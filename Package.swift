@@ -9,7 +9,7 @@ let package = Package(
 	products: [
 		.library(name: "KokoroUtils", targets: ["KokoroUtils"]),
 		.library(name: "KokoroUI", targets: ["KokoroUI"]),
-		.library(name: "KokoroFetchable", targets: ["KokoroFetchable"])
+		.library(name: "KokoroFetchable", targets: ["KokoroFetchable"]),
 	],
 	targets: [
 		.target(

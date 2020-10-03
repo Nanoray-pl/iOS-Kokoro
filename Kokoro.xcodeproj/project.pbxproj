@@ -50,6 +50,7 @@
 		AAD355B92528AD60007C63EF /* MapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355B82528AD60007C63EF /* MapListDataSource.swift */; };
 		AAD355BE2528AF83007C63EF /* CompactMapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */; };
 		AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */; };
+		AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355C72528B3D7007C63EF /* Identifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,7 @@
 		AAD355B82528AD60007C63EF /* MapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDataSource.swift; sourceTree = "<group>"; };
 		AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactMapListDataSource.swift; sourceTree = "<group>"; };
 		AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchyObserving.swift; sourceTree = "<group>"; };
+		AAD355C72528B3D7007C63EF /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +171,7 @@
 				AAD354A325286B88007C63EF /* OptionalExtensions.swift */,
 				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
 				AAD354DB2528758B007C63EF /* CodeIdentifier.swift */,
+				AAD355C72528B3D7007C63EF /* Identifier.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
+				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAD354DC2528758B007C63EF /* CodeIdentifier.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
