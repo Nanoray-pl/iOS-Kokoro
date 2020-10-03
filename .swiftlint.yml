@@ -1,0 +1,72 @@
+opt_in_rules:
+  - empty_count
+  - empty_xctest_method
+  - fatal_error_message
+  - first_where
+  - last_where
+  - multiple_closures_with_trailing_closure
+force_cast:
+    severity: warning
+disabled_rules:
+    - nesting
+    - line_length
+    - type_name
+    - function_body_length
+    - type_body_length
+    - file_length
+    - force_cast
+    - force_try
+    - identifier_name
+    - function_parameter_count
+    - first_where
+    - implicit_getter
+    - trailing_whitespace
+    - opening_brace
+    - trailing_comma
+cyclomatic_complexity:
+    ignores_case_statements: true
+generic_type_name:
+  max_length:
+    warning: 1000
+excluded:
+  - Pods
+  - Carthage
+  - Resources/R.generated.swift
+  - Sourcery/Generated
+custom_rules:
+  avoid_print:
+    included: ".*.swift"
+    excluded:
+      - ".*Test.?\\.swift"
+    regex: 'print\('
+    name: "print"
+    message: "Avoid using print method directly. Use logger"
+    severity: warning
+  avoid_nslog:
+    included: ".*.swift"
+    excluded:
+      - ".*Test.?\\.swift"
+    regex: 'NSLog\('
+    name: "NSLog"
+    message: "Avoid using NSLog method directly. Use logger"
+    severity: warning
+  descriptive_failure_logs:
+    included: ".*.swift"
+    excluded: ".*Test.?\\.swift"
+    regex: '\.(?:warning|error|debug|verbose|info)\(error\.localizedDescription\)'
+    name: "descriptive_failure_logs"
+    message: "Sometimes localizedDescription is not enough, add a descriptive message and pass in the error"
+    severity: warning
+  accessibility_isReduceMotionEnabled:
+    included: ".*.swift"
+    excluded: ".*Test.?\\.swift"
+    regex: 'animated: true'
+    name: "accessibility_isReduceMotionEnabled"
+    message: "Please take in consideration the is Reduce Motion Enabled property"
+    severity: warning
+  weak_router:
+    included: ".*.swift"
+    regex: '(?<!weak )var router:'
+    name: 'Weak Router'
+    message: "Routers should be weak to avoid reference cycles."
+    severity: warning

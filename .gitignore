@@ -1,0 +1,13 @@
+# Xcode
+WorkspaceSettings.xcsettings
+*.pbxuser
+*.xccheckout
+*.xcscmblueprint
+xcuserdata
+
+# Dependency managers
+.build/
+Carthage/
+
+# Code generators
+*.generated.swift
