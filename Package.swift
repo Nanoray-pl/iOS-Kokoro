@@ -10,6 +10,7 @@ let package = Package(
 		.library(name: "KokoroUtils", targets: ["KokoroUtils"]),
 		.library(name: "KokoroUI", targets: ["KokoroUI"]),
 		.library(name: "KokoroFetchable", targets: ["KokoroFetchable"]),
+		.library(name: "KokoroHttp", targets: ["KokoroHttp"]),
 	],
 	targets: [
 		.target(
@@ -27,7 +28,13 @@ let package = Package(
 			name: "KokoroFetchable",
 			path: "KokoroFetchable",
 			exclude: ["Bootstrap/Info.plist"]
-		)
+		),
+		.target(
+			name: "KokoroHttp",
+			dependencies: ["KokoroUtils"],
+			path: "KokoroHttp",
+			exclude: ["Bootstrap/Info.plist"]
+		),
 //		.testTarget(name: "KokoroUtilsTests", dependencies: ["KokoroUtils"], path: "KokoroUtilsTests")
 	]
 )
