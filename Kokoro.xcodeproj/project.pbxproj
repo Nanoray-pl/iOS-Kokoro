@@ -49,6 +49,7 @@
 		AAD355B42528AD40007C63EF /* FilterListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355B32528AD40007C63EF /* FilterListDataSource.swift */; };
 		AAD355B92528AD60007C63EF /* MapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355B82528AD60007C63EF /* MapListDataSource.swift */; };
 		AAD355BE2528AF83007C63EF /* CompactMapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */; };
+		AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,7 @@
 		AAD355B32528AD40007C63EF /* FilterListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterListDataSource.swift; sourceTree = "<group>"; };
 		AAD355B82528AD60007C63EF /* MapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDataSource.swift; sourceTree = "<group>"; };
 		AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactMapListDataSource.swift; sourceTree = "<group>"; };
+		AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchyObserving.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				AAD3551825288CC6007C63EF /* ReusableCells.swift */,
 				AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */,
 				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
+				AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 			files = (
 				AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */,
 				AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */,
+				AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */,
 				AAD3550225288947007C63EF /* ClickThroughCollectionView.swift in Sources */,
 				AAD354C125287281007C63EF /* Geometry.swift in Sources */,
 				AAD3550B25288A0F007C63EF /* GradientView.swift in Sources */,
