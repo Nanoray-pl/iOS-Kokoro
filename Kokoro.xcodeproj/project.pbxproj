@@ -83,6 +83,8 @@
 		AAD357512528C45F007C63EF /* CombineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357502528C45F007C63EF /* CombineExtensions.swift */; };
 		AAD3575F2528C4A9007C63EF /* CoreDataContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3575E2528C4A9007C63EF /* CoreDataContextTests.swift */; };
 		AAD357672528C4C6007C63EF /* PredicateBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */; };
+		AAD3577025291B2D007C63EF /* URLSessionHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3576F25291B2D007C63EF /* URLSessionHttpClient.swift */; };
+		AAD3577E25291B6C007C63EF /* SchedulingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -199,6 +201,8 @@
 		AAD357502528C45F007C63EF /* CombineExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExtensions.swift; sourceTree = "<group>"; };
 		AAD3575E2528C4A9007C63EF /* CoreDataContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContextTests.swift; sourceTree = "<group>"; };
 		AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredicateBuilderTests.swift; sourceTree = "<group>"; };
+		AAD3576F25291B2D007C63EF /* URLSessionHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHttpClient.swift; sourceTree = "<group>"; };
+		AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulingHttpClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,10 +432,10 @@
 			isa = PBXGroup;
 			children = (
 				AAD355E62528B81C007C63EF /* Bootstrap */,
+				AAD3576E25291B13007C63EF /* Client */,
 				AAD355E72528B82E007C63EF /* HttpRequestBuilder.swift */,
 				AAD355ED2528B853007C63EF /* HttpBodyEncoder.swift */,
 				AAD355F92528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift */,
-				AAD355FF2528B8F0007C63EF /* HttpClient.swift */,
 			);
 			path = KokoroHttp;
 			sourceTree = "<group>";
@@ -524,6 +528,16 @@
 				AAD357382528C3FF007C63EF /* TestEntity.swift */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		AAD3576E25291B13007C63EF /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				AAD355FF2528B8F0007C63EF /* HttpClient.swift */,
+				AAD3576F25291B2D007C63EF /* URLSessionHttpClient.swift */,
+				AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */,
+			);
+			path = Client;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -962,6 +976,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD355EE2528B853007C63EF /* HttpBodyEncoder.swift in Sources */,
+				AAD3577025291B2D007C63EF /* URLSessionHttpClient.swift in Sources */,
+				AAD3577E25291B6C007C63EF /* SchedulingHttpClient.swift in Sources */,
 				AAD355FA2528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift in Sources */,
 				AAD356002528B8F0007C63EF /* HttpClient.swift in Sources */,
 				AAD355E82528B82E007C63EF /* HttpRequestBuilder.swift in Sources */,
