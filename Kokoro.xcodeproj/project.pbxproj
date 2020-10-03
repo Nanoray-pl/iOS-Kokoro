@@ -11,7 +11,43 @@
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
 		AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A625286E31007C63EF /* CollectionExtensions.swift */; };
+		AAD354B525287210007C63EF /* KokoroUI.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD354B325287210007C63EF /* KokoroUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AAD354C125287281007C63EF /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354C025287281007C63EF /* Geometry.swift */; };
+		AAD354C5252872C8007C63EF /* Insets.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354C4252872C8007C63EF /* Insets.swift */; };
+		AAD354CA2528732E007C63EF /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354C92528732E007C63EF /* Constraints.swift */; };
+		AAD354CE252873FD007C63EF /* NonBasicConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354CD252873FD007C63EF /* NonBasicConstraints.swift */; };
+		AAD354D22528744D007C63EF /* BasicConstraintBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354D12528744D007C63EF /* BasicConstraintBuilders.swift */; };
+		AAD354DC2528758B007C63EF /* CodeIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354DB2528758B007C63EF /* CodeIdentifier.swift */; };
+		AAD354E025287987007C63EF /* ProportionalOffsetConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354DF25287987007C63EF /* ProportionalOffsetConstraint.swift */; };
+		AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354E4252879C7007C63EF /* StateEnums.swift */; };
+		AAD354EB25287A0B007C63EF /* HierarchyLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354EA25287A0B007C63EF /* HierarchyLookup.swift */; };
+		AAD354EF25288258007C63EF /* AspectRatioEqualConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354EE25288258007C63EF /* AspectRatioEqualConstraint.swift */; };
+		AAD354F4252882AA007C63EF /* FrameObservingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354F3252882AA007C63EF /* FrameObservingView.swift */; };
+		AAD354FA25288577007C63EF /* MinMaxLengthConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354F925288577007C63EF /* MinMaxLengthConstraint.swift */; };
+		AAD354FE252887F0007C63EF /* Animated.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354FD252887F0007C63EF /* Animated.swift */; };
+		AAD3550225288947007C63EF /* ClickThroughCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */; };
+		AAD3550625288985007C63EF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550525288985007C63EF /* Button.swift */; };
+		AAD3550B25288A0F007C63EF /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550A25288A0F007C63EF /* GradientView.swift */; };
+		AAD3551125288BD4007C63EF /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3551025288BD4007C63EF /* ProgressBar.swift */; };
+		AAD3551525288C88007C63EF /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3551425288C88007C63EF /* RoundedView.swift */; };
+		AAD3551925288CC6007C63EF /* ReusableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3551825288CC6007C63EF /* ReusableCells.swift */; };
+		AAD3551E25288D04007C63EF /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3551D25288D04007C63EF /* ContainerViewController.swift */; };
+		AAD3552225288E3F007C63EF /* NavigationControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3552125288E3F007C63EF /* NavigationControllerWrapper.swift */; };
+		AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3552525288F0A007C63EF /* PrecedingControllerNavigator.swift */; };
+		AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */; };
+		AAD35530252893FD007C63EF /* ButtonMenuConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */; };
+		AAD3554A2528A03F007C63EF /* ForceTouchGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AAD354D725287472007C63EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -21,10 +57,45 @@
 		AAD354A325286B88007C63EF /* OptionalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtensions.swift; sourceTree = "<group>"; };
 		AAD354A625286E31007C63EF /* CollectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtensions.swift; sourceTree = "<group>"; };
 		AAD354AB252870F9007C63EF /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		AAD354B125287210007C63EF /* KokoroUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD354B325287210007C63EF /* KokoroUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUI.h; sourceTree = "<group>"; };
+		AAD354B425287210007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAD354C025287281007C63EF /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		AAD354C4252872C8007C63EF /* Insets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insets.swift; sourceTree = "<group>"; };
+		AAD354C92528732E007C63EF /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
+		AAD354CD252873FD007C63EF /* NonBasicConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonBasicConstraints.swift; sourceTree = "<group>"; };
+		AAD354D12528744D007C63EF /* BasicConstraintBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicConstraintBuilders.swift; sourceTree = "<group>"; };
+		AAD354DB2528758B007C63EF /* CodeIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeIdentifier.swift; sourceTree = "<group>"; };
+		AAD354DF25287987007C63EF /* ProportionalOffsetConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraint.swift; sourceTree = "<group>"; };
+		AAD354E4252879C7007C63EF /* StateEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateEnums.swift; sourceTree = "<group>"; };
+		AAD354EA25287A0B007C63EF /* HierarchyLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchyLookup.swift; sourceTree = "<group>"; };
+		AAD354EE25288258007C63EF /* AspectRatioEqualConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioEqualConstraint.swift; sourceTree = "<group>"; };
+		AAD354F3252882AA007C63EF /* FrameObservingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameObservingView.swift; sourceTree = "<group>"; };
+		AAD354F925288577007C63EF /* MinMaxLengthConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinMaxLengthConstraint.swift; sourceTree = "<group>"; };
+		AAD354FD252887F0007C63EF /* Animated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animated.swift; sourceTree = "<group>"; };
+		AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickThroughCollectionView.swift; sourceTree = "<group>"; };
+		AAD3550525288985007C63EF /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		AAD3550A25288A0F007C63EF /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		AAD3551025288BD4007C63EF /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		AAD3551425288C88007C63EF /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
+		AAD3551825288CC6007C63EF /* ReusableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCells.swift; sourceTree = "<group>"; };
+		AAD3551D25288D04007C63EF /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		AAD3552125288E3F007C63EF /* NavigationControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerWrapper.swift; sourceTree = "<group>"; };
+		AAD3552525288F0A007C63EF /* PrecedingControllerNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecedingControllerNavigator.swift; sourceTree = "<group>"; };
+		AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabAndNavigationControllerWrapper.swift; sourceTree = "<group>"; };
+		AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonMenuConfigurator.swift; sourceTree = "<group>"; };
+		AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceTouchGestureRecognizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		AAD3548A252869D0007C63EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD354AE25287210007C63EF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -39,6 +110,7 @@
 			children = (
 				AAD354AB252870F9007C63EF /* Package.swift */,
 				AAD3548F252869D0007C63EF /* KokoroUtils */,
+				AAD354B225287210007C63EF /* KokoroUI */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				AAD3548D252869D0007C63EF /* KokoroUtils.framework */,
+				AAD354B125287210007C63EF /* KokoroUI.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,6 +131,7 @@
 				AAD354A025286B1C007C63EF /* With.swift */,
 				AAD354A325286B88007C63EF /* OptionalExtensions.swift */,
 				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
+				AAD354DB2528758B007C63EF /* CodeIdentifier.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -71,6 +145,95 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AAD354B225287210007C63EF /* KokoroUI */ = {
+			isa = PBXGroup;
+			children = (
+				AAD354BB25287214007C63EF /* Bootstrap */,
+				AAD354BF2528726D007C63EF /* Math */,
+				AAD354C82528731A007C63EF /* Constraints */,
+				AAD3551C25288CE4007C63EF /* Containers */,
+				AAD354F22528829C007C63EF /* Functional Views */,
+				AAD3550925288A03007C63EF /* Aesthetic Views */,
+				AAD354E3252879BB007C63EF /* Utils */,
+			);
+			path = KokoroUI;
+			sourceTree = "<group>";
+		};
+		AAD354BB25287214007C63EF /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAD354B325287210007C63EF /* KokoroUI.h */,
+				AAD354B425287210007C63EF /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AAD354BF2528726D007C63EF /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				AAD354C025287281007C63EF /* Geometry.swift */,
+				AAD354C4252872C8007C63EF /* Insets.swift */,
+			);
+			path = Math;
+			sourceTree = "<group>";
+		};
+		AAD354C82528731A007C63EF /* Constraints */ = {
+			isa = PBXGroup;
+			children = (
+				AAD354C92528732E007C63EF /* Constraints.swift */,
+				AAD354D12528744D007C63EF /* BasicConstraintBuilders.swift */,
+				AAD354CD252873FD007C63EF /* NonBasicConstraints.swift */,
+				AAD354DF25287987007C63EF /* ProportionalOffsetConstraint.swift */,
+				AAD354EE25288258007C63EF /* AspectRatioEqualConstraint.swift */,
+				AAD354F925288577007C63EF /* MinMaxLengthConstraint.swift */,
+			);
+			path = Constraints;
+			sourceTree = "<group>";
+		};
+		AAD354E3252879BB007C63EF /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				AAD354E4252879C7007C63EF /* StateEnums.swift */,
+				AAD354EA25287A0B007C63EF /* HierarchyLookup.swift */,
+				AAD354FD252887F0007C63EF /* Animated.swift */,
+				AAD3551825288CC6007C63EF /* ReusableCells.swift */,
+				AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */,
+				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		AAD354F22528829C007C63EF /* Functional Views */ = {
+			isa = PBXGroup;
+			children = (
+				AAD354F3252882AA007C63EF /* FrameObservingView.swift */,
+				AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */,
+				AAD3550525288985007C63EF /* Button.swift */,
+			);
+			path = "Functional Views";
+			sourceTree = "<group>";
+		};
+		AAD3550925288A03007C63EF /* Aesthetic Views */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3550A25288A0F007C63EF /* GradientView.swift */,
+				AAD3551025288BD4007C63EF /* ProgressBar.swift */,
+				AAD3551425288C88007C63EF /* RoundedView.swift */,
+			);
+			path = "Aesthetic Views";
+			sourceTree = "<group>";
+		};
+		AAD3551C25288CE4007C63EF /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3551D25288D04007C63EF /* ContainerViewController.swift */,
+				AAD3552525288F0A007C63EF /* PrecedingControllerNavigator.swift */,
+				AAD3552125288E3F007C63EF /* NavigationControllerWrapper.swift */,
+				AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */,
+			);
+			path = Containers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -79,6 +242,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD354AC25287210007C63EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD354B525287210007C63EF /* KokoroUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +275,28 @@
 			productReference = AAD3548D252869D0007C63EF /* KokoroUtils.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		AAD354B025287210007C63EF /* KokoroUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAD354B625287210007C63EF /* Build configuration list for PBXNativeTarget "KokoroUI" */;
+			buildPhases = (
+				AAD354AC25287210007C63EF /* Headers */,
+				AAD354BC25287220007C63EF /* Linters */,
+				AAD354AD25287210007C63EF /* Sources */,
+				AAD354AE25287210007C63EF /* Frameworks */,
+				AAD354AF25287210007C63EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAD354D825287472007C63EF /* PBXTargetDependency */,
+			);
+			name = KokoroUI;
+			packageProductDependencies = (
+			);
+			productName = KokoroUI;
+			productReference = AAD354B125287210007C63EF /* KokoroUI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -114,6 +307,10 @@
 				ORGANIZATIONNAME = Nanoray;
 				TargetAttributes = {
 					AAD3548C252869D0007C63EF = {
+						CreatedOnToolsVersion = 12.0.1;
+						LastSwiftMigration = 1200;
+					};
+					AAD354B025287210007C63EF = {
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
 					};
@@ -128,17 +325,27 @@
 				Base,
 			);
 			mainGroup = AAD35483252869D0007C63EF;
+			packageReferences = (
+			);
 			productRefGroup = AAD3548E252869D0007C63EF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				AAD3548C252869D0007C63EF /* KokoroUtils */,
+				AAD354B025287210007C63EF /* KokoroUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AAD3548B252869D0007C63EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD354AF25287210007C63EF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -167,6 +374,25 @@
 			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		AAD354BC25287220007C63EF /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -175,12 +401,52 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
+				AAD354DC2528758B007C63EF /* CodeIdentifier.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD354AD25287210007C63EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */,
+				AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */,
+				AAD3550225288947007C63EF /* ClickThroughCollectionView.swift in Sources */,
+				AAD354C125287281007C63EF /* Geometry.swift in Sources */,
+				AAD3550B25288A0F007C63EF /* GradientView.swift in Sources */,
+				AAD354EB25287A0B007C63EF /* HierarchyLookup.swift in Sources */,
+				AAD354F4252882AA007C63EF /* FrameObservingView.swift in Sources */,
+				AAD35530252893FD007C63EF /* ButtonMenuConfigurator.swift in Sources */,
+				AAD354CE252873FD007C63EF /* NonBasicConstraints.swift in Sources */,
+				AAD3551125288BD4007C63EF /* ProgressBar.swift in Sources */,
+				AAD354FE252887F0007C63EF /* Animated.swift in Sources */,
+				AAD354D22528744D007C63EF /* BasicConstraintBuilders.swift in Sources */,
+				AAD3550625288985007C63EF /* Button.swift in Sources */,
+				AAD354FA25288577007C63EF /* MinMaxLengthConstraint.swift in Sources */,
+				AAD3551525288C88007C63EF /* RoundedView.swift in Sources */,
+				AAD3551E25288D04007C63EF /* ContainerViewController.swift in Sources */,
+				AAD354CA2528732E007C63EF /* Constraints.swift in Sources */,
+				AAD354E025287987007C63EF /* ProportionalOffsetConstraint.swift in Sources */,
+				AAD3554A2528A03F007C63EF /* ForceTouchGestureRecognizer.swift in Sources */,
+				AAD3552225288E3F007C63EF /* NavigationControllerWrapper.swift in Sources */,
+				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
+				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
+				AAD3551925288CC6007C63EF /* ReusableCells.swift in Sources */,
+				AAD354EF25288258007C63EF /* AspectRatioEqualConstraint.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AAD354D825287472007C63EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AAD354D725287472007C63EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AAD35493252869D0007C63EF /* Debug */ = {
@@ -240,7 +506,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "XCODE DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -297,6 +563,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = XCODE;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -356,6 +623,59 @@
 			};
 			name = Release;
 		};
+		AAD354B725287210007C63EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AAD354B825287210007C63EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -373,6 +693,15 @@
 			buildConfigurations = (
 				AAD35496252869D0007C63EF /* Debug */,
 				AAD35497252869D0007C63EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAD354B625287210007C63EF /* Build configuration list for PBXNativeTarget "KokoroUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAD354B725287210007C63EF /* Debug */,
+				AAD354B825287210007C63EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
