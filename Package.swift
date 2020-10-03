@@ -11,6 +11,7 @@ let package = Package(
 		.library(name: "KokoroUI", targets: ["KokoroUI"]),
 		.library(name: "KokoroFetchable", targets: ["KokoroFetchable"]),
 		.library(name: "KokoroHttp", targets: ["KokoroHttp"]),
+		.library(name: "KokoroCoreData", targets: ["KokoroCoreData"]),
 	],
 	targets: [
 		.target(
@@ -35,6 +36,17 @@ let package = Package(
 			path: "KokoroHttp",
 			exclude: ["Bootstrap/Info.plist"]
 		),
-//		.testTarget(name: "KokoroUtilsTests", dependencies: ["KokoroUtils"], path: "KokoroUtilsTests")
+		.target(
+			name: "KokoroCoreData",
+			path: "KokoroCoreData",
+			exclude: ["Bootstrap/Info.plist"]
+		),
+//		.testTarget(
+//			name: "KokoroCoreDataTests",
+//			dependencies: ["KokoroCoreData"],
+//			path: "KokoroCoreDataTests",
+//			exclude: ["Bootstrap/Info.plist"],
+//			resources: [.copy("Resources/TestModel.xcdatamodeld")]
+//		)
 	]
 )

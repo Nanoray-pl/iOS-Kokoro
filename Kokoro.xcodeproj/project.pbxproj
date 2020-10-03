@@ -57,6 +57,32 @@
 		AAD355EE2528B853007C63EF /* HttpBodyEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355ED2528B853007C63EF /* HttpBodyEncoder.swift */; };
 		AAD355FA2528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355F92528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift */; };
 		AAD356002528B8F0007C63EF /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355FF2528B8F0007C63EF /* HttpClient.swift */; };
+		AAD356132528BAC9007C63EF /* KokoroCoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD3560A2528BAC9007C63EF /* KokoroCoreData.framework */; };
+		AAD3561A2528BAC9007C63EF /* KokoroCoreData.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD3560C2528BAC9007C63EF /* KokoroCoreData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AAD3567B2528BBF2007C63EF /* CoreDataModelVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3567A2528BBF2007C63EF /* CoreDataModelVersion.swift */; };
+		AAD356832528BC1E007C63EF /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356822528BC1E007C63EF /* CoreDataManager.swift */; };
+		AAD3568B2528BC4B007C63EF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3568A2528BC4B007C63EF /* CoreDataStack.swift */; };
+		AAD356932528BC66007C63EF /* CoreDataContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356922528BC66007C63EF /* CoreDataContext.swift */; };
+		AAD3569B2528BCA7007C63EF /* CoreDataModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3569A2528BCA7007C63EF /* CoreDataModelProvider.swift */; };
+		AAD356A32528BCC2007C63EF /* CoreDataMigrationPathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356A22528BCC2007C63EF /* CoreDataMigrationPathProvider.swift */; };
+		AAD356AB2528BCD5007C63EF /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356AA2528BCD5007C63EF /* CoreDataExtensions.swift */; };
+		AAD356B42528BDA4007C63EF /* PredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356B32528BDA4007C63EF /* PredicateBuilder.swift */; };
+		AAD356BC2528BDC9007C63EF /* BoolPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356BB2528BDC9007C63EF /* BoolPredicateBuilder.swift */; };
+		AAD356C42528BDF6007C63EF /* RawPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356C32528BDF6007C63EF /* RawPredicateBuilder.swift */; };
+		AAD356CC2528BE1C007C63EF /* ManagedObjectPredicateBuilderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356CB2528BE1C007C63EF /* ManagedObjectPredicateBuilderExtensions.swift */; };
+		AAD356DA2528BE40007C63EF /* EquatablePredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356D92528BE40007C63EF /* EquatablePredicateBuilder.swift */; };
+		AAD356E82528C328007C63EF /* NotPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356E72528C328007C63EF /* NotPredicateBuilder.swift */; };
+		AAD356F02528C343007C63EF /* AndPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD356EF2528C343007C63EF /* AndPredicateBuilder.swift */; };
+		AAD357042528C358007C63EF /* OrPredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357032528C358007C63EF /* OrPredicateBuilder.swift */; };
+		AAD3570C2528C371007C63EF /* ComparablePredicateBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3570B2528C371007C63EF /* ComparablePredicateBuilder.swift */; };
+		AAD3571A2528C3A3007C63EF /* CoreDataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357192528C3A3007C63EF /* CoreDataManagerTests.swift */; };
+		AAD357232528C3CA007C63EF /* ResourceBundleAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357222528C3CA007C63EF /* ResourceBundleAccessor.swift */; };
+		AAD357312528C3EE007C63EF /* TestModelVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357302528C3EE007C63EF /* TestModelVersion.swift */; };
+		AAD357392528C3FF007C63EF /* TestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357382528C3FF007C63EF /* TestEntity.swift */; };
+		AAD357432528C422007C63EF /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AAD357402528C422007C63EF /* TestModel.xcdatamodeld */; };
+		AAD357512528C45F007C63EF /* CombineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357502528C45F007C63EF /* CombineExtensions.swift */; };
+		AAD3575F2528C4A9007C63EF /* CoreDataContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3575E2528C4A9007C63EF /* CoreDataContextTests.swift */; };
+		AAD357672528C4C6007C63EF /* PredicateBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +99,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AAD3548C252869D0007C63EF;
 			remoteInfo = KokoroUtils;
+		};
+		AAD356142528BAC9007C63EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD356092528BAC9007C63EF;
+			remoteInfo = KokoroCoreData;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -136,6 +169,36 @@
 		AAD355ED2528B853007C63EF /* HttpBodyEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpBodyEncoder.swift; sourceTree = "<group>"; };
 		AAD355F92528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProgressPublisher.swift; sourceTree = "<group>"; };
 		AAD355FF2528B8F0007C63EF /* HttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
+		AAD3560A2528BAC9007C63EF /* KokoroCoreData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroCoreData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD3560C2528BAC9007C63EF /* KokoroCoreData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroCoreData.h; sourceTree = "<group>"; };
+		AAD3560D2528BAC9007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KokoroCoreDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD356192528BAC9007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAD3567A2528BBF2007C63EF /* CoreDataModelVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataModelVersion.swift; sourceTree = "<group>"; };
+		AAD356822528BC1E007C63EF /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		AAD3568A2528BC4B007C63EF /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		AAD356922528BC66007C63EF /* CoreDataContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContext.swift; sourceTree = "<group>"; };
+		AAD3569A2528BCA7007C63EF /* CoreDataModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataModelProvider.swift; sourceTree = "<group>"; };
+		AAD356A22528BCC2007C63EF /* CoreDataMigrationPathProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMigrationPathProvider.swift; sourceTree = "<group>"; };
+		AAD356AA2528BCD5007C63EF /* CoreDataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExtensions.swift; sourceTree = "<group>"; };
+		AAD356B32528BDA4007C63EF /* PredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD356BB2528BDC9007C63EF /* BoolPredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolPredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD356C32528BDF6007C63EF /* RawPredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawPredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD356CB2528BE1C007C63EF /* ManagedObjectPredicateBuilderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectPredicateBuilderExtensions.swift; sourceTree = "<group>"; };
+		AAD356D92528BE40007C63EF /* EquatablePredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquatablePredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD356E72528C328007C63EF /* NotPredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotPredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD356EF2528C343007C63EF /* AndPredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndPredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD357032528C358007C63EF /* OrPredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrPredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD3570B2528C371007C63EF /* ComparablePredicateBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparablePredicateBuilder.swift; sourceTree = "<group>"; };
+		AAD357192528C3A3007C63EF /* CoreDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManagerTests.swift; sourceTree = "<group>"; };
+		AAD357222528C3CA007C63EF /* ResourceBundleAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceBundleAccessor.swift; sourceTree = "<group>"; };
+		AAD357302528C3EE007C63EF /* TestModelVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModelVersion.swift; sourceTree = "<group>"; };
+		AAD357382528C3FF007C63EF /* TestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEntity.swift; sourceTree = "<group>"; };
+		AAD357412528C422007C63EF /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
+		AAD357422528C422007C63EF /* ExtraArgs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ExtraArgs.xcdatamodel; sourceTree = "<group>"; };
+		AAD357502528C45F007C63EF /* CombineExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExtensions.swift; sourceTree = "<group>"; };
+		AAD3575E2528C4A9007C63EF /* CoreDataContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContextTests.swift; sourceTree = "<group>"; };
+		AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredicateBuilderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +230,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD356072528BAC9007C63EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD3560F2528BAC9007C63EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD356132528BAC9007C63EF /* KokoroCoreData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -178,6 +256,8 @@
 				AAD354B225287210007C63EF /* KokoroUI */,
 				AAD355592528A818007C63EF /* KokoroFetchable */,
 				AAD355D72528B7F7007C63EF /* KokoroHttp */,
+				AAD3560B2528BAC9007C63EF /* KokoroCoreData */,
+				AAD356162528BAC9007C63EF /* KokoroCoreDataTests */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -189,6 +269,8 @@
 				AAD354B125287210007C63EF /* KokoroUI.framework */,
 				AAD355582528A818007C63EF /* KokoroFetchable.framework */,
 				AAD355D62528B7F7007C63EF /* KokoroHttp.framework */,
+				AAD3560A2528BAC9007C63EF /* KokoroCoreData.framework */,
+				AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -363,6 +445,87 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AAD3560B2528BAC9007C63EF /* KokoroCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				AAD356272528BAD0007C63EF /* Bootstrap */,
+				AAD356792528BBE8007C63EF /* Core */,
+				AAD356B22528BD97007C63EF /* Predicate Builder */,
+			);
+			path = KokoroCoreData;
+			sourceTree = "<group>";
+		};
+		AAD356162528BAC9007C63EF /* KokoroCoreDataTests */ = {
+			isa = PBXGroup;
+			children = (
+				AAD356282528BAD8007C63EF /* Bootstrap */,
+				AAD357212528C3BA007C63EF /* Resources */,
+				AAD357502528C45F007C63EF /* CombineExtensions.swift */,
+				AAD357192528C3A3007C63EF /* CoreDataManagerTests.swift */,
+				AAD3575E2528C4A9007C63EF /* CoreDataContextTests.swift */,
+				AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */,
+			);
+			path = KokoroCoreDataTests;
+			sourceTree = "<group>";
+		};
+		AAD356272528BAD0007C63EF /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3560C2528BAC9007C63EF /* KokoroCoreData.h */,
+				AAD3560D2528BAC9007C63EF /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AAD356282528BAD8007C63EF /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAD356192528BAC9007C63EF /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AAD356792528BBE8007C63EF /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3567A2528BBF2007C63EF /* CoreDataModelVersion.swift */,
+				AAD356822528BC1E007C63EF /* CoreDataManager.swift */,
+				AAD3568A2528BC4B007C63EF /* CoreDataStack.swift */,
+				AAD356922528BC66007C63EF /* CoreDataContext.swift */,
+				AAD3569A2528BCA7007C63EF /* CoreDataModelProvider.swift */,
+				AAD356A22528BCC2007C63EF /* CoreDataMigrationPathProvider.swift */,
+				AAD356AA2528BCD5007C63EF /* CoreDataExtensions.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AAD356B22528BD97007C63EF /* Predicate Builder */ = {
+			isa = PBXGroup;
+			children = (
+				AAD356B32528BDA4007C63EF /* PredicateBuilder.swift */,
+				AAD356C32528BDF6007C63EF /* RawPredicateBuilder.swift */,
+				AAD356E72528C328007C63EF /* NotPredicateBuilder.swift */,
+				AAD356EF2528C343007C63EF /* AndPredicateBuilder.swift */,
+				AAD357032528C358007C63EF /* OrPredicateBuilder.swift */,
+				AAD356BB2528BDC9007C63EF /* BoolPredicateBuilder.swift */,
+				AAD356D92528BE40007C63EF /* EquatablePredicateBuilder.swift */,
+				AAD3570B2528C371007C63EF /* ComparablePredicateBuilder.swift */,
+				AAD356CB2528BE1C007C63EF /* ManagedObjectPredicateBuilderExtensions.swift */,
+			);
+			path = "Predicate Builder";
+			sourceTree = "<group>";
+		};
+		AAD357212528C3BA007C63EF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AAD357222528C3CA007C63EF /* ResourceBundleAccessor.swift */,
+				AAD357402528C422007C63EF /* TestModel.xcdatamodeld */,
+				AAD357302528C3EE007C63EF /* TestModelVersion.swift */,
+				AAD357382528C3FF007C63EF /* TestEntity.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -395,6 +558,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD355DA2528B7F7007C63EF /* KokoroHttp.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD356052528BAC9007C63EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD3561A2528BAC9007C63EF /* KokoroCoreData.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +637,7 @@
 			buildConfigurationList = AAD355DB2528B7F7007C63EF /* Build configuration list for PBXNativeTarget "KokoroHttp" */;
 			buildPhases = (
 				AAD355D12528B7F7007C63EF /* Headers */,
+				AAD3566B2528BB6A007C63EF /* Linters */,
 				AAD355D22528B7F7007C63EF /* Sources */,
 				AAD355D32528B7F7007C63EF /* Frameworks */,
 				AAD355D42528B7F7007C63EF /* Resources */,
@@ -480,12 +652,50 @@
 			productReference = AAD355D62528B7F7007C63EF /* KokoroHttp.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		AAD356092528BAC9007C63EF /* KokoroCoreData */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAD3561B2528BAC9007C63EF /* Build configuration list for PBXNativeTarget "KokoroCoreData" */;
+			buildPhases = (
+				AAD356052528BAC9007C63EF /* Headers */,
+				AAD3566C2528BB75007C63EF /* Linters */,
+				AAD356062528BAC9007C63EF /* Sources */,
+				AAD356072528BAC9007C63EF /* Frameworks */,
+				AAD356082528BAC9007C63EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KokoroCoreData;
+			productName = KokoroCoreData;
+			productReference = AAD3560A2528BAC9007C63EF /* KokoroCoreData.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AAD356112528BAC9007C63EF /* KokoroCoreDataTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAD3561E2528BAC9007C63EF /* Build configuration list for PBXNativeTarget "KokoroCoreDataTests" */;
+			buildPhases = (
+				AAD3560E2528BAC9007C63EF /* Sources */,
+				AAD3560F2528BAC9007C63EF /* Frameworks */,
+				AAD356102528BAC9007C63EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAD356152528BAC9007C63EF /* PBXTargetDependency */,
+			);
+			name = KokoroCoreDataTests;
+			productName = KokoroCoreDataTests;
+			productReference = AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		AAD35484252869D0007C63EF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Nanoray;
 				TargetAttributes = {
@@ -502,6 +712,14 @@
 						LastSwiftMigration = 1200;
 					};
 					AAD355D52528B7F7007C63EF = {
+						CreatedOnToolsVersion = 12.0.1;
+						LastSwiftMigration = 1200;
+					};
+					AAD356092528BAC9007C63EF = {
+						CreatedOnToolsVersion = 12.0.1;
+						LastSwiftMigration = 1200;
+					};
+					AAD356112528BAC9007C63EF = {
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
 					};
@@ -526,6 +744,8 @@
 				AAD354B025287210007C63EF /* KokoroUI */,
 				AAD355572528A818007C63EF /* KokoroFetchable */,
 				AAD355D52528B7F7007C63EF /* KokoroHttp */,
+				AAD356092528BAC9007C63EF /* KokoroCoreData */,
+				AAD356112528BAC9007C63EF /* KokoroCoreDataTests */,
 			);
 		};
 /* End PBXProject section */
@@ -553,6 +773,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AAD355D42528B7F7007C63EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD356082528BAC9007C63EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD356102528BAC9007C63EF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -617,6 +851,44 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAD3566B2528BB6A007C63EF /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAD3566C2528BB75007C63EF /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/${TARGET_NAME}Tests\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/${TARGET_NAME}Tests\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -696,6 +968,44 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD356062528BAC9007C63EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD356932528BC66007C63EF /* CoreDataContext.swift in Sources */,
+				AAD356B42528BDA4007C63EF /* PredicateBuilder.swift in Sources */,
+				AAD3570C2528C371007C63EF /* ComparablePredicateBuilder.swift in Sources */,
+				AAD3569B2528BCA7007C63EF /* CoreDataModelProvider.swift in Sources */,
+				AAD356BC2528BDC9007C63EF /* BoolPredicateBuilder.swift in Sources */,
+				AAD356C42528BDF6007C63EF /* RawPredicateBuilder.swift in Sources */,
+				AAD3568B2528BC4B007C63EF /* CoreDataStack.swift in Sources */,
+				AAD356A32528BCC2007C63EF /* CoreDataMigrationPathProvider.swift in Sources */,
+				AAD356832528BC1E007C63EF /* CoreDataManager.swift in Sources */,
+				AAD356AB2528BCD5007C63EF /* CoreDataExtensions.swift in Sources */,
+				AAD357042528C358007C63EF /* OrPredicateBuilder.swift in Sources */,
+				AAD3567B2528BBF2007C63EF /* CoreDataModelVersion.swift in Sources */,
+				AAD356DA2528BE40007C63EF /* EquatablePredicateBuilder.swift in Sources */,
+				AAD356CC2528BE1C007C63EF /* ManagedObjectPredicateBuilderExtensions.swift in Sources */,
+				AAD356E82528C328007C63EF /* NotPredicateBuilder.swift in Sources */,
+				AAD356F02528C343007C63EF /* AndPredicateBuilder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD3560E2528BAC9007C63EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD357392528C3FF007C63EF /* TestEntity.swift in Sources */,
+				AAD357672528C4C6007C63EF /* PredicateBuilderTests.swift in Sources */,
+				AAD357432528C422007C63EF /* TestModel.xcdatamodeld in Sources */,
+				AAD357312528C3EE007C63EF /* TestModelVersion.swift in Sources */,
+				AAD357512528C45F007C63EF /* CombineExtensions.swift in Sources */,
+				AAD357232528C3CA007C63EF /* ResourceBundleAccessor.swift in Sources */,
+				AAD3571A2528C3A3007C63EF /* CoreDataManagerTests.swift in Sources */,
+				AAD3575F2528C4A9007C63EF /* CoreDataContextTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -708,6 +1018,11 @@
 			isa = PBXTargetDependency;
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
 			targetProxy = AAD355F32528B86E007C63EF /* PBXContainerItemProxy */;
+		};
+		AAD356152528BAC9007C63EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD356092528BAC9007C63EF /* KokoroCoreData */;
+			targetProxy = AAD356142528BAC9007C63EF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -771,6 +1086,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "XCODE DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -829,6 +1145,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = XCODE;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -846,7 +1163,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -857,7 +1173,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -872,7 +1187,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -882,7 +1196,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -897,7 +1210,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -908,7 +1220,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -923,7 +1234,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -933,7 +1243,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -948,7 +1257,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -959,7 +1267,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -974,7 +1281,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -984,7 +1290,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -999,7 +1304,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1010,7 +1314,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1025,7 +1328,6 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1035,7 +1337,90 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AAD3561C2528BAC9007C63EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreData;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AAD3561D2528BAC9007C63EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreData;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AAD3561F2528BAC9007C63EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreDataTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AAD356202528BAC9007C63EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreDataTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1087,7 +1472,39 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		AAD3561B2528BAC9007C63EF /* Build configuration list for PBXNativeTarget "KokoroCoreData" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAD3561C2528BAC9007C63EF /* Debug */,
+				AAD3561D2528BAC9007C63EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAD3561E2528BAC9007C63EF /* Build configuration list for PBXNativeTarget "KokoroCoreDataTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAD3561F2528BAC9007C63EF /* Debug */,
+				AAD356202528BAC9007C63EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AAD357402528C422007C63EF /* TestModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AAD357412528C422007C63EF /* TestModel.xcdatamodel */,
+				AAD357422528C422007C63EF /* ExtraArgs.xcdatamodel */,
+			);
+			currentVersion = AAD357422528C422007C63EF /* ExtraArgs.xcdatamodel */;
+			path = TestModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AAD35484252869D0007C63EF /* Project object */;
 }
