@@ -88,7 +88,7 @@ public extension HttpClient {
 	}
 }
 
-public class DefaultHttpClient: HttpClient {
+public class URLSessionHttpClient: HttpClient {
 	private let session: URLSession
 	private let decoder: JSONDecoder
 
