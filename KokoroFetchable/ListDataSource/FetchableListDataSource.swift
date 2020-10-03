@@ -1,0 +1,187 @@
+//
+//  Created on 03/10/2020.
+//  Copyright © 2020 Nanoray. All rights reserved.
+//
+
+public protocol FetchableListDataSourceObserver: class {
+	associatedtype Element
+
+	func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>)
+}
+
+public final class WeakFetchableListDataSourceObserver<Element>: FetchableListDataSourceObserver {
+	public let identifier: ObjectIdentifier
+	public private(set) weak var weakReference: AnyObject?
+	private let didUpdateDataClosure: (_ dataSource: AnyFetchableListDataSource<Element>) -> Void
+
+	public init<T>(wrapping wrapped: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		identifier = ObjectIdentifier(wrapped)
+		weakReference = wrapped
+		didUpdateDataClosure = { [weak wrapped] in wrapped?.didUpdateData(of: $0) }
+	}
+
+	public func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
+		didUpdateDataClosure(dataSource)
+	}
+}
+
+public protocol FetchableListDataSource: class {
+	associatedtype Element
+
+	var identifier: ObjectIdentifier { get }
+	var elements: [Element] { get }
+	var count: Int { get }
+	var error: Error? { get }
+	var isFetching: Bool { get }
+
+	subscript(_ index: Int) -> Element { get }
+
+	@discardableResult
+	func fetchAdditionalData() -> Bool
+
+	func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element
+	func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element
+}
+
+public extension FetchableListDataSource {
+	var identifier: ObjectIdentifier {
+		return ObjectIdentifier(self)
+	}
+
+	var elements: [Element] {
+		return (0 ..< count).map { self[$0] }
+	}
+
+	var isEmpty: Bool {
+		return count == 0 // swiftlint:disable:this empty_count
+	}
+
+	var fetchState: DataSourceFetchState<Error> {
+		if isFetching {
+			return .fetching
+		} else if let error = error {
+			return .failure(error)
+		} else {
+			return .finished
+		}
+	}
+
+	func eraseToAnyFetchableListDataSource() -> AnyFetchableListDataSource<Element> {
+		return (self as? AnyFetchableListDataSource<Element>) ?? .init(wrapping: self)
+	}
+}
+
+private class AnyFetchableListDataSourceBase<Element>: FetchableListDataSource {
+	var count: Int {
+		fatalError("Not overriden abstract member")
+	}
+
+	var error: Error? {
+		fatalError("Not overriden abstract member")
+	}
+
+	var isFetching: Bool {
+		fatalError("Not overriden abstract member")
+	}
+
+	subscript(_ index: Int) -> Element {
+		fatalError("Not overriden abstract member")
+	}
+
+	@discardableResult
+	func fetchAdditionalData() -> Bool {
+		fatalError("Not overriden abstract member")
+	}
+
+	func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		fatalError("Not overriden abstract member")
+	}
+
+	func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		fatalError("Not overriden abstract member")
+	}
+}
+
+private class AnyFetchableListDataSourceBox<Wrapped>: AnyFetchableListDataSourceBase<Wrapped.Element> where Wrapped: FetchableListDataSource {
+	typealias Element = Wrapped.Element
+
+	private let wrapped: Wrapped
+
+	var elements: [Element] {
+		return wrapped.elements
+	}
+
+	override var count: Int {
+		return wrapped.count
+	}
+
+	override var error: Error? {
+		return wrapped.error
+	}
+
+	override var isFetching: Bool {
+		return wrapped.isFetching
+	}
+
+	override subscript(index: Int) -> Element {
+		return wrapped[index]
+	}
+
+	init(wrapping wrapped: Wrapped) {
+		self.wrapped = wrapped
+	}
+
+	@discardableResult
+	override func fetchAdditionalData() -> Bool {
+		return wrapped.fetchAdditionalData()
+	}
+
+	override func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		wrapped.addObserver(observer)
+	}
+
+	override func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		wrapped.removeObserver(observer)
+	}
+}
+
+public final class AnyFetchableListDataSource<Element>: FetchableListDataSource {
+	private let box: AnyFetchableListDataSourceBase<Element>
+
+	public var elements: [Element] {
+		return box.elements
+	}
+
+	public var count: Int {
+		return box.count
+	}
+
+	public var error: Error? {
+		return box.error
+	}
+
+	public var isFetching: Bool {
+		return box.isFetching
+	}
+
+	public subscript(index: Int) -> Element {
+		return box[index]
+	}
+
+	public init<T>(wrapping wrapped: T) where T: FetchableListDataSource, T.Element == Element {
+		box = AnyFetchableListDataSourceBox(wrapping: wrapped)
+	}
+
+	@discardableResult
+	public func fetchAdditionalData() -> Bool {
+		return box.fetchAdditionalData()
+	}
+
+	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		box.addObserver(observer)
+	}
+
+	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+		box.removeObserver(observer)
+	}
+}

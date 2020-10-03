@@ -37,6 +37,18 @@
 		AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */; };
 		AAD35530252893FD007C63EF /* ButtonMenuConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */; };
 		AAD3554A2528A03F007C63EF /* ForceTouchGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */; };
+		AAD3555C2528A818007C63EF /* KokoroFetchable.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD3555A2528A818007C63EF /* KokoroFetchable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AAD3557C2528A900007C63EF /* FetchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3557B2528A900007C63EF /* FetchableListDataSource.swift */; };
+		AAD355822528A92E007C63EF /* DataSourceFetchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355812528A92E007C63EF /* DataSourceFetchState.swift */; };
+		AAD3558A2528A94B007C63EF /* SnapshotListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355892528A94B007C63EF /* SnapshotListDataSource.swift */; };
+		AAD355922528AA59007C63EF /* SkeletonListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355912528AA59007C63EF /* SkeletonListDataSource.swift */; };
+		AAD3559A2528AA91007C63EF /* PublisherListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355992528AA91007C63EF /* PublisherListDataSource.swift */; };
+		AAD3559F2528AB5D007C63EF /* MergeListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3559E2528AB5D007C63EF /* MergeListDataSource.swift */; };
+		AAD355AA2528ACE5007C63EF /* UniqueListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355A92528ACE5007C63EF /* UniqueListDataSource.swift */; };
+		AAD355AF2528AD18007C63EF /* IgnoringUnchangedListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355AE2528AD18007C63EF /* IgnoringUnchangedListDataSource.swift */; };
+		AAD355B42528AD40007C63EF /* FilterListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355B32528AD40007C63EF /* FilterListDataSource.swift */; };
+		AAD355B92528AD60007C63EF /* MapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355B82528AD60007C63EF /* MapListDataSource.swift */; };
+		AAD355BE2528AF83007C63EF /* CompactMapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +97,20 @@
 		AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabAndNavigationControllerWrapper.swift; sourceTree = "<group>"; };
 		AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonMenuConfigurator.swift; sourceTree = "<group>"; };
 		AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceTouchGestureRecognizer.swift; sourceTree = "<group>"; };
+		AAD355582528A818007C63EF /* KokoroFetchable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroFetchable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD3555A2528A818007C63EF /* KokoroFetchable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroFetchable.h; sourceTree = "<group>"; };
+		AAD3555B2528A818007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAD3557B2528A900007C63EF /* FetchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchableListDataSource.swift; sourceTree = "<group>"; };
+		AAD355812528A92E007C63EF /* DataSourceFetchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceFetchState.swift; sourceTree = "<group>"; };
+		AAD355892528A94B007C63EF /* SnapshotListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotListDataSource.swift; sourceTree = "<group>"; };
+		AAD355912528AA59007C63EF /* SkeletonListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonListDataSource.swift; sourceTree = "<group>"; };
+		AAD355992528AA91007C63EF /* PublisherListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherListDataSource.swift; sourceTree = "<group>"; };
+		AAD3559E2528AB5D007C63EF /* MergeListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeListDataSource.swift; sourceTree = "<group>"; };
+		AAD355A92528ACE5007C63EF /* UniqueListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueListDataSource.swift; sourceTree = "<group>"; };
+		AAD355AE2528AD18007C63EF /* IgnoringUnchangedListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoringUnchangedListDataSource.swift; sourceTree = "<group>"; };
+		AAD355B32528AD40007C63EF /* FilterListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterListDataSource.swift; sourceTree = "<group>"; };
+		AAD355B82528AD60007C63EF /* MapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDataSource.swift; sourceTree = "<group>"; };
+		AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactMapListDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +128,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD355552528A818007C63EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,6 +144,7 @@
 				AAD354AB252870F9007C63EF /* Package.swift */,
 				AAD3548F252869D0007C63EF /* KokoroUtils */,
 				AAD354B225287210007C63EF /* KokoroUI */,
+				AAD355592528A818007C63EF /* KokoroFetchable */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -120,6 +154,7 @@
 			children = (
 				AAD3548D252869D0007C63EF /* KokoroUtils.framework */,
 				AAD354B125287210007C63EF /* KokoroUI.framework */,
+				AAD355582528A818007C63EF /* KokoroFetchable.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -234,6 +269,42 @@
 			path = Containers;
 			sourceTree = "<group>";
 		};
+		AAD355592528A818007C63EF /* KokoroFetchable */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3556D2528A8A6007C63EF /* Bootstrap */,
+				AAD355802528A919007C63EF /* ListDataSource */,
+				AAD355812528A92E007C63EF /* DataSourceFetchState.swift */,
+			);
+			path = KokoroFetchable;
+			sourceTree = "<group>";
+		};
+		AAD3556D2528A8A6007C63EF /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3555A2528A818007C63EF /* KokoroFetchable.h */,
+				AAD3555B2528A818007C63EF /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AAD355802528A919007C63EF /* ListDataSource */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3557B2528A900007C63EF /* FetchableListDataSource.swift */,
+				AAD355892528A94B007C63EF /* SnapshotListDataSource.swift */,
+				AAD355912528AA59007C63EF /* SkeletonListDataSource.swift */,
+				AAD355992528AA91007C63EF /* PublisherListDataSource.swift */,
+				AAD3559E2528AB5D007C63EF /* MergeListDataSource.swift */,
+				AAD355A92528ACE5007C63EF /* UniqueListDataSource.swift */,
+				AAD355AE2528AD18007C63EF /* IgnoringUnchangedListDataSource.swift */,
+				AAD355B32528AD40007C63EF /* FilterListDataSource.swift */,
+				AAD355B82528AD60007C63EF /* MapListDataSource.swift */,
+				AAD355BD2528AF83007C63EF /* CompactMapListDataSource.swift */,
+			);
+			path = ListDataSource;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -250,6 +321,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD354B525287210007C63EF /* KokoroUI.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD355532528A818007C63EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD3555C2528A818007C63EF /* KokoroFetchable.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +376,25 @@
 			productReference = AAD354B125287210007C63EF /* KokoroUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		AAD355572528A818007C63EF /* KokoroFetchable */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAD3555F2528A818007C63EF /* Build configuration list for PBXNativeTarget "KokoroFetchable" */;
+			buildPhases = (
+				AAD355532528A818007C63EF /* Headers */,
+				AAD355632528A824007C63EF /* Linters */,
+				AAD355542528A818007C63EF /* Sources */,
+				AAD355552528A818007C63EF /* Frameworks */,
+				AAD355562528A818007C63EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KokoroFetchable;
+			productName = KokoroFetchable;
+			productReference = AAD355582528A818007C63EF /* KokoroFetchable.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -311,6 +409,10 @@
 						LastSwiftMigration = 1200;
 					};
 					AAD354B025287210007C63EF = {
+						CreatedOnToolsVersion = 12.0.1;
+						LastSwiftMigration = 1200;
+					};
+					AAD355572528A818007C63EF = {
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
 					};
@@ -333,6 +435,7 @@
 			targets = (
 				AAD3548C252869D0007C63EF /* KokoroUtils */,
 				AAD354B025287210007C63EF /* KokoroUI */,
+				AAD355572528A818007C63EF /* KokoroFetchable */,
 			);
 		};
 /* End PBXProject section */
@@ -346,6 +449,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AAD354AF25287210007C63EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD355562528A818007C63EF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -375,6 +485,25 @@
 			showEnvVarsInLog = 0;
 		};
 		AAD354BC25287220007C63EF /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAD355632528A824007C63EF /* Linters */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -435,6 +564,24 @@
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
 				AAD3551925288CC6007C63EF /* ReusableCells.swift in Sources */,
 				AAD354EF25288258007C63EF /* AspectRatioEqualConstraint.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD355542528A818007C63EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD3558A2528A94B007C63EF /* SnapshotListDataSource.swift in Sources */,
+				AAD355AF2528AD18007C63EF /* IgnoringUnchangedListDataSource.swift in Sources */,
+				AAD355AA2528ACE5007C63EF /* UniqueListDataSource.swift in Sources */,
+				AAD355B42528AD40007C63EF /* FilterListDataSource.swift in Sources */,
+				AAD3557C2528A900007C63EF /* FetchableListDataSource.swift in Sources */,
+				AAD3559F2528AB5D007C63EF /* MergeListDataSource.swift in Sources */,
+				AAD355822528A92E007C63EF /* DataSourceFetchState.swift in Sources */,
+				AAD355B92528AD60007C63EF /* MapListDataSource.swift in Sources */,
+				AAD355BE2528AF83007C63EF /* CompactMapListDataSource.swift in Sources */,
+				AAD3559A2528AA91007C63EF /* PublisherListDataSource.swift in Sources */,
+				AAD355922528AA59007C63EF /* SkeletonListDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,7 +773,6 @@
 		AAD354B725287210007C63EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -653,7 +799,6 @@
 		AAD354B825287210007C63EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -669,6 +814,57 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AAD3555D2528A818007C63EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroFetchable;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AAD3555E2528A818007C63EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroFetchable;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -702,6 +898,15 @@
 			buildConfigurations = (
 				AAD354B725287210007C63EF /* Debug */,
 				AAD354B825287210007C63EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAD3555F2528A818007C63EF /* Build configuration list for PBXNativeTarget "KokoroFetchable" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAD3555D2528A818007C63EF /* Debug */,
+				AAD3555E2528A818007C63EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
