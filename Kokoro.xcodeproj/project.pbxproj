@@ -85,6 +85,20 @@
 		AAD357672528C4C6007C63EF /* PredicateBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */; };
 		AAD3577025291B2D007C63EF /* URLSessionHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3576F25291B2D007C63EF /* URLSessionHttpClient.swift */; };
 		AAD3577E25291B6C007C63EF /* SchedulingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */; };
+		AAD3578E2529C468007C63EF /* KokoroResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD3578C2529C468007C63EF /* KokoroResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AAD3579C2529C524007C63EF /* ResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3579B2529C524007C63EF /* ResourceProvider.swift */; };
+		AAD357A52529C539007C63EF /* ResourceProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357A42529C539007C63EF /* ResourceProviderFactory.swift */; };
+		AAD357AE2529C558007C63EF /* LocalUrlDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357AD2529C558007C63EF /* LocalUrlDataProvider.swift */; };
+		AAD357BE2529C56F007C63EF /* UrlDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357BD2529C56F007C63EF /* UrlDataProvider.swift */; };
+		AAD357C72529C593007C63EF /* BlurredImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357C62529C593007C63EF /* BlurredImageProvider.swift */; };
+		AAD357D02529C5AD007C63EF /* UrlAvAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357CF2529C5AD007C63EF /* UrlAvAssetProvider.swift */; };
+		AAD357D92529C5C1007C63EF /* DataAvAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357D82529C5C1007C63EF /* DataAvAssetProvider.swift */; };
+		AAD357E22529C5D7007C63EF /* ValueResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357E12529C5D7007C63EF /* ValueResourceProvider.swift */; };
+		AAD357EB2529C5E7007C63EF /* MapResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357EA2529C5E7007C63EF /* MapResourceProvider.swift */; };
+		AAD357F42529C5F7007C63EF /* TryMapResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357F32529C5F7007C63EF /* TryMapResourceProvider.swift */; };
+		AAD357FD2529C608007C63EF /* FlatMapResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357FC2529C608007C63EF /* FlatMapResourceProvider.swift */; };
+		AAD358062529C61D007C63EF /* MapPublisherResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD358052529C61D007C63EF /* MapPublisherResourceProvider.swift */; };
+		AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3580E2529C6F2007C63EF /* Identifiable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +122,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AAD356092528BAC9007C63EF;
 			remoteInfo = KokoroCoreData;
+		};
+		AAD3581E2529CAA2007C63EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -203,6 +224,22 @@
 		AAD357662528C4C6007C63EF /* PredicateBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredicateBuilderTests.swift; sourceTree = "<group>"; };
 		AAD3576F25291B2D007C63EF /* URLSessionHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHttpClient.swift; sourceTree = "<group>"; };
 		AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulingHttpClient.swift; sourceTree = "<group>"; };
+		AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroResourceProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD3578C2529C468007C63EF /* KokoroResourceProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroResourceProvider.h; sourceTree = "<group>"; };
+		AAD3578D2529C468007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAD3579B2529C524007C63EF /* ResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceProvider.swift; sourceTree = "<group>"; };
+		AAD357A42529C539007C63EF /* ResourceProviderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceProviderFactory.swift; sourceTree = "<group>"; };
+		AAD357AD2529C558007C63EF /* LocalUrlDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalUrlDataProvider.swift; sourceTree = "<group>"; };
+		AAD357BD2529C56F007C63EF /* UrlDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlDataProvider.swift; sourceTree = "<group>"; };
+		AAD357C62529C593007C63EF /* BlurredImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredImageProvider.swift; sourceTree = "<group>"; };
+		AAD357CF2529C5AD007C63EF /* UrlAvAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlAvAssetProvider.swift; sourceTree = "<group>"; };
+		AAD357D82529C5C1007C63EF /* DataAvAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAvAssetProvider.swift; sourceTree = "<group>"; };
+		AAD357E12529C5D7007C63EF /* ValueResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueResourceProvider.swift; sourceTree = "<group>"; };
+		AAD357EA2529C5E7007C63EF /* MapResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapResourceProvider.swift; sourceTree = "<group>"; };
+		AAD357F32529C5F7007C63EF /* TryMapResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryMapResourceProvider.swift; sourceTree = "<group>"; };
+		AAD357FC2529C608007C63EF /* FlatMapResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatMapResourceProvider.swift; sourceTree = "<group>"; };
+		AAD358052529C61D007C63EF /* MapPublisherResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPublisherResourceProvider.swift; sourceTree = "<group>"; };
+		AAD3580E2529C6F2007C63EF /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +286,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD357872529C468007C63EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -262,6 +306,7 @@
 				AAD355D72528B7F7007C63EF /* KokoroHttp */,
 				AAD3560B2528BAC9007C63EF /* KokoroCoreData */,
 				AAD356162528BAC9007C63EF /* KokoroCoreDataTests */,
+				AAD3578B2529C468007C63EF /* KokoroResourceProvider */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -275,6 +320,7 @@
 				AAD355D62528B7F7007C63EF /* KokoroHttp.framework */,
 				AAD3560A2528BAC9007C63EF /* KokoroCoreData.framework */,
 				AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */,
+				AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -288,6 +334,7 @@
 				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
 				AAD354DB2528758B007C63EF /* CodeIdentifier.swift */,
 				AAD355C72528B3D7007C63EF /* Identifier.swift */,
+				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
 				AAD355CC2528B4A4007C63EF /* Logger.swift */,
 			);
 			path = KokoroUtils;
@@ -540,6 +587,35 @@
 			path = Client;
 			sourceTree = "<group>";
 		};
+		AAD3578B2529C468007C63EF /* KokoroResourceProvider */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3579A2529C4BF007C63EF /* Bootstrap */,
+				AAD3579B2529C524007C63EF /* ResourceProvider.swift */,
+				AAD357A42529C539007C63EF /* ResourceProviderFactory.swift */,
+				AAD357AD2529C558007C63EF /* LocalUrlDataProvider.swift */,
+				AAD357BD2529C56F007C63EF /* UrlDataProvider.swift */,
+				AAD357C62529C593007C63EF /* BlurredImageProvider.swift */,
+				AAD357CF2529C5AD007C63EF /* UrlAvAssetProvider.swift */,
+				AAD357D82529C5C1007C63EF /* DataAvAssetProvider.swift */,
+				AAD357E12529C5D7007C63EF /* ValueResourceProvider.swift */,
+				AAD357EA2529C5E7007C63EF /* MapResourceProvider.swift */,
+				AAD357F32529C5F7007C63EF /* TryMapResourceProvider.swift */,
+				AAD357FC2529C608007C63EF /* FlatMapResourceProvider.swift */,
+				AAD358052529C61D007C63EF /* MapPublisherResourceProvider.swift */,
+			);
+			path = KokoroResourceProvider;
+			sourceTree = "<group>";
+		};
+		AAD3579A2529C4BF007C63EF /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3578C2529C468007C63EF /* KokoroResourceProvider.h */,
+				AAD3578D2529C468007C63EF /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -580,6 +656,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD3561A2528BAC9007C63EF /* KokoroCoreData.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD357852529C468007C63EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD3578E2529C468007C63EF /* KokoroResourceProvider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,6 +787,26 @@
 			productReference = AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		AAD357892529C468007C63EF /* KokoroResourceProvider */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAD357912529C468007C63EF /* Build configuration list for PBXNativeTarget "KokoroResourceProvider" */;
+			buildPhases = (
+				AAD357852529C468007C63EF /* Headers */,
+				AAD357992529C47D007C63EF /* Linters */,
+				AAD357862529C468007C63EF /* Sources */,
+				AAD357872529C468007C63EF /* Frameworks */,
+				AAD357882529C468007C63EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAD3581F2529CAA2007C63EF /* PBXTargetDependency */,
+			);
+			name = KokoroResourceProvider;
+			productName = KokoroResourceProvider;
+			productReference = AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -737,6 +841,10 @@
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
 					};
+					AAD357892529C468007C63EF = {
+						CreatedOnToolsVersion = 12.0.1;
+						LastSwiftMigration = 1200;
+					};
 				};
 			};
 			buildConfigurationList = AAD35487252869D0007C63EF /* Build configuration list for PBXProject "Kokoro" */;
@@ -760,6 +868,7 @@
 				AAD355D52528B7F7007C63EF /* KokoroHttp */,
 				AAD356092528BAC9007C63EF /* KokoroCoreData */,
 				AAD356112528BAC9007C63EF /* KokoroCoreDataTests */,
+				AAD357892529C468007C63EF /* KokoroResourceProvider */,
 			);
 		};
 /* End PBXProject section */
@@ -807,6 +916,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD357882529C468007C63EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -826,7 +942,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AAD354BC25287220007C63EF /* Linters */ = {
@@ -845,7 +961,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AAD355632528A824007C63EF /* Linters */ = {
@@ -864,7 +980,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AAD3566B2528BB6A007C63EF /* Linters */ = {
@@ -883,7 +999,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AAD3566C2528BB75007C63EF /* Linters */ = {
@@ -902,7 +1018,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/${TARGET_NAME}Tests\" --force-exclude\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\n\t\"$SRCROOT/swiftformat\" --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/${TARGET_NAME}Tests\"\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/${TARGET_NAME}Tests\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/${TARGET_NAME}Tests\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAD357992529C47D007C63EF /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -916,6 +1051,7 @@
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAD354DC2528758B007C63EF /* CodeIdentifier.swift in Sources */,
+				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
 			);
@@ -1022,6 +1158,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD357862529C468007C63EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD357BE2529C56F007C63EF /* UrlDataProvider.swift in Sources */,
+				AAD3579C2529C524007C63EF /* ResourceProvider.swift in Sources */,
+				AAD357A52529C539007C63EF /* ResourceProviderFactory.swift in Sources */,
+				AAD357FD2529C608007C63EF /* FlatMapResourceProvider.swift in Sources */,
+				AAD357EB2529C5E7007C63EF /* MapResourceProvider.swift in Sources */,
+				AAD357D92529C5C1007C63EF /* DataAvAssetProvider.swift in Sources */,
+				AAD357F42529C5F7007C63EF /* TryMapResourceProvider.swift in Sources */,
+				AAD357C72529C593007C63EF /* BlurredImageProvider.swift in Sources */,
+				AAD358062529C61D007C63EF /* MapPublisherResourceProvider.swift in Sources */,
+				AAD357D02529C5AD007C63EF /* UrlAvAssetProvider.swift in Sources */,
+				AAD357E22529C5D7007C63EF /* ValueResourceProvider.swift in Sources */,
+				AAD357AE2529C558007C63EF /* LocalUrlDataProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1039,6 +1194,11 @@
 			isa = PBXTargetDependency;
 			target = AAD356092528BAC9007C63EF /* KokoroCoreData */;
 			targetProxy = AAD356142528BAC9007C63EF /* PBXContainerItemProxy */;
+		};
+		AAD3581F2529CAA2007C63EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AAD3581E2529CAA2007C63EF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1440,6 +1600,53 @@
 			};
 			name = Release;
 		};
+		AAD3578F2529C468007C63EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroResourceProvider;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AAD357902529C468007C63EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroResourceProvider;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1502,6 +1709,15 @@
 			buildConfigurations = (
 				AAD3561F2528BAC9007C63EF /* Debug */,
 				AAD356202528BAC9007C63EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAD357912529C468007C63EF /* Build configuration list for PBXNativeTarget "KokoroResourceProvider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAD3578F2529C468007C63EF /* Debug */,
+				AAD357902529C468007C63EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
