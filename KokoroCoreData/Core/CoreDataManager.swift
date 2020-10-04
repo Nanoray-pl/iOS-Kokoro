@@ -142,33 +142,20 @@ public class DefaultCoreDataManager<ModelVersion: CoreDataModelVersion>: CoreDat
 		self.migrationPathProvider = migrationPathProvider.eraseToAnyCoreDataMigrationPathProvider()
 	}
 
-	private enum PartialInitializeResult {
-		case result(_ result: InitializeResult)
-		case toBeDetermined
-	}
-
 	public func initialize(options: InitializeOptions) -> AnyPublisher<InitializeResult, InitializeFailure> {
-		return Deferred { [storeType] in
-			return Future { promise in
-				switch (self.state, recreate: options.recreate) {
-				case (.initialized, recreate: false):
-					promise(.success(.result(.alreadyInitialized(storeType: storeType))))
-				case (.initialized, recreate: true):
-					promise(.failure(.duringInitializing(InitializeFailure.Error.cannotRecreateInitializedStack)))
-				case (.initializing, _):
-					promise(.failure(.duringInitializing(InitializeFailure.Error.alreadyInitializing)))
-				case (.awaiting, _):
-					promise(.success(.toBeDetermined))
-				}
-			}
-		}
-		.flatMap { [storeType] (partialInitializeResult: PartialInitializeResult) -> AnyPublisher<InitializeResult, InitializeFailure> in
-			switch partialInitializeResult {
-			case let .result(result):
-				return Just(result)
+		return Deferred { [storeType] () -> AnyPublisher<InitializeResult, InitializeFailure> in
+			switch (self.state, recreate: options.recreate) {
+			case (.initialized, recreate: false):
+				return Just(.alreadyInitialized(storeType: storeType))
 					.setFailureType(to: InitializeFailure.self)
 					.eraseToAnyPublisher()
-			case .toBeDetermined:
+			case (.initialized, recreate: true):
+				return Fail(error: .duringInitializing(InitializeFailure.Error.cannotRecreateInitializedStack))
+					.eraseToAnyPublisher()
+			case (.initializing, _):
+				return Fail(error: .duringInitializing(InitializeFailure.Error.alreadyInitializing))
+					.eraseToAnyPublisher()
+			case (.awaiting, _):
 				self.state = .initializing
 
 				if options.recreate {
@@ -230,34 +217,18 @@ public class DefaultCoreDataManager<ModelVersion: CoreDataModelVersion>: CoreDat
 		return .unknownVersion
 	}
 
-	private enum PartialMigrationResult {
-		case result(_ result: MigrationResult)
-		case toBeDetermined(currentVersion: ModelVersion)
-	}
-
 	private func migrateIfNeeded(versionOverride: InitializeOptions.VersionOverride) -> AnyPublisher<MigrationResult, Error> {
-		return Deferred {
-			return Future { promise in
-				let currentPotentialVersion = self.currentStoreVersion()
-				switch currentPotentialVersion {
-				case .unknownVersion:
-					promise(.failure(InitializeFailure.Error.cannotMigrateUnknownVersion))
-					return
-				case .none:
-					promise(.success(.result(.noStoreToMigrate)))
-					return
-				case let .version(currentVersion):
-					promise(.success(.toBeDetermined(currentVersion: currentVersion)))
-				}
-			}
-		}
-		.flatMap { (partialMigrationResult: PartialMigrationResult) -> AnyPublisher<MigrationResult, Error> in
-			switch partialMigrationResult {
-			case let .result(result):
-				return Just(result)
+		return Deferred { () -> AnyPublisher<MigrationResult, Error> in
+			let currentPotentialVersion = self.currentStoreVersion()
+			switch currentPotentialVersion {
+			case .unknownVersion:
+				return Fail(error: InitializeFailure.Error.cannotMigrateUnknownVersion)
+					.eraseToAnyPublisher()
+			case .none:
+				return Just(.noStoreToMigrate)
 					.setFailureType(to: Error.self)
 					.eraseToAnyPublisher()
-			case let .toBeDetermined(currentVersion):
+			case let .version(currentVersion):
 				do {
 					let migrationPath: [CoreDataMigrationStep<ModelVersion>]
 					switch versionOverride {
@@ -353,16 +324,14 @@ public class DefaultCoreDataManager<ModelVersion: CoreDataModelVersion>: CoreDat
 	}
 
 	private func loadStore() -> AnyPublisher<Void, Error> {
-		return Deferred {
-			return Future { promise in
-				if let stack = self.stack {
-					promise(.success(stack))
-				} else {
-					promise(.failure(InitializeFailure.Error.stackNotSetup))
-				}
+		return Deferred { () -> AnyPublisher<Void, Error> in
+			if let stack = self.stack {
+				return stack.instance.loadStore()
+			} else {
+				return Fail(error: InitializeFailure.Error.stackNotSetup)
+					.eraseToAnyPublisher()
 			}
 		}
-		.flatMap { (stack: (instance: CoreDataStack, version: ModelVersion)) in stack.instance.loadStore() }
 		.eraseToAnyPublisher()
 	}
 
