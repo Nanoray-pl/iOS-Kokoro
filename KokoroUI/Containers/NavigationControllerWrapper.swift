@@ -156,7 +156,7 @@ open class NavigationControllerWrapper: UIViewController {
 
 		func precedingNavigationItems(for controller: UIViewController) -> [UINavigationItem] {
 			guard let index = parent.wrappedNavigationController.viewControllers.firstIndex(of: controller) else { return [] }
-			return parent.wrappedNavigationController.viewControllers.prefix(index).map { $0.navigationItem }
+			return parent.wrappedNavigationController.viewControllers.prefix(index).map(\.navigationItem)
 		}
 
 		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {

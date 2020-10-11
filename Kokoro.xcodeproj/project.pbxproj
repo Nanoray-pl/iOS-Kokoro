@@ -99,6 +99,13 @@
 		AAD357FD2529C608007C63EF /* FlatMapResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD357FC2529C608007C63EF /* FlatMapResourceProvider.swift */; };
 		AAD358062529C61D007C63EF /* MapPublisherResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD358052529C61D007C63EF /* MapPublisherResourceProvider.swift */; };
 		AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3580E2529C6F2007C63EF /* Identifiable.swift */; };
+		AAD57CB8253376C5007358D1 /* SwiftUIRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57CB7253376C5007358D1 /* SwiftUIRepresentable.swift */; };
+		AAD57CC72533B0C8007358D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57CC62533B0C8007358D1 /* AppDelegate.swift */; };
+		AAD57CD02533B0CA007358D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAD57CCF2533B0CA007358D1 /* Assets.xcassets */; };
+		AAD57D132533B1AC007358D1 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D122533B1AC007358D1 /* MenuViewController.swift */; };
+		AAD57D372533B363007358D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAD57D362533B363007358D1 /* LaunchScreen.storyboard */; };
+		AAD57D412533B46F007358D1 /* ProgressBarsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */; };
+		AAD57D532533B689007358D1 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D522533B689007358D1 /* MainNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +136,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AAD3548C252869D0007C63EF;
 			remoteInfo = KokoroUtils;
+		};
+		AAD57D242533B2DB007358D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD354B025287210007C63EF;
+			remoteInfo = KokoroUI;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -240,6 +254,15 @@
 		AAD357FC2529C608007C63EF /* FlatMapResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatMapResourceProvider.swift; sourceTree = "<group>"; };
 		AAD358052529C61D007C63EF /* MapPublisherResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPublisherResourceProvider.swift; sourceTree = "<group>"; };
 		AAD3580E2529C6F2007C63EF /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		AAD57CB7253376C5007358D1 /* SwiftUIRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIRepresentable.swift; sourceTree = "<group>"; };
+		AAD57CC42533B0C8007358D1 /* KokoroUIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KokoroUIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD57CC62533B0C8007358D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AAD57CCF2533B0CA007358D1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AAD57CD42533B0CA007358D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAD57D122533B1AC007358D1 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		AAD57D362533B363007358D1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarsViewController.swift; sourceTree = "<group>"; };
+		AAD57D522533B689007358D1 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,6 +316,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD57CC12533B0C8007358D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -302,6 +332,7 @@
 				AAD354AB252870F9007C63EF /* Package.swift */,
 				AAD3548F252869D0007C63EF /* KokoroUtils */,
 				AAD354B225287210007C63EF /* KokoroUI */,
+				AAD57CC52533B0C8007358D1 /* KokoroUIDemo */,
 				AAD355592528A818007C63EF /* KokoroFetchable */,
 				AAD355D72528B7F7007C63EF /* KokoroHttp */,
 				AAD3560B2528BAC9007C63EF /* KokoroCoreData */,
@@ -321,6 +352,7 @@
 				AAD3560A2528BAC9007C63EF /* KokoroCoreData.framework */,
 				AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */,
 				AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */,
+				AAD57CC42533B0C8007358D1 /* KokoroUIDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -404,6 +436,7 @@
 				AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */,
 				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
 				AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */,
+				AAD57CB7253376C5007358D1 /* SwiftUIRepresentable.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -616,6 +649,36 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AAD57CC52533B0C8007358D1 /* KokoroUIDemo */ = {
+			isa = PBXGroup;
+			children = (
+				AAD57CE02533B0D7007358D1 /* Bootstrap */,
+				AAD57CE12533B0E3007358D1 /* Resources */,
+				AAD57D522533B689007358D1 /* MainNavigationController.swift */,
+				AAD57D122533B1AC007358D1 /* MenuViewController.swift */,
+				AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */,
+			);
+			path = KokoroUIDemo;
+			sourceTree = "<group>";
+		};
+		AAD57CE02533B0D7007358D1 /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAD57CD42533B0CA007358D1 /* Info.plist */,
+				AAD57CC62533B0C8007358D1 /* AppDelegate.swift */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AAD57CE12533B0E3007358D1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AAD57D362533B363007358D1 /* LaunchScreen.storyboard */,
+				AAD57CCF2533B0CA007358D1 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -807,6 +870,25 @@
 			productReference = AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		AAD57CC32533B0C8007358D1 /* KokoroUIDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAD57CD52533B0CA007358D1 /* Build configuration list for PBXNativeTarget "KokoroUIDemo" */;
+			buildPhases = (
+				AAD57D642533C200007358D1 /* Linters */,
+				AAD57CC02533B0C8007358D1 /* Sources */,
+				AAD57CC12533B0C8007358D1 /* Frameworks */,
+				AAD57CC22533B0C8007358D1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAD57D252533B2DB007358D1 /* PBXTargetDependency */,
+			);
+			name = KokoroUIDemo;
+			productName = KokoroUIDemo;
+			productReference = AAD57CC42533B0C8007358D1 /* KokoroUIDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -845,6 +927,9 @@
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
 					};
+					AAD57CC32533B0C8007358D1 = {
+						CreatedOnToolsVersion = 12.0.1;
+					};
 				};
 			};
 			buildConfigurationList = AAD35487252869D0007C63EF /* Build configuration list for PBXProject "Kokoro" */;
@@ -869,6 +954,7 @@
 				AAD356092528BAC9007C63EF /* KokoroCoreData */,
 				AAD356112528BAC9007C63EF /* KokoroCoreDataTests */,
 				AAD357892529C468007C63EF /* KokoroResourceProvider */,
+				AAD57CC32533B0C8007358D1 /* KokoroUIDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -920,6 +1006,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAD57CC22533B0C8007358D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD57CD02533B0CA007358D1 /* Assets.xcassets in Resources */,
+				AAD57D372533B363007358D1 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1040,6 +1135,25 @@
 			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		AAD57D642533C200007358D1 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1077,6 +1191,7 @@
 				AAD3550625288985007C63EF /* Button.swift in Sources */,
 				AAD354FA25288577007C63EF /* MinMaxLengthConstraint.swift in Sources */,
 				AAD3551525288C88007C63EF /* RoundedView.swift in Sources */,
+				AAD57CB8253376C5007358D1 /* SwiftUIRepresentable.swift in Sources */,
 				AAD3551E25288D04007C63EF /* ContainerViewController.swift in Sources */,
 				AAD354CA2528732E007C63EF /* Constraints.swift in Sources */,
 				AAD354E025287987007C63EF /* ProportionalOffsetConstraint.swift in Sources */,
@@ -1177,6 +1292,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAD57CC02533B0C8007358D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAD57D412533B46F007358D1 /* ProgressBarsViewController.swift in Sources */,
+				AAD57D132533B1AC007358D1 /* MenuViewController.swift in Sources */,
+				AAD57D532533B689007358D1 /* MainNavigationController.swift in Sources */,
+				AAD57CC72533B0C8007358D1 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1199,6 +1325,11 @@
 			isa = PBXTargetDependency;
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
 			targetProxy = AAD3581E2529CAA2007C63EF /* PBXContainerItemProxy */;
+		};
+		AAD57D252533B2DB007358D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD354B025287210007C63EF /* KokoroUI */;
+			targetProxy = AAD57D242533B2DB007358D1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1647,6 +1778,38 @@
 			};
 			name = Release;
 		};
+		AAD57CD62533B0CA007358D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUIDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AAD57CD72533B0CA007358D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = PT4XKN3RDP;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUIDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1718,6 +1881,15 @@
 			buildConfigurations = (
 				AAD3578F2529C468007C63EF /* Debug */,
 				AAD357902529C468007C63EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAD57CD52533B0CA007358D1 /* Build configuration list for PBXNativeTarget "KokoroUIDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAD57CD62533B0CA007358D1 /* Debug */,
+				AAD57CD72533B0CA007358D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

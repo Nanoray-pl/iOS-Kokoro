@@ -66,7 +66,7 @@ custom_rules:
     severity: warning
   weak_router:
     included: ".*.swift"
-    regex: '(?<!weak )var router:'
+    regex: '(?<!(weak|unowned) )var router:'
     name: 'Weak Router'
-    message: "Routers should be weak to avoid reference cycles."
+    message: "Routers should be weak or unowned to avoid reference cycles."
     severity: warning

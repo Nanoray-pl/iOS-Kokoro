@@ -33,7 +33,7 @@ public class GradientView: UIView {
 
 	public var colors: [(location: Double, color: UIColor)]? {
 		didSet {
-			gradient.colors = colors?.map { $0.color.cgColor }
+			gradient.colors = colors?.map(\.color.cgColor)
 			gradient.locations = colors?.map { $0.location as NSNumber }
 		}
 	}

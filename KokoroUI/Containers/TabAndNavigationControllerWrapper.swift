@@ -346,11 +346,11 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		func precedingNavigationItems(for controller: UIViewController) -> [UINavigationItem] {
 			guard let navigationController = parent.navigationControllers.first(where: { $0.viewControllers.contains(controller) }) else { return [] }
 			guard let index = navigationController.viewControllers.firstIndex(of: controller) else { return [] }
-			return navigationController.viewControllers.prefix(index).map { $0.navigationItem }
+			return navigationController.viewControllers.prefix(index).map(\.navigationItem)
 		}
 
 		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
-			guard let controller = parent.navigationControllers.flatMap({ $0.viewControllers }).first(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+			guard let controller = parent.navigationControllers.flatMap(\.viewControllers).first(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
 			parent.popToViewController(controller, animated: animated, completion: completion)
 		}
 	}
