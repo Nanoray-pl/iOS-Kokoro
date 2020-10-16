@@ -62,10 +62,10 @@ open class Button: UIControl {
 
 		contentView = UIView(frame: .zero).with { [parent = self] in
 			parent.addSubview($0)
-			topConstraint = $0.top(to: parent)
-			bottomConstraint = $0.bottom(to: parent)
-			leftConstraint = $0.left(to: parent)
-			rightConstraint = $0.right(to: parent)
+			topConstraint = $0.topToSuperview()
+			bottomConstraint = $0.bottomToSuperview()
+			leftConstraint = $0.leftToSuperview()
+			rightConstraint = $0.rightToSuperview()
 			constraints += [topConstraint, bottomConstraint, leftConstraint, rightConstraint]
 		}
 
@@ -86,10 +86,10 @@ open class Button: UIControl {
 
 			parent.addSubview($0)
 			constraints += [
-				$0.left(to: parent),
-				$0.top(to: parent),
-				$0.size(to: parent, relation: .greaterThanOrEqual),
-				$0.size(to: parent).priority(.defaultLow),
+				$0.leftToSuperview(),
+				$0.topToSuperview(),
+				$0.sizeToSuperview(relation: .greaterThanOrEqual),
+				$0.sizeToSuperview().priority(.defaultLow),
 			]
 		}
 	}

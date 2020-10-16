@@ -185,7 +185,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 
 		addChild(wrappedTabBarController)
 		view.addSubview(wrappedTabBarController.view)
-		wrappedTabBarController.view.edges(to: wrappedTabBarController.view.superview!).activate()
+		wrappedTabBarController.view.edgesToSuperview().activate()
 		wrappedTabBarController.didMove(toParent: self)
 	}
 

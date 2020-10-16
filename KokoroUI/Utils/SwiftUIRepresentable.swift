@@ -3,8 +3,9 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-#if canImport(CoreGraphics)
+#if canImport(CoreGraphics) && canImport(Foundation)
 import CoreGraphics
+import Foundation
 
 public enum XcodePreviews {
 	static var isPreviewing: Bool {
@@ -123,7 +124,7 @@ private struct ViewRepresentable<T: UIView>: UIViewRepresentable {
 			self.wrapped = view
 			super.init(frame: .zero)
 			addSubview(view)
-			view.edges(to: view.superview!).activate()
+			view.edgesToSuperview().activate()
 		}
 
 		override func didMoveToSuperview() {

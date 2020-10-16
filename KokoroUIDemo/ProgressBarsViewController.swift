@@ -117,7 +117,7 @@ class ProgressBarsViewController: UIViewController {
 					}
 
 					parent.addSubview($0)
-					constraints += $0.edges(to: $0.superview!)
+					constraints += $0.edgesToSuperview()
 				}
 
 				parent.addArrangedSubview($0)
@@ -147,7 +147,7 @@ class ProgressBarsViewController: UIViewController {
 					}
 
 					parent.addSubview($0)
-					constraints += $0.edges(to: $0.superview!)
+					constraints += $0.edgesToSuperview()
 				}
 
 				parent.addArrangedSubview($0)
@@ -172,14 +172,14 @@ class ProgressBarsViewController: UIViewController {
 	private func updateValue() {
 		valueLabel.text = "\(Int(valueSlider.value * 100))%"
 		indeterminateSwitch.setOn(false, animated: Animated.motionBased.value)
-		horizontalProgressBar.value = .determinate(Double(valueSlider.value))
-		verticalProgressBar.value = .determinate(Double(valueSlider.value))
+		horizontalProgressBar.setValue(.determinate(Double(valueSlider.value)), animated: false)
+		verticalProgressBar.setValue(.determinate(Double(valueSlider.value)), animated: false)
 	}
 
 	@objc private func didToggleIndeterminateSwitch() {
 		if indeterminateSwitch.isOn {
-			horizontalProgressBar.value = .indeterminate
-			verticalProgressBar.value = .indeterminate
+			horizontalProgressBar.setValue(.indeterminate, animated: false)
+			verticalProgressBar.setValue(.indeterminate, animated: false)
 		} else {
 			updateValue()
 		}

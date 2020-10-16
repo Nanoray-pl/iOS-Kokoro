@@ -34,13 +34,13 @@ public class ProgressBar: UIView {
 		}
 	}
 
-	public var value = Value.determinate(0.5) {
+	public private(set) var value = Value.determinate(0.5) {
 		didSet {
 			updateValue()
 		}
 	}
 
-	public var rounding: RoundedView.Rounding {
+	public var rounding: RoundedView.Rounding? {
 		get {
 			return bar.rounding
 		}
@@ -115,13 +115,15 @@ public class ProgressBar: UIView {
 
 		spacerSpacer = UIView().with { [parent = self] in
 			parent.addSubview($0)
-			constraints += $0.size(to: $0.superview!)
+			constraints += $0.sizeToSuperview()
 		}
 
 		bar = RoundedView().with { [parent = self] in
+			$0.rounding = nil
+
 			gradient = GradientView().with { [parent = $0] in
 				parent.addSubview($0)
-				constraints += $0.edges(to: $0.superview!)
+				constraints += $0.edgesToSuperview()
 			}
 
 			parent.addSubview($0)
@@ -147,6 +149,16 @@ public class ProgressBar: UIView {
 		colors = [(location: 0, color: color), (location: 1, color: color)]
 	}
 
+	public func setValue(_ value: Value, animated: Bool) {
+		guard value != self.value else { return }
+		Animated(booleanLiteral: animated).run {
+			self.value = value
+			if animated {
+				self.layoutIfNeeded()
+			}
+		}
+	}
+
 	private func updateColors() {
 		gradient.colors = colors.map { (location: $0.location, color: $0.color ?? tintColor) }
 	}
@@ -167,11 +179,11 @@ public class ProgressBar: UIView {
 			gradient.startPoint = .init(x: 0, y: 0.5)
 			gradient.endPoint = .init(x: 1, y: 0.5)
 			directionConstraints = [
-				bar.verticalEdges(to: bar.superview!),
-				spacer.verticalEdges(to: spacer.superview!),
-				spacerSpacer.verticalEdges(to: spacerSpacer.superview!),
+				bar.verticalEdgesToSuperview(),
+				spacer.verticalEdgesToSuperview(),
+				spacerSpacer.verticalEdgesToSuperview(),
 				[
-					spacerSpacer.rightToLeft(of: spacerSpacer.superview!),
+					spacerSpacer.rightToLeftOfSuperview(),
 					spacer.left(to: spacerSpacer),
 					bar.leftToRight(of: spacer),
 				],
@@ -180,11 +192,11 @@ public class ProgressBar: UIView {
 			gradient.startPoint = .init(x: 1, y: 0.5)
 			gradient.endPoint = .init(x: 0, y: 0.5)
 			directionConstraints = [
-				bar.verticalEdges(to: bar.superview!),
-				spacer.verticalEdges(to: spacer.superview!),
-				spacerSpacer.verticalEdges(to: spacerSpacer.superview!),
+				bar.verticalEdgesToSuperview(),
+				spacer.verticalEdgesToSuperview(),
+				spacerSpacer.verticalEdgesToSuperview(),
 				[
-					spacerSpacer.leftToRight(of: spacerSpacer.superview!),
+					spacerSpacer.leftToRightOfSuperview(),
 					spacer.right(to: spacerSpacer),
 					bar.rightToLeft(of: spacer),
 				],
@@ -193,11 +205,11 @@ public class ProgressBar: UIView {
 			gradient.startPoint = .init(x: 0.5, y: 1)
 			gradient.endPoint = .init(x: 0.5, y: 0)
 			directionConstraints = [
-				bar.horizontalEdges(to: bar.superview!),
-				spacer.horizontalEdges(to: spacer.superview!),
-				spacerSpacer.horizontalEdges(to: spacerSpacer.superview!),
+				bar.horizontalEdgesToSuperview(),
+				spacer.horizontalEdgesToSuperview(),
+				spacerSpacer.horizontalEdgesToSuperview(),
 				[
-					spacerSpacer.topToBottom(of: spacerSpacer.superview!),
+					spacerSpacer.topToBottomOfSuperview(),
 					spacer.bottom(to: spacerSpacer),
 					bar.bottomToTop(of: spacer),
 				],
@@ -206,11 +218,11 @@ public class ProgressBar: UIView {
 			gradient.startPoint = .init(x: 0.5, y: 0)
 			gradient.endPoint = .init(x: 0.5, y: 1)
 			directionConstraints = [
-				bar.horizontalEdges(to: bar.superview!),
-				spacer.horizontalEdges(to: spacer.superview!),
-				spacerSpacer.horizontalEdges(to: spacerSpacer.superview!),
+				bar.horizontalEdgesToSuperview(),
+				spacer.horizontalEdgesToSuperview(),
+				spacerSpacer.horizontalEdgesToSuperview(),
 				[
-					spacerSpacer.bottomToTop(of: spacerSpacer.superview!),
+					spacerSpacer.bottomToTopOfSuperview(),
 					spacer.top(to: spacerSpacer),
 					bar.topToBottom(of: spacer),
 				],
@@ -254,18 +266,18 @@ public class ProgressBar: UIView {
 	private func updateSpacerLengthConstraint(offset: Double) {
 		switch direction {
 		case .leftToRight, .rightToLeft, .leadingToTrailing, .trailingToLeading:
-			spacerLengthConstraint = spacer.width(to: spacer.superview!, ratio: CGFloat(1 + offset))
+			spacerLengthConstraint = spacer.widthToSuperview(ratio: CGFloat(1 + offset))
 		case .bottomToTop, .topToBottom:
-			spacerLengthConstraint = spacer.height(to: spacer.superview!, ratio: CGFloat(1 + offset))
+			spacerLengthConstraint = spacer.heightToSuperview(ratio: CGFloat(1 + offset))
 		}
 	}
 
 	private func updateGradientLengthConstraint(value: Double) {
 		switch direction {
 		case .leftToRight, .rightToLeft, .leadingToTrailing, .trailingToLeading:
-			barLengthConstraint = bar.width(to: bar.superview!, ratio: CGFloat(value))
+			barLengthConstraint = bar.widthToSuperview(ratio: CGFloat(value))
 		case .bottomToTop, .topToBottom:
-			barLengthConstraint = bar.height(to: bar.superview!, ratio: CGFloat(value))
+			barLengthConstraint = bar.heightToSuperview(ratio: CGFloat(value))
 		}
 	}
 }
@@ -277,28 +289,11 @@ struct ProgressBarPreviews: PreviewProvider {
 	static var previews: some View {
 		Group {
 			ForEach([ProgressBar.Direction.leftToRight, ProgressBar.Direction.rightToLeft], id: \.self) { direction in
-				representable(size: .init(width: .fixed(200), height: .fixed(8))) {
+				representable {
 					ProgressBar(direction: direction).with {
-						$0.value = .determinate(0.7)
-						$0.colors = [(location: 0, color: .systemBlue), (location: 1, color: .systemRed)]
+						$0.setValue(.determinate(0.7), animated: false)
 					}
 				}
-			}
-		}
-		Group {
-			ForEach([ProgressBar.Direction.bottomToTop, ProgressBar.Direction.topToBottom], id: \.self) { direction in
-				representable(size: .init(width: .fixed(8), height: .fixed(200))) {
-					ProgressBar(direction: direction).with {
-						$0.value = .determinate(0.7)
-						$0.colors = [(location: 0, color: .systemBlue), (location: 1, color: .systemRed)]
-					}
-				}
-			}
-		}
-		representable(size: .init(width: .fixed(200), height: .fixed(8))) {
-			ProgressBar(direction: .leftToRight).with {
-				$0.value = .indeterminate
-				$0.colors = [(location: 0, color: .systemBlue), (location: 1, color: .systemRed)]
 			}
 		}
 	}

@@ -43,7 +43,7 @@ open class RoundedView: UIView {
 		}
 	}
 
-	public var rounding: Rounding = .rectangle() {
+	public var rounding: Rounding? = .rectangle() {
 		didSet {
 			switch rounding {
 			case let .polygon(points, _):
@@ -111,13 +111,16 @@ open class RoundedView: UIView {
 	}
 
 	private func updateCornerRadius() {
-		layer.mask = CAShapeLayer().with {
-			$0.path = borderPath()
+		let path = borderPath()
+		layer.mask = path.flatMap { path in
+			return CAShapeLayer().with {
+				$0.path = path
+			}
 		}
-		borderLayer.path = borderPath()
+		borderLayer.path = path
 	}
 
-	private func borderPath() -> CGPath {
+	private func borderPath() -> CGPath? {
 		switch rounding {
 		case let .rectangle(corners, radius):
 			let finalRadius = radius.points(for: bounds.size)
@@ -141,6 +144,8 @@ open class RoundedView: UIView {
 			}
 			path.closeSubpath()
 			return path
+		case .none:
+			return nil
 		}
 	}
 }

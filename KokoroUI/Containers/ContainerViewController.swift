@@ -45,7 +45,7 @@ open class ContainerViewController: UIViewController {
 
 		addChild(newViewController)
 		view.addSubview(newViewController.view)
-		newViewController.view.edges(to: newViewController.view.superview!).activate()
+		newViewController.view.edgesToSuperview().activate()
 		newViewController.didMove(toParent: self)
 		self.contentViewController = contentViewController
 		setNeedsStatusBarAppearanceUpdate()

@@ -76,7 +76,7 @@ open class NavigationControllerWrapper: UIViewController {
 
 		addChild(wrappedNavigationController)
 		view.addSubview(wrappedNavigationController.view)
-		wrappedNavigationController.view.edges(to: wrappedNavigationController.view.superview!).activate()
+		wrappedNavigationController.view.edgesToSuperview().activate()
 		wrappedNavigationController.didMove(toParent: self)
 	}
 

@@ -58,32 +58,32 @@ public extension LoggerFactory {
 public protocol Logger {
 	var level: LogLevel { get set }
 
-	func log(_ level: LogLevel, _ message: @autoclosure () -> String, _ identifier: CodeIdentifier)
+	func log(_ level: LogLevel, _ message: @autoclosure () -> String, file: String, function: String, line: Int)
 }
 
 public extension Logger {
-	func verbose(_ message: @autoclosure () -> String, _ identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line)) {
-		log(.verbose, message(), identifier)
+	func verbose(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+		log(.verbose, message(), file: file, function: function, line: line)
 	}
 
-	func debug(_ message: @autoclosure () -> String, _ identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line)) {
-		log(.debug, message(), identifier)
+	func debug(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+		log(.debug, message(), file: file, function: function, line: line)
 	}
 
-	func info(_ message: @autoclosure () -> String, _ identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line)) {
-		log(.info, message(), identifier)
+	func info(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+		log(.info, message(), file: file, function: function, line: line)
 	}
 
-	func warning(_ message: @autoclosure () -> String, _ identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line)) {
-		log(.warning, message(), identifier)
+	func warning(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+		log(.warning, message(), file: file, function: function, line: line)
 	}
 
-	func error(_ message: @autoclosure () -> String, _ identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line)) {
-		log(.error, message(), identifier)
+	func error(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+		log(.error, message(), file: file, function: function, line: line)
 	}
 
-	func log(_ level: LogLevel, _ message: @autoclosure () -> String, _ identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line)) {
-		log(level, message(), identifier)
+	func log(_ level: LogLevel, _ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+		log(level, message(), file: file, function: function, line: line)
 	}
 }
 
@@ -104,12 +104,16 @@ class OSLogLoggerFactory: LoggerFactory {
 			level = initialLevel
 		}
 
-		func log(_ level: LogLevel, _ message: @autoclosure () -> String, _ identifier: CodeIdentifier) {
+		private func identifier(file: String, function: String, line: Int) -> String {
+			return "\(file.split(separator: "/").last!):\(function):\(line)"
+		}
+
+		func log(_ level: LogLevel, _ message: @autoclosure () -> String, file: String, function: String, line: Int) {
 			guard level >= self.level else { return }
 
 			let builtMessage = message()
 			let builtMessageWithPrefix = builtMessage.isEmpty ? "" : ": \(builtMessage)"
-			let finalMessage = "\(identifier.stringRepresentation)\(builtMessageWithPrefix)"
+			let finalMessage = "\(identifier(file: file, function: function, line: line))\(builtMessageWithPrefix)"
 
 			os_log("%@[%@] %@", type: Self.osLogType(for: level), level.symbol ?? "", name, finalMessage)
 		}
@@ -135,13 +139,13 @@ class OSLogLoggerFactory: LoggerFactory {
 import Combine
 
 public extension Publisher {
-	func logging(to logger: Logger, identifier: CodeIdentifier = MagicConstantCodeIdentifier(file: #file, function: #function, line: #line), name: String, outputLogLevel: LogLevel = .info, failureLogLevel: LogLevel = .warning, subscribeLogLevel: LogLevel = .debug, outputMapper: @escaping (Output) -> String = { "\($0)" }) -> Publishers.HandleEvents<Self> {
+	func logging(to logger: Logger, file: String = #file, function: String = #function, line: Int = #line, name: String, outputLogLevel: LogLevel = .info, failureLogLevel: LogLevel = .warning, subscribeLogLevel: LogLevel = .debug, outputMapper: @escaping (Output) -> String = { "\($0)" }) -> Publishers.HandleEvents<Self> {
 		return handleEvents(
-			receiveSubscription: { _ in logger.log(subscribeLogLevel, "\(name) initiated", identifier) },
-			receiveOutput: { logger.log(outputLogLevel, "\(name): \(outputMapper($0))", identifier) },
+			receiveSubscription: { _ in logger.log(subscribeLogLevel, "\(name) initiated", file: file, function: function, line: line) },
+			receiveOutput: { logger.log(outputLogLevel, "\(name): \(outputMapper($0))", file: file, function: function, line: line) },
 			receiveCompletion: {
 				if case let Subscribers.Completion.failure(error) = $0 {
-					logger.log(failureLogLevel, "\(name): \(error)", identifier)
+					logger.log(failureLogLevel, "\(name): \(error)", file: file, function: function, line: line)
 				}
 			}
 		)
