@@ -106,6 +106,12 @@
 		AAD57D412533B46F007358D1 /* ProgressBarsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */; };
 		AAD57D532533B689007358D1 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D522533B689007358D1 /* MainNavigationController.swift */; };
 		AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */; };
+		AAEFB1262542D860003AA60E /* SeparatorStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1252542D860003AA60E /* SeparatorStackView.swift */; };
+		AAEFB1302542DACB003AA60E /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB12F2542DACB003AA60E /* BorderedView.swift */; };
+		AAEFB13A2542DBC2003AA60E /* HeaderFooterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1392542DBC2003AA60E /* HeaderFooterCollectionView.swift */; };
+		AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */; };
+		AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB14D2542DE74003AA60E /* LazyInitView.swift */; };
+		AAEFB1582542DEB6003AA60E /* KeyboardSpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -263,6 +269,12 @@
 		AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarsViewController.swift; sourceTree = "<group>"; };
 		AAD57D522533B689007358D1 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicSuperviewConstraintBuilders.swift; sourceTree = "<group>"; };
+		AAEFB1252542D860003AA60E /* SeparatorStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorStackView.swift; sourceTree = "<group>"; };
+		AAEFB12F2542DACB003AA60E /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
+		AAEFB1392542DBC2003AA60E /* HeaderFooterCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderFooterCollectionView.swift; sourceTree = "<group>"; };
+		AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedOnTopView.swift; sourceTree = "<group>"; };
+		AAEFB14D2542DE74003AA60E /* LazyInitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyInitView.swift; sourceTree = "<group>"; };
+		AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSpacerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -447,6 +459,9 @@
 				AAD354F3252882AA007C63EF /* FrameObservingView.swift */,
 				AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */,
 				AAD3550525288985007C63EF /* Button.swift */,
+				AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */,
+				AAEFB14D2542DE74003AA60E /* LazyInitView.swift */,
+				AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */,
 			);
 			path = "Functional Views";
 			sourceTree = "<group>";
@@ -457,6 +472,7 @@
 				AAD3550A25288A0F007C63EF /* GradientView.swift */,
 				AAD3551025288BD4007C63EF /* ProgressBar.swift */,
 				AAD3551425288C88007C63EF /* RoundedView.swift */,
+				AAEFB12F2542DACB003AA60E /* BorderedView.swift */,
 			);
 			path = "Aesthetic Views";
 			sourceTree = "<group>";
@@ -468,6 +484,8 @@
 				AAD3552525288F0A007C63EF /* PrecedingControllerNavigator.swift */,
 				AAD3552125288E3F007C63EF /* NavigationControllerWrapper.swift */,
 				AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */,
+				AAEFB1252542D860003AA60E /* SeparatorStackView.swift */,
+				AAEFB1392542DBC2003AA60E /* HeaderFooterCollectionView.swift */,
 			);
 			path = Containers;
 			sourceTree = "<group>";
@@ -1174,6 +1192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAEFB1302542DACB003AA60E /* BorderedView.swift in Sources */,
 				AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */,
 				AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */,
 				AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */,
@@ -1187,8 +1206,10 @@
 				AAD3551125288BD4007C63EF /* ProgressBar.swift in Sources */,
 				AAD354FE252887F0007C63EF /* Animated.swift in Sources */,
 				AAD354D22528744D007C63EF /* BasicConstraintBuilders.swift in Sources */,
+				AAEFB1262542D860003AA60E /* SeparatorStackView.swift in Sources */,
 				AAD3550625288985007C63EF /* Button.swift in Sources */,
 				AAD354FA25288577007C63EF /* MinMaxLengthConstraint.swift in Sources */,
+				AAEFB1582542DEB6003AA60E /* KeyboardSpacerView.swift in Sources */,
 				AAD3551525288C88007C63EF /* RoundedView.swift in Sources */,
 				AAD57CB8253376C5007358D1 /* SwiftUIRepresentable.swift in Sources */,
 				AAD3551E25288D04007C63EF /* ContainerViewController.swift in Sources */,
@@ -1198,8 +1219,11 @@
 				AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */,
 				AAD3552225288E3F007C63EF /* NavigationControllerWrapper.swift in Sources */,
 				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
+				AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */,
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
+				AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */,
 				AAD3551925288CC6007C63EF /* ReusableCells.swift in Sources */,
+				AAEFB13A2542DBC2003AA60E /* HeaderFooterCollectionView.swift in Sources */,
 				AAD354EF25288258007C63EF /* AspectRatioEqualConstraint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

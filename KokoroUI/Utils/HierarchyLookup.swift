@@ -43,6 +43,21 @@ public extension UIView {
 		return nil
 	}
 
+	func isContainedInOrExactly(_ view: UIView) -> Bool {
+		return (view == self) ? true : isContained(in: view)
+	}
+
+	func isContained(in view: UIView) -> Bool {
+		var current: UIView? = superview
+		while let testing = current {
+			if testing == view {
+				return true
+			}
+			current = testing.superview
+		}
+		return false
+	}
+
 	// MARK: - All Subviews
 
 	func allSubviews<T: UIView>(ignoreHidden: Bool = false) -> [T] {
