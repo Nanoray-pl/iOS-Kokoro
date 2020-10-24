@@ -112,6 +112,7 @@
 		AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */; };
 		AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB14D2542DE74003AA60E /* LazyInitView.swift */; };
 		AAEFB1582542DEB6003AA60E /* KeyboardSpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */; };
+		AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -275,6 +276,7 @@
 		AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedOnTopView.swift; sourceTree = "<group>"; };
 		AAEFB14D2542DE74003AA60E /* LazyInitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyInitView.swift; sourceTree = "<group>"; };
 		AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSpacerView.swift; sourceTree = "<group>"; };
+		AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableUrlTextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -462,6 +464,7 @@
 				AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */,
 				AAEFB14D2542DE74003AA60E /* LazyInitView.swift */,
 				AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */,
+				AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */,
 			);
 			path = "Functional Views";
 			sourceTree = "<group>";
@@ -1221,6 +1224,7 @@
 				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
 				AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */,
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
+				AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */,
 				AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */,
 				AAD3551925288CC6007C63EF /* ReusableCells.swift in Sources */,
 				AAEFB13A2542DBC2003AA60E /* HeaderFooterCollectionView.swift in Sources */,
