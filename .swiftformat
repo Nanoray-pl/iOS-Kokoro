@@ -1,0 +1,12 @@
+--swiftversion 5.3
+--exclude **/*.generated.swift
+--rules blankLinesAroundMark,blankLinesAtEndOfScope,blankLinesAtStartOfScope,blankLinesBetweenScopes,braces,consecutiveBlankLines,consecutiveSpaces,duplicateImports,elseOnSameLine,emptyBraces,hoistPatternLet,indent,leadingDelimiters,modifierOrder,preferKeyPath,redundantBackticks,redundantBreak,redundantExtensionACL,redundantFileprivate,redundantGet,redundantInit,redundantLet,redundantLetError,redundantNilInit,redundantObjc,redundantParens,redundantPattern,redundantRawValues,redundantType,redundantVoidReturnType,sortedImports,spaceAroundBraces,spaceAroundBrackets,spaceAroundComments,spaceAroundGenerics,spaceAroundOperators,spaceAroundParens,spaceInsideBraces,spaceInsideBrackets,spaceInsideComments,spaceInsideGenerics,spaceInsideParens,strongifiedSelf,todos,trailingCommas,typeSugar,void,wrapArguments
+--ifdef no-indent
+--importgrouping testable-bottom
+--indent tab
+--semicolons never
+--modifierorder open,public,internal,internal(set),fileprivate,fileprivate(set),private,private(set),override,required,static,class,final,convenience,lazy,weak
+--tabwidth 4
+--wraparguments before-first
+--wrapcollections before-first
+--wrapparameters before-first

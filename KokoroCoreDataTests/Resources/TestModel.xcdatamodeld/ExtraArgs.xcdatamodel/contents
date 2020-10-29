@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G46c" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="TestEntity" representedClassName="KokoroCoreDataTests.TestEntity" syncable="YES">
+        <attribute name="extraDouble" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="extraInt" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="optionalString" optional="YES" attributeType="String"/>
+        <attribute name="requiredString" attributeType="String"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TestEntity" inverseName="parent" inverseEntity="TestEntity"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TestEntity" inverseName="children" inverseEntity="TestEntity"/>
+    </entity>
+    <elements>
+        <element name="TestEntity" positionX="-63" positionY="-18" width="128" height="133"/>
+    </elements>
+</model>
