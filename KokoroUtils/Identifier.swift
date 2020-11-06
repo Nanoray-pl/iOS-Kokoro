@@ -37,3 +37,13 @@ extension Identifier: Comparable where KeyType: Comparable {
 		return lhs.wrappedValue < rhs.wrappedValue
 	}
 }
+
+#if canImport(Foundation)
+import Foundation
+
+public extension Identifier where KeyType == UUID {
+	init() {
+		self.init(.init())
+	}
+}
+#endif

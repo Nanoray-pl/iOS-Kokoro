@@ -3,6 +3,10 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+public enum FetchableListDataSourceError: Error {
+	case multipleErrors(_ errors: [Error])
+}
+
 public protocol FetchableListDataSourceObserver: class {
 	associatedtype Element
 

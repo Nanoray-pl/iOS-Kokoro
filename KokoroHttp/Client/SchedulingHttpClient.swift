@@ -8,22 +8,16 @@ import Combine
 import Foundation
 
 fileprivate extension Publisher {
-	func delay<Scheduler: Combine.Scheduler>(via client: SchedulingHttpClient<Scheduler>) -> AnyPublisher<Output, Failure> {
-		var publisher = self
-			.buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
-			.eraseToAnyPublisher()
-
+	func scheduling<Scheduler: Combine.Scheduler>(via client: SchedulingHttpClient<Scheduler>) -> AnyPublisher<Output, Failure> {
 		if let delay = client.delay {
-			publisher = publisher
+			return buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
 				.delay(for: delay, scheduler: client.scheduler)
 				.eraseToAnyPublisher()
 		} else {
-			publisher = publisher
+			return buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
 				.receive(on: client.scheduler)
 				.eraseToAnyPublisher()
 		}
-
-		return publisher
 	}
 }
 
@@ -39,15 +33,15 @@ public class SchedulingHttpClient<Scheduler: Combine.Scheduler>: HttpClient {
 	}
 
 	public func requestOptional<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output?>, Error> {
-		return wrapped.requestOptional(request).delay(via: self)
+		return wrapped.requestOptional(request).scheduling(via: self)
 	}
 
 	public func request<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output>, Error> {
-		return wrapped.request(request).delay(via: self)
+		return wrapped.request(request).scheduling(via: self)
 	}
 
 	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Void>, Error> {
-		return wrapped.request(request).delay(via: self)
+		return wrapped.request(request).scheduling(via: self)
 	}
 }
 

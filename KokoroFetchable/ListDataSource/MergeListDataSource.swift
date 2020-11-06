@@ -5,10 +5,6 @@
 
 import KokoroUtils
 
-public enum MergeListDataSourceError: Error {
-	case multipleErrors(_ errors: [Error])
-}
-
 public class MergeListDataSource<Element>: FetchableListDataSource {
 	private let sortStrategySupplier: ([AnyFetchableListDataSource<Element>]) -> AnyMergeListDataSourceSortStrategy<Element>
 	private var sortStrategy: AnyMergeListDataSourceSortStrategy<Element>!
@@ -97,7 +93,7 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 		case 0:
 			error = nil
 		default:
-			error = MergeListDataSourceError.multipleErrors(errors)
+			error = FetchableListDataSourceError.multipleErrors(errors)
 		}
 	}
 

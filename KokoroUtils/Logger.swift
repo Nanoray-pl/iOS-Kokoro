@@ -87,8 +87,8 @@ public extension Logger {
 	}
 }
 
-class OSLogLoggerFactory: LoggerFactory {
-	func createLogger(name: String, level: LogLevel) -> Logger {
+public class OSLogLoggerFactory: LoggerFactory {
+	public func createLogger(name: String, level: LogLevel) -> Logger {
 		return OSLogLogger(logger: OSLog(subsystem: name, category: name), name: name, initialLevel: level)
 	}
 

@@ -22,16 +22,16 @@ public extension Dictionary {
 		case keepCurrent, overwrite
 	}
 
-	mutating func computeIfAbsent(for key: Key, initializer: @autoclosure () -> Value) -> Value {
-		return computeIfAbsent(for: key) { _ in initializer() }
+	mutating func computeIfAbsent(for key: Key, initializer: @autoclosure () throws -> Value) rethrows -> Value {
+		return try computeIfAbsent(for: key) { _ in try initializer() }
 	}
 
-	mutating func computeIfAbsent(for key: Key, initializer: (_ key: Key) -> Value) -> Value {
+	mutating func computeIfAbsent(for key: Key, initializer: (_ key: Key) throws -> Value) rethrows -> Value {
 		if let value = self[key] {
 			return value
 		}
 
-		let value = initializer(key)
+		let value = try initializer(key)
 		self[key] = value
 		return value
 	}
@@ -60,30 +60,7 @@ public extension Collection {
 	}
 }
 
-private func areInOrder<Element, Value: Comparable>(_ order: KeyPathSortOrder, lhs: Element, rhs: Element, getter: (Element) -> Value) -> Bool {
-	switch order {
-	case .ascending:
-		return getter(lhs) < getter(rhs)
-	case .descending:
-		return getter(lhs) > getter(rhs)
-	}
-}
-
-private extension KeyPath where Value: Comparable {
-	func areInOrder(_ order: KeyPathSortOrder, lhs: Root, rhs: Root) -> Bool {
-		return KokoroUtils.areInOrder(order, lhs: lhs, rhs: rhs) { $0[keyPath: self] }
-	}
-}
-
 public extension Array {
-	func sorted<A: Comparable>(by keyPath: KeyPath<Element, A>, _ order: KeyPathSortOrder = .ascending) -> [Element] {
-		return sorted { keyPath.areInOrder(order, lhs: $0, rhs: $1) }
-	}
-
-	func sorted<A: Comparable, B: Comparable>(by firstKeyPath: KeyPath<Element, A>, _ firstOrder: KeyPathSortOrder = .ascending, then secondKeyPath: KeyPath<Element, B>, _ secondOrder: KeyPathSortOrder = .ascending) -> [Element] {
-		return sorted { firstKeyPath.areInOrder(firstOrder, lhs: $0, rhs: $1) || secondKeyPath.areInOrder(secondOrder, lhs: $0, rhs: $1) }
-	}
-
 	@discardableResult
 	mutating func removeFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
 		if let index = try firstIndex(where: predicate) {
@@ -104,23 +81,40 @@ public extension Array {
 }
 
 public extension Sequence {
-	func min<T: Comparable>(by mapper: (Element) -> T) -> Element? {
-		return self.min(by: { areInOrder(.ascending, lhs: $0, rhs: $1, getter: mapper) })
+	func sorted<A: Comparable>(by mapper: (Element) throws -> A, _ order: KeyPathSortOrder = .ascending) rethrows -> [Element] {
+		return try sorted { try order.areInOrder(lhs: $0, rhs: $1, mapper: mapper) }
 	}
 
-	func max<T: Comparable>(by mapper: (Element) -> T) -> Element? {
-		return self.max(by: { areInOrder(.ascending, lhs: $0, rhs: $1, getter: mapper) })
+	func sorted<A: Comparable, B: Comparable>(by firstMapper: (Element) throws -> A, _ firstOrder: KeyPathSortOrder = .ascending, then secondMapper: (Element) throws -> B, _ secondOrder: KeyPathSortOrder = .ascending) rethrows -> [Element] {
+		return try sorted { try firstOrder.areInOrder(lhs: $0, rhs: $1, mapper: firstMapper) || secondOrder.areInOrder(lhs: $0, rhs: $1, mapper: secondMapper) }
 	}
 
-	func min<A: Comparable>(by keyPath: KeyPath<Element, A>) -> Element? {
-		return self.min(by: { keyPath.areInOrder(.ascending, lhs: $0, rhs: $1) })
+	func sorted<A: Comparable, B: Comparable, C: Comparable>(by firstMapper: (Element) throws -> A, _ firstOrder: KeyPathSortOrder = .ascending, then secondMapper: (Element) throws -> B, _ secondOrder: KeyPathSortOrder = .ascending, then thirdMapper: (Element) throws -> C, _ thirdOrder: KeyPathSortOrder = .ascending) rethrows -> [Element] {
+		return try sorted { try firstOrder.areInOrder(lhs: $0, rhs: $1, mapper: firstMapper) || secondOrder.areInOrder(lhs: $0, rhs: $1, mapper: secondMapper) || thirdOrder.areInOrder(lhs: $0, rhs: $1, mapper: thirdMapper) }
 	}
 
-	func max<A: Comparable>(by keyPath: KeyPath<Element, A>) -> Element? {
-		return self.max(by: { keyPath.areInOrder(.ascending, lhs: $0, rhs: $1) })
+	func min<T: Comparable>(by mapper: (Element) throws -> T) rethrows -> Element? {
+		return try self.min(by: { try KeyPathSortOrder.ascending.areInOrder(lhs: $0, rhs: $1, mapper: mapper) })
+	}
+
+	func max<T: Comparable>(by mapper: (Element) throws -> T) rethrows -> Element? {
+		return try self.max(by: { try KeyPathSortOrder.ascending.areInOrder(lhs: $0, rhs: $1, mapper: mapper) })
 	}
 }
 
 public enum KeyPathSortOrder {
 	case ascending, descending
+
+	public func areInOrder<Value: Comparable>(lhs: Value, rhs: Value) -> Bool {
+		switch self {
+		case .ascending:
+			return lhs < rhs
+		case .descending:
+			return lhs > rhs
+		}
+	}
+
+	public func areInOrder<Root, Value: Comparable>(lhs: Root, rhs: Root, mapper: (Root) throws -> Value) rethrows -> Bool {
+		return areInOrder(lhs: try mapper(lhs), rhs: try mapper(rhs))
+	}
 }

@@ -62,11 +62,11 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 			}
 
 			observations = [
-				dataTask.progress.observe(\.isIndeterminate, changeHandler: { _, _ in self.updateProgress() }),
-				dataTask.observe(\.countOfBytesSent, changeHandler: { _, _ in self.updateProgress() }),
-				dataTask.observe(\.countOfBytesExpectedToSend, changeHandler: { _, _ in self.updateProgress() }),
-				dataTask.observe(\.countOfBytesReceived, changeHandler: { _, _ in self.updateProgress() }),
-				dataTask.observe(\.countOfBytesExpectedToReceive, changeHandler: { _, _ in self.updateProgress() }),
+				dataTask.progress.observe(\.isIndeterminate, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+				dataTask.observe(\.countOfBytesSent, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+				dataTask.observe(\.countOfBytesExpectedToSend, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+				dataTask.observe(\.countOfBytesReceived, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+				dataTask.observe(\.countOfBytesExpectedToReceive, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
 			]
 			self.dataTask = dataTask
 			dataTask.resume()
