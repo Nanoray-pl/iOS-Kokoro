@@ -3,31 +3,53 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public class IgnoringUnchangedListDataSource<Element, Key: Equatable>: FetchableListDataSource {
-	private let wrapped: AnyFetchableListDataSource<Element>
+public enum IgnoringUnchangedListDataSourceErrorMatchingStrategy {
+	case byPresenceOnly
+	case byDescription
+	case custom(_ function: (Error, Error) -> Bool)
+
+	func areMatchingErrors(_ error1: Error?, _ error2: Error?) -> Bool {
+		switch (error1, error2) {
+		case (.none, .none):
+			return true
+		case (.none, .some), (.some, .none):
+			return false
+		case let (.some(error1), .some(error2)):
+			switch self {
+			case .byPresenceOnly:
+				return false
+			case .byDescription:
+				return "\(error1)" == "\(error2)"
+			case let .custom(function):
+				return function(error1, error2)
+			}
+		}
+	}
+}
+
+public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, Key: Equatable>: FetchableListDataSource {
+	public typealias Element = Wrapped.Element
+
+	private let wrapped: Wrapped
+	private let errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy
 	private let uniqueKeyFunction: (Element) -> Key
 	private lazy var observer = WrappedObserver(parent: self)
 	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var elements = [Element]()
+	public private(set) var error: Error?
+	public private(set) var isFetching = false
 
 	public var count: Int {
 		return elements.count
 	}
 
-	public var error: Error? {
-		return wrapped.error
-	}
-
-	public var isFetching: Bool {
-		return wrapped.isFetching
-	}
-
-	public convenience init<T>(wrapping wrapped: T) where T: FetchableListDataSource, T.Element == Element, Element == Key {
+	public convenience init(wrapping wrapped: Wrapped, errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy = .byDescription) where Element == Key {
 		self.init(wrapping: wrapped, uniqueKeyFunction: { $0 })
 	}
 
-	public init<T>(wrapping wrapped: T, uniqueKeyFunction: @escaping (Element) -> Key) where T: FetchableListDataSource, T.Element == Element {
-		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
+	public init(wrapping wrapped: Wrapped, errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy = .byDescription, uniqueKeyFunction: @escaping (Element) -> Key) {
+		self.wrapped = wrapped
+		self.errorMatchingStrategy = errorMatchingStrategy
 		self.uniqueKeyFunction = uniqueKeyFunction
 		wrapped.addObserver(observer)
 		updateData()
@@ -39,6 +61,12 @@ public class IgnoringUnchangedListDataSource<Element, Key: Equatable>: Fetchable
 
 	public subscript(index: Int) -> Element {
 		return elements[index]
+	}
+
+	public func reset() {
+		error = nil
+		isFetching = false
+		wrapped.reset()
 	}
 
 	@discardableResult
@@ -70,8 +98,10 @@ public class IgnoringUnchangedListDataSource<Element, Key: Equatable>: Fetchable
 	}
 
 	private func updateData() {
-		if shouldUpdateData(oldData: elements, newData: wrapped.elements) {
+		if isFetching != wrapped.isFetching || !errorMatchingStrategy.areMatchingErrors(error, wrapped.error) || shouldUpdateData(oldData: elements, newData: wrapped.elements) {
 			elements = wrapped.elements
+			error = wrapped.error
+			isFetching = wrapped.isFetching
 			let erasedSelf = eraseToAnyFetchableListDataSource()
 			observers = observers.filter { $0.weakReference != nil }
 			observers.forEach { $0.didUpdateData(of: erasedSelf) }
@@ -79,9 +109,9 @@ public class IgnoringUnchangedListDataSource<Element, Key: Equatable>: Fetchable
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: IgnoringUnchangedListDataSource<Element, Key>
+		private unowned let parent: IgnoringUnchangedListDataSource<Wrapped, Key>
 
-		init(parent: IgnoringUnchangedListDataSource<Element, Key>) {
+		init(parent: IgnoringUnchangedListDataSource<Wrapped, Key>) {
 			self.parent = parent
 		}
 
@@ -92,13 +122,13 @@ public class IgnoringUnchangedListDataSource<Element, Key: Equatable>: Fetchable
 }
 
 public extension FetchableListDataSource where Element: Equatable {
-	func ignoringUnchanged() -> IgnoringUnchangedListDataSource<Element, Element> {
+	func ignoringUnchanged() -> IgnoringUnchangedListDataSource<Self, Element> {
 		return IgnoringUnchangedListDataSource(wrapping: self)
 	}
 }
 
 public extension FetchableListDataSource {
-	func ignoringUnchanged<Key: Equatable>(via uniqueKeyFunction: @escaping (Element) -> Key) -> IgnoringUnchangedListDataSource<Element, Key> {
+	func ignoringUnchanged<Key: Equatable>(via uniqueKeyFunction: @escaping (Element) -> Key) -> IgnoringUnchangedListDataSource<Self, Key> {
 		return IgnoringUnchangedListDataSource(wrapping: self, uniqueKeyFunction: uniqueKeyFunction)
 	}
 }

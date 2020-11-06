@@ -32,6 +32,10 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 		return elements[index]
 	}
 
+	public func reset() {
+		// do nothing
+	}
+
 	@discardableResult
 	public func fetchAdditionalData() -> Bool {
 		return false

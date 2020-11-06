@@ -3,11 +3,11 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public class CompactMapListDataSource<Input, Output>: FetchableListDataSource {
+public class CompactMapListDataSource<Wrapped: FetchableListDataSource, Output>: FetchableListDataSource {
 	public typealias Element = Output
 
-	private let wrapped: AnyFetchableListDataSource<Input>
-	private let mappingFunction: (Input) -> Output?
+	private let wrapped: Wrapped
+	private let mappingFunction: (Wrapped.Element) -> Output?
 	private lazy var observer = WrappedObserver(parent: self)
 	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var elements = [Element]()
@@ -24,8 +24,8 @@ public class CompactMapListDataSource<Input, Output>: FetchableListDataSource {
 		return wrapped.isFetching
 	}
 
-	public init<T>(wrapping wrapped: T, mappingFunction: @escaping (Input) -> Output?) where T: FetchableListDataSource, T.Element == Input {
-		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
+	public init(wrapping wrapped: Wrapped, mappingFunction: @escaping (Wrapped.Element) -> Output?) {
+		self.wrapped = wrapped
 		self.mappingFunction = mappingFunction
 		wrapped.addObserver(observer)
 		updateData()
@@ -37,6 +37,10 @@ public class CompactMapListDataSource<Input, Output>: FetchableListDataSource {
 
 	public subscript(index: Int) -> Element {
 		return elements[index]
+	}
+
+	public func reset() {
+		wrapped.reset()
 	}
 
 	@discardableResult
@@ -63,22 +67,20 @@ public class CompactMapListDataSource<Input, Output>: FetchableListDataSource {
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		typealias Element = Input
+		private unowned let parent: CompactMapListDataSource<Wrapped, Output>
 
-		private unowned let parent: CompactMapListDataSource<Input, Output>
-
-		init(parent: CompactMapListDataSource<Input, Output>) {
+		init(parent: CompactMapListDataSource<Wrapped, Output>) {
 			self.parent = parent
 		}
 
-		func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
+		func didUpdateData(of dataSource: AnyFetchableListDataSource<Wrapped.Element>) {
 			parent.updateData()
 		}
 	}
 }
 
 public extension FetchableListDataSource {
-	func compactMap<Output>(_ mappingFunction: @escaping (Element) -> Output?) -> CompactMapListDataSource<Element, Output> {
+	func compactMap<Output>(_ mappingFunction: @escaping (Element) -> Output?) -> CompactMapListDataSource<Self, Output> {
 		return CompactMapListDataSource(wrapping: self, mappingFunction: mappingFunction)
 	}
 }

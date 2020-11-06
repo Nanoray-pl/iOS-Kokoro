@@ -8,6 +8,7 @@ public enum MergeListDataSourceError: Error {
 }
 
 public class MergeListDataSource<Element>: FetchableListDataSource {
+	private let sortStrategySupplier: ([AnyFetchableListDataSource<Element>]) -> AnyMergeListDataSourceSortStrategy<Element>
 	private var sortStrategy: AnyMergeListDataSourceSortStrategy<Element>!
 	private let dataSources: [AnyFetchableListDataSource<Element>]
 	private lazy var observer = DataSourceObserver(parent: self)
@@ -26,14 +27,15 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 		return dataSources.contains(where: { $0.isFetching })
 	}
 
-	public convenience init<SortStrategy, T1, T2>(sortStrategySupplier: ([AnyFetchableListDataSource<Element>]) -> SortStrategy, dataSources dataSource1: T1, _ dataSource2: T2) where SortStrategy: MergeListDataSourceSortStrategy, T1: FetchableListDataSource, T2: FetchableListDataSource, SortStrategy.Element == Element, T1.Element == Element, T2.Element == Element {
+	public convenience init<SortStrategy, T1, T2>(sortStrategySupplier: @escaping ([AnyFetchableListDataSource<Element>]) -> SortStrategy, dataSources dataSource1: T1, _ dataSource2: T2) where SortStrategy: MergeListDataSourceSortStrategy, T1: FetchableListDataSource, T2: FetchableListDataSource, SortStrategy.Element == Element, T1.Element == Element, T2.Element == Element {
 		self.init(sortStrategySupplier: sortStrategySupplier, dataSources: [dataSource1.eraseToAnyFetchableListDataSource(), dataSource2.eraseToAnyFetchableListDataSource()])
 	}
 
-	public init<SortStrategy>(sortStrategySupplier: ([AnyFetchableListDataSource<Element>]) -> SortStrategy, dataSources: [AnyFetchableListDataSource<Element>]) where SortStrategy: MergeListDataSourceSortStrategy, SortStrategy.Element == Element {
+	public init<SortStrategy>(sortStrategySupplier: @escaping ([AnyFetchableListDataSource<Element>]) -> SortStrategy, dataSources: [AnyFetchableListDataSource<Element>]) where SortStrategy: MergeListDataSourceSortStrategy, SortStrategy.Element == Element {
 		if dataSources.isEmpty { fatalError("Cannot create a MergeListDataSource without any child data sources") }
+		self.sortStrategySupplier = { sortStrategySupplier($0).eraseToAnyMergeListDataSourceSortStrategy() }
 		self.dataSources = dataSources
-		sortStrategy = sortStrategySupplier(dataSources.map { $0.eraseToAnyFetchableListDataSource() }).eraseToAnyMergeFetchableListDataSourceSortStrategy()
+		setupSortStrategy()
 		dataSources.forEach { $0.addObserver(observer) }
 		updateData()
 	}
@@ -44,6 +46,16 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 
 	public subscript(index: Int) -> Element {
 		return elements[index]
+	}
+
+	private func setupSortStrategy() {
+		sortStrategy = sortStrategySupplier(dataSources.map { $0.eraseToAnyFetchableListDataSource() }).eraseToAnyMergeListDataSourceSortStrategy()
+	}
+
+	public func reset() {
+		sortStrategy = MergeListDataSourceNoOpSortStrategy().eraseToAnyMergeListDataSourceSortStrategy()
+		dataSources.forEach { $0.reset() }
+		setupSortStrategy()
 	}
 
 	@discardableResult
@@ -78,7 +90,7 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 	}
 
 	private func updateError() {
-		let errors = dataSources.compactMap { $0.error }
+		let errors = dataSources.compactMap(\.error)
 		switch errors.count {
 		case 1:
 			error = errors[0]
@@ -129,9 +141,15 @@ public final class AnyMergeListDataSourceSortStrategy<Element>: MergeListDataSou
 }
 
 public extension MergeListDataSourceSortStrategy {
-	func eraseToAnyMergeFetchableListDataSourceSortStrategy() -> AnyMergeListDataSourceSortStrategy<Element> {
+	func eraseToAnyMergeListDataSourceSortStrategy() -> AnyMergeListDataSourceSortStrategy<Element> {
 		return (self as? AnyMergeListDataSourceSortStrategy<Element>) ?? .init(wrapping: self)
 	}
+}
+
+private class MergeListDataSourceNoOpSortStrategy<Element>: MergeListDataSourceSortStrategy {
+	let elements = [Element]()
+
+	func updateElements() {}
 }
 
 public class MergeListDataSourceByDataSourceSortStrategy<Element>: MergeListDataSourceSortStrategy {
@@ -143,7 +161,7 @@ public class MergeListDataSourceByDataSourceSortStrategy<Element>: MergeListData
 	}
 
 	public func updateElements() {
-		elements = dataSources.flatMap { $0.elements }
+		elements = dataSources.flatMap(\.elements)
 	}
 }
 

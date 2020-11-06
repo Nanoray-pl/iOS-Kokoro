@@ -19,10 +19,10 @@ public enum SkeletonListDataSourceElement<WrappedType> {
 extension SkeletonListDataSourceElement: Equatable where WrappedType: Equatable {}
 extension SkeletonListDataSourceElement: Hashable where WrappedType: Hashable {}
 
-public class SkeletonListDataSource<WrappedType>: FetchableListDataSource {
-	public typealias Element = SkeletonListDataSourceElement<WrappedType>
+public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: FetchableListDataSource {
+	public typealias Element = SkeletonListDataSourceElement<Wrapped.Element>
 
-	private let wrapped: AnyFetchableListDataSource<WrappedType>
+	private let wrapped: Wrapped
 	private let behavior: SkeletonListDataSourceBehavior
 	private lazy var observer = WrappedObserver(parent: self)
 	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
@@ -54,8 +54,8 @@ public class SkeletonListDataSource<WrappedType>: FetchableListDataSource {
 		return wrapped.isFetching
 	}
 
-	public init<T>(wrapping wrapped: T, behavior: SkeletonListDataSourceBehavior) where T: FetchableListDataSource, T.Element == WrappedType {
-		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
+	public init(wrapping wrapped: Wrapped, behavior: SkeletonListDataSourceBehavior) {
+		self.wrapped = wrapped
 		self.behavior = behavior
 		wrapped.addObserver(observer)
 	}
@@ -64,7 +64,7 @@ public class SkeletonListDataSource<WrappedType>: FetchableListDataSource {
 		wrapped.removeObserver(observer)
 	}
 
-	public subscript(index: Int) -> SkeletonListDataSourceElement<WrappedType> {
+	public subscript(index: Int) -> Element {
 		if index < wrapped.count {
 			return .element(wrapped[index])
 		} else if index < wrapped.count + skeletonCount {
@@ -72,6 +72,10 @@ public class SkeletonListDataSource<WrappedType>: FetchableListDataSource {
 		} else {
 			fatalError("Index out of bounds")
 		}
+	}
+
+	public func reset() {
+		wrapped.reset()
 	}
 
 	@discardableResult
@@ -104,22 +108,20 @@ public class SkeletonListDataSource<WrappedType>: FetchableListDataSource {
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		typealias Element = WrappedType
+		private unowned let parent: SkeletonListDataSource<Wrapped>
 
-		private unowned let parent: SkeletonListDataSource<WrappedType>
-
-		init(parent: SkeletonListDataSource<WrappedType>) {
+		init(parent: SkeletonListDataSource<Wrapped>) {
 			self.parent = parent
 		}
 
-		func didUpdateData(of dataSource: AnyFetchableListDataSource<WrappedType>) {
+		func didUpdateData(of dataSource: AnyFetchableListDataSource<Wrapped.Element>) {
 			parent.updateData()
 		}
 	}
 }
 
 public extension FetchableListDataSource {
-	func withSkeletons(behavior: SkeletonListDataSourceBehavior) -> SkeletonListDataSource<Element> {
+	func withSkeletons(behavior: SkeletonListDataSourceBehavior) -> SkeletonListDataSource<Self> {
 		return SkeletonListDataSource(wrapping: self, behavior: behavior)
 	}
 }

@@ -36,6 +36,8 @@ public protocol FetchableListDataSource: class {
 
 	subscript(_ index: Int) -> Element { get }
 
+	func reset()
+
 	@discardableResult
 	func fetchAdditionalData() -> Bool
 
@@ -88,6 +90,10 @@ private class AnyFetchableListDataSourceBase<Element>: FetchableListDataSource {
 		fatalError("Not overriden abstract member")
 	}
 
+	func reset() {
+		fatalError("Not overriden abstract member")
+	}
+
 	@discardableResult
 	func fetchAdditionalData() -> Bool {
 		fatalError("Not overriden abstract member")
@@ -131,6 +137,10 @@ private class AnyFetchableListDataSourceBox<Wrapped>: AnyFetchableListDataSource
 		self.wrapped = wrapped
 	}
 
+	override func reset() {
+		wrapped.reset()
+	}
+
 	@discardableResult
 	override func fetchAdditionalData() -> Bool {
 		return wrapped.fetchAdditionalData()
@@ -170,6 +180,10 @@ public final class AnyFetchableListDataSource<Element>: FetchableListDataSource 
 
 	public init<T>(wrapping wrapped: T) where T: FetchableListDataSource, T.Element == Element {
 		box = AnyFetchableListDataSourceBox(wrapping: wrapped)
+	}
+
+	public func reset() {
+		box.reset()
 	}
 
 	@discardableResult

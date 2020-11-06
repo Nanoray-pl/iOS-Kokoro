@@ -37,6 +37,14 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 		return elements[index]
 	}
 
+	public func reset() {
+		requestCancellable?.cancel()
+		pages = []
+		error = nil
+		fetchingPageIndex = nil
+		updateElements()
+	}
+
 	@discardableResult
 	public func fetchAdditionalData() -> Bool {
 		guard fetchingPageIndex == nil else { return false }
@@ -97,7 +105,7 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 	}
 
 	private func updateElements() {
-		elements = pages.flatMap { $0.elements }
+		elements = pages.flatMap(\.elements)
 		let erasedSelf = eraseToAnyFetchableListDataSource()
 		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }

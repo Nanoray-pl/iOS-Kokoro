@@ -3,8 +3,10 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public class FilterListDataSource<Element>: FetchableListDataSource {
-	private let wrapped: AnyFetchableListDataSource<Element>
+public class FilterListDataSource<Wrapped: FetchableListDataSource>: FetchableListDataSource {
+	public typealias Element = Wrapped.Element
+
+	private let wrapped: Wrapped
 	private let predicateFunction: (Element) -> Bool
 	private lazy var observer = WrappedObserver(parent: self)
 	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
@@ -22,8 +24,8 @@ public class FilterListDataSource<Element>: FetchableListDataSource {
 		return wrapped.isFetching
 	}
 
-	public init<T>(wrapping wrapped: T, predicateFunction: @escaping (Element) -> Bool) where T: FetchableListDataSource, T.Element == Element {
-		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
+	public init(wrapping wrapped: Wrapped, predicateFunction: @escaping (Element) -> Bool) {
+		self.wrapped = wrapped
 		self.predicateFunction = predicateFunction
 		wrapped.addObserver(observer)
 		updateData()
@@ -35,6 +37,10 @@ public class FilterListDataSource<Element>: FetchableListDataSource {
 
 	public subscript(index: Int) -> Element {
 		return elements[index]
+	}
+
+	public func reset() {
+		wrapped.reset()
 	}
 
 	@discardableResult
@@ -61,9 +67,9 @@ public class FilterListDataSource<Element>: FetchableListDataSource {
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: FilterListDataSource<Element>
+		private unowned let parent: FilterListDataSource<Wrapped>
 
-		init(parent: FilterListDataSource<Element>) {
+		init(parent: FilterListDataSource<Wrapped>) {
 			self.parent = parent
 		}
 
@@ -74,7 +80,7 @@ public class FilterListDataSource<Element>: FetchableListDataSource {
 }
 
 public extension FetchableListDataSource {
-	func filter(_ predicateFunction: @escaping (Element) -> Bool) -> FilterListDataSource<Element> {
+	func filter(_ predicateFunction: @escaping (Element) -> Bool) -> FilterListDataSource<Self> {
 		return FilterListDataSource(wrapping: self, predicateFunction: predicateFunction)
 	}
 }

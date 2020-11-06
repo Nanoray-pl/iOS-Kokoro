@@ -3,8 +3,10 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public class UniqueListDataSource<Element, Key: Equatable>: FetchableListDataSource {
-	private let wrapped: AnyFetchableListDataSource<Element>
+public class UniqueListDataSource<Wrapped: FetchableListDataSource, Key: Equatable>: FetchableListDataSource {
+	public typealias Element = Wrapped.Element
+
+	private let wrapped: Wrapped
 	private let uniqueKeyFunction: (Element) -> Key
 	private lazy var observer = WrappedObserver(parent: self)
 	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
@@ -22,12 +24,12 @@ public class UniqueListDataSource<Element, Key: Equatable>: FetchableListDataSou
 		return wrapped.isFetching
 	}
 
-	public convenience init<T>(wrapping wrapped: T) where T: FetchableListDataSource, T.Element == Element, Element == Key {
+	public convenience init(wrapping wrapped: Wrapped) where Element == Key {
 		self.init(wrapping: wrapped, uniqueKeyFunction: { $0 })
 	}
 
-	public init<T>(wrapping wrapped: T, uniqueKeyFunction: @escaping (Element) -> Key) where T: FetchableListDataSource, T.Element == Element {
-		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
+	public init(wrapping wrapped: Wrapped, uniqueKeyFunction: @escaping (Element) -> Key) {
+		self.wrapped = wrapped
 		self.uniqueKeyFunction = uniqueKeyFunction
 		wrapped.addObserver(observer)
 		updateData()
@@ -39,6 +41,10 @@ public class UniqueListDataSource<Element, Key: Equatable>: FetchableListDataSou
 
 	public subscript(index: Int) -> Element {
 		return elements[index]
+	}
+
+	public func reset() {
+		wrapped.reset()
 	}
 
 	@discardableResult
@@ -75,9 +81,9 @@ public class UniqueListDataSource<Element, Key: Equatable>: FetchableListDataSou
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: UniqueListDataSource<Element, Key>
+		private unowned let parent: UniqueListDataSource<Wrapped, Key>
 
-		init(parent: UniqueListDataSource<Element, Key>) {
+		init(parent: UniqueListDataSource<Wrapped, Key>) {
 			self.parent = parent
 		}
 
@@ -88,13 +94,13 @@ public class UniqueListDataSource<Element, Key: Equatable>: FetchableListDataSou
 }
 
 public extension FetchableListDataSource where Element: Equatable {
-	func uniquing() -> UniqueListDataSource<Element, Element> {
+	func uniquing() -> UniqueListDataSource<Self, Element> {
 		return UniqueListDataSource(wrapping: self)
 	}
 }
 
 public extension FetchableListDataSource {
-	func uniquing<Key>(via uniqueKeyFunction: @escaping (Element) -> Key) -> UniqueListDataSource<Element, Key> {
+	func uniquing<Key>(via uniqueKeyFunction: @escaping (Element) -> Key) -> UniqueListDataSource<Self, Key> {
 		return UniqueListDataSource(wrapping: self, uniqueKeyFunction: uniqueKeyFunction)
 	}
 }

@@ -3,11 +3,11 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public class MapListDataSource<Input, Output>: FetchableListDataSource {
+public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: FetchableListDataSource {
 	public typealias Element = Output
 
-	private let wrapped: AnyFetchableListDataSource<Input>
-	private let mappingFunction: (Input) -> Output
+	private let wrapped: Wrapped
+	private let mappingFunction: (Wrapped.Element) -> Output
 	private lazy var observer = WrappedObserver(parent: self)
 	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var elements = [Element]()
@@ -24,8 +24,8 @@ public class MapListDataSource<Input, Output>: FetchableListDataSource {
 		return wrapped.isFetching
 	}
 
-	public init<T>(wrapping wrapped: T, mappingFunction: @escaping (Input) -> Output) where T: FetchableListDataSource, T.Element == Input {
-		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
+	public init(wrapping wrapped: Wrapped, mappingFunction: @escaping (Wrapped.Element) -> Output) {
+		self.wrapped = wrapped
 		self.mappingFunction = mappingFunction
 		wrapped.addObserver(observer)
 		updateData()
@@ -37,6 +37,10 @@ public class MapListDataSource<Input, Output>: FetchableListDataSource {
 
 	public subscript(index: Int) -> Element {
 		return elements[index]
+	}
+
+	public func reset() {
+		wrapped.reset()
 	}
 
 	@discardableResult
@@ -63,22 +67,20 @@ public class MapListDataSource<Input, Output>: FetchableListDataSource {
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		typealias Element = Input
+		private unowned let parent: MapListDataSource<Wrapped, Output>
 
-		private unowned let parent: MapListDataSource<Input, Output>
-
-		init(parent: MapListDataSource<Input, Output>) {
+		init(parent: MapListDataSource<Wrapped, Output>) {
 			self.parent = parent
 		}
 
-		func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
+		func didUpdateData(of dataSource: AnyFetchableListDataSource<Wrapped.Element>) {
 			parent.updateData()
 		}
 	}
 }
 
 public extension FetchableListDataSource {
-	func map<Output>(_ mappingFunction: @escaping (Element) -> Output) -> MapListDataSource<Element, Output> {
+	func map<Output>(_ mappingFunction: @escaping (Element) -> Output) -> MapListDataSource<Self, Output> {
 		return MapListDataSource(wrapping: self, mappingFunction: mappingFunction)
 	}
 }
