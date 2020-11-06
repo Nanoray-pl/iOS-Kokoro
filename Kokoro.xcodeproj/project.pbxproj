@@ -136,6 +136,13 @@
 			remoteGlobalIDString = AAD3548C252869D0007C63EF;
 			remoteInfo = KokoroUtils;
 		};
+		AA5AEC6B25558D6D00516C8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
+		};
 		AAD354D725287472007C63EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -916,6 +923,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				AA5AEC6C25558D6D00516C8D /* PBXTargetDependency */,
 			);
 			name = KokoroFetchable;
 			productName = KokoroFetchable;
@@ -1477,6 +1485,11 @@
 			isa = PBXTargetDependency;
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
 			targetProxy = AA5AEBE52555801000516C8D /* PBXContainerItemProxy */;
+		};
+		AA5AEC6C25558D6D00516C8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AA5AEC6B25558D6D00516C8D /* PBXContainerItemProxy */;
 		};
 		AAD354D825287472007C63EF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

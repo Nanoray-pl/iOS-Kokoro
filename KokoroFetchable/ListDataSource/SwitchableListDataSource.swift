@@ -3,6 +3,8 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+import KokoroUtils
+
 public class SwitchableListDataSource<Element>: FetchableListDataSource {
 	private var currentDataSource: AnyFetchableListDataSource<Element>
 	private var targetDataSource: AnyFetchableListDataSource<Element>?
@@ -52,9 +54,7 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
 		let identifier = ObjectIdentifier(observer)
-		if let index = observers.firstIndex(where: { $0.identifier == identifier }) {
-			observers.remove(at: index)
-		}
+		observers.removeFirst(where: { $0.identifier == identifier })
 	}
 
 	public func switchDataSource<DataSource>(to targetDataSource: DataSource) where DataSource: FetchableListDataSource, DataSource.Element == Element {

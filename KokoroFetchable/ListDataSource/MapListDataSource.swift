@@ -3,6 +3,8 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+import KokoroUtils
+
 public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: FetchableListDataSource {
 	public typealias Element = Output
 
@@ -54,9 +56,7 @@ public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: Fetcha
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
 		let identifier = ObjectIdentifier(observer)
-		if let index = observers.firstIndex(where: { $0.identifier == identifier }) {
-			observers.remove(at: index)
-		}
+		observers.removeFirst(where: { $0.identifier == identifier })
 	}
 
 	private func updateData() {

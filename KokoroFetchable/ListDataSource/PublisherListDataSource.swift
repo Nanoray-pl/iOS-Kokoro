@@ -5,6 +5,7 @@
 
 #if canImport(Combine)
 import Combine
+import KokoroUtils
 
 public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: FetchableListDataSource {
 	public typealias Page = (elements: [Element], isLast: Bool)
@@ -99,9 +100,7 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
 		let identifier = ObjectIdentifier(observer)
-		if let index = observers.firstIndex(where: { $0.identifier == identifier }) {
-			observers.remove(at: index)
-		}
+		observers.removeFirst(where: { $0.identifier == identifier })
 	}
 
 	private func updateElements() {

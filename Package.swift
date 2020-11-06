@@ -27,6 +27,7 @@ let package = Package(
 		),
 		.target(
 			name: "KokoroFetchable",
+			dependencies: ["KokoroUtils"],
 			path: "KokoroFetchable",
 			exclude: ["Bootstrap/Info.plist"]
 		),

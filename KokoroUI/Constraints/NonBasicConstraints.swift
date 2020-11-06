@@ -4,6 +4,7 @@
 //
 
 #if canImport(UIKit)
+import KokoroUtils
 import UIKit
 
 public protocol NonBasicConstraint: Constraint {}
@@ -30,9 +31,7 @@ public extension Constrainable {
 
 	func removeConstraint(_ constraint: NonBasicConstraint) {
 		var constraints = nonBasicConstraints
-		if let index = constraints.firstIndex(where: { $0 === constraint }) {
-			constraints.remove(at: index)
-		}
+		constraints.removeFirst(where: { $0 === constraint })
 		nonBasicConstraints = constraints
 	}
 }
