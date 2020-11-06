@@ -47,8 +47,7 @@ public extension HttpRequestBuilder {
 }
 
 public class DefaultHttpRequestBuilder: HttpRequestBuilder {
-	public init() {
-	}
+	public init() {}
 
 	public func buildRequest(method: HttpMethod, url: URL, urlParameters: [String: Any], headers: [String: Any]) -> URLRequest {
 		var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!

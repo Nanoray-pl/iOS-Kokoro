@@ -20,6 +20,7 @@
 		AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC25255585F700516C8D /* CombineExtensions.swift */; };
 		AA5AEC3B255587FF00516C8D /* HapticFeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */; };
 		AA5AEC5825558B8F00516C8D /* SystemUILocalizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */; };
+		AA5AEC772555903A00516C8D /* EndpointUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC762555903A00516C8D /* EndpointUrl.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -196,6 +197,7 @@
 		AA5AEC25255585F700516C8D /* CombineExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExtensions.swift; sourceTree = "<group>"; };
 		AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackGenerator.swift; sourceTree = "<group>"; };
 		AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUILocalizable.swift; sourceTree = "<group>"; };
+		AA5AEC762555903A00516C8D /* EndpointUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointUrl.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 				AAD355E72528B82E007C63EF /* HttpRequestBuilder.swift */,
 				AAD355ED2528B853007C63EF /* HttpBodyEncoder.swift */,
 				AAD355F92528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift */,
+				AA5AEC762555903A00516C8D /* EndpointUrl.swift */,
 			);
 			path = KokoroHttp;
 			sourceTree = "<group>";
@@ -1402,6 +1405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD355EE2528B853007C63EF /* HttpBodyEncoder.swift in Sources */,
+				AA5AEC772555903A00516C8D /* EndpointUrl.swift in Sources */,
 				AAD3577025291B2D007C63EF /* URLSessionHttpClient.swift in Sources */,
 				AAD3577E25291B6C007C63EF /* SchedulingHttpClient.swift in Sources */,
 				AAD355FA2528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift in Sources */,

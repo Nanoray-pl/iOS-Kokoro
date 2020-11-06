@@ -7,11 +7,23 @@
 import Combine
 import Foundation
 
+public typealias HttpClientProgress = UrlSessionDataTaskProgressPublisher.Output.Progress
+
 public enum HttpClientOutput<Output> {
-	case progress(_ progress: Progress)
+	case sendProgress(_ progress: HttpClientProgress)
+	case receiveProgress(_ progress: HttpClientProgress)
 	case output(_ output: Output)
 
-	public typealias Progress = UrlSessionDataTaskProgressPublisher.Output.Progress
+	public func map<NewOutput>(_ mappingFunction: (Output) throws -> NewOutput) rethrows -> HttpClientOutput<NewOutput> {
+		switch self {
+		case let .sendProgress(progress):
+			return .sendProgress(progress)
+		case let .receiveProgress(progress):
+			return .receiveProgress(progress)
+		case let .output(output):
+			return .output(try mappingFunction(output))
+		}
+	}
 }
 
 public protocol HttpClient {

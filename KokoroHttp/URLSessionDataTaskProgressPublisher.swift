@@ -14,11 +14,12 @@ public extension URLSession {
 }
 
 public class UrlSessionDataTaskProgressPublisher: Publisher {
-	public enum Output {
-		case progress(_ progress: Progress)
+	public enum Output: Hashable {
+		case sendProgress(_ progress: Progress)
+		case receiveProgress(_ progress: Progress)
 		case output(data: Data, response: URLResponse)
 
-		public enum Progress {
+		public enum Progress: Hashable {
 			case indeterminate
 			case determinate(processedByteCount: Int, expectedByteCount: Int)
 		}
@@ -32,8 +33,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	private let lock = NSObject()
 	private var subscriptionCount = 0
 	private var dataTask: URLSessionDataTask?
-	private var fractionObservation: NSKeyValueObservation?
-	private var indeterminateObservation: NSKeyValueObservation?
+	private var observations = [NSKeyValueObservation]()
 
 	public init(session: URLSession, request: URLRequest) {
 		self.session = session
@@ -60,8 +60,14 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 				self.subject.send(.output(data: data, response: response))
 				self.subject.send(completion: .finished)
 			}
-			fractionObservation = dataTask.progress.observe(\.fractionCompleted, changeHandler: { progress, _ in self.updateProgress(progress) })
-			indeterminateObservation = dataTask.progress.observe(\.isIndeterminate, changeHandler: { progress, _ in self.updateProgress(progress) })
+
+			observations = [
+				dataTask.progress.observe(\.isIndeterminate, changeHandler: { _, _ in self.updateProgress() }),
+				dataTask.observe(\.countOfBytesSent, changeHandler: { _, _ in self.updateProgress() }),
+				dataTask.observe(\.countOfBytesExpectedToSend, changeHandler: { _, _ in self.updateProgress() }),
+				dataTask.observe(\.countOfBytesReceived, changeHandler: { _, _ in self.updateProgress() }),
+				dataTask.observe(\.countOfBytesExpectedToReceive, changeHandler: { _, _ in self.updateProgress() }),
+			]
 			self.dataTask = dataTask
 			dataTask.resume()
 		}
@@ -70,24 +76,28 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 		subscriber.receive(subscription: subscription)
 	}
 
-	private func updateProgress(_ progress: Progress) {
+	private func updateProgress() {
 		guard let dataTask = dataTask else { return }
+		let progress = dataTask.progress
 
-		if progress.isIndeterminate {
-			subject.send(.progress(.indeterminate))
+		if dataTask.countOfBytesExpectedToSend <= 0 {
+			subject.send(.sendProgress(.indeterminate))
+		} else if dataTask.countOfBytesSent < dataTask.countOfBytesExpectedToSend {
+			subject.send(.sendProgress(.determinate(processedByteCount: Int(dataTask.countOfBytesSent), expectedByteCount: Int(dataTask.countOfBytesExpectedToSend))))
+		} else if progress.isIndeterminate || dataTask.countOfBytesExpectedToReceive < 0 || (dataTask.countOfBytesExpectedToReceive == 0 && dataTask.countOfBytesReceived == 0) {
+			subject.send(.receiveProgress(.indeterminate))
 		} else {
-			subject.send(.progress(.determinate(processedByteCount: Int(dataTask.countOfBytesReceived), expectedByteCount: Int(dataTask.countOfBytesExpectedToReceive))))
+			subject.send(.receiveProgress(.determinate(processedByteCount: Int(dataTask.countOfBytesReceived), expectedByteCount: Int(dataTask.countOfBytesExpectedToReceive))))
 		}
 	}
 
 	private func dropSubscription() {
-		objc_sync_enter(self)
+		objc_sync_enter(lock)
 		defer { objc_sync_exit(lock) }
 
 		subscriptionCount -= 1
 		if subscriptionCount == 0 {
-			fractionObservation = nil
-			indeterminateObservation = nil
+			observations = []
 			dataTask?.cancel()
 			dataTask = nil
 		}
@@ -100,7 +110,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 		init<S>(publisher: UrlSessionDataTaskProgressPublisher, subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
 			self.publisher = publisher
 
-			cancellable = publisher.subject.sink(receiveCompletion: { completion in
+			cancellable = publisher.subject.removeDuplicates().sink(receiveCompletion: { completion in
 				subscriber.receive(completion: completion)
 			}, receiveValue: { value in
 				_ = subscriber.receive(value)
