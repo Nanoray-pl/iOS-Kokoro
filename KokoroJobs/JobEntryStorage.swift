@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+#if canImport(Combine) && canImport(Foundation)
 import Foundation
 
 public struct JobInfo {
@@ -23,3 +24,4 @@ public protocol JobEntryStorage: class {
 	func updatePersistedScheduleParameters(jobIdentifier: JobIdentifier, persistedScheduleParameters: JobManagerPersistedScheduleParameters)
 	func removeJobEntry(with identifier: JobIdentifier)
 }
+#endif

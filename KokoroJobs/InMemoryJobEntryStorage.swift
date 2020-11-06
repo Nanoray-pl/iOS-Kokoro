@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+#if canImport(Combine) && canImport(Foundation)
 import Foundation
 
 public class InMemoryJobEntryStorage: JobEntryStorage {
@@ -49,3 +50,4 @@ public class InMemoryJobEntryStorage: JobEntryStorage {
 		complexJobInfos.removeFirst(where: { $0.jobIdentifier == identifier })
 	}
 }
+#endif

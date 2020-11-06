@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+#if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
 import KokoroUtils
@@ -256,3 +257,4 @@ public class DefaultJobManager: JobManager, ObjectWith {
 		jobs.removeFirst(where: { $0.identifier == identifier })
 	}
 }
+#endif

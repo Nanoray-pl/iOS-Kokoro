@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+#if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
 
@@ -90,3 +91,4 @@ public protocol Job: class {
 
 	func execute() -> AnyPublisher<Output, Failure>
 }
+#endif

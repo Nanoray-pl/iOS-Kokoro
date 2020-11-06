@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+#if canImport(Combine) && canImport(Foundation)
 import Foundation
 import KokoroUtils
 
@@ -111,3 +112,4 @@ public class UserDefaultsJobEntryStorage: JobEntryStorage {
 		}
 	}
 }
+#endif
