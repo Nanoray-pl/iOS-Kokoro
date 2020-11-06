@@ -15,6 +15,11 @@
 		AA5AEBD225557EF400516C8D /* DefaultJobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBD125557EF400516C8D /* DefaultJobManager.swift */; };
 		AA5AEBF12555802800516C8D /* InMemoryJobEntryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBF02555802800516C8D /* InMemoryJobEntryStorage.swift */; };
 		AA5AEBFC2555805300516C8D /* UserDefaultsJobEntryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBFB2555805300516C8D /* UserDefaultsJobEntryStorage.swift */; };
+		AA5AEC072555845D00516C8D /* ComparableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC062555845D00516C8D /* ComparableExtensions.swift */; };
+		AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC1A255584D800516C8D /* Cancellable.swift */; };
+		AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC25255585F700516C8D /* CombineExtensions.swift */; };
+		AA5AEC3B255587FF00516C8D /* HapticFeedbackGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */; };
+		AA5AEC5825558B8F00516C8D /* SystemUILocalizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -179,6 +184,11 @@
 		AA5AEBD125557EF400516C8D /* DefaultJobManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultJobManager.swift; sourceTree = "<group>"; };
 		AA5AEBF02555802800516C8D /* InMemoryJobEntryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryJobEntryStorage.swift; sourceTree = "<group>"; };
 		AA5AEBFB2555805300516C8D /* UserDefaultsJobEntryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsJobEntryStorage.swift; sourceTree = "<group>"; };
+		AA5AEC062555845D00516C8D /* ComparableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableExtensions.swift; sourceTree = "<group>"; };
+		AA5AEC1A255584D800516C8D /* Cancellable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cancellable.swift; sourceTree = "<group>"; };
+		AA5AEC25255585F700516C8D /* CombineExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExtensions.swift; sourceTree = "<group>"; };
+		AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackGenerator.swift; sourceTree = "<group>"; };
+		AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUILocalizable.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -395,6 +405,16 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AA5AEC39255587F000516C8D /* Business Logic */ = {
+			isa = PBXGroup;
+			children = (
+				AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */,
+				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
+				AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */,
+			);
+			path = "Business Logic";
+			sourceTree = "<group>";
+		};
 		AAD35483252869D0007C63EF = {
 			isa = PBXGroup;
 			children = (
@@ -433,11 +453,14 @@
 			children = (
 				AAD3549A25286A16007C63EF /* Bootstrap */,
 				AAD354A025286B1C007C63EF /* With.swift */,
-				AAD354A325286B88007C63EF /* OptionalExtensions.swift */,
-				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
 				AAD355C72528B3D7007C63EF /* Identifier.swift */,
 				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
 				AAD355CC2528B4A4007C63EF /* Logger.swift */,
+				AA5AEC1A255584D800516C8D /* Cancellable.swift */,
+				AAD354A325286B88007C63EF /* OptionalExtensions.swift */,
+				AA5AEC062555845D00516C8D /* ComparableExtensions.swift */,
+				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
+				AA5AEC25255585F700516C8D /* CombineExtensions.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -460,6 +483,7 @@
 				AAD3551C25288CE4007C63EF /* Containers */,
 				AAD354F22528829C007C63EF /* Functional Views */,
 				AAD3550925288A03007C63EF /* Aesthetic Views */,
+				AA5AEC39255587F000516C8D /* Business Logic */,
 				AAD354E3252879BB007C63EF /* Utils */,
 			);
 			path = KokoroUI;
@@ -504,10 +528,9 @@
 				AAD354EA25287A0B007C63EF /* HierarchyLookup.swift */,
 				AAD354FD252887F0007C63EF /* Animated.swift */,
 				AAD3551825288CC6007C63EF /* ReusableCells.swift */,
-				AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */,
-				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
 				AAD355C22528B2B3007C63EF /* HierarchyObserving.swift */,
 				AAD57CB7253376C5007358D1 /* SwiftUIRepresentable.swift */,
+				AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1292,10 +1315,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA5AEC072555845D00516C8D /* ComparableExtensions.swift in Sources */,
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
+				AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */,
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
+				AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
 			);
@@ -1330,8 +1356,10 @@
 				AAD354E025287987007C63EF /* ProportionalOffsetConstraint.swift in Sources */,
 				AAD3554A2528A03F007C63EF /* ForceTouchGestureRecognizer.swift in Sources */,
 				AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */,
+				AA5AEC5825558B8F00516C8D /* SystemUILocalizable.swift in Sources */,
 				AAD3552225288E3F007C63EF /* NavigationControllerWrapper.swift in Sources */,
 				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
+				AA5AEC3B255587FF00516C8D /* HapticFeedbackGenerator.swift in Sources */,
 				AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */,
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
 				AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */,

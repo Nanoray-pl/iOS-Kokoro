@@ -8,7 +8,7 @@ import CoreGraphics
 import Foundation
 
 public enum XcodePreviews {
-	static var isPreviewing: Bool {
+	public static var isPreviewing: Bool {
 		#if canImport(SwiftUI) && DEBUG
 		return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != nil
 		#else

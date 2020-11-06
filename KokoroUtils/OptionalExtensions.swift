@@ -17,3 +17,9 @@ public extension Optional {
 		}
 	}
 }
+
+public extension Optional where Wrapped: StringProtocol {
+	var isEmpty: Bool {
+		return self?.isEmpty != false
+	}
+}

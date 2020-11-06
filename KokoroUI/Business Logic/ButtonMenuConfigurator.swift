@@ -8,8 +8,8 @@ import UIKit
 
 public class ButtonMenuConfigurator {
 	public final class ButtonTargetHandler {
-		private(set) weak var target: AnyObject?
-		private(set) var selector: Selector
+		public private(set) weak var target: AnyObject?
+		public private(set) var selector: Selector
 
 		public init(target: AnyObject, selector: Selector) {
 			self.target = target
@@ -74,10 +74,10 @@ public class ButtonMenuConfigurator {
 			case menu(_ menu: Menu)
 		}
 
-		let primaryAction: Action?
-		let secondaryAction: Action?
+		public let primaryAction: Action?
+		public let secondaryAction: Action?
 
-		var nonMenuPrimaryAction: ButtonHandler? {
+		public var nonMenuPrimaryAction: ButtonHandler? {
 			if case let .handler(handler) = primaryAction {
 				return handler
 			} else {
@@ -85,7 +85,7 @@ public class ButtonMenuConfigurator {
 			}
 		}
 
-		var nonMenuSecondaryAction: ButtonHandler? {
+		public var nonMenuSecondaryAction: ButtonHandler? {
 			if case let .handler(handler) = secondaryAction {
 				return handler
 			} else {
@@ -93,7 +93,7 @@ public class ButtonMenuConfigurator {
 			}
 		}
 
-		var menu: Menu? {
+		public var menu: Menu? {
 			if case let .menu(menu) = primaryAction {
 				return menu
 			} else if case let .menu(menu) = secondaryAction {
@@ -108,23 +108,23 @@ public class ButtonMenuConfigurator {
 			self.secondaryAction = secondaryAction
 		}
 
-		init(handler: ButtonHandler) {
+		public init(handler: ButtonHandler) {
 			self.init(primaryAction: .handler(handler), secondaryAction: nil)
 		}
 
-		init(primaryHandler: ButtonHandler, secondaryHandler: ButtonHandler) {
+		public init(primaryHandler: ButtonHandler, secondaryHandler: ButtonHandler) {
 			self.init(primaryAction: .handler(primaryHandler), secondaryAction: .handler(secondaryHandler))
 		}
 
-		init(menu: Menu) {
+		public init(menu: Menu) {
 			self.init(primaryAction: .menu(menu), secondaryAction: nil)
 		}
 
-		init(primaryMenu: Menu, secondaryHandler: ButtonHandler) {
+		public init(primaryMenu: Menu, secondaryHandler: ButtonHandler) {
 			self.init(primaryAction: .menu(primaryMenu), secondaryAction: .handler(secondaryHandler))
 		}
 
-		init(primaryHandler: ButtonHandler, secondaryMenu: Menu) {
+		public init(primaryHandler: ButtonHandler, secondaryMenu: Menu) {
 			self.init(primaryAction: .handler(primaryHandler), secondaryAction: .menu(secondaryMenu))
 		}
 	}
@@ -142,7 +142,6 @@ public class ButtonMenuConfigurator {
 	private let alwaysUseActionSheet: Bool
 	private let actionSheetPresenter: (_ source: UIView, _ title: String?, _ actions: [ActionSheetAction], _ animated: Bool) -> Void
 	private var configurations = NSMapTable<UIButton, Configuration>(keyOptions: .weakMemory, valueOptions: .strongMemory)
-	private lazy var uiKitBundle = Bundle(identifier: "com.apple.UIKit")!
 
 	private var shouldUseActionSheet: Bool {
 		if #available(iOS 14, *) {
@@ -152,7 +151,7 @@ public class ButtonMenuConfigurator {
 		}
 	}
 
-	init(actionSheetPresenter: @escaping (_ source: UIView, _ title: String?, _ actions: [ActionSheetAction], _ animated: Bool) -> Void, alwaysUseActionSheet: Bool = false) {
+	public init(actionSheetPresenter: @escaping (_ source: UIView, _ title: String?, _ actions: [ActionSheetAction], _ animated: Bool) -> Void, alwaysUseActionSheet: Bool = false) {
 		self.actionSheetPresenter = actionSheetPresenter
 		self.alwaysUseActionSheet = alwaysUseActionSheet
 	}
@@ -176,7 +175,7 @@ public class ButtonMenuConfigurator {
 		configurations.removeObject(forKey: button)
 	}
 
-	func configure(_ button: UIButton, actions: Actions?) {
+	public func configure(_ button: UIButton, actions: Actions?) {
 		cleanUpConfiguration(of: button)
 		guard let actions = actions else { return }
 
@@ -267,7 +266,7 @@ public class ButtonMenuConfigurator {
 			)
 		}
 
-		actions.append(.init(title: uiKitBundle.localizedString(forKey: "Cancel", value: "", table: nil), style: .cancel))
+		actions.append(.init(title: SystemUILocalizable.cancel, style: .cancel))
 		actionSheetPresenter(button, menu.title.isEmpty ? nil : menu.title, actions, Animated.motionBased.value)
 	}
 
@@ -342,7 +341,7 @@ public class ButtonMenuConfigurator {
 	}
 }
 
-extension ButtonMenuConfigurator {
+public extension ButtonMenuConfigurator {
 	func configure(_ button: Button, actions: Actions?) {
 		configure(button.wrappedButton, actions: actions)
 	}

@@ -6,10 +6,6 @@
 #if canImport(UIKit)
 import UIKit
 
-private enum Lazy {
-	static let uiKitBundle = Bundle(identifier: "com.apple.UIKit")!
-}
-
 public protocol PrecedingControllerNavigator: class {
 	func precedingNavigationItems(for controller: UIViewController) -> [UINavigationItem]
 	func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?)
@@ -27,7 +23,7 @@ public extension PrecedingControllerNavigator {
 			return .init(
 				children: precedingNavigationItems.map { item in
 					return ButtonMenuConfigurator.MenuAction(
-						title: item.title ?? Lazy.uiKitBundle.localizedString(forKey: "Back", value: "", table: nil),
+						title: item.title ?? SystemUILocalizable.back,
 						handler: .closure { [weak self] in self?.navigateBackToViewController(owning: item, animated: Animated.motionBased.value) }
 					)
 				}
