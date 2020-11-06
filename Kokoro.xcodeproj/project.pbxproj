@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
+		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
+		AA5AEBBC25557E6D00516C8D /* JobHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBBB25557E6D00516C8D /* JobHandler.swift */; };
+		AA5AEBC725557EC600516C8D /* JobEntryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBC625557EC600516C8D /* JobEntryStorage.swift */; };
+		AA5AEBD225557EF400516C8D /* DefaultJobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBD125557EF400516C8D /* DefaultJobManager.swift */; };
+		AA5AEBF12555802800516C8D /* InMemoryJobEntryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBF02555802800516C8D /* InMemoryJobEntryStorage.swift */; };
+		AA5AEBFC2555805300516C8D /* UserDefaultsJobEntryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBFB2555805300516C8D /* UserDefaultsJobEntryStorage.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -117,6 +124,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AA5AEBE52555801000516C8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
+		};
 		AAD354D725287472007C63EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -156,6 +170,15 @@
 
 /* Begin PBXFileReference section */
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
+		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
+		AA5AEB8F25557D7700516C8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA5AEBB025557E1B00516C8D /* JobManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobManager.swift; sourceTree = "<group>"; };
+		AA5AEBBB25557E6D00516C8D /* JobHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobHandler.swift; sourceTree = "<group>"; };
+		AA5AEBC625557EC600516C8D /* JobEntryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobEntryStorage.swift; sourceTree = "<group>"; };
+		AA5AEBD125557EF400516C8D /* DefaultJobManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultJobManager.swift; sourceTree = "<group>"; };
+		AA5AEBF02555802800516C8D /* InMemoryJobEntryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryJobEntryStorage.swift; sourceTree = "<group>"; };
+		AA5AEBFB2555805300516C8D /* UserDefaultsJobEntryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsJobEntryStorage.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -282,6 +305,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA5AEB8925557D7700516C8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD3548A252869D0007C63EF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -342,6 +372,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA5AEB8D25557D7700516C8D /* KokoroJobs */ = {
+			isa = PBXGroup;
+			children = (
+				AA5AEB9D25557D8500516C8D /* Bootstrap */,
+				AA5AEBB025557E1B00516C8D /* JobManager.swift */,
+				AA5AEBD125557EF400516C8D /* DefaultJobManager.swift */,
+				AA5AEBBB25557E6D00516C8D /* JobHandler.swift */,
+				AA5AEBC625557EC600516C8D /* JobEntryStorage.swift */,
+				AA5AEBF02555802800516C8D /* InMemoryJobEntryStorage.swift */,
+				AA5AEBFB2555805300516C8D /* UserDefaultsJobEntryStorage.swift */,
+			);
+			path = KokoroJobs;
+			sourceTree = "<group>";
+		};
+		AA5AEB9D25557D8500516C8D /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AA5AEB8E25557D7700516C8D /* KokoroJobs.h */,
+				AA5AEB8F25557D7700516C8D /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
 		AAD35483252869D0007C63EF = {
 			isa = PBXGroup;
 			children = (
@@ -354,6 +407,7 @@
 				AAD3560B2528BAC9007C63EF /* KokoroCoreData */,
 				AAD356162528BAC9007C63EF /* KokoroCoreDataTests */,
 				AAD3578B2529C468007C63EF /* KokoroResourceProvider */,
+				AA5AEB8D25557D7700516C8D /* KokoroJobs */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -369,6 +423,7 @@
 				AAD356122528BAC9007C63EF /* KokoroCoreDataTests.xctest */,
 				AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */,
 				AAD57CC42533B0C8007358D1 /* KokoroUIDemo.app */,
+				AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -706,6 +761,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		AA5AEB8725557D7700516C8D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD35488252869D0007C63EF /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -757,6 +820,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		AA5AEB8B25557D7700516C8D /* KokoroJobs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA5AEB9125557D7700516C8D /* Build configuration list for PBXNativeTarget "KokoroJobs" */;
+			buildPhases = (
+				AA5AEB8725557D7700516C8D /* Headers */,
+				AA5AEB8825557D7700516C8D /* Sources */,
+				AA5AEB8925557D7700516C8D /* Frameworks */,
+				AA5AEB8A25557D7700516C8D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA5AEBE62555801000516C8D /* PBXTargetDependency */,
+			);
+			name = KokoroJobs;
+			productName = KokoroJobs;
+			productReference = AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		AAD3548C252869D0007C63EF /* KokoroUtils */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AAD35495252869D0007C63EF /* Build configuration list for PBXNativeTarget "KokoroUtils" */;
@@ -923,6 +1005,10 @@
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Nanoray;
 				TargetAttributes = {
+					AA5AEB8B25557D7700516C8D = {
+						CreatedOnToolsVersion = 12.1;
+						LastSwiftMigration = 1210;
+					};
 					AAD3548C252869D0007C63EF = {
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
@@ -973,17 +1059,25 @@
 			targets = (
 				AAD3548C252869D0007C63EF /* KokoroUtils */,
 				AAD354B025287210007C63EF /* KokoroUI */,
+				AAD57CC32533B0C8007358D1 /* KokoroUIDemo */,
 				AAD355572528A818007C63EF /* KokoroFetchable */,
 				AAD355D52528B7F7007C63EF /* KokoroHttp */,
 				AAD356092528BAC9007C63EF /* KokoroCoreData */,
 				AAD356112528BAC9007C63EF /* KokoroCoreDataTests */,
 				AAD357892529C468007C63EF /* KokoroResourceProvider */,
-				AAD57CC32533B0C8007358D1 /* KokoroUIDemo */,
+				AA5AEB8B25557D7700516C8D /* KokoroJobs */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AA5AEB8A25557D7700516C8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD3548B252869D0007C63EF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1181,6 +1275,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AA5AEB8825557D7700516C8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5AEBBC25557E6D00516C8D /* JobHandler.swift in Sources */,
+				AA5AEBD225557EF400516C8D /* DefaultJobManager.swift in Sources */,
+				AA5AEBF12555802800516C8D /* InMemoryJobEntryStorage.swift in Sources */,
+				AA5AEBFC2555805300516C8D /* UserDefaultsJobEntryStorage.swift in Sources */,
+				AA5AEBC725557EC600516C8D /* JobEntryStorage.swift in Sources */,
+				AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD35489252869D0007C63EF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1338,6 +1445,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AA5AEBE62555801000516C8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AA5AEBE52555801000516C8D /* PBXContainerItemProxy */;
+		};
 		AAD354D825287472007C63EF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
@@ -1366,6 +1478,51 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		AA5AEB9225557D7700516C8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroJobs;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA5AEB9325557D7700516C8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroJobs;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		AAD35493252869D0007C63EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1845,6 +2002,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA5AEB9125557D7700516C8D /* Build configuration list for PBXNativeTarget "KokoroJobs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA5AEB9225557D7700516C8D /* Debug */,
+				AA5AEB9325557D7700516C8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AAD35487252869D0007C63EF /* Build configuration list for PBXProject "Kokoro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

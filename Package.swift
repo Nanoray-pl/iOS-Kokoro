@@ -47,6 +47,12 @@ let package = Package(
 			path: "KokoroResourceProvider",
 			exclude: ["Bootstrap/Info.plist"]
 		),
+		.target(
+			name: "KokoroJobs",
+			dependencies: ["KokoroUtils"],
+			path: "KokoroJobs",
+			exclude: ["Bootstrap/Info.plist"]
+		),
 //		.testTarget(
 //			name: "KokoroCoreDataTests",
 //			dependencies: ["KokoroCoreData"],
