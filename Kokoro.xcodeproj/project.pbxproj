@@ -22,6 +22,15 @@
 		AA5AEC5825558B8F00516C8D /* SystemUILocalizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */; };
 		AA5AEC772555903A00516C8D /* EndpointUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC762555903A00516C8D /* EndpointUrl.swift */; };
 		AA5AEC8225559BA600516C8D /* TryMapListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEC8125559BA600516C8D /* TryMapListDataSource.swift */; };
+		AA5AEC9E2556AF1C00516C8D /* KokoroCache.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEC9C2556AF1C00516C8D /* KokoroCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA5AECB02556AF6100516C8D /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AECAF2556AF6100516C8D /* Cache.swift */; };
+		AA5AECBC2556AFB900516C8D /* InMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AECBB2556AFB900516C8D /* InMemoryCache.swift */; };
+		AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AECC72556B03600516C8D /* SortedArray.swift */; };
+		AA5AECDE2556B0D700516C8D /* OnDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AECDD2556B0D700516C8D /* OnDiskCache.swift */; };
+		AA5AECEA2556B10D00516C8D /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AECE92556B10D00516C8D /* MD5.swift */; };
+		AA5AED082556B2B000516C8D /* KokoroCacheResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AED062556B2B000516C8D /* KokoroCacheResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA5AED192556B2D200516C8D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AED182556B2D200516C8D /* Extensions.swift */; };
+		AA5AEDA32556B36E00516C8D /* CacheResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -145,6 +154,27 @@
 			remoteGlobalIDString = AAD3548C252869D0007C63EF;
 			remoteInfo = KokoroUtils;
 		};
+		AA5AECAD2556AF2F00516C8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
+		};
+		AA5AED932556B33100516C8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA5AEC992556AF1C00516C8D;
+			remoteInfo = KokoroCache;
+		};
+		AA5AED952556B33100516C8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD357892529C468007C63EF;
+			remoteInfo = KokoroResourceProvider;
+		};
 		AAD354D725287472007C63EF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -200,6 +230,19 @@
 		AA5AEC5725558B8F00516C8D /* SystemUILocalizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUILocalizable.swift; sourceTree = "<group>"; };
 		AA5AEC762555903A00516C8D /* EndpointUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointUrl.swift; sourceTree = "<group>"; };
 		AA5AEC8125559BA600516C8D /* TryMapListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryMapListDataSource.swift; sourceTree = "<group>"; };
+		AA5AEC9A2556AF1C00516C8D /* KokoroCache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroCache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA5AEC9C2556AF1C00516C8D /* KokoroCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroCache.h; sourceTree = "<group>"; };
+		AA5AEC9D2556AF1C00516C8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA5AECAF2556AF6100516C8D /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		AA5AECBB2556AFB900516C8D /* InMemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCache.swift; sourceTree = "<group>"; };
+		AA5AECC72556B03600516C8D /* SortedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
+		AA5AECDD2556B0D700516C8D /* OnDiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDiskCache.swift; sourceTree = "<group>"; };
+		AA5AECE92556B10D00516C8D /* MD5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
+		AA5AED042556B2B000516C8D /* KokoroCacheResourceProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroCacheResourceProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA5AED062556B2B000516C8D /* KokoroCacheResourceProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroCacheResourceProvider.h; sourceTree = "<group>"; };
+		AA5AED072556B2B000516C8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA5AED182556B2D200516C8D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheResourceProvider.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -333,6 +376,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA5AEC972556AF1C00516C8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA5AED012556B2B000516C8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD3548A252869D0007C63EF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -426,6 +483,45 @@
 			path = "Business Logic";
 			sourceTree = "<group>";
 		};
+		AA5AEC9B2556AF1C00516C8D /* KokoroCache */ = {
+			isa = PBXGroup;
+			children = (
+				AA5AECAC2556AF2100516C8D /* Bootstrap */,
+				AA5AECAF2556AF6100516C8D /* Cache.swift */,
+				AA5AECBB2556AFB900516C8D /* InMemoryCache.swift */,
+				AA5AECDD2556B0D700516C8D /* OnDiskCache.swift */,
+			);
+			path = KokoroCache;
+			sourceTree = "<group>";
+		};
+		AA5AECAC2556AF2100516C8D /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AA5AEC9C2556AF1C00516C8D /* KokoroCache.h */,
+				AA5AEC9D2556AF1C00516C8D /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AA5AED052556B2B000516C8D /* KokoroCacheResourceProvider */ = {
+			isa = PBXGroup;
+			children = (
+				AA5AED172556B2B400516C8D /* Bootstrap */,
+				AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */,
+				AA5AED182556B2D200516C8D /* Extensions.swift */,
+			);
+			path = KokoroCacheResourceProvider;
+			sourceTree = "<group>";
+		};
+		AA5AED172556B2B400516C8D /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AA5AED062556B2B000516C8D /* KokoroCacheResourceProvider.h */,
+				AA5AED072556B2B000516C8D /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
 		AAD35483252869D0007C63EF = {
 			isa = PBXGroup;
 			children = (
@@ -439,6 +535,8 @@
 				AAD356162528BAC9007C63EF /* KokoroCoreDataTests */,
 				AAD3578B2529C468007C63EF /* KokoroResourceProvider */,
 				AA5AEB8D25557D7700516C8D /* KokoroJobs */,
+				AA5AEC9B2556AF1C00516C8D /* KokoroCache */,
+				AA5AED052556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -455,6 +553,8 @@
 				AAD3578A2529C468007C63EF /* KokoroResourceProvider.framework */,
 				AAD57CC42533B0C8007358D1 /* KokoroUIDemo.app */,
 				AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */,
+				AA5AEC9A2556AF1C00516C8D /* KokoroCache.framework */,
+				AA5AED042556B2B000516C8D /* KokoroCacheResourceProvider.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -468,6 +568,8 @@
 				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
 				AAD355CC2528B4A4007C63EF /* Logger.swift */,
 				AA5AEC1A255584D800516C8D /* Cancellable.swift */,
+				AA5AECC72556B03600516C8D /* SortedArray.swift */,
+				AA5AECE92556B10D00516C8D /* MD5.swift */,
 				AAD354A325286B88007C63EF /* OptionalExtensions.swift */,
 				AA5AEC062555845D00516C8D /* ComparableExtensions.swift */,
 				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
@@ -805,6 +907,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA5AEC952556AF1C00516C8D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5AEC9E2556AF1C00516C8D /* KokoroCache.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA5AECFF2556B2B000516C8D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5AED082556B2B000516C8D /* KokoroCacheResourceProvider.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD35488252869D0007C63EF /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -873,6 +991,45 @@
 			name = KokoroJobs;
 			productName = KokoroJobs;
 			productReference = AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AA5AEC992556AF1C00516C8D /* KokoroCache */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA5AEC9F2556AF1C00516C8D /* Build configuration list for PBXNativeTarget "KokoroCache" */;
+			buildPhases = (
+				AA5AEC952556AF1C00516C8D /* Headers */,
+				AA5AEC962556AF1C00516C8D /* Sources */,
+				AA5AEC972556AF1C00516C8D /* Frameworks */,
+				AA5AEC982556AF1C00516C8D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA5AECAE2556AF2F00516C8D /* PBXTargetDependency */,
+			);
+			name = KokoroCache;
+			productName = KokoroCache;
+			productReference = AA5AEC9A2556AF1C00516C8D /* KokoroCache.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AA5AED032556B2B000516C8D /* KokoroCacheResourceProvider */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA5AED092556B2B000516C8D /* Build configuration list for PBXNativeTarget "KokoroCacheResourceProvider" */;
+			buildPhases = (
+				AA5AECFF2556B2B000516C8D /* Headers */,
+				AA5AED002556B2B000516C8D /* Sources */,
+				AA5AED012556B2B000516C8D /* Frameworks */,
+				AA5AED022556B2B000516C8D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA5AED942556B33100516C8D /* PBXTargetDependency */,
+				AA5AED962556B33100516C8D /* PBXTargetDependency */,
+			);
+			name = KokoroCacheResourceProvider;
+			productName = KokoroCacheResourceProvider;
+			productReference = AA5AED042556B2B000516C8D /* KokoroCacheResourceProvider.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		AAD3548C252869D0007C63EF /* KokoroUtils */ = {
@@ -1046,6 +1203,14 @@
 						CreatedOnToolsVersion = 12.1;
 						LastSwiftMigration = 1210;
 					};
+					AA5AEC992556AF1C00516C8D = {
+						CreatedOnToolsVersion = 12.1;
+						LastSwiftMigration = 1210;
+					};
+					AA5AED032556B2B000516C8D = {
+						CreatedOnToolsVersion = 12.1;
+						LastSwiftMigration = 1210;
+					};
 					AAD3548C252869D0007C63EF = {
 						CreatedOnToolsVersion = 12.0.1;
 						LastSwiftMigration = 1200;
@@ -1103,12 +1268,28 @@
 				AAD356112528BAC9007C63EF /* KokoroCoreDataTests */,
 				AAD357892529C468007C63EF /* KokoroResourceProvider */,
 				AA5AEB8B25557D7700516C8D /* KokoroJobs */,
+				AA5AEC992556AF1C00516C8D /* KokoroCache */,
+				AA5AED032556B2B000516C8D /* KokoroCacheResourceProvider */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AA5AEB8A25557D7700516C8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA5AEC982556AF1C00516C8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA5AED022556B2B000516C8D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1325,6 +1506,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA5AEC962556AF1C00516C8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5AECBC2556AFB900516C8D /* InMemoryCache.swift in Sources */,
+				AA5AECB02556AF6100516C8D /* Cache.swift in Sources */,
+				AA5AECDE2556B0D700516C8D /* OnDiskCache.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA5AED002556B2B000516C8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA5AED192556B2D200516C8D /* Extensions.swift in Sources */,
+				AA5AEDA32556B36E00516C8D /* CacheResourceProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AAD35489252869D0007C63EF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1333,11 +1533,13 @@
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
 				AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */,
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
+				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
+				AA5AECEA2556B10D00516C8D /* MD5.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1499,6 +1701,21 @@
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
 			targetProxy = AA5AEC6B25558D6D00516C8D /* PBXContainerItemProxy */;
 		};
+		AA5AECAE2556AF2F00516C8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AA5AECAD2556AF2F00516C8D /* PBXContainerItemProxy */;
+		};
+		AA5AED942556B33100516C8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA5AEC992556AF1C00516C8D /* KokoroCache */;
+			targetProxy = AA5AED932556B33100516C8D /* PBXContainerItemProxy */;
+		};
+		AA5AED962556B33100516C8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD357892529C468007C63EF /* KokoroResourceProvider */;
+			targetProxy = AA5AED952556B33100516C8D /* PBXContainerItemProxy */;
+		};
 		AAD354D825287472007C63EF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
@@ -1545,7 +1762,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroJobs;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1566,6 +1782,94 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroJobs;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AA5AECA02556AF1C00516C8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCache;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA5AECA12556AF1C00516C8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCache;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AA5AED0A2556B2B000516C8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCacheResourceProvider;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA5AED0B2556B2B000516C8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCacheResourceProvider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1716,7 +2020,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUtils;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1763,7 +2066,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1810,7 +2112,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroFetchable;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1857,7 +2158,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroHttp;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1904,7 +2204,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreData;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1988,7 +2287,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroResourceProvider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -2056,6 +2354,24 @@
 			buildConfigurations = (
 				AA5AEB9225557D7700516C8D /* Debug */,
 				AA5AEB9325557D7700516C8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA5AEC9F2556AF1C00516C8D /* Build configuration list for PBXNativeTarget "KokoroCache" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA5AECA02556AF1C00516C8D /* Debug */,
+				AA5AECA12556AF1C00516C8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA5AED092556B2B000516C8D /* Build configuration list for PBXNativeTarget "KokoroCacheResourceProvider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA5AED0A2556B2B000516C8D /* Debug */,
+				AA5AED0B2556B2B000516C8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
