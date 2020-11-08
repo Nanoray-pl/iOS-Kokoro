@@ -62,3 +62,18 @@ import Combine
 
 extension Combine.AnyCancellable: CancellableProtocol {}
 #endif
+
+#if canImport(UIKit)
+import UIKit
+
+extension UIViewPropertyAnimator: CancellableProtocol {
+	public func cancel() {
+		if state == .active {
+			stopAnimation(true)
+		}
+		if state == .inactive {
+			finishAnimation(at: .current)
+		}
+	}
+}
+#endif
