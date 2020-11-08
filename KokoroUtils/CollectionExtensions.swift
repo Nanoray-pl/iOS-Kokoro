@@ -17,11 +17,11 @@ public extension Set {
 	}
 }
 
-public extension Dictionary {
-	enum MergePolicy {
-		case keepCurrent, overwrite
-	}
+public enum DictionaryMergePolicy {
+	case keepCurrent, overwrite
+}
 
+public extension Dictionary {
 	mutating func computeIfAbsent(for key: Key, initializer: @autoclosure () throws -> Value) rethrows -> Value {
 		return try computeIfAbsent(for: key) { _ in try initializer() }
 	}
@@ -36,7 +36,7 @@ public extension Dictionary {
 		return value
 	}
 
-	func merging(_ other: [Key: Value], withMergePolicy mergePolicy: MergePolicy) -> [Key: Value] {
+	func merging(_ other: [Key: Value], withMergePolicy mergePolicy: DictionaryMergePolicy) -> [Key: Value] {
 		return merging(other, uniquingKeysWith: { current, new in
 			switch mergePolicy {
 			case .keepCurrent:

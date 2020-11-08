@@ -137,6 +137,8 @@
 		AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB14D2542DE74003AA60E /* LazyInitView.swift */; };
 		AAEFB1582542DEB6003AA60E /* KeyboardSpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */; };
 		AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */; };
+		AAF139D2255838E300C6890F /* AdditionalHeadersHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF139D1255838E300C6890F /* AdditionalHeadersHttpClient.swift */; };
+		AAF139DF25583ACE00C6890F /* ErrorSimulatingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF139DE25583ACE00C6890F /* ErrorSimulatingHttpClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -366,6 +368,8 @@
 		AAEFB14D2542DE74003AA60E /* LazyInitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyInitView.swift; sourceTree = "<group>"; };
 		AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSpacerView.swift; sourceTree = "<group>"; };
 		AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableUrlTextView.swift; sourceTree = "<group>"; };
+		AAF139D1255838E300C6890F /* AdditionalHeadersHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalHeadersHttpClient.swift; sourceTree = "<group>"; };
+		AAF139DE25583ACE00C6890F /* ErrorSimulatingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSimulatingHttpClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -833,6 +837,8 @@
 				AAD355FF2528B8F0007C63EF /* HttpClient.swift */,
 				AAD3576F25291B2D007C63EF /* URLSessionHttpClient.swift */,
 				AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */,
+				AAF139D1255838E300C6890F /* AdditionalHeadersHttpClient.swift */,
+				AAF139DE25583ACE00C6890F /* ErrorSimulatingHttpClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -1610,7 +1616,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAF139D2255838E300C6890F /* AdditionalHeadersHttpClient.swift in Sources */,
 				AAD355EE2528B853007C63EF /* HttpBodyEncoder.swift in Sources */,
+				AAF139DF25583ACE00C6890F /* ErrorSimulatingHttpClient.swift in Sources */,
 				AA5AEC772555903A00516C8D /* EndpointUrl.swift in Sources */,
 				AAD3577025291B2D007C63EF /* URLSessionHttpClient.swift in Sources */,
 				AAD3577E25291B6C007C63EF /* SchedulingHttpClient.swift in Sources */,
