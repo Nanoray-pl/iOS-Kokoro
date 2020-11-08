@@ -3,8 +3,6 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-import os.log
-
 public enum LogLevel: String, CaseIterable, Comparable {
 	/// Used for logging big chunks of data for debugging purposes (hidden by default).
 	case verbose
@@ -21,7 +19,7 @@ public enum LogLevel: String, CaseIterable, Comparable {
 	/// Used for logging errors, which cannot be handled gracefully and which will break the flow of the app, but not crash it.
 	case error
 
-	var symbol: String? {
+	public var symbol: String? {
 		switch self {
 		case .verbose:
 			return nil
@@ -87,7 +85,12 @@ public extension Logger {
 	}
 }
 
+#if canImport(os)
+import os.log
+
 public class OSLogLoggerFactory: LoggerFactory {
+	public init() {}
+
 	public func createLogger(name: String, level: LogLevel) -> Logger {
 		return OSLogLogger(logger: OSLog(subsystem: name, category: name), name: name, initialLevel: level)
 	}
@@ -134,6 +137,7 @@ public class OSLogLoggerFactory: LoggerFactory {
 		}
 	}
 }
+#endif
 
 #if canImport(Combine)
 import Combine
