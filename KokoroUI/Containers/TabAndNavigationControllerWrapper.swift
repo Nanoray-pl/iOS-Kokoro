@@ -77,6 +77,18 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	private weak var targetOrCurrentViewController: UIViewController?
 	private lazy var internalDelegate = InternalDelegate(parent: self) // swiftlint:disable:this weak_delegate
 
+	open override var childForHomeIndicatorAutoHidden: UIViewController? {
+		return targetOrCurrentViewController ?? super.childForHomeIndicatorAutoHidden
+	}
+
+	open override var childForScreenEdgesDeferringSystemGestures: UIViewController? {
+		return targetOrCurrentViewController ?? super.childForScreenEdgesDeferringSystemGestures
+	}
+
+	open override var childForStatusBarHidden: UIViewController? {
+		return currentNavigationBar.isHidden ? (targetOrCurrentViewController ?? super.childForStatusBarHidden) : nil
+	}
+
 	open override var childForStatusBarStyle: UIViewController? {
 		return currentNavigationBar.isHidden ? (targetOrCurrentViewController ?? super.childForStatusBarStyle) : nil
 	}
