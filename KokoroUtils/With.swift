@@ -80,3 +80,12 @@ import QuartzCore
 
 extension CATransform3D: ValueWith {}
 #endif
+
+#if canImport(UIKit)
+import UIKit
+
+@available(iOS 14, *)
+extension NSDiffableDataSourceSectionSnapshot: ValueWith {}
+
+extension NSDiffableDataSourceSnapshot: ValueWith {}
+#endif
