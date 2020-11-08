@@ -3,8 +3,9 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-#if canImport(CryptoKit)
+#if canImport(CryptoKit) && canImport(Foundation)
 import CryptoKit
+import Foundation
 
 public struct MD5: CustomStringConvertible {
 	public let digest: Data
