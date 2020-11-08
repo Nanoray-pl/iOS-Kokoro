@@ -3,7 +3,9 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-#if canImport(UIKit)
+#if canImport(Foundation) && canImport(UIKit)
+import Foundation
+
 public enum SystemUILocalizable {
 	private static let uiKitBundle = Bundle(identifier: "com.apple.UIKit")!
 
