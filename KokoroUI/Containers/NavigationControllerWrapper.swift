@@ -159,6 +159,12 @@ open class NavigationControllerWrapper: UIViewController {
 		return wrappedNavigationController.popToRootViewController(animated: animated, completion: completion)
 	}
 
+	private func updateDelegatedChildViewControllers() {
+		setNeedsStatusBarAppearanceUpdate()
+		setNeedsUpdateOfHomeIndicatorAutoHidden()
+		setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
+	}
+
 	private class PrecedingControllerNavigatorImplementation: PrecedingControllerNavigator {
 		private unowned let parent: NavigationControllerWrapper
 
@@ -185,7 +191,7 @@ open class NavigationControllerWrapper: UIViewController {
 		navigationController.interactivePopGestureRecognizer?.isEnabled = !shouldDisableSwipeBackGesture
 
 		targetOrCurrentViewController = controller
-		setNeedsStatusBarAppearanceUpdate()
+		updateDelegatedChildViewControllers()
 	}
 
 	private func didShow(_ controller: UIViewController, animated: Bool, in navigationController: UINavigationController) {
@@ -194,7 +200,7 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 
 		targetOrCurrentViewController = controller
-		setNeedsStatusBarAppearanceUpdate()
+		updateDelegatedChildViewControllers()
 	}
 
 	private class InternalDelegate: NSObject, UINavigationControllerDelegate {

@@ -345,7 +345,13 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 
 	open func didSelectViewController(_ controller: UIViewController) {
 		targetOrCurrentViewController = topViewController
+		updateDelegatedChildViewControllers()
+	}
+
+	private func updateDelegatedChildViewControllers() {
 		setNeedsStatusBarAppearanceUpdate()
+		setNeedsUpdateOfHomeIndicatorAutoHidden()
+		setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 	}
 
 	private class PrecedingControllerNavigatorImplementation: PrecedingControllerNavigator {
@@ -386,12 +392,12 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		setupBarVisibility(for: navigationState, animated: animated)
 
 		targetOrCurrentViewController = controller
-		setNeedsStatusBarAppearanceUpdate()
+		updateDelegatedChildViewControllers()
 
 		navigationController.topViewController?.transitionCoordinator?.notifyWhenInteractionChanges { [weak self] context in
 			if context.isCancelled {
 				self?.targetOrCurrentViewController = navigationState.currentController
-				self?.setNeedsStatusBarAppearanceUpdate()
+				self?.updateDelegatedChildViewControllers()
 
 				navigationState.targetController = nil
 				self?.setupBarVisibility(for: navigationState, setupNavigationBar: false, animated: Animated.motionBased.value)
@@ -406,7 +412,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		setupBarVisibility(for: navigationState, animated: false)
 
 		targetOrCurrentViewController = controller
-		setNeedsStatusBarAppearanceUpdate()
+		updateDelegatedChildViewControllers()
 	}
 
 	private class InternalDelegate: NSObject, UITabBarControllerDelegate, UINavigationControllerDelegate {

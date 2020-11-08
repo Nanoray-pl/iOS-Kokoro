@@ -61,6 +61,8 @@ open class ContainerViewController: UIViewController {
 		newViewController.didMove(toParent: self)
 		self.contentViewController = contentViewController
 		setNeedsStatusBarAppearanceUpdate()
+		setNeedsUpdateOfHomeIndicatorAutoHidden()
+		setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
 		if let oldViewController = oldViewController {
 			oldViewController.willMove(toParent: nil)
