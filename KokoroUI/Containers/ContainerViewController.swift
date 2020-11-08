@@ -9,6 +9,18 @@ import UIKit
 open class ContainerViewController: UIViewController {
 	public private(set) var contentViewController: UIViewController?
 
+	open override var childForHomeIndicatorAutoHidden: UIViewController? {
+		return contentViewController ?? super.childForHomeIndicatorAutoHidden
+	}
+
+	open override var childForScreenEdgesDeferringSystemGestures: UIViewController? {
+		return contentViewController ?? super.childForScreenEdgesDeferringSystemGestures
+	}
+
+	open override var childForStatusBarHidden: UIViewController? {
+		return contentViewController ?? super.childForStatusBarHidden
+	}
+
 	open override var childForStatusBarStyle: UIViewController? {
 		return contentViewController ?? super.childForStatusBarStyle
 	}
