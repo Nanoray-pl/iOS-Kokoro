@@ -41,14 +41,22 @@ public class ProgressBar: UIView {
 	}
 
 	public var rounding: RoundedView.Rounding? {
-		get {
-			return bar.rounding
-		}
-		set {
-			bar.rounding = newValue
+		didSet {
+			roundedView.rounding = rounding
+			bar.rounding = rounding
 		}
 	}
 
+	public override var backgroundColor: UIColor? {
+		get {
+			return roundedView.backgroundColor
+		}
+		set {
+			roundedView.backgroundColor = newValue
+		}
+	}
+
+	private var roundedView: RoundedView!
 	private var spacer: UIView!
 	private var spacerSpacer: UIView!
 	private var bar: RoundedView!
@@ -106,27 +114,32 @@ public class ProgressBar: UIView {
 		var constraints = ConstraintSet()
 		defer { constraints.activate() }
 
-		backgroundColor = .systemGray4
-		clipsToBounds = true
+		roundedView = RoundedView().with { [parent = self] in
+			$0.backgroundColor = .systemGray4
+			$0.clipsToBounds = true
 
-		spacer = UIView().with { [parent = self] in
-			parent.addSubview($0)
-		}
-
-		spacerSpacer = UIView().with { [parent = self] in
-			parent.addSubview($0)
-			constraints += $0.sizeToSuperview()
-		}
-
-		bar = RoundedView().with { [parent = self] in
-			$0.rounding = nil
-
-			gradient = GradientView().with { [parent = $0] in
+			spacer = UIView().with { [parent = $0] in
 				parent.addSubview($0)
-				constraints += $0.edgesToSuperview()
+			}
+
+			spacerSpacer = UIView().with { [parent = $0] in
+				parent.addSubview($0)
+				constraints += $0.sizeToSuperview()
+			}
+
+			bar = RoundedView().with { [parent = $0] in
+				$0.rounding = nil
+
+				gradient = GradientView().with { [parent = $0] in
+					parent.addSubview($0)
+					constraints += $0.edgesToSuperview()
+				}
+
+				parent.addSubview($0)
 			}
 
 			parent.addSubview($0)
+			constraints += $0.edgesToSuperview()
 		}
 
 		updateColors()
@@ -239,28 +252,32 @@ public class ProgressBar: UIView {
 
 		switch value {
 		case .indeterminate:
-			updateGradientLengthConstraint(value: 0.5)
-			updateSpacerLengthConstraint(offset: -0.5)
-			self.spacer.superview?.layoutIfNeeded()
-
-			indeterminateAnimator = Animated.run(
-				duration: 1.5,
-				curve: .easeInOut,
-				animations: {
-					self.updateSpacerLengthConstraint(offset: 1)
-					self.spacer.superview?.layoutIfNeeded()
-				},
-				completion: { [weak self] in
-					guard let self = self else { return }
-					if self.shouldRepeatIndeterminateAnimation {
-						self.updateValue()
-					}
-				}
-			)
+			updateIndeterminateAnimator(forward: true)
 		case let .determinate(value):
 			updateGradientLengthConstraint(value: value)
 			updateSpacerLengthConstraint(offset: 0)
 		}
+	}
+
+	private func updateIndeterminateAnimator(forward: Bool) {
+		updateGradientLengthConstraint(value: 0.5)
+		updateSpacerLengthConstraint(offset: forward ? -0.5 : 1)
+		self.spacer.superview?.layoutIfNeeded()
+
+		indeterminateAnimator = Animated.run(
+			duration: 1.5,
+			curve: .easeInOut,
+			animations: {
+				self.updateSpacerLengthConstraint(offset: forward ? 1 : -0.5)
+				self.spacer.superview?.layoutIfNeeded()
+			},
+			completion: { [weak self] in
+				guard let self = self else { return }
+				if self.shouldRepeatIndeterminateAnimation {
+					self.updateIndeterminateAnimator(forward: !forward)
+				}
+			}
+		)
 	}
 
 	private func updateSpacerLengthConstraint(offset: Double) {

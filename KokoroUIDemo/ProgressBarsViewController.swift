@@ -11,7 +11,7 @@ protocol ProgressBarsRoute: class {
 }
 
 class ProgressBarsViewController: UIViewController {
-	private static let shortProgressBarLength: CGFloat = 4
+	private static let shortProgressBarLength: CGFloat = 6
 
 	private var horizontalProgressBar: ProgressBar!
 	private var verticalProgressBar: ProgressBar!
