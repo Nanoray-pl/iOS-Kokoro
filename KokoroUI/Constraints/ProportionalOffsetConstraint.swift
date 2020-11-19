@@ -23,8 +23,24 @@ public class ProportionalOffsetConstraint: NonBasicConstraint, ObjectWith {
 	private weak var anchor: Constrainable?
 	public let horizontalPoint: HorizontalPoint?
 	public let verticalPoint: VerticalPoint?
-	public let ratio: CGSize
-	public let offset: CGPoint
+
+	public var ratio: CGSize {
+		didSet {
+			if isActive {
+				deactivate()
+				activate()
+			}
+		}
+	}
+
+	public var offset: CGPoint {
+		didSet {
+			if isActive {
+				deactivate()
+				activate()
+			}
+		}
+	}
 
 	private weak var helper: UIView? {
 		didSet {
@@ -113,7 +129,7 @@ public class ProportionalOffsetConstraint: NonBasicConstraint, ObjectWith {
 					constraints += constrainable.bottom(to: $0).priority(priority)
 				}
 			} else {
-				constraints += $0.width(of: 0)
+				constraints += $0.height(of: 0)
 			}
 		}
 	}

@@ -18,10 +18,17 @@ class MainNavigationController: NavigationControllerWrapper {
 	}
 }
 
-extension MainNavigationController: ProgressBarsRoute {
+extension MainNavigationController: ProgressBarsRoute, ProportionalOffsetConstraintRoute {
 	func showProgressBars(animated: Bool) {
 		navigateToExistingOrNewViewController(
 			factory: { _ in .init(controller: ProgressBarsViewController(), options: .init(navigationBar: .visible)) },
+			animated: animated
+		)
+	}
+
+	func showProportionalOffsetConstraint(animated: Bool) {
+		navigateToExistingOrNewViewController(
+			factory: { _ in .init(controller: ProportionalOffsetConstraintViewController(), options: .init(navigationBar: .visible)) },
 			animated: animated
 		)
 	}

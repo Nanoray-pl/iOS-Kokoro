@@ -7,12 +7,28 @@ import KokoroUI
 import UIKit
 
 class MenuViewController: UITableViewController {
-	private enum Cell {
-		case progressBars
+	private struct Section {
+		let header: String?
+		let footer: String?
+		let cells: [Cell]
+
+		init(header: String? = nil, footer: String? = nil, cells: [Cell]) {
+			self.header = header
+			self.footer = footer
+			self.cells = cells
+		}
 	}
 
-	unowned var router: ProgressBarsRoute!
-	private let cells: [Cell] = [.progressBars]
+	private enum Cell {
+		case proportionalOffsetConstraint, aspectRatioEqualConstraint, minMaxLengthConstraint
+		case progressBar
+	}
+
+	unowned var router: (ProgressBarsRoute & ProportionalOffsetConstraintRoute)!
+	private let sections: [Section] = [
+		.init(header: "Non-basic Constraints", cells: [.proportionalOffsetConstraint, .aspectRatioEqualConstraint, .minMaxLengthConstraint]),
+		.init(header: "Aesthetic", cells: [.progressBar]),
+	]
 
 	init() {
 		super.init(style: .grouped)
@@ -28,23 +44,46 @@ class MenuViewController: UITableViewController {
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
 	}
 
+	override func numberOfSections(in tableView: UITableView) -> Int {
+		return sections.count
+	}
+
+	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+		return sections[section].header
+	}
+
+	override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+		return sections[section].footer
+	}
+
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return cells.count
+		return sections[section].cells.count
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-		switch cells[indexPath.row] {
-		case .progressBars:
-			cell.textLabel?.text = "Progress Bars"
+		cell.accessoryType = .disclosureIndicator
+		switch sections[indexPath.section].cells[indexPath.row] {
+		case .proportionalOffsetConstraint:
+			cell.textLabel?.text = "ProportionalOffsetConstraint"
+		case .aspectRatioEqualConstraint:
+			cell.textLabel?.text = "AspectRatioEqualConstraint"
+		case .minMaxLengthConstraint:
+			cell.textLabel?.text = "MinMaxLengthConstraint"
+		case .progressBar:
+			cell.textLabel?.text = "ProgressBar"
 		}
 		return cell
 	}
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: Animated.motionBased.value)
-		switch cells[indexPath.row] {
-		case .progressBars:
+		switch sections[indexPath.section].cells[indexPath.row] {
+		case .proportionalOffsetConstraint:
+			router.showProportionalOffsetConstraint(animated: Animated.motionBased.value)
+		case .aspectRatioEqualConstraint, .minMaxLengthConstraint:
+			break
+		case .progressBar:
 			router.showProgressBars(animated: Animated.motionBased.value)
 		}
 	}

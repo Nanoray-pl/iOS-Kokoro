@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
 		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
@@ -215,6 +216,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
 		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
@@ -454,6 +456,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA42D3112566B04B004604D2 /* Aesthetic */ = {
+			isa = PBXGroup;
+			children = (
+				AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */,
+			);
+			path = Aesthetic;
+			sourceTree = "<group>";
+		};
+		AA42D3122566B054004604D2 /* Non-basic Constraints */ = {
+			isa = PBXGroup;
+			children = (
+				AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */,
+			);
+			path = "Non-basic Constraints";
+			sourceTree = "<group>";
+		};
 		AA5AEB8D25557D7700516C8D /* KokoroJobs */ = {
 			isa = PBXGroup;
 			children = (
@@ -877,9 +895,10 @@
 			children = (
 				AAD57CE02533B0D7007358D1 /* Bootstrap */,
 				AAD57CE12533B0E3007358D1 /* Resources */,
+				AA42D3122566B054004604D2 /* Non-basic Constraints */,
+				AA42D3112566B04B004604D2 /* Aesthetic */,
 				AAD57D522533B689007358D1 /* MainNavigationController.swift */,
 				AAD57D122533B1AC007358D1 /* MenuViewController.swift */,
-				AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */,
 			);
 			path = KokoroUIDemo;
 			sourceTree = "<group>";
@@ -1690,6 +1709,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD57D412533B46F007358D1 /* ProgressBarsViewController.swift in Sources */,
+				AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */,
 				AAD57D132533B1AC007358D1 /* MenuViewController.swift in Sources */,
 				AAD57D532533B689007358D1 /* MainNavigationController.swift in Sources */,
 				AAD57CC72533B0C8007358D1 /* AppDelegate.swift in Sources */,
