@@ -24,7 +24,7 @@ class ProportionalOffsetConstraintViewController: UIViewController {
 
 	init() {
 		super.init(nibName: nil, bundle: nil)
-		navigationItem.title = "Progress Bars"
+		navigationItem.title = "ProportionalOffsetConstraint"
 	}
 
 	required init?(coder: NSCoder) {

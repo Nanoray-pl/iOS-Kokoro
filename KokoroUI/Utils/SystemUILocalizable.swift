@@ -9,27 +9,27 @@ import Foundation
 public enum SystemUILocalizable {
 	private static let uiKitBundle = Bundle(identifier: "com.apple.UIKit")!
 
-	static var cancel: String {
+	public static var cancel: String {
 		return uiKitBundle.localizedString(forKey: "Cancel", value: "", table: nil)
 	}
 
-	static var back: String {
+	public static var back: String {
 		return uiKitBundle.localizedString(forKey: "Back", value: "", table: nil)
 	}
 
-	static var done: String {
+	public static var done: String {
 		return uiKitBundle.localizedString(forKey: "Done", value: "", table: nil)
 	}
 
-	static var ok: String {
+	public static var ok: String {
 		return uiKitBundle.localizedString(forKey: "OK", value: "", table: nil)
 	}
 
-	static var previous: String {
+	public static var previous: String {
 		return uiKitBundle.localizedString(forKey: "Previous", value: "", table: nil)
 	}
 
-	static var next: String {
+	public static var next: String {
 		return uiKitBundle.localizedString(forKey: "Next", value: "", table: nil)
 	}
 }

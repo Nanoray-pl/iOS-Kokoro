@@ -22,7 +22,7 @@ class ProgressBarsViewController: UIViewController {
 
 	init() {
 		super.init(nibName: nil, bundle: nil)
-		navigationItem.title = "Progress Bars"
+		navigationItem.title = "ProgressBar"
 	}
 
 	required init?(coder: NSCoder) {
