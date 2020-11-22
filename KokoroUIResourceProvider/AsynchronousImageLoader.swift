@@ -5,29 +5,39 @@
 
 #if canImport(Combine) && canImport(UIKit)
 import Combine
+import KokoroUI
 import KokoroUtils
 import KokoroResourceProvider
 import UIKit
 
+public protocol AsynchronousImageLoaderTarget {
+	var image: UIImage? { get set }
+
+	func addSubview(_ subview: UIView)
+}
+
+extension UIImageView: AsynchronousImageLoaderTarget {}
+extension RatioImageView: AsynchronousImageLoaderTarget {}
+
 public protocol AsynchronousImageLoader: class {
-	func loadImage<T>(from provider: T?, into imageView: UIImageView, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage?
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage?
 }
 
 public extension AsynchronousImageLoader {
-	func loadImage<T>(from provider: T?, into imageView: UIImageView, errorHandler: @escaping (Error) -> AnyPublisher<UIImage, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
 		let provider: AnyResourceProvider<UIImage?>? = provider.flatMap { (provider: T) -> AnyResourceProvider<UIImage?> in MapResourceProvider(wrapping: provider, identifier: PrivateSourceLocation().description, mapFunction: .init { $0 }).eraseToAnyResourceProvider() }
 		let errorHandler: (Error) -> AnyPublisher<UIImage?, Never> = { errorHandler($0).map { $0 }.eraseToAnyPublisher() }
-		loadImage(from: provider, into: imageView, errorHandler: errorHandler, successCallback: successCallback)
+		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: successCallback)
 	}
 
-	func loadImage<T>(from provider: T?, into imageView: UIImageView, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
-		loadImage(from: provider, into: imageView, errorHandler: errorHandler, successCallback: successCallback)
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
+		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: successCallback)
 	}
 
-	func loadImage<T>(from provider: T?, into imageView: UIImageView, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
 		loadImage(
 			from: provider,
-			into: imageView,
+			into: target,
 			errorHandler: {
 				logger.warning("Failed to load image: \($0)", file: file, function: function, line: line)
 				return Just(placeholder).eraseToAnyPublisher()
@@ -36,10 +46,10 @@ public extension AsynchronousImageLoader {
 		)
 	}
 
-	func loadImage<T>(from provider: T?, into imageView: UIImageView, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
 		loadImage(
 			from: provider,
-			into: imageView,
+			into: target,
 			errorHandler: {
 				logger.warning("Failed to load image: \($0)", file: file, function: function, line: line)
 				return Just(placeholder).eraseToAnyPublisher()
