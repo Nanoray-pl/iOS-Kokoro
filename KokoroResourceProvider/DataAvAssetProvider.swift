@@ -12,6 +12,8 @@ public class DataAvAssetProviderFactory: ResourceProviderFactory {
 	public typealias Input = (data: Data, identifier: String)
 	public typealias Resource = AVAsset
 
+	public init() {}
+
 	public func create(for input: Input) -> AnyResourceProvider<AVAsset> {
 		return DataAvAssetProvider(data: input.data, identifier: input.identifier).eraseToAnyResourceProvider()
 	}

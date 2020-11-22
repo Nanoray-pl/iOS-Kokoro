@@ -12,6 +12,8 @@ public class UrlAvAssetProviderFactory: ResourceProviderFactory {
 	public typealias Input = URL
 	public typealias Resource = AVAsset
 
+	public init() {}
+
 	public func create(for input: URL) -> AnyResourceProvider<AVAsset> {
 		return UrlAvAssetProvider(url: input).eraseToAnyResourceProvider()
 	}
