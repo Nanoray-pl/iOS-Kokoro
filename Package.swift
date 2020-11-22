@@ -12,6 +12,11 @@ let package = Package(
 		.library(name: "KokoroFetchable", targets: ["KokoroFetchable"]),
 		.library(name: "KokoroHttp", targets: ["KokoroHttp"]),
 		.library(name: "KokoroCoreData", targets: ["KokoroCoreData"]),
+		.library(name: "KokoroResourceProvider", targets: ["KokoroResourceProvider"]),
+		.library(name: "KokoroJobs", targets: ["KokoroJobs"]),
+		.library(name: "KokoroCache", targets: ["KokoroCache"]),
+		.library(name: "KokoroCacheResourceProvider", targets: ["KokoroCacheResourceProvider"]),
+		.library(name: "KokoroUIResourceProvider", targets: ["KokoroUIResourceProvider"]),
 	],
 	targets: [
 		.target(
