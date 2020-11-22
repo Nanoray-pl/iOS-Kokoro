@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
+		AA42D3C4256A752E004604D2 /* RatioImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3C3256A752E004604D2 /* RatioImageView.swift */; };
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
 		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
@@ -217,6 +218,7 @@
 
 /* Begin PBXFileReference section */
 		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
+		AA42D3C3256A752E004604D2 /* RatioImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioImageView.swift; sourceTree = "<group>"; };
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
 		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
@@ -680,6 +682,7 @@
 				AAEFB14D2542DE74003AA60E /* LazyInitView.swift */,
 				AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */,
 				AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */,
+				AA42D3C3256A752E004604D2 /* RatioImageView.swift */,
 			);
 			path = "Functional Views";
 			sourceTree = "<group>";
@@ -1606,6 +1609,7 @@
 				AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */,
 				AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */,
 				AAD3551925288CC6007C63EF /* ReusableCells.swift in Sources */,
+				AA42D3C4256A752E004604D2 /* RatioImageView.swift in Sources */,
 				AAEFB13A2542DBC2003AA60E /* HeaderFooterCollectionView.swift in Sources */,
 				AAD354EF25288258007C63EF /* AspectRatioEqualConstraint.swift in Sources */,
 			);
