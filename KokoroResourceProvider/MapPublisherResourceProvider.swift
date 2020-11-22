@@ -48,8 +48,8 @@ public class MapPublisherResourceProvider<OldResource, NewPublisher>: ResourcePr
 		return "MapPublisherResourceProvider[identifier: \(mapperIdentifier), value: \(wrapped.identifier)]"
 	}
 
-	public init(wrapping wrapped: AnyResourceProvider<OldResource>, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<OldResource, Error>) -> NewPublisher>) {
-		self.wrapped = wrapped
+	public init<Wrapped>(wrapping wrapped: Wrapped, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<OldResource, Error>) -> NewPublisher>) where Wrapped: ResourceProvider, Wrapped.Resource == OldResource {
+		self.wrapped = wrapped.eraseToAnyResourceProvider()
 		mapperIdentifier = identifier
 		self.mapFunction = mapFunction
 	}

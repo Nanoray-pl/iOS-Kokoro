@@ -43,8 +43,8 @@ public class CacheResourceProvider<Input, Resource>: ResourceProvider {
 		return "CacheResourceProvider[identifier: \(cacheIdentifier), value: \(wrapped.identifier)]"
 	}
 
-	public init(wrapping wrapped: AnyResourceProvider<Resource>, identifier: String, cache: AnyCache<AnyResourceProvider<Resource>, Resource>) {
-		self.wrapped = wrapped
+	public init<Wrapped>(wrapping wrapped: Wrapped, identifier: String, cache: AnyCache<AnyResourceProvider<Resource>, Resource>) where Wrapped: ResourceProvider, Wrapped.Resource == Resource {
+		self.wrapped = wrapped.eraseToAnyResourceProvider()
 		cacheIdentifier = identifier
 		self.cache = cache
 	}

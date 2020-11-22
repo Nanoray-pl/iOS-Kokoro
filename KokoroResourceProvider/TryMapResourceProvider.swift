@@ -50,8 +50,8 @@ public class TryMapResourceProvider<OldResource, Resource>: ResourceProvider {
 	}
 
 	// swiftformat:disable:next spaceAroundOperators
-	public init(wrapping wrapped: AnyResourceProvider<OldResource>, identifier: String, mapFunction: Identifiable<UUID, (OldResource) throws -> Resource>) {
-		self.wrapped = wrapped
+	public init<Wrapped>(wrapping wrapped: Wrapped, identifier: String, mapFunction: Identifiable<UUID, (OldResource) throws -> Resource>) where Wrapped: ResourceProvider, Wrapped.Resource == OldResource {
+		self.wrapped = wrapped.eraseToAnyResourceProvider()
 		mapperIdentifier = identifier
 		self.mapFunction = mapFunction
 	}

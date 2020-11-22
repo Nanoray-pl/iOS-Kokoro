@@ -34,8 +34,8 @@ public class BlurredImageProvider: ResourceProvider {
 		return "BlurredImageProvider[radius: \(radius), value: \(wrapped.identifier)]"
 	}
 
-	public init(wrapping wrapped: AnyResourceProvider<UIImage>, radius: CGFloat) {
-		self.wrapped = wrapped
+	public init<Wrapped>(wrapping wrapped: Wrapped, radius: CGFloat) where Wrapped: ResourceProvider, Wrapped.Resource == UIImage {
+		self.wrapped = wrapped.eraseToAnyResourceProvider()
 		self.radius = radius
 	}
 

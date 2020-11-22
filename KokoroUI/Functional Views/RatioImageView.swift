@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+#if canImport(UIKit)
 import KokoroUtils
 import UIKit
 
@@ -61,3 +62,4 @@ public class RatioImageView: UIView {
 		ratioConstraint = imageView.ratio(size: ratio).priority(ratioConstraintPriority)
 	}
 }
+#endif
