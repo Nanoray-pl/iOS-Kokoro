@@ -96,7 +96,7 @@ public class DefaultJobManager: JobManager, ObjectWith {
 	private let logger: Logger
 	private let dispatchQueue: DispatchQueue
 
-	private let lock = NSObject()
+	private let lock = ObjcLock()
 	private var handlers = [JobHandlerIdentifier: UntypedJobHandler]()
 	private var jobs = [UntypedJob]()
 	private var jobHandlers = [JobIdentifier: UntypedJobHandler]()
@@ -111,150 +111,145 @@ public class DefaultJobManager: JobManager, ObjectWith {
 	}
 
 	public func registerHandler<Handler: JobHandler>(_ handler: Handler) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			logger.debug("Registering handler: \(handler) (\(handler.identifier))")
+			handlers[handler.identifier] = UntypedJobHandler(wrapping: handler)
 
-		logger.debug("Registering handler: \(handler) (\(handler.identifier))")
-		handlers[handler.identifier] = UntypedJobHandler(wrapping: handler)
-
-		let existingJobs = entryStorage.jobs(for: handler)
-		existingJobs.forEach {
-			logger.info("Found persisted job \($0.job.identifier) for handler, rescheduling")
-			let job = UntypedJob(wrapping: $0.job)
-			jobs.append(job)
-			jobHandlers[$0.job.identifier] = UntypedJobHandler(wrapping: handler)
-			persistedScheduleParameters[$0.job.identifier] = $0.persistedScheduleParameters
+			let existingJobs = entryStorage.jobs(for: handler)
+			existingJobs.forEach {
+				logger.info("Found persisted job \($0.job.identifier) for handler, rescheduling")
+				let job = UntypedJob(wrapping: $0.job)
+				jobs.append(job)
+				jobHandlers[$0.job.identifier] = UntypedJobHandler(wrapping: handler)
+				persistedScheduleParameters[$0.job.identifier] = $0.persistedScheduleParameters
+			}
+			rescheduleNextJob()
 		}
-		rescheduleNextJob()
 	}
 
 	public func unregisterHandler<Handler: JobHandler>(_ handler: Handler) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			logger.debug("Unregistering handler: \(handler) (\(handler.identifier))")
 
-		logger.debug("Unregistering handler: \(handler) (\(handler.identifier))")
+			let jobs = entryStorage.jobs(for: handler).map { $0.job }
+			jobs.forEach { cancelJob($0) }
 
-		let jobs = entryStorage.jobs(for: handler).map { $0.job }
-		jobs.forEach { cancelJob($0) }
-
-		handlers[handler.identifier] = nil
-		rescheduleNextJob()
+			handlers[handler.identifier] = nil
+			rescheduleNextJob()
+		}
 	}
 
 	public func schedule<Handler: JobHandler>(via handler: Handler, parameters: Handler.Parameters, scheduleParameters: JobManagerScheduleParameters) -> Handler.JobType {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		let job = handler.createJob(for: parameters, identifier: .init())
-		logger.info("Scheduling job \(job.identifier) for handler \(handler) (\(handler.identifier))")
-		let persistedScheduleParameters = JobManagerPersistedScheduleParameters(backoff: scheduleParameters.backoff, lastDelay: nil, dispatchTime: Date().addingTimeInterval(scheduleParameters.initialDelay))
-		jobs.append(UntypedJob(wrapping: job))
-		jobHandlers[job.identifier] = UntypedJobHandler(wrapping: handler)
-		self.persistedScheduleParameters[job.identifier] = persistedScheduleParameters
-		entryStorage.storeJobEntry(for: job, via: handler, parameters: parameters, persistedScheduleParameters: persistedScheduleParameters)
-		rescheduleNextJob()
-		return job
+		return lock.acquireAndRun {
+			let job = handler.createJob(for: parameters, identifier: .init())
+			logger.info("Scheduling job \(job.identifier) for handler \(handler) (\(handler.identifier))")
+			let persistedScheduleParameters = JobManagerPersistedScheduleParameters(backoff: scheduleParameters.backoff, lastDelay: nil, dispatchTime: Date().addingTimeInterval(scheduleParameters.initialDelay))
+			jobs.append(UntypedJob(wrapping: job))
+			jobHandlers[job.identifier] = UntypedJobHandler(wrapping: handler)
+			self.persistedScheduleParameters[job.identifier] = persistedScheduleParameters
+			entryStorage.storeJobEntry(for: job, via: handler, parameters: parameters, persistedScheduleParameters: persistedScheduleParameters)
+			rescheduleNextJob()
+			return job
+		}
 	}
 
 	private func delayJob(_ job: UntypedJob) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		let persistedScheduleParameters = self.persistedScheduleParameters[job.identifier]!
-		let delay: TimeInterval
-		switch (lastDelay: persistedScheduleParameters.lastDelay, backoffPolicy: persistedScheduleParameters.backoff.policy) {
-		case (.none, _):
-			delay = persistedScheduleParameters.backoff.firstDelay
-		case let (.some(lastDelay), .linear):
-			delay = lastDelay + persistedScheduleParameters.backoff.firstDelay
-		case let (.some(lastDelay), .exponential):
-			delay = lastDelay * 2
+		lock.acquireAndRun {
+			let persistedScheduleParameters = self.persistedScheduleParameters[job.identifier]!
+			let delay: TimeInterval
+			switch (lastDelay: persistedScheduleParameters.lastDelay, backoffPolicy: persistedScheduleParameters.backoff.policy) {
+			case (.none, _):
+				delay = persistedScheduleParameters.backoff.firstDelay
+			case let (.some(lastDelay), .linear):
+				delay = lastDelay + persistedScheduleParameters.backoff.firstDelay
+			case let (.some(lastDelay), .exponential):
+				delay = lastDelay * 2
+			}
+			self.persistedScheduleParameters[job.identifier] = .init(backoff: persistedScheduleParameters.backoff, lastDelay: delay, dispatchTime: Date().addingTimeInterval(delay))
+			entryStorage.updatePersistedScheduleParameters(jobIdentifier: job.identifier, persistedScheduleParameters: persistedScheduleParameters)
+			rescheduleNextJob()
 		}
-		self.persistedScheduleParameters[job.identifier] = .init(backoff: persistedScheduleParameters.backoff, lastDelay: delay, dispatchTime: Date().addingTimeInterval(delay))
-		entryStorage.updatePersistedScheduleParameters(jobIdentifier: job.identifier, persistedScheduleParameters: persistedScheduleParameters)
-		rescheduleNextJob()
 	}
 
 	private func rescheduleNextJob() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			guard let firstJob = jobs.filter({ runningJobs[$0.identifier] == nil }).min(by: { persistedScheduleParameters[$0.identifier]!.dispatchTime }) else {
+				logger.verbose("No jobs left to reschedule")
+				return
+			}
 
-		guard let firstJob = jobs.filter({ runningJobs[$0.identifier] == nil }).min(by: { persistedScheduleParameters[$0.identifier]!.dispatchTime }) else {
-			logger.verbose("No jobs left to reschedule")
-			return
+			workItem?.cancel()
+			workItem = nil
+
+			let workItem = DispatchWorkItem { [weak self] in
+				self?.executeJob(firstJob)
+			}
+			self.workItem = workItem
+			let delay = persistedScheduleParameters[firstJob.identifier]!.dispatchTime.timeIntervalSince(Date())
+			logger.debug("Rescheduled job \(firstJob.identifier) - will run after \(delay)s")
+			dispatchQueue.asyncAfter(deadline: .now() + delay, execute: workItem)
 		}
-
-		workItem?.cancel()
-		workItem = nil
-
-		let workItem = DispatchWorkItem { [weak self] in
-			self?.executeJob(firstJob)
-		}
-		self.workItem = workItem
-		let delay = persistedScheduleParameters[firstJob.identifier]!.dispatchTime.timeIntervalSince(Date())
-		logger.debug("Rescheduled job \(firstJob.identifier) - will run after \(delay)s")
-		dispatchQueue.asyncAfter(deadline: .now() + delay, execute: workItem)
 	}
 
 	private func executeJob(_ job: UntypedJob) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			guard let jobHandler = jobHandlers[job.identifier] else {
+				logger.error("Tried to execute job \(job.identifier), but there is no handler registered for it")
+				cancelJob(job)
+				rescheduleNextJob()
+				return
+			}
 
-		guard let jobHandler = jobHandlers[job.identifier] else {
-			logger.error("Tried to execute job \(job.identifier), but there is no handler registered for it")
-			cancelJob(job)
-			rescheduleNextJob()
-			return
-		}
-
-		logger.info("Executing job \(job.identifier)")
-		var manager: DefaultJobManager! = self
-		runningJobs[job.identifier] = job.execute()
-			.sink(
-				receiveCompletion: { [logger] in
-					manager.runningJobs[job.identifier] = nil
-					switch $0 {
-					case .finished:
-						break
-					case let .failure(error):
-						logger.info("Job \(job.identifier) for handler \(jobHandler.identifier) failed")
-						if jobHandler.canRetryAfterError(error, for: job) {
-							logger.info("Error for job \(job.identifier) is non-fatal, delaying")
-							manager.delayJob(job)
-						} else {
-							logger.warning("Error for job \(job.identifier) is fatal")
-							jobHandler.didFail(job, error: error)
-							manager.cancelJob(job)
+			logger.info("Executing job \(job.identifier)")
+			var manager: DefaultJobManager! = self
+			runningJobs[job.identifier] = job.execute()
+				.sink(
+					receiveCompletion: { [logger] in
+						manager.runningJobs[job.identifier] = nil
+						switch $0 {
+						case .finished:
+							break
+						case let .failure(error):
+							logger.info("Job \(job.identifier) for handler \(jobHandler.identifier) failed")
+							if jobHandler.canRetryAfterError(error, for: job) {
+								logger.info("Error for job \(job.identifier) is non-fatal, delaying")
+								manager.delayJob(job)
+							} else {
+								logger.warning("Error for job \(job.identifier) is fatal")
+								jobHandler.didFail(job, error: error)
+								manager.cancelJob(job)
+							}
 						}
+						manager = nil
+					}, receiveValue: { [logger] in
+						logger.info("Job \(job.identifier) for handler \(jobHandler.identifier) succeeded")
+						manager.cleanUpAfterJob(identifier: job.identifier)
+						jobHandler.didSucceed(job, result: $0)
 					}
-					manager = nil
-				}, receiveValue: { [logger] in
-					logger.info("Job \(job.identifier) for handler \(jobHandler.identifier) succeeded")
-					manager.cleanUpAfterJob(identifier: job.identifier)
-					jobHandler.didSucceed(job, result: $0)
-				}
-			)
-		jobHandler.didSchedule(job)
-		rescheduleNextJob()
+				)
+			jobHandler.didSchedule(job)
+			rescheduleNextJob()
+		}
 	}
 
 	public func cancelJob(with identifier: JobIdentifier) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			guard jobs.contains(where: { $0.identifier == identifier }) else { return }
+			logger.info("Cancelling job \(identifier)")
 
-		guard jobs.contains(where: { $0.identifier == identifier }) else { return }
-		logger.info("Cancelling job \(identifier)")
-
-		cleanUpAfterJob(identifier: identifier)
-		rescheduleNextJob()
+			cleanUpAfterJob(identifier: identifier)
+			rescheduleNextJob()
+		}
 	}
 
 	private func cleanUpAfterJob(identifier: JobIdentifier) {
-		entryStorage.removeJobEntry(with: identifier)
-		persistedScheduleParameters[identifier] = nil
-		runningJobs[identifier] = nil
-		jobHandlers[identifier] = nil
-		jobs.removeFirst(where: { $0.identifier == identifier })
+		lock.acquireAndRun {
+			entryStorage.removeJobEntry(with: identifier)
+			persistedScheduleParameters[identifier] = nil
+			runningJobs[identifier] = nil
+			jobHandlers[identifier] = nil
+			jobs.removeFirst(where: { $0.identifier == identifier })
+		}
 	}
 }
 #endif

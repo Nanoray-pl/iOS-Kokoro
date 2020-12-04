@@ -6,6 +6,7 @@
 #if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
+import KokoroUtils
 
 public extension URLSession {
 	func dataTaskProgressPublisher(for request: URLRequest) -> UrlSessionDataTaskProgressPublisher {
@@ -30,7 +31,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	private let session: URLSession
 	private let request: URLRequest
 	private let subject = PassthroughSubject<Output, Failure>()
-	private let lock = NSObject()
+	private let lock = ObjcLock()
 	private var subscriptionCount = 0
 	private var dataTask: URLSessionDataTask?
 	private var observations = [NSKeyValueObservation]()
@@ -41,39 +42,38 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	}
 
 	public func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			subscriptionCount += 1
+			if subscriptionCount == 1 {
+				let dataTask = session.dataTask(with: request) { data, response, error in
+					if let error = error {
+						self.subject.send(completion: .failure(error as? URLError ?? .init(.unknown)))
+						return
+					}
 
-		subscriptionCount += 1
-		if subscriptionCount == 1 {
-			let dataTask = session.dataTask(with: request) { data, response, error in
-				if let error = error {
-					self.subject.send(completion: .failure(error as? URLError ?? .init(.unknown)))
-					return
+					guard let data = data, let response = response else {
+						self.subject.send(completion: .failure(.init(.unknown)))
+						return
+					}
+
+					self.subject.send(.output(data: data, response: response))
+					self.subject.send(completion: .finished)
 				}
 
-				guard let data = data, let response = response else {
-					self.subject.send(completion: .failure(.init(.unknown)))
-					return
-				}
-
-				self.subject.send(.output(data: data, response: response))
-				self.subject.send(completion: .finished)
+				observations = [
+					dataTask.progress.observe(\.isIndeterminate, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+					dataTask.observe(\.countOfBytesSent, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+					dataTask.observe(\.countOfBytesExpectedToSend, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+					dataTask.observe(\.countOfBytesReceived, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+					dataTask.observe(\.countOfBytesExpectedToReceive, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
+				]
+				self.dataTask = dataTask
+				dataTask.resume()
 			}
 
-			observations = [
-				dataTask.progress.observe(\.isIndeterminate, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-				dataTask.observe(\.countOfBytesSent, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-				dataTask.observe(\.countOfBytesExpectedToSend, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-				dataTask.observe(\.countOfBytesReceived, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-				dataTask.observe(\.countOfBytesExpectedToReceive, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-			]
-			self.dataTask = dataTask
-			dataTask.resume()
+			let subscription = Subscription(publisher: self, subscriber: subscriber)
+			subscriber.receive(subscription: subscription)
 		}
-
-		let subscription = Subscription(publisher: self, subscriber: subscriber)
-		subscriber.receive(subscription: subscription)
 	}
 
 	private func updateProgress() {
@@ -92,14 +92,13 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	}
 
 	private func dropSubscription() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		subscriptionCount -= 1
-		if subscriptionCount == 0 {
-			observations = []
-			dataTask?.cancel()
-			dataTask = nil
+		lock.acquireAndRun {
+			subscriptionCount -= 1
+			if subscriptionCount == 0 {
+				observations = []
+				dataTask?.cancel()
+				dataTask = nil
+			}
 		}
 	}
 
