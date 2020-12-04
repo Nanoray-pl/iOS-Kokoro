@@ -123,8 +123,9 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 
 	private let cacheDirectoryUrl: URL
 	private let fileManager: FileManager
-	private let queue: DispatchQueue
 	private let serializer: Serializer
+	private let scheduler: Scheduler
+	private let lock = ObjcLock()
 
 	private lazy var cacheEntriesFileUrl = cacheDirectoryUrl.appendingPathComponent("/cache.json")
 
@@ -141,13 +142,12 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 	})
 	private var scheduledInvalidation: (cacheIdentifier: String, workItem: DispatchWorkItem)?
 	private var currentSize = 0
-	private let lock = NSObject()
 
-	public init(cacheDirectoryUrl: URL, fileManager: FileManager = .default, queue: DispatchQueue = .global(qos: .background), serializer: Serializer) {
+	public init(cacheDirectoryUrl: URL, fileManager: FileManager = .default, serializer: Serializer, scheduler: Scheduler = DispatchQueue.global(qos: .background)) {
 		self.cacheDirectoryUrl = cacheDirectoryUrl.standardizedFileURL
 		self.fileManager = fileManager
-		self.queue = queue
 		self.serializer = serializer
+		self.scheduler = scheduler
 
 		var isDirectory: ObjCBool = false
 		let directoryExists = fileManager.fileExists(atPath: cacheDirectoryUrl.path, isDirectory: &isDirectory)
@@ -164,32 +164,30 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 	}
 
 	private func restoreEntries() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			entries = [:]
+			entriesSortedByInvalidationDate.removeAll()
+			currentSize = 0
 
-		entries = [:]
-		entriesSortedByInvalidationDate.removeAll()
-		currentSize = 0
+			if let data = try? Data(contentsOf: cacheEntriesFileUrl) {
+				let decoder = JSONDecoder()
+				entries = (try? decoder.decode([String: Entry].self, from: data)) ?? [:]
+			}
 
-		if let data = try? Data(contentsOf: cacheEntriesFileUrl) {
-			let decoder = JSONDecoder()
-			entries = (try? decoder.decode([String: Entry].self, from: data)) ?? [:]
+			entries.values.forEach {
+				entriesSortedByInvalidationDate.insert($0)
+				currentSize += $0.valueSize
+			}
+			scheduleInvalidation()
 		}
-
-		entries.values.forEach {
-			entriesSortedByInvalidationDate.insert($0)
-			currentSize += $0.valueSize
-		}
-		scheduleInvalidation()
 	}
 
 	private func saveEntries() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		let encoder = JSONEncoder()
-		let data = try! encoder.encode(entries)
-		try! data.write(to: cacheEntriesFileUrl)
+		lock.acquireAndRun {
+			let encoder = JSONEncoder()
+			let data = try! encoder.encode(entries)
+			try! data.write(to: cacheEntriesFileUrl)
+		}
 	}
 
 	private func url(forCacheIdentifier cacheIdentifier: String) -> URL {
@@ -197,34 +195,33 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 	}
 
 	public func value(for key: Key) -> Value? {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		if let entry = entries[key.cacheIdentifier] {
-			if case let .afterAccess(time) = options.validity {
-				if let index = entriesSortedByInvalidationDate.firstIndex(where: { $0.cacheIdentifier == entry.cacheIdentifier }) {
-					entriesSortedByInvalidationDate.remove(at: index)
+		return lock.acquireAndRun {
+			if let entry = entries[key.cacheIdentifier] {
+				if case let .afterAccess(time) = options.validity {
+					if let index = entriesSortedByInvalidationDate.firstIndex(where: { $0.cacheIdentifier == entry.cacheIdentifier }) {
+						entriesSortedByInvalidationDate.remove(at: index)
+					}
+					entry.invalidationDate = scheduler.currentDate.addingTimeInterval(time)
+					entriesSortedByInvalidationDate.insert(entry)
+					scheduleInvalidation()
 				}
-				entry.invalidationDate = Date().addingTimeInterval(time)
-				entriesSortedByInvalidationDate.insert(entry)
-				scheduleInvalidation()
-			}
-			do {
-				let data = try Data(contentsOf: url(forCacheIdentifier: entry.cacheIdentifier))
-				let value = try serializer.deserialize(data)
-				return value
-			} catch {
-				switch options.serializeErrorBehavior {
-				case .noValue:
-					return nil
-				case let .defaultValue(defaultValue):
-					return defaultValue
-				case let .handler(handler):
-					return handler(key)
+				do {
+					let data = try Data(contentsOf: url(forCacheIdentifier: entry.cacheIdentifier))
+					let value = try serializer.deserialize(data)
+					return value
+				} catch {
+					switch options.serializeErrorBehavior {
+					case .noValue:
+						return nil
+					case let .defaultValue(defaultValue):
+						return defaultValue
+					case let .handler(handler):
+						return handler(key)
+					}
 				}
 			}
+			return nil
 		}
-		return nil
 	}
 
 	public func store(_ value: Value, for key: Key) {
@@ -232,38 +229,37 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 	}
 
 	private func store(_ value: Value, for cacheIdentifier: String) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			invalidateValue(for: cacheIdentifier)
+			let data = serializer.serialize(value)
 
-		invalidateValue(for: cacheIdentifier)
-		let data = serializer.serialize(value)
-
-		if let entryCountLimit = options.entryCountLimit, entries.count >= entryCountLimit {
-			invalidateValue(for: entriesSortedByInvalidationDate.first!.cacheIdentifier)
-		}
-		if let totalSizeLimit = options.totalSizeLimit {
-			while !entries.isEmpty && currentSize + data.count > totalSizeLimit {
+			if let entryCountLimit = options.entryCountLimit, entries.count >= entryCountLimit {
 				invalidateValue(for: entriesSortedByInvalidationDate.first!.cacheIdentifier)
 			}
-		}
+			if let totalSizeLimit = options.totalSizeLimit {
+				while !entries.isEmpty && currentSize + data.count > totalSizeLimit {
+					invalidateValue(for: entriesSortedByInvalidationDate.first!.cacheIdentifier)
+				}
+			}
 
-		let invalidationDate: Date?
-		switch options.validity {
-		case .forever:
-			invalidationDate = nil
-		case let .afterAccess(time), let .afterStorage(time):
-			invalidationDate = Date().addingTimeInterval(time)
-		}
+			let invalidationDate: Date?
+			switch options.validity {
+			case .forever:
+				invalidationDate = nil
+			case let .afterAccess(time), let .afterStorage(time):
+				invalidationDate = scheduler.currentDate.addingTimeInterval(time)
+			}
 
-		let entry = Entry(cacheIdentifier: cacheIdentifier, valueSize: data.count, validUntil: invalidationDate)
-		try! data.write(to: url(forCacheIdentifier: cacheIdentifier))
-		entries[cacheIdentifier] = entry
-		entriesSortedByInvalidationDate.insert(entry)
-		currentSize += data.count
-		if entry.invalidationDate != nil {
-			scheduleInvalidation()
+			let entry = Entry(cacheIdentifier: cacheIdentifier, valueSize: data.count, validUntil: invalidationDate)
+			try! data.write(to: url(forCacheIdentifier: cacheIdentifier))
+			entries[cacheIdentifier] = entry
+			entriesSortedByInvalidationDate.insert(entry)
+			currentSize += data.count
+			if entry.invalidationDate != nil {
+				scheduleInvalidation()
+			}
+			saveEntries()
 		}
-		saveEntries()
 	}
 
 	public func invalidateValue(for key: Key) {
@@ -271,45 +267,42 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 	}
 
 	private func invalidateValue(for cacheIdentifier: String) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		if let entry = entries.removeValue(forKey: cacheIdentifier) {
-			try? fileManager.removeItem(at: url(forCacheIdentifier: entry.cacheIdentifier))
-			entriesSortedByInvalidationDate.remove(at: entriesSortedByInvalidationDate.firstIndex(where: { $0.cacheIdentifier == cacheIdentifier })!)
-			currentSize -= entry.valueSize
+		lock.acquireAndRun {
+			if let entry = entries.removeValue(forKey: cacheIdentifier) {
+				try? fileManager.removeItem(at: url(forCacheIdentifier: entry.cacheIdentifier))
+				entriesSortedByInvalidationDate.remove(at: entriesSortedByInvalidationDate.firstIndex(where: { $0.cacheIdentifier == cacheIdentifier })!)
+				currentSize -= entry.valueSize
+			}
+			scheduleInvalidation()
+			saveEntries()
 		}
-		scheduleInvalidation()
-		saveEntries()
 	}
 
 	public func invalidateAllValues() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		entries.values.forEach {
-			try? fileManager.removeItem(at: url(forCacheIdentifier: $0.cacheIdentifier))
+		lock.acquireAndRun {
+			entries.values.forEach {
+				try? fileManager.removeItem(at: url(forCacheIdentifier: $0.cacheIdentifier))
+			}
+			entries.removeAll()
+			entriesSortedByInvalidationDate.removeAll()
+			currentSize = 0
+			scheduleInvalidation()
+			saveEntries()
 		}
-		entries.removeAll()
-		entriesSortedByInvalidationDate.removeAll()
-		currentSize = 0
-		scheduleInvalidation()
-		saveEntries()
 	}
 
 	private func scheduleInvalidation() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			scheduledInvalidation?.workItem.cancel()
+			scheduledInvalidation = nil
 
-		scheduledInvalidation?.workItem.cancel()
-		scheduledInvalidation = nil
-
-		guard let entry = entriesSortedByInvalidationDate.first, let invalidationDate = entry.invalidationDate else { return }
-		let workItem = DispatchWorkItem { [weak self, cacheIdentifier = entry.cacheIdentifier] in
-			self?.invalidateValue(for: cacheIdentifier)
+			guard let entry = entriesSortedByInvalidationDate.first, let invalidationDate = entry.invalidationDate else { return }
+			let workItem = DispatchWorkItem { [weak self, cacheIdentifier = entry.cacheIdentifier] in
+				self?.invalidateValue(for: cacheIdentifier)
+			}
+			scheduledInvalidation = (cacheIdentifier: entry.cacheIdentifier, workItem: workItem)
+			scheduler.schedule(at: invalidationDate, execute: workItem)
 		}
-		scheduledInvalidation = (cacheIdentifier: entry.cacheIdentifier, workItem: workItem)
-		queue.asyncAfter(deadline: .now() + invalidationDate.timeIntervalSinceNow, execute: workItem)
 	}
 
 	public static func == (lhs: OnDiskCache<Key, Serializer>, rhs: OnDiskCache<Key, Serializer>) -> Bool {

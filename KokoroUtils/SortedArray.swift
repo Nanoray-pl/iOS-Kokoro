@@ -48,8 +48,9 @@ public struct SortedArray<Element>: Collection {
 		array.append(element)
 	}
 
-	public mutating func remove(at index: Index) {
-		array.remove(at: index)
+	@discardableResult
+	public mutating func remove(at index: Index) -> Element? {
+		return array.remove(at: index)
 	}
 
 	public mutating func removeAll() {
@@ -115,5 +116,16 @@ extension SortedArray: ExpressibleByArrayLiteral where Element: Comparable {
 public extension SortedArray where Element: Hashable, Element: Comparable {
 	init(elements: [Element] = [], uniqueValues: Bool = false) {
 		self.init(elements: elements, uniqueValues: uniqueValues, comparator: { $0 < $1 })
+	}
+}
+
+public extension SortedArray {
+	@discardableResult
+	mutating func removeFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+		if let index = try firstIndex(where: predicate) {
+			return remove(at: index)
+		} else {
+			return nil
+		}
 	}
 }

@@ -59,8 +59,9 @@ public class InMemoryCache<Key: Hashable, Value>: Cache {
 		totalSizeLimit: Int(ProcessInfo.processInfo.physicalMemory / 4) // 25% of available RAM
 	)
 
-	private let queue: DispatchQueue
+	private let scheduler: Scheduler
 	private let sizeFunction: (Value) -> Int
+	private let lock = ObjcLock()
 
 	private var entries = [Key: Entry]()
 	private var entriesSortedByInvalidationDate = SortedArray<Entry>(comparator: {
@@ -75,21 +76,20 @@ public class InMemoryCache<Key: Hashable, Value>: Cache {
 	})
 	private var scheduledInvalidation: (key: Key, workItem: DispatchWorkItem)?
 	private var currentSize = 0
-	private let lock = NSObject()
 
-	public init(queue: DispatchQueue = .global(qos: .background), sizeFunction: @escaping (Value) -> Int) {
-		self.queue = queue
+	public init(scheduler: Scheduler = DispatchQueue.global(qos: .background), sizeFunction: @escaping (Value) -> Int) {
+		self.scheduler = scheduler
 		self.sizeFunction = sizeFunction
 	}
 
 	public func value(for key: Key) -> Value? {
-		return queue.sync {
+		return lock.acquireAndRun {
 			if let entry = entries[key] {
 				if case let .afterAccess(time) = options.validity {
 					if let index = entriesSortedByInvalidationDate.firstIndex(where: { $0.key == entry.key }) {
 						entriesSortedByInvalidationDate.remove(at: index)
 					}
-					entry.invalidationDate = Date().addingTimeInterval(time)
+					entry.invalidationDate = scheduler.currentDate.addingTimeInterval(time)
 					entriesSortedByInvalidationDate.insert(entry)
 					scheduleInvalidation()
 				}
@@ -100,72 +100,68 @@ public class InMemoryCache<Key: Hashable, Value>: Cache {
 	}
 
 	public func store(_ value: Value, for key: Key) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			invalidateValue(for: key)
+			let size = sizeFunction(value)
 
-		invalidateValue(for: key)
-		let size = sizeFunction(value)
-
-		if let entryCountLimit = self.options.entryCountLimit, entries.count >= entryCountLimit {
-			invalidateValue(for: entriesSortedByInvalidationDate.first!.key)
-		}
-		if let totalSizeLimit = self.options.totalSizeLimit {
-			while !entries.isEmpty && currentSize + size > totalSizeLimit {
+			if let entryCountLimit = self.options.entryCountLimit, entries.count >= entryCountLimit {
 				invalidateValue(for: entriesSortedByInvalidationDate.first!.key)
 			}
-		}
+			if let totalSizeLimit = self.options.totalSizeLimit {
+				while !entries.isEmpty && currentSize + size > totalSizeLimit {
+					invalidateValue(for: entriesSortedByInvalidationDate.first!.key)
+				}
+			}
 
-		let invalidationDate: Date?
-		switch self.options.validity {
-		case .forever:
-			invalidationDate = nil
-		case let .afterAccess(time), let .afterStorage(time):
-			invalidationDate = Date().addingTimeInterval(time)
-		}
+			let invalidationDate: Date?
+			switch self.options.validity {
+			case .forever:
+				invalidationDate = nil
+			case let .afterAccess(time), let .afterStorage(time):
+				invalidationDate = scheduler.currentDate.addingTimeInterval(time)
+			}
 
-		let entry = Entry(key: key, value: value, size: size, validUntil: invalidationDate)
-		entries[key] = entry
-		entriesSortedByInvalidationDate.insert(entry)
-		currentSize += size
-		if entry.invalidationDate != nil {
-			scheduleInvalidation()
+			let entry = Entry(key: key, value: value, size: size, validUntil: invalidationDate)
+			entries[key] = entry
+			entriesSortedByInvalidationDate.insert(entry)
+			currentSize += size
+			if entry.invalidationDate != nil {
+				scheduleInvalidation()
+			}
 		}
 	}
 
 	public func invalidateValue(for key: Key) {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		if let entry = entries.removeValue(forKey: key) {
-			entriesSortedByInvalidationDate.remove(at: entriesSortedByInvalidationDate.firstIndex(where: { $0.key == key })!)
-			currentSize -= entry.size
+		lock.acquireAndRun {
+			if let entry = entries.removeValue(forKey: key) {
+				entriesSortedByInvalidationDate.remove(at: entriesSortedByInvalidationDate.firstIndex(where: { $0.key == key })!)
+				currentSize -= entry.size
+			}
+			scheduleInvalidation()
 		}
-		scheduleInvalidation()
 	}
 
 	public func invalidateAllValues() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
-
-		entries.removeAll()
-		entriesSortedByInvalidationDate.removeAll()
-		currentSize = 0
-		scheduleInvalidation()
+		lock.acquireAndRun {
+			entries.removeAll()
+			entriesSortedByInvalidationDate.removeAll()
+			currentSize = 0
+			scheduleInvalidation()
+		}
 	}
 
 	private func scheduleInvalidation() {
-		objc_sync_enter(lock)
-		defer { objc_sync_exit(lock) }
+		lock.acquireAndRun {
+			scheduledInvalidation?.workItem.cancel()
+			scheduledInvalidation = nil
 
-		scheduledInvalidation?.workItem.cancel()
-		scheduledInvalidation = nil
-
-		guard let entry = entriesSortedByInvalidationDate.first, let invalidationDate = entry.invalidationDate else { return }
-		let workItem = DispatchWorkItem { [weak self, key = entry.key] in
-			self?.invalidateValue(for: key)
+			guard let entry = entriesSortedByInvalidationDate.first, let invalidationDate = entry.invalidationDate else { return }
+			let workItem = DispatchWorkItem { [weak self, key = entry.key] in
+				self?.invalidateValue(for: key)
+			}
+			scheduledInvalidation = (key: entry.key, workItem: workItem)
+			scheduler.schedule(at: invalidationDate, execute: workItem)
 		}
-		scheduledInvalidation = (key: entry.key, workItem: workItem)
-		queue.asyncAfter(deadline: .now() + invalidationDate.timeIntervalSinceNow, execute: workItem)
 	}
 
 	public static func == (lhs: InMemoryCache<Key, Value>, rhs: InMemoryCache<Key, Value>) -> Bool {

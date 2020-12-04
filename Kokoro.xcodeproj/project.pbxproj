@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA16EAE1257A74DA001C30E9 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EAE0257A74DA001C30E9 /* Lock.swift */; };
+		AA16EAFB257A7818001C30E9 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EAFA257A7818001C30E9 /* Scheduler.swift */; };
+		AA16EB0A257A78F0001C30E9 /* DispatchQueueScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EB09257A78F0001C30E9 /* DispatchQueueScheduler.swift */; };
+		AA16EB24257A7917001C30E9 /* SynchronousScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EB23257A7917001C30E9 /* SynchronousScheduler.swift */; };
+		AA16EB44257A7AAC001C30E9 /* InMemoryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EB43257A7AAC001C30E9 /* InMemoryCacheTests.swift */; };
+		AA16EB46257A7AAC001C30E9 /* KokoroCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5AEC9A2556AF1C00516C8D /* KokoroCache.framework */; };
+		AA16EBB6257A7B46001C30E9 /* OnDiskCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBB5257A7B46001C30E9 /* OnDiskCacheTests.swift */; };
 		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
 		AA42D3C4256A752E004604D2 /* RatioImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3C3256A752E004604D2 /* RatioImageView.swift */; };
 		AA42D3D9256A781D004604D2 /* KokoroUIResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA42D3D7256A781D004604D2 /* KokoroUIResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -150,6 +157,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AA16EB47257A7AAC001C30E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA5AEC992556AF1C00516C8D;
+			remoteInfo = KokoroCache;
+		};
 		AA42D3EA256A7833004604D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -237,6 +251,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA16EAE0257A74DA001C30E9 /* Lock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
+		AA16EAFA257A7818001C30E9 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		AA16EB09257A78F0001C30E9 /* DispatchQueueScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueScheduler.swift; sourceTree = "<group>"; };
+		AA16EB23257A7917001C30E9 /* SynchronousScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronousScheduler.swift; sourceTree = "<group>"; };
+		AA16EB41257A7AAC001C30E9 /* KokoroCacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KokoroCacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA16EB43257A7AAC001C30E9 /* InMemoryCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCacheTests.swift; sourceTree = "<group>"; };
+		AA16EB45257A7AAC001C30E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA16EBB5257A7B46001C30E9 /* OnDiskCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDiskCacheTests.swift; sourceTree = "<group>"; };
 		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
 		AA42D3C3256A752E004604D2 /* RatioImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioImageView.swift; sourceTree = "<group>"; };
 		AA42D3D5256A781D004604D2 /* KokoroUIResourceProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUIResourceProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -405,6 +427,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA16EB3E257A7AAC001C30E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA16EB46257A7AAC001C30E9 /* KokoroCache.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA42D3D2256A781D004604D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -493,6 +523,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA16EB08257A7849001C30E9 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				AA16EAFA257A7818001C30E9 /* Scheduler.swift */,
+				AA16EB09257A78F0001C30E9 /* DispatchQueueScheduler.swift */,
+				AA16EB23257A7917001C30E9 /* SynchronousScheduler.swift */,
+			);
+			path = Scheduler;
+			sourceTree = "<group>";
+		};
+		AA16EB42257A7AAC001C30E9 /* KokoroCacheTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA16EB59257A7AB9001C30E9 /* Bootstrap */,
+				AA16EB43257A7AAC001C30E9 /* InMemoryCacheTests.swift */,
+				AA16EBB5257A7B46001C30E9 /* OnDiskCacheTests.swift */,
+			);
+			path = KokoroCacheTests;
+			sourceTree = "<group>";
+		};
+		AA16EB59257A7AB9001C30E9 /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AA16EB45257A7AAC001C30E9 /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
 		AA42D3112566B04B004604D2 /* Aesthetic */ = {
 			isa = PBXGroup;
 			children = (
@@ -615,6 +673,7 @@
 				AAD3578B2529C468007C63EF /* KokoroResourceProvider */,
 				AA5AEB8D25557D7700516C8D /* KokoroJobs */,
 				AA5AEC9B2556AF1C00516C8D /* KokoroCache */,
+				AA16EB42257A7AAC001C30E9 /* KokoroCacheTests */,
 				AA5AED052556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AA42D3D6256A781D004604D2 /* KokoroUIResourceProvider */,
 				AAD3548E252869D0007C63EF /* Products */,
@@ -636,6 +695,7 @@
 				AA5AEC9A2556AF1C00516C8D /* KokoroCache.framework */,
 				AA5AED042556B2B000516C8D /* KokoroCacheResourceProvider.framework */,
 				AA42D3D5256A781D004604D2 /* KokoroUIResourceProvider.framework */,
+				AA16EB41257A7AAC001C30E9 /* KokoroCacheTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -644,6 +704,7 @@
 			isa = PBXGroup;
 			children = (
 				AAD3549A25286A16007C63EF /* Bootstrap */,
+				AA16EB08257A7849001C30E9 /* Scheduler */,
 				AAD354A025286B1C007C63EF /* With.swift */,
 				AAD355C72528B3D7007C63EF /* Identifier.swift */,
 				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
@@ -656,6 +717,7 @@
 				AAD354A625286E31007C63EF /* CollectionExtensions.swift */,
 				AA5AEC25255585F700516C8D /* CombineExtensions.swift */,
 				AA42D414256A7BBC004604D2 /* PrivateSourceLocation.swift */,
+				AA16EAE0257A74DA001C30E9 /* Lock.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -1069,6 +1131,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		AA16EB40257A7AAC001C30E9 /* KokoroCacheTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA16EB49257A7AAC001C30E9 /* Build configuration list for PBXNativeTarget "KokoroCacheTests" */;
+			buildPhases = (
+				AA16EB3D257A7AAC001C30E9 /* Sources */,
+				AA16EB3E257A7AAC001C30E9 /* Frameworks */,
+				AA16EB3F257A7AAC001C30E9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA16EB48257A7AAC001C30E9 /* PBXTargetDependency */,
+			);
+			name = KokoroCacheTests;
+			productName = KokoroCacheTests;
+			productReference = AA16EB41257A7AAC001C30E9 /* KokoroCacheTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		AA42D3D4256A781D004604D2 /* KokoroUIResourceProvider */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA42D3DC256A781D004604D2 /* Build configuration list for PBXNativeTarget "KokoroUIResourceProvider" */;
@@ -1310,10 +1390,13 @@
 		AAD35484252869D0007C63EF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1220;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Nanoray;
 				TargetAttributes = {
+					AA16EB40257A7AAC001C30E9 = {
+						CreatedOnToolsVersion = 12.2;
+					};
 					AA42D3D4256A781D004604D2 = {
 						CreatedOnToolsVersion = 12.2;
 						LastSwiftMigration = 1220;
@@ -1388,6 +1471,7 @@
 				AAD357892529C468007C63EF /* KokoroResourceProvider */,
 				AA5AEB8B25557D7700516C8D /* KokoroJobs */,
 				AA5AEC992556AF1C00516C8D /* KokoroCache */,
+				AA16EB40257A7AAC001C30E9 /* KokoroCacheTests */,
 				AA5AED032556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AA42D3D4256A781D004604D2 /* KokoroUIResourceProvider */,
 			);
@@ -1395,6 +1479,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AA16EB3F257A7AAC001C30E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA42D3D3256A781D004604D2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1620,6 +1711,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AA16EB3D257A7AAC001C30E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA16EBB6257A7B46001C30E9 /* OnDiskCacheTests.swift in Sources */,
+				AA16EB44257A7AAC001C30E9 /* InMemoryCacheTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA42D3D1256A781D004604D2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1667,17 +1767,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA5AEC072555845D00516C8D /* ComparableExtensions.swift in Sources */,
+				AA16EAFB257A7818001C30E9 /* Scheduler.swift in Sources */,
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
 				AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */,
 				AA42D415256A7BBC004604D2 /* PrivateSourceLocation.swift in Sources */,
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
 				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
+				AA16EAE1257A74DA001C30E9 /* Lock.swift in Sources */,
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
 				AA5AECEA2556B10D00516C8D /* MD5.swift in Sources */,
+				AA16EB0A257A78F0001C30E9 /* DispatchQueueScheduler.swift in Sources */,
+				AA16EB24257A7917001C30E9 /* SynchronousScheduler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1834,6 +1938,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AA16EB48257A7AAC001C30E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA5AEC992556AF1C00516C8D /* KokoroCache */;
+			targetProxy = AA16EB47257A7AAC001C30E9 /* PBXContainerItemProxy */;
+		};
 		AA42D3EB256A7833004604D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AAD357892529C468007C63EF /* KokoroResourceProvider */;
@@ -1897,6 +2006,36 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		AA16EB4A257A7AAC001C30E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCacheTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA16EB4B257A7AAC001C30E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCacheTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		AA42D3DA256A781D004604D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2515,6 +2654,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA16EB49257A7AAC001C30E9 /* Build configuration list for PBXNativeTarget "KokoroCacheTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA16EB4A257A7AAC001C30E9 /* Debug */,
+				AA16EB4B257A7AAC001C30E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AA42D3DC256A781D004604D2 /* Build configuration list for PBXNativeTarget "KokoroUIResourceProvider" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
