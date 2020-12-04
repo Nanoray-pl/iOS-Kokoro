@@ -14,6 +14,7 @@
 		AA16EB44257A7AAC001C30E9 /* InMemoryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EB43257A7AAC001C30E9 /* InMemoryCacheTests.swift */; };
 		AA16EB46257A7AAC001C30E9 /* KokoroCache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5AEC9A2556AF1C00516C8D /* KokoroCache.framework */; };
 		AA16EBB6257A7B46001C30E9 /* OnDiskCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBB5257A7B46001C30E9 /* OnDiskCacheTests.swift */; };
+		AA16EBC5257A7FB3001C30E9 /* Fetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */; };
 		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
 		AA42D3C4256A752E004604D2 /* RatioImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3C3256A752E004604D2 /* RatioImageView.swift */; };
 		AA42D3D9256A781D004604D2 /* KokoroUIResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA42D3D7256A781D004604D2 /* KokoroUIResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -259,6 +260,7 @@
 		AA16EB43257A7AAC001C30E9 /* InMemoryCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCacheTests.swift; sourceTree = "<group>"; };
 		AA16EB45257A7AAC001C30E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA16EBB5257A7B46001C30E9 /* OnDiskCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDiskCacheTests.swift; sourceTree = "<group>"; };
+		AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fetchable.swift; sourceTree = "<group>"; };
 		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
 		AA42D3C3256A752E004604D2 /* RatioImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioImageView.swift; sourceTree = "<group>"; };
 		AA42D3D5256A781D004604D2 /* KokoroUIResourceProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUIResourceProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -837,6 +839,7 @@
 			children = (
 				AAD3556D2528A8A6007C63EF /* Bootstrap */,
 				AAD355802528A919007C63EF /* ListDataSource */,
+				AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */,
 				AAD355812528A92E007C63EF /* DataSourceFetchState.swift */,
 			);
 			path = KokoroFetchable;
@@ -1840,6 +1843,7 @@
 				AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */,
 				AAD355AA2528ACE5007C63EF /* UniqueListDataSource.swift in Sources */,
 				AAD355B42528AD40007C63EF /* FilterListDataSource.swift in Sources */,
+				AA16EBC5257A7FB3001C30E9 /* Fetchable.swift in Sources */,
 				AAD3557C2528A900007C63EF /* FetchableListDataSource.swift in Sources */,
 				AAD3559F2528AB5D007C63EF /* MergeListDataSource.swift in Sources */,
 				AAD355822528A92E007C63EF /* DataSourceFetchState.swift in Sources */,
