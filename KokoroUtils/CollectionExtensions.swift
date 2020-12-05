@@ -78,6 +78,10 @@ public extension Array {
 			return nil
 		}
 	}
+
+	subscript(optional index: Index) -> Element? {
+		return index >= startIndex && index < endIndex ? self[index] : nil
+	}
 }
 
 public extension Sequence {
