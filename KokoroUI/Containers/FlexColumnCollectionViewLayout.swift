@@ -129,12 +129,10 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	}
 
 	public override var collectionViewContentSize: CGSize {
-		switch orientation {
-		case .vertical:
-			return .init(width: collectionView?.bounds.width ?? 0, height: calculatedContentLength)
-		case .horizontal:
-			return .init(width: calculatedContentLength, height: collectionView?.bounds.height ?? 0)
-		}
+		return .init(
+			width: orientational(vertical: collectionView?.bounds.width ?? 0, horizontal: calculatedContentLength),
+			height: orientational(vertical: calculatedContentLength, horizontal: collectionView?.bounds.height ?? 0)
+		)
 	}
 
 	private func orientational<Value>(vertical: @autoclosure () -> Value, horizontal: @autoclosure () -> Value) -> Value {
