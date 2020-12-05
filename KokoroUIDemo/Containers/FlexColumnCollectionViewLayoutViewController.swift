@@ -295,7 +295,7 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 		if sender.selectedSegmentIndex == 0 {
 			layout.columnConstraint = .count(2)
 		} else {
-			layout.columnConstraint = .minWidth(150)
+			layout.columnConstraint = .minLength(150)
 		}
 		updateColumnConstraintUI()
 	}
@@ -388,8 +388,8 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 		switch layout.columnConstraint {
 		case .count:
 			layout.columnConstraint = .count(Int(columnCountStepper.value))
-		case .minWidth:
-			layout.columnConstraint = .minWidth(CGFloat(columnWidthSlider.value))
+		case .minLength:
+			layout.columnConstraint = .minLength(CGFloat(columnWidthSlider.value))
 		}
 		updateColumnConstraintUI()
 	}
@@ -401,11 +401,11 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 			columnCountStepper.isHidden = false
 			columnWidthSlider.isHidden = true
 			columnCountStepper.value = Double(count)
-		case let .minWidth(minWidth):
-			columnConstraintLabel.text = "Column Width: ≥\(Int(minWidth))"
+		case let .minLength(minLength):
+			columnConstraintLabel.text = "Column Width: ≥\(Int(minLength))"
 			columnCountStepper.isHidden = true
 			columnWidthSlider.isHidden = false
-			columnWidthSlider.value = Float(minWidth)
+			columnWidthSlider.value = Float(minLength)
 		}
 	}
 
@@ -427,7 +427,7 @@ extension FlexColumnCollectionViewLayoutViewController: UICollectionViewDataSour
 }
 
 extension FlexColumnCollectionViewLayoutViewController: FlexColumnCollectionViewLayoutDelegate {
-	func lengthForItemInFlexColumnCollectionViewLayout(at indexPath: IndexPath, in collectionView: UICollectionView) -> CGFloat {
+	func rowLengthForItemInFlexColumnCollectionViewLayout(at indexPath: IndexPath, in collectionView: UICollectionView) -> CGFloat {
 		return items[indexPath.item].length
 	}
 }
