@@ -21,12 +21,14 @@ class MenuViewController: UITableViewController {
 
 	private enum Cell {
 		case proportionalOffsetConstraint, aspectRatioEqualConstraint, minMaxLengthConstraint
+		case flexColumnCollectionViewLayout
 		case progressBar
 	}
 
-	unowned var router: (ProgressBarsRoute & ProportionalOffsetConstraintRoute)!
+	unowned var router: (ProportionalOffsetConstraintRoute & FlexColumnCollectionViewLayoutRoute & ProgressBarsRoute)!
 	private let sections: [Section] = [
 		.init(header: "Non-basic Constraints", cells: [.proportionalOffsetConstraint, .aspectRatioEqualConstraint, .minMaxLengthConstraint]),
+		.init(header: "Containers", cells: [.flexColumnCollectionViewLayout]),
 		.init(header: "Aesthetic", cells: [.progressBar]),
 	]
 
@@ -70,6 +72,8 @@ class MenuViewController: UITableViewController {
 			cell.textLabel?.text = "AspectRatioEqualConstraint"
 		case .minMaxLengthConstraint:
 			cell.textLabel?.text = "MinMaxLengthConstraint"
+		case .flexColumnCollectionViewLayout:
+			cell.textLabel?.text = "FlexColumnCollectionViewLayout"
 		case .progressBar:
 			cell.textLabel?.text = "ProgressBar"
 		}
@@ -83,6 +87,8 @@ class MenuViewController: UITableViewController {
 			router.showProportionalOffsetConstraint(animated: Animated.motionBased.value)
 		case .aspectRatioEqualConstraint, .minMaxLengthConstraint:
 			break
+		case .flexColumnCollectionViewLayout:
+			router.showFlexColumnCollectionViewLayout(animated: Animated.motionBased.value)
 		case .progressBar:
 			router.showProgressBars(animated: Animated.motionBased.value)
 		}

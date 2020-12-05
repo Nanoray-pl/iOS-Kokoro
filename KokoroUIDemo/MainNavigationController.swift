@@ -18,17 +18,24 @@ class MainNavigationController: NavigationControllerWrapper {
 	}
 }
 
-extension MainNavigationController: ProgressBarsRoute, ProportionalOffsetConstraintRoute {
-	func showProgressBars(animated: Bool) {
+extension MainNavigationController: ProportionalOffsetConstraintRoute, ProgressBarsRoute, FlexColumnCollectionViewLayoutRoute {
+	func showProportionalOffsetConstraint(animated: Bool) {
 		navigateToExistingOrNewViewController(
-			factory: { _ in .init(controller: ProgressBarsViewController(), options: .init(navigationBar: .visible)) },
+			factory: { _ in .init(controller: ProportionalOffsetConstraintViewController(), options: .init(navigationBar: .visible)) },
 			animated: animated
 		)
 	}
 
-	func showProportionalOffsetConstraint(animated: Bool) {
+	func showFlexColumnCollectionViewLayout(animated: Bool) {
 		navigateToExistingOrNewViewController(
-			factory: { _ in .init(controller: ProportionalOffsetConstraintViewController(), options: .init(navigationBar: .visible)) },
+			factory: { _ in .init(controller: FlexColumnCollectionViewLayoutViewController(), options: .init(navigationBar: .visible)) },
+			animated: animated
+		)
+	}
+
+	func showProgressBars(animated: Bool) {
+		navigateToExistingOrNewViewController(
+			factory: { _ in .init(controller: ProgressBarsViewController(), options: .init(navigationBar: .visible)) },
 			animated: animated
 		)
 	}

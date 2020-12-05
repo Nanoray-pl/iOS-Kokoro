@@ -21,7 +21,7 @@ public extension PrecedingControllerNavigator {
 		if #available(iOS 14, *) {
 			let precedingNavigationItems = self.precedingNavigationItems(for: controller)
 			return .init(
-				children: precedingNavigationItems.map { item in
+				children: precedingNavigationItems.reversed().map { item in
 					return ButtonMenuConfigurator.MenuAction(
 						title: item.title ?? SystemUILocalizable.back,
 						handler: .closure { [weak self] in self?.navigateBackToViewController(owning: item, animated: Animated.motionBased.value) }
