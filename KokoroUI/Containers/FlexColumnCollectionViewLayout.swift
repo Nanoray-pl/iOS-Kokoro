@@ -91,6 +91,13 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
+	public var sectionSpacing: CGFloat = 20 {
+		didSet {
+			if oldValue == sectionSpacing { return }
+			invalidateLayout()
+		}
+	}
+
 	public var itemLength: CGFloat = 60 {
 		didSet {
 			if oldValue == itemLength || delegate != nil { return }
@@ -185,99 +192,106 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 		let availableWidth = self.availableWidth()
 		calculatedSizeAttributes = calculateSizeAttributes(forAvailableWidth: availableWidth)
-		let numberOfItems = collectionView.numberOfItems(inSection: 0)
-		let rowCount = Int(ceil(Double(numberOfItems) / Double(sizeAttributes.columnCount)))
 
 		let leadingColumnOffset = orientational(contentInsets, vertical: \.left, horizontal: \.top)
 		let leadingRowOffset = orientational(contentInsets, vertical: \.top, horizontal: \.left)
 		var currentRowOffset: CGFloat = 0
 
-		for rowIndex in 0 ..< rowCount {
-			if rowIndex > 0 {
-				currentRowOffset += rowSpacing
+		for sectionIndex in 0 ..< collectionView.numberOfSections {
+			if sectionIndex > 0 {
+				currentRowOffset += sectionSpacing
 			}
 
-			let itemCountInRow: Int
-			if rowIndex < rowCount - 1 {
-				itemCountInRow = sizeAttributes.columnCount
-			} else {
-				let modulo = numberOfItems % sizeAttributes.columnCount
-				itemCountInRow = (modulo == 0 ? sizeAttributes.columnCount : modulo)
-			}
-			let columnWidth: CGFloat
-			let alignmentColumnOffset: CGFloat
-			switch orientation {
-			case .vertical(_, lastColumnAlignment: .left, _), .horizontal(_, lastColumnAlignment: .top, _):
-				columnWidth = sizeAttributes.columnWidth
-				alignmentColumnOffset = 0
-			case .vertical(_, lastColumnAlignment: .center, _), .horizontal(_, lastColumnAlignment: .center, _):
-				columnWidth = sizeAttributes.columnWidth
-				alignmentColumnOffset = (availableWidth - (CGFloat(itemCountInRow) * columnWidth + CGFloat(itemCountInRow - 1) * columnSpacing)) / 2
-			case .vertical(_, lastColumnAlignment: .right, _), .horizontal(_, lastColumnAlignment: .bottom, _):
-				columnWidth = sizeAttributes.columnWidth
-				alignmentColumnOffset = availableWidth - (CGFloat(itemCountInRow) * columnWidth + CGFloat(itemCountInRow - 1) * columnSpacing)
-			case .vertical(_, lastColumnAlignment: .fillEqually, _), .horizontal(_, lastColumnAlignment: .fillEqually, _):
-				columnWidth = (availableWidth - CGFloat(itemCountInRow - 1) * columnSpacing) / CGFloat(itemCountInRow)
-				alignmentColumnOffset = 0
-			}
+			let numberOfItems = collectionView.numberOfItems(inSection: sectionIndex)
+			let rowCount = Int(ceil(Double(numberOfItems) / Double(sizeAttributes.columnCount)))
 
-			let startingColumnIndex: Int
-			let columnIndexDirection: Int
-			switch orientation {
-			case .vertical(fillDirection: .leftToRight, _, _), .horizontal(fillDirection: .topToBottom, _, _):
-				startingColumnIndex = 0
-				columnIndexDirection = 1
-			case .vertical(fillDirection: .rightToLeft, _, _), .horizontal(fillDirection: .bottomToTop, _, _):
-				startingColumnIndex = itemCountInRow - 1
-				columnIndexDirection = -1
-			}
-
-			let itemLengths: [(indexPath: IndexPath, length: CGFloat)] = (0 ..< itemCountInRow).map { columnIndex in
-				let indexPath = IndexPath(item: startingColumnIndex + columnIndex * columnIndexDirection + rowIndex * sizeAttributes.columnCount, section: 0)
-				let itemLength = delegate?.lengthForItemInFlexColumnCollectionViewLayout(at: indexPath, in: collectionView) ?? self.itemLength
-				return (indexPath: indexPath, length: itemLength)
-			}
-			let maxItemLength = itemLengths.map(\.length).max()!
-
-			for columnIndex in 0 ..< itemCountInRow {
-				let itemLength: CGFloat
-				let itemOffset: CGFloat
-				switch orientation {
-				case .vertical(_, _, itemDistribution: .top), .horizontal(_, _, itemDistribution: .left):
-					itemLength = itemLengths[columnIndex].length
-					itemOffset = 0
-				case .vertical(_, _, itemDistribution: .center), .horizontal(_, _, itemDistribution: .center):
-					itemLength = itemLengths[columnIndex].length
-					itemOffset = (maxItemLength - itemLength) / 2
-				case .vertical(_, _, itemDistribution: .bottom), .horizontal(_, _, itemDistribution: .right):
-					itemLength = itemLengths[columnIndex].length
-					itemOffset = maxItemLength - itemLength
-				case .vertical(_, _, itemDistribution: .fill), .horizontal(_, _, itemDistribution: .fill):
-					itemLength = maxItemLength
-					itemOffset = 0
+			for rowIndex in 0 ..< rowCount {
+				if rowIndex > 0 {
+					currentRowOffset += rowSpacing
 				}
 
-				let attribute = UICollectionViewLayoutAttributes(forCellWith: itemLengths[columnIndex].indexPath)
-				switch orientation {
-				case .vertical:
-					attribute.frame = .init(
-						x: leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing),
-						y: leadingRowOffset + currentRowOffset + itemOffset,
-						width: columnWidth,
-						height: itemLength
-					)
-				case .horizontal:
-					attribute.frame = .init(
-						x: leadingRowOffset + currentRowOffset + itemOffset,
-						y: leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing),
-						width: itemLength,
-						height: columnWidth
-					)
+				let itemCountInRow: Int
+				if rowIndex < rowCount - 1 {
+					itemCountInRow = sizeAttributes.columnCount
+				} else {
+					let modulo = numberOfItems % sizeAttributes.columnCount
+					itemCountInRow = (modulo == 0 ? sizeAttributes.columnCount : modulo)
 				}
-				attributes.append(attribute)
-			}
+				let columnWidth: CGFloat
+				let alignmentColumnOffset: CGFloat
+				switch orientation {
+				case .vertical(_, lastColumnAlignment: .left, _), .horizontal(_, lastColumnAlignment: .top, _):
+					columnWidth = sizeAttributes.columnWidth
+					alignmentColumnOffset = 0
+				case .vertical(_, lastColumnAlignment: .center, _), .horizontal(_, lastColumnAlignment: .center, _):
+					columnWidth = sizeAttributes.columnWidth
+					alignmentColumnOffset = (availableWidth - (CGFloat(itemCountInRow) * columnWidth + CGFloat(itemCountInRow - 1) * columnSpacing)) / 2
+				case .vertical(_, lastColumnAlignment: .right, _), .horizontal(_, lastColumnAlignment: .bottom, _):
+					columnWidth = sizeAttributes.columnWidth
+					alignmentColumnOffset = availableWidth - (CGFloat(itemCountInRow) * columnWidth + CGFloat(itemCountInRow - 1) * columnSpacing)
+				case .vertical(_, lastColumnAlignment: .fillEqually, _), .horizontal(_, lastColumnAlignment: .fillEqually, _):
+					columnWidth = (availableWidth - CGFloat(itemCountInRow - 1) * columnSpacing) / CGFloat(itemCountInRow)
+					alignmentColumnOffset = 0
+				}
 
-			currentRowOffset += maxItemLength
+				let startingColumnIndex: Int
+				let columnIndexDirection: Int
+				switch orientation {
+				case .vertical(fillDirection: .leftToRight, _, _), .horizontal(fillDirection: .topToBottom, _, _):
+					startingColumnIndex = 0
+					columnIndexDirection = 1
+				case .vertical(fillDirection: .rightToLeft, _, _), .horizontal(fillDirection: .bottomToTop, _, _):
+					startingColumnIndex = itemCountInRow - 1
+					columnIndexDirection = -1
+				}
+
+				let itemLengths: [(indexPath: IndexPath, length: CGFloat)] = (0 ..< itemCountInRow).map { columnIndex in
+					let indexPath = IndexPath(item: startingColumnIndex + columnIndex * columnIndexDirection + rowIndex * sizeAttributes.columnCount, section: sectionIndex)
+					let itemLength = delegate?.lengthForItemInFlexColumnCollectionViewLayout(at: indexPath, in: collectionView) ?? self.itemLength
+					return (indexPath: indexPath, length: itemLength)
+				}
+				let maxItemLength = itemLengths.map(\.length).max()!
+
+				for columnIndex in 0 ..< itemCountInRow {
+					let itemLength: CGFloat
+					let itemOffset: CGFloat
+					switch orientation {
+					case .vertical(_, _, itemDistribution: .top), .horizontal(_, _, itemDistribution: .left):
+						itemLength = itemLengths[columnIndex].length
+						itemOffset = 0
+					case .vertical(_, _, itemDistribution: .center), .horizontal(_, _, itemDistribution: .center):
+						itemLength = itemLengths[columnIndex].length
+						itemOffset = (maxItemLength - itemLength) / 2
+					case .vertical(_, _, itemDistribution: .bottom), .horizontal(_, _, itemDistribution: .right):
+						itemLength = itemLengths[columnIndex].length
+						itemOffset = maxItemLength - itemLength
+					case .vertical(_, _, itemDistribution: .fill), .horizontal(_, _, itemDistribution: .fill):
+						itemLength = maxItemLength
+						itemOffset = 0
+					}
+
+					let attribute = UICollectionViewLayoutAttributes(forCellWith: itemLengths[columnIndex].indexPath)
+					switch orientation {
+					case .vertical:
+						attribute.frame = .init(
+							x: leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing),
+							y: leadingRowOffset + currentRowOffset + itemOffset,
+							width: columnWidth,
+							height: itemLength
+						)
+					case .horizontal:
+						attribute.frame = .init(
+							x: leadingRowOffset + currentRowOffset + itemOffset,
+							y: leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing),
+							width: itemLength,
+							height: columnWidth
+						)
+					}
+					attributes.append(attribute)
+				}
+
+				currentRowOffset += maxItemLength
+			}
 		}
 
 		let trailingRowOffset = orientational(contentInsets, vertical: \.bottom, horizontal: \.right)

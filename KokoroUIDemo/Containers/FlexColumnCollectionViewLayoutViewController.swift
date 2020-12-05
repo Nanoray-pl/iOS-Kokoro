@@ -250,6 +250,12 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 		updateFillDirectionSegmentedControl()
 		updateLastColumnAlignmentSegmentedControl()
 		updateItemDistributionSegmentedControl()
+
+		DispatchQueue.main.async {
+			self.fillDirectionSegmentedControl.selectedSegmentIndex = 0
+			self.lastColumnAlignmentSegmentedControl.selectedSegmentIndex = 0
+			self.itemDistributionSegmentedControl.selectedSegmentIndex = 0
+		}
 	}
 
 	@objc private func didChangeFillDirectionSegmentedControlValue(_ sender: UISegmentedControl) {
