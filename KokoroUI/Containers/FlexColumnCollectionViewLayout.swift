@@ -271,22 +271,14 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 					}
 
 					let attribute = UICollectionViewLayoutAttributes(forCellWith: itemLengths[columnIndex].indexPath)
-					switch orientation {
-					case .vertical:
-						attribute.frame = .init(
-							x: leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing),
-							y: leadingRowOffset + currentRowOffset + itemOffset,
-							width: columnWidth,
-							height: itemLength
-						)
-					case .horizontal:
-						attribute.frame = .init(
-							x: leadingRowOffset + currentRowOffset + itemOffset,
-							y: leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing),
-							width: itemLength,
-							height: columnWidth
-						)
-					}
+					let frameColumnOffset = leadingColumnOffset + alignmentColumnOffset + CGFloat(columnIndex) * (columnWidth + columnSpacing)
+					let frameRowOffset = leadingRowOffset + currentRowOffset + itemOffset
+					attribute.frame = .init(
+						x: orientational(vertical: frameColumnOffset, horizontal: frameRowOffset),
+						y: orientational(vertical: frameRowOffset, horizontal: frameColumnOffset),
+						width: orientational(vertical: columnWidth, horizontal: itemLength),
+						height: orientational(vertical: itemLength, horizontal: columnWidth)
+					)
 					attributes.append(attribute)
 				}
 
