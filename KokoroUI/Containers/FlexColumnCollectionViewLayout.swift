@@ -7,38 +7,38 @@
 import UIKit
 
 public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate {
-	func columnConstraint(forRowIndex rowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint
-	func itemRowLength(at indexPath: IndexPath, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
-	func sectionSpacing(betweenSectionIndex precedingSectionIndex: Int, andSectionIndex followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
-	func rowSpacing(betweenRowIndex precedingRowIndex: Int, andRowIndex followingRowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
+	func columnConstraint(forRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint
+	func itemRowLength(at indexPath: IndexPath, inColumn columnIndex: Int, inRow rowIndex: Int, rowAttributes: FlexColumnCollectionViewLayout.RowAttributes, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
+	func sectionSpacing(between precedingSectionIndex: Int, and followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
+	func rowSpacing(between precedingRowIndex: Int, and followingRowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 
 	/// - Warning: The value returned from this method cannot be smaller than `layout.columnSpacing` - if it is, `layout.columnSpacing` will be used instead.
-	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRowAtIndex rowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
+	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 }
 
 public extension FlexColumnCollectionViewLayoutDelegate {
-	func columnConstraint(forRowIndex rowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint {
+	func columnConstraint(forRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint {
 		return layout.columnConstraint
 	}
 
-	func itemRowLength(at indexPath: IndexPath, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
+	func itemRowLength(at indexPath: IndexPath, inColumn columnIndex: Int, inRow rowIndex: Int, rowAttributes: FlexColumnCollectionViewLayout.RowAttributes, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
 		switch layout.itemRowLength {
 		case let .fixed(length):
 			return length
 		case let .ratio(ratio):
-			return columnLength * ratio
+			return rowAttributes.columnLength * ratio
 		}
 	}
 
-	func sectionSpacing(betweenSectionIndex precedingSectionIndex: Int, andSectionIndex followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
+	func sectionSpacing(between precedingSectionIndex: Int, and followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
 		return layout.sectionSpacing
 	}
 
-	func rowSpacing(betweenRowIndex precedingRowIndex: Int, andRowIndex followingRowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
+	func rowSpacing(between precedingRowIndex: Int, and followingRowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
 		return layout.rowSpacing
 	}
 
-	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRowAtIndex rowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
+	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
 		return layout.columnSpacing
 	}
 }
@@ -239,7 +239,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 		for sectionIndex in 0 ..< collectionView.numberOfSections {
 			if sectionIndex > 0 {
-				currentRowOffset += delegate?.sectionSpacing(betweenSectionIndex: sectionIndex - 1, andSectionIndex: sectionIndex, in: self, in: collectionView) ?? sectionSpacing
+				currentRowOffset += delegate?.sectionSpacing(between: sectionIndex - 1, and: sectionIndex, in: self, in: collectionView) ?? sectionSpacing
 			}
 
 			let numberOfItems = collectionView.numberOfItems(inSection: sectionIndex)
@@ -248,7 +248,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 			while itemIndex < numberOfItems {
 				let baseRowAttributes: RowAttributes
-				if let columnConstraint = delegate?.columnConstraint(forRowIndex: rowIndex, inSectionAtIndex: sectionIndex, in: self, in: collectionView), columnConstraint != self.columnConstraint {
+				if let columnConstraint = delegate?.columnConstraint(forRow: rowIndex, inSection: sectionIndex, in: self, in: collectionView), columnConstraint != self.columnConstraint {
 					baseRowAttributes = calculateRowAttributes(availableColumnLength: availableColumnLength, columnConstraint: columnConstraint)
 				} else {
 					baseRowAttributes = self.rowAttributes
@@ -256,7 +256,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 				let itemCountInRow = min(numberOfItems - itemIndex, baseRowAttributes.columnCount)
 
 				if rowIndex > 0 {
-					currentRowOffset += delegate?.rowSpacing(betweenRowIndex: rowIndex - 1, andRowIndex: rowIndex, inSectionAtIndex: sectionIndex, in: self, in: collectionView) ?? rowSpacing
+					currentRowOffset += delegate?.rowSpacing(between: rowIndex - 1, and: rowIndex, inSection: sectionIndex, in: self, in: collectionView) ?? rowSpacing
 				}
 
 				let startingColumnIndex: Int
@@ -282,7 +282,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 					itemSlotCountInRow = itemCountInRow
 					rowAttributes = (itemCountInRow != baseRowAttributes.columnCount ? calculateRowAttributes(availableColumnLength: availableColumnLength, columnConstraint: .count(itemSlotCountInRow)) : baseRowAttributes)
 				}
-				let columnSpacings = (1 ..< itemSlotCountInRow).map { columnIndex in min(delegate?.columnSpacing(between: (indexPath: itemIndexPaths[optional: columnIndex - 1], columnIndex: columnIndex - 1), and: (indexPath: itemIndexPaths[optional: columnIndex], columnIndex: columnIndex), inRowAtIndex: rowIndex, inSectionAtIndex: sectionIndex, in: self, in: collectionView) ?? columnSpacing, columnSpacing) }
+				let columnSpacings = (1 ..< itemSlotCountInRow).map { columnIndex in min(delegate?.columnSpacing(between: (indexPath: itemIndexPaths[optional: columnIndex - 1], columnIndex: columnIndex - 1), and: (indexPath: itemIndexPaths[optional: columnIndex], columnIndex: columnIndex), inRow: rowIndex, inSection: sectionIndex, in: self, in: collectionView) ?? columnSpacing, columnSpacing) }
 				let columnLength = (columnSpacings.allSatisfy { $0 == columnSpacing } ? rowAttributes.columnLength : self.columnLength(forColumnCount: itemSlotCountInRow, availableColumnLength: availableColumnLength, columnSpacings: columnSpacings))
 
 				let totalRowLength = CGFloat(itemCountInRow) * columnLength - columnSpacings.reduce(0, +)
@@ -299,7 +299,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 				}
 
 				let itemRowLengths: [CGFloat] = (0 ..< itemCountInRow).map { columnIndex in
-					if let itemRowLength = delegate?.itemRowLength(at: itemIndexPaths[columnIndex], columnLength: columnLength, in: self, in: collectionView) {
+					if let itemRowLength = delegate?.itemRowLength(at: itemIndexPaths[columnIndex], inColumn: columnIndex, inRow: rowIndex, rowAttributes: rowAttributes, in: self, in: collectionView) {
 						return itemRowLength
 					} else {
 						switch self.itemRowLength {
