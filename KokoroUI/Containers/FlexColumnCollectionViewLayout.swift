@@ -7,6 +7,7 @@
 import UIKit
 
 public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate {
+	func columnConstraint(forRowIndex rowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint
 	func itemRowLength(at indexPath: IndexPath, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 	func sectionSpacing(betweenSectionIndex precedingSectionIndex: Int, andSectionIndex followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 	func rowSpacing(betweenRowIndex precedingRowIndex: Int, andRowIndex followingRowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
@@ -16,6 +17,10 @@ public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate
 }
 
 public extension FlexColumnCollectionViewLayoutDelegate {
+	func columnConstraint(forRowIndex rowIndex: Int, inSectionAtIndex sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint {
+		return layout.columnConstraint
+	}
+
 	func itemRowLength(at indexPath: IndexPath, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
 		switch layout.itemRowLength {
 		case let .fixed(length):
@@ -84,7 +89,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		case horizontal(fillDirection: FillDirection.Horizontal = .topToBottom, lastColumnAlignment: LastColumnAlignment.Horizontal = .top, itemDistribution: ItemDistribution.Horizontal = .left)
 	}
 
-	public struct SizeAttributes: Hashable {
+	public struct RowAttributes: Hashable {
 		public let columnCount: Int
 		public let columnLength: CGFloat
 	}
@@ -138,17 +143,17 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
-	public var sizeAttributes: SizeAttributes {
-		if let sizeAttributes = calculatedSizeAttributes {
-			return sizeAttributes
+	public var rowAttributes: RowAttributes {
+		if let rowAttributes = calculatedRowAttributes {
+			return rowAttributes
 		} else {
-			let sizeAttributes = calculateSizeAttributes(availableColumnLength: availableColumnLength())
-			calculatedSizeAttributes = sizeAttributes
-			return sizeAttributes
+			let rowAttributes = calculateRowAttributes(availableColumnLength: availableColumnLength(), columnConstraint: columnConstraint)
+			calculatedRowAttributes = rowAttributes
+			return rowAttributes
 		}
 	}
 
-	private var calculatedSizeAttributes: SizeAttributes?
+	private var calculatedRowAttributes: RowAttributes?
 	private var calculatedContentLength: CGFloat = 0
 	private var attributes = [UICollectionViewLayoutAttributes]()
 
@@ -181,12 +186,12 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
-	private func availableColumnLength() -> CGFloat {
+	public func availableColumnLength() -> CGFloat {
 		guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
 		return orientational(collectionView.bounds, vertical: \.width, horizontal: \.height) - orientational(contentInsets, vertical: \.horizontal, horizontal: \.vertical)
 	}
 
-	private func calculateSizeAttributes(availableColumnLength: CGFloat) -> SizeAttributes {
+	private func calculateRowAttributes(availableColumnLength: CGFloat, columnConstraint: ColumnConstraint) -> RowAttributes {
 		switch columnConstraint {
 		case let .count(columnCount):
 			let columnLength = self.columnLength(forColumnCount: columnCount, availableColumnLength: availableColumnLength)
@@ -217,7 +222,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 	public override func invalidateLayout() {
 		super.invalidateLayout()
-		calculatedSizeAttributes = nil
+		calculatedRowAttributes = nil
 	}
 
 	public override func prepare() {
@@ -226,7 +231,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
 
 		let availableColumnLength = self.availableColumnLength()
-		calculatedSizeAttributes = calculateSizeAttributes(availableColumnLength: availableColumnLength)
+		calculatedRowAttributes = calculateRowAttributes(availableColumnLength: availableColumnLength, columnConstraint: columnConstraint)
 
 		let leadingColumnOffset = orientational(contentInsets, vertical: \.left, horizontal: \.top)
 		let leadingRowOffset = orientational(contentInsets, vertical: \.top, horizontal: \.left)
@@ -238,19 +243,20 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 			}
 
 			let numberOfItems = collectionView.numberOfItems(inSection: sectionIndex)
-			let rowCount = Int(ceil(Double(numberOfItems) / Double(sizeAttributes.columnCount)))
+			var rowIndex = 0
+			var itemIndex = 0
 
-			for rowIndex in 0 ..< rowCount {
+			while itemIndex < numberOfItems {
+				let baseRowAttributes: RowAttributes
+				if let columnConstraint = delegate?.columnConstraint(forRowIndex: rowIndex, inSectionAtIndex: sectionIndex, in: self, in: collectionView), columnConstraint != self.columnConstraint {
+					baseRowAttributes = calculateRowAttributes(availableColumnLength: availableColumnLength, columnConstraint: columnConstraint)
+				} else {
+					baseRowAttributes = self.rowAttributes
+				}
+				let itemCountInRow = min(numberOfItems - itemIndex, baseRowAttributes.columnCount)
+
 				if rowIndex > 0 {
 					currentRowOffset += delegate?.rowSpacing(betweenRowIndex: rowIndex - 1, andRowIndex: rowIndex, inSectionAtIndex: sectionIndex, in: self, in: collectionView) ?? rowSpacing
-				}
-
-				let itemCountInRow: Int
-				if rowIndex < rowCount - 1 {
-					itemCountInRow = sizeAttributes.columnCount
-				} else {
-					let modulo = numberOfItems % sizeAttributes.columnCount
-					itemCountInRow = (modulo == 0 ? sizeAttributes.columnCount : modulo)
 				}
 
 				let startingColumnIndex: Int
@@ -264,17 +270,20 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 					columnIndexDirection = -1
 				}
 
-				let itemIndexPaths = (0 ..< itemCountInRow).map { columnIndex in IndexPath(item: startingColumnIndex + columnIndex * columnIndexDirection + rowIndex * sizeAttributes.columnCount, section: sectionIndex) }
+				let itemIndexPaths = (0 ..< itemCountInRow).map { columnIndex in IndexPath(item: itemIndex + startingColumnIndex + columnIndex * columnIndexDirection, section: sectionIndex) }
 
+				let rowAttributes: RowAttributes
 				let itemSlotCountInRow: Int
 				switch orientation {
 				case .vertical(_, lastColumnAlignment: .left, _), .horizontal(_, lastColumnAlignment: .top, _), .vertical(_, lastColumnAlignment: .center, _), .horizontal(_, lastColumnAlignment: .center, _), .vertical(_, lastColumnAlignment: .right, _), .horizontal(_, lastColumnAlignment: .bottom, _):
-					itemSlotCountInRow = sizeAttributes.columnCount
+					itemSlotCountInRow = baseRowAttributes.columnCount
+					rowAttributes = baseRowAttributes
 				case .vertical(_, lastColumnAlignment: .fillEqually, _), .horizontal(_, lastColumnAlignment: .fillEqually, _):
 					itemSlotCountInRow = itemCountInRow
+					rowAttributes = (itemCountInRow != baseRowAttributes.columnCount ? calculateRowAttributes(availableColumnLength: availableColumnLength, columnConstraint: .count(itemSlotCountInRow)) : baseRowAttributes)
 				}
 				let columnSpacings = (1 ..< itemSlotCountInRow).map { columnIndex in min(delegate?.columnSpacing(between: (indexPath: itemIndexPaths[optional: columnIndex - 1], columnIndex: columnIndex - 1), and: (indexPath: itemIndexPaths[optional: columnIndex], columnIndex: columnIndex), inRowAtIndex: rowIndex, inSectionAtIndex: sectionIndex, in: self, in: collectionView) ?? columnSpacing, columnSpacing) }
-				let columnLength = (columnSpacings.allSatisfy({ $0 == columnSpacing }) ? sizeAttributes.columnLength : self.columnLength(forColumnCount: itemSlotCountInRow, availableColumnLength: availableColumnLength, columnSpacings: columnSpacings))
+				let columnLength = (columnSpacings.allSatisfy { $0 == columnSpacing } ? rowAttributes.columnLength : self.columnLength(forColumnCount: itemSlotCountInRow, availableColumnLength: availableColumnLength, columnSpacings: columnSpacings))
 
 				let totalRowLength = CGFloat(itemCountInRow) * columnLength - columnSpacings.reduce(0, +)
 				let alignmentColumnOffset: CGFloat
@@ -343,9 +352,11 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 						height: orientational(vertical: itemRowLength, horizontal: columnLength)
 					)
 					attributes.append(attribute)
+					itemIndex += 1
 				}
 
 				currentRowOffset += maxItemRowLength
+				rowIndex += 1
 			}
 		}
 
