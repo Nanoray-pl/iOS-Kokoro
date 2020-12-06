@@ -313,7 +313,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 				for columnIndex in 0 ..< itemCountInRow {
 					if columnIndex > 0 {
-						currentColumnOffset += CGFloat(columnIndexDirection) * (columnLength + (columnSpacings[optional: startingColumnIndex + columnIndex * columnIndexDirection - 1] ?? 0))
+						currentColumnOffset += CGFloat(columnIndexDirection) * (columnLength + columnSpacings[startingColumnIndex + columnIndex * columnIndexDirection - 1])
 					}
 
 					let itemRowLength: CGFloat
