@@ -204,7 +204,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	}
 
 	private func columnLength(forColumnCount columnCount: Int, availableColumnLength: CGFloat) -> CGFloat {
-		return columnLength(forColumnCount: columnCount, availableColumnLength: availableColumnLength, columnSpacings: (1 ..< columnCount).map { _ in columnSpacing })
+		return columnLength(forColumnCount: columnCount, availableColumnLength: availableColumnLength, columnSpacings: Array(repeating: columnSpacing, count: columnCount - 1))
 	}
 
 	private func columnLength(forColumnCount columnCount: Int, availableColumnLength: CGFloat, columnSpacings: [CGFloat]) -> CGFloat {
