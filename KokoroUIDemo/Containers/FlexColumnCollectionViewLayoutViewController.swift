@@ -427,7 +427,7 @@ extension FlexColumnCollectionViewLayoutViewController: UICollectionViewDataSour
 }
 
 extension FlexColumnCollectionViewLayoutViewController: FlexColumnCollectionViewLayoutDelegate {
-	func itemRowLength(at indexPath: IndexPath, inColumn columnIndex: Int, inRow rowIndex: Int, rowAttributes: FlexColumnCollectionViewLayout.RowAttributes, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
-		return items[indexPath.item].length
+	func itemRowLength(at indexPath: IndexPath, inColumn columnIndex: Int, inRow rowIndex: Int, rowAttributes: FlexColumnCollectionViewLayout.RowAttributes, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength {
+		return .fixed(items[indexPath.item].length)
 	}
 }
