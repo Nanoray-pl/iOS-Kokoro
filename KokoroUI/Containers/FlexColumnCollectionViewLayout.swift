@@ -155,7 +155,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 	private var calculatedRowAttributes: RowAttributes?
 	private var calculatedContentLength: CGFloat = 0
-	private var attributes = [UICollectionViewLayoutAttributes]()
+	private var attributes = [IndexPath: UICollectionViewLayoutAttributes]()
 
 	private var delegate: FlexColumnCollectionViewLayoutDelegate? {
 		return collectionView?.delegate as? FlexColumnCollectionViewLayoutDelegate
@@ -342,7 +342,8 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 						itemOffset = 0
 					}
 
-					let attribute = UICollectionViewLayoutAttributes(forCellWith: itemIndexPaths[columnIndex])
+					let itemIndexPath = itemIndexPaths[columnIndex]
+					let attribute = UICollectionViewLayoutAttributes(forCellWith: itemIndexPath)
 					let frameColumnOffset = leadingColumnOffset + alignmentColumnOffset + currentColumnOffset
 					let frameRowOffset = leadingRowOffset + currentRowOffset + itemOffset
 					attribute.frame = .init(
@@ -351,7 +352,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 						width: orientational(vertical: columnLength, horizontal: itemRowLength),
 						height: orientational(vertical: itemRowLength, horizontal: columnLength)
 					)
-					attributes.append(attribute)
+					attributes[itemIndexPath] = attribute
 					itemIndex += 1
 				}
 
@@ -365,11 +366,11 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	}
 
 	public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-		return attributes.filter { $0.frame.intersects(rect) }
+		return attributes.values.filter { $0.frame.intersects(rect) }
 	}
 
 	public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-		return attributes[indexPath.item]
+		return attributes[indexPath]
 	}
 }
 #endif
