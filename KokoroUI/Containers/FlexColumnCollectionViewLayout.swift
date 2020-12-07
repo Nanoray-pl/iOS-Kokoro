@@ -133,7 +133,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 	public var itemRowLength = ItemRowLength.ratio(1) {
 		didSet {
-			if oldValue == itemRowLength || delegate != nil { return }
+			if oldValue == itemRowLength { return }
 			invalidateLayout()
 		}
 	}
