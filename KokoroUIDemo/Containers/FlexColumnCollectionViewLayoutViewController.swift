@@ -426,7 +426,7 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 	}
 
 	private func updateItemCountToCompletelyFill() {
-		let itemCountToCompletelyFill = layout.itemCountToCompletelyFill(rowCount: layout.calculatedLayout.sections[0].rows.count, inSection: 0)
+		let itemCountToCompletelyFill = layout.itemCountToCompletelyFill(additionalRowCount: 0, existingItemCount: items.count, inSection: 0)
 		itemCountToCompletelyFillLabel.text = "Items to completely fill: \(itemCountToCompletelyFill)"
 	}
 }

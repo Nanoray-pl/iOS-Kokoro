@@ -7,12 +7,14 @@
 import UIKit
 
 public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate {
-	/// - Warning: This method can also be called for indexes outside of your data source's bounds when additional layout calculations are requested (for example, when calling `FlexColumnCollectionViewLayout.itemCountToCompletelyFill(rowCount:inSection:)`).
+	/// - Warning: This method can also be called for indexes outside of your data source's bounds when additional layout calculations are requested (for example, when calling `FlexColumnCollectionViewLayout.itemCountToCompletelyFill(additionalRowCount:existingItemCount:inSection:)`).
 	func columnConstraint(forRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint
 
 	func itemRowLength(at indexPath: IndexPath?, inColumn columnIndex: Int, inRow rowIndex: Int, inSection sectionIndex: Int, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength
 	func sectionSpacing(between precedingSectionIndex: Int, and followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 	func rowSpacing(between precedingRowIndex: Int, and followingRowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
+
+	/// - Warning: The value returned from this method cannot be smaller than `layout.columnSpacing` - if it is, `layout.columnSpacing` will be used instead.
 	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 }
 
@@ -299,12 +301,29 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		isLayoutInvalidated = true
 	}
 
-	public override func prepare() {
-		super.prepare()
-		if calculatedLayoutStorage == nil || isLayoutInvalidated {
+	private func shouldRecalculateLayout() -> Bool {
+		if isLayoutInvalidated { return true }
+		if let layout = calculatedLayoutStorage {
+			guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
+			return (0 ..< layout.sections.count).contains { sectionIndex in layout.sections[sectionIndex].rows.flatMap { $0.cells.map { $0.indexPath } }.count != collectionView.numberOfItems(inSection: sectionIndex) }
+		} else {
+			return true
+		}
+	}
+
+	private func recalculateLayoutIfNeeded(prepare: Bool) {
+		if shouldRecalculateLayout() {
 			calculatedLayoutStorage = calculateLayout()
 			isLayoutInvalidated = false
+			if prepare {
+				self.prepare()
+			}
 		}
+	}
+
+	public override func prepare() {
+		super.prepare()
+		recalculateLayoutIfNeeded(prepare: false)
 		attributes.removeAll()
 
 		let layout = calculatedLayout
@@ -501,6 +520,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	}
 
 	public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+		recalculateLayoutIfNeeded(prepare: true)
 		return attributes.values.filter { $0.frame.intersects(rect) }
 	}
 
@@ -516,20 +536,14 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		observers.removeFirst { $0.wrapped === observer }
 	}
 
-	/// Calculates the item count that would be required to fill all columns of `rowCount` rows of a specific section.
-	public func itemCountToCompletelyFill(rowCount: Int, inSection sectionIndex: Int) -> Int {
-		var rowColumnCounts = [Int]()
-		if !isLayoutInvalidated, let layout = calculatedLayoutStorage, let section = layout.sections[optional: sectionIndex] {
-			rowColumnCounts = section.rows.map(\.maxColumnCount)
-			if rowCount <= rowColumnCounts.count {
-				return rowColumnCounts.reduce(0, +)
-			}
-		}
-
+	public func itemCountToCompletelyFill(additionalRowCount: Int, existingItemCount: Int, inSection sectionIndex: Int) -> Int {
 		guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
+		var rowColumnCounts = [Int]()
+		var currentItemCount = 0
 		let availableColumnLength = self.availableColumnLength()
-		for rowIndex in rowColumnCounts.count ..< rowCount {
-			let columnConstraint = delegate?.columnConstraint(forRow: rowIndex, inSection: sectionIndex, in: self, in: collectionView) ?? self.columnConstraint
+
+		func addRow() {
+			let columnConstraint = delegate?.columnConstraint(forRow: rowColumnCounts.count, inSection: sectionIndex, in: self, in: collectionView) ?? self.columnConstraint
 			let columnCount: Int
 			switch columnConstraint {
 			case let .count(count):
@@ -538,8 +552,16 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 				columnCount = self.columnCount(forColumnLength: minColumnLength, availableColumnLength: availableColumnLength)
 			}
 			rowColumnCounts.append(columnCount)
+			currentItemCount += columnCount
 		}
-		return rowColumnCounts.reduce(0, +)
+
+		while currentItemCount < existingItemCount {
+			addRow()
+		}
+		for _ in 0 ..< additionalRowCount {
+			addRow()
+		}
+		return currentItemCount
 	}
 }
 #endif
