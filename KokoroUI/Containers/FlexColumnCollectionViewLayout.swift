@@ -10,7 +10,7 @@ public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate
 	/// - Warning: This method can also be called for indexes outside of your data source's bounds when additional layout calculations are requested (for example, when calling `FlexColumnCollectionViewLayout.itemCountToCompletelyFill(rowCount:inSection:)`).
 	func columnConstraint(forRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ColumnConstraint
 
-	func itemRowLength(at indexPath: IndexPath?, inColumn columnIndex: Int, inRow rowIndex: Int, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength
+	func itemRowLength(at indexPath: IndexPath?, inColumn columnIndex: Int, inRow rowIndex: Int, inSection sectionIndex: Int, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength
 	func sectionSpacing(between precedingSectionIndex: Int, and followingSectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 	func rowSpacing(between precedingRowIndex: Int, and followingRowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
 	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
@@ -21,7 +21,7 @@ public extension FlexColumnCollectionViewLayoutDelegate {
 		return layout.columnConstraint
 	}
 
-	func itemRowLength(at indexPath: IndexPath?, inColumn columnIndex: Int, inRow rowIndex: Int, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength {
+	func itemRowLength(at indexPath: IndexPath?, inColumn columnIndex: Int, inRow rowIndex: Int, inSection sectionIndex: Int, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength {
 		return layout.itemRowLength
 	}
 
@@ -60,9 +60,13 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
-	public enum ItemRowLength: Equatable, ExpressibleByFloatLiteral {
+	public enum ItemRowLength: Equatable, ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral {
 		case fixed(_ length: CGFloat)
 		case ratio(_ ratio: CGFloat)
+
+		public init(integerLiteral value: IntegerLiteralType) {
+			self = .fixed(CGFloat(value))
+		}
 
 		public init(floatLiteral value: FloatLiteralType) {
 			self = .fixed(CGFloat(value))
@@ -423,7 +427,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 				let itemRowLengths: [CGFloat] = (0 ..< itemIndexPaths.count).map { columnIndex in
 					guard let indexPath = itemIndexPaths[columnIndex] else { return 0 }
-					switch delegate?.itemRowLength(at: indexPath, inColumn: columnIndex, inRow: rowIndex, columnLength: columnLength, in: self, in: collectionView) ?? itemRowLength {
+					switch delegate?.itemRowLength(at: indexPath, inColumn: columnIndex, inRow: rowIndex, inSection: sectionIndex, columnLength: columnLength, in: self, in: collectionView) ?? itemRowLength {
 					case let .fixed(fixedItemRowLength):
 						return fixedItemRowLength
 					case let .ratio(ratio):
