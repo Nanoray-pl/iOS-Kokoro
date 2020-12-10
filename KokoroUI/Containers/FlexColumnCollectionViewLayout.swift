@@ -51,14 +51,22 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
-	public enum ColumnConstraint: Equatable {
+	public enum ColumnConstraint: Equatable, ExpressibleByIntegerLiteral {
 		case count(_ count: Int)
 		case minLength(_ minLength: CGFloat)
+
+		public init(integerLiteral value: IntegerLiteralType) {
+			self = .count(value)
+		}
 	}
 
-	public enum ItemRowLength: Equatable {
+	public enum ItemRowLength: Equatable, ExpressibleByFloatLiteral {
 		case fixed(_ length: CGFloat)
 		case ratio(_ ratio: CGFloat)
+
+		public init(floatLiteral value: FloatLiteralType) {
+			self = .fixed(CGFloat(value))
+		}
 	}
 
 	public enum Orientation: Hashable {
