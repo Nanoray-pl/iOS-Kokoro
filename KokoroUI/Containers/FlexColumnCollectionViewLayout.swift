@@ -194,8 +194,9 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		if let calculatedLayout = calculatedLayoutStorage {
 			return calculatedLayout
 		} else {
-			calculateLayout()
-			return calculatedLayoutStorage!
+			let calculatedLayout = calculateLayout()
+			calculatedLayoutStorage = calculatedLayout
+			return calculatedLayout
 		}
 	}
 
