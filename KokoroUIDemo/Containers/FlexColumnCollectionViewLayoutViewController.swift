@@ -29,6 +29,8 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 	private var itemCountLabel: UILabel!
 	private var itemCountStepper: UIStepper!
 
+	private var itemCountToCompletelyFillLabel: UILabel!
+
 	private var collectionView: UICollectionView!
 	private var layout: FlexColumnCollectionViewLayout!
 
@@ -57,6 +59,7 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 
 		view.backgroundColor = .systemBackground
 		layout = FlexColumnCollectionViewLayout()
+		layout.addObserver(self)
 
 		let stack = UIStackView().with { [parent = view!] in
 			$0.axis = .vertical
@@ -205,6 +208,11 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 				parent.addArrangedSubview($0)
 			}
 
+			itemCountToCompletelyFillLabel = UILabel().with { [parent = $0] in
+				$0.textColor = .label
+				parent.addArrangedSubview($0)
+			}
+
 			parent.addSubview($0)
 			constraints += $0.horizontalEdges(to: parent.safeAreaLayoutGuide)
 		}
@@ -239,6 +247,10 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 			self.itemDistributionSegmentedControl.selectedSegmentIndex = 0
 			self.columnConstraintSegmentedControl.selectedSegmentIndex = 1
 		}
+	}
+
+	deinit {
+		layout?.removeObserver(self)
 	}
 
 	@objc private func didChangeOrientationSegmentedControlValue(_ sender: UISegmentedControl) {
@@ -412,6 +424,11 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 	private func updateItemCountUI() {
 		itemCountLabel.text = "Items: \(items.count)"
 	}
+
+	private func updateItemCountToCompletelyFill() {
+		let itemCountToCompletelyFill = layout.itemCountToCompletelyFill(rowCount: layout.calculatedLayout.sections[0].rows.count, inSection: 0)
+		itemCountToCompletelyFillLabel.text = "Items to completely fill: \(itemCountToCompletelyFill)"
+	}
 }
 
 extension FlexColumnCollectionViewLayoutViewController: UICollectionViewDataSource {
@@ -427,7 +444,13 @@ extension FlexColumnCollectionViewLayoutViewController: UICollectionViewDataSour
 }
 
 extension FlexColumnCollectionViewLayoutViewController: FlexColumnCollectionViewLayoutDelegate {
-	func itemRowLength(at indexPath: IndexPath, inColumn columnIndex: Int, inRow rowIndex: Int, rowAttributes: FlexColumnCollectionViewLayout.RowAttributes, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength {
-		return .fixed(items[indexPath.item].length)
+	func itemRowLength(at indexPath: IndexPath?, inColumn columnIndex: Int, inRow rowIndex: Int, columnLength: CGFloat, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.ItemRowLength {
+		return indexPath.flatMap { .fixed(items[$0.item].length) } ?? layout.itemRowLength
+	}
+}
+
+extension FlexColumnCollectionViewLayoutViewController: FlexColumnCollectionViewLayoutObserver {
+	func didRecalculateLayout(to calculatedLayout: FlexColumnCollectionViewLayout.CalculatedLayout, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) {
+		updateItemCountToCompletelyFill()
 	}
 }
