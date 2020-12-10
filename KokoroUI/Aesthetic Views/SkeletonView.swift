@@ -62,8 +62,6 @@ public class SkeletonView: UIView {
 	/// Whether masking should be done on hidden views (including any of their superviews). Defaults to `true`.
 	public var masksHiddenViews = true
 
-	/// Whether masking should be done on hidden views (including any of their superviews) inside observed view hierarchies. Defaults to `false`.
-
 	public var animating = true {
 		didSet {
 			guard animating != oldValue, window != nil else {
