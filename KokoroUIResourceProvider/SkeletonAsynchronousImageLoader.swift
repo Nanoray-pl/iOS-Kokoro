@@ -12,58 +12,61 @@ import UIKit
 public class SkeletonAsynchronousImageLoader: AsynchronousImageLoader {
 	private let skeletonFactory: () -> SkeletonView
 
-	private var cancellables = Set<Combine.AnyCancellable>()
-	private let imageToCancellable = NSMapTable<UIImageView, Combine.AnyCancellable>(keyOptions: .weakMemory, valueOptions: .weakMemory)
-	private let imageToSkeleton = NSMapTable<UIImageView, SkeletonView>(keyOptions: .weakMemory, valueOptions: .weakMemory)
+	private struct Entry {
+		private(set) weak var target: AsynchronousImageLoaderTarget?
+		let cancellable: Combine.AnyCancellable
+		let skeleton: SkeletonView
+	}
+
+	private var entries = [Entry]() {
+		didSet {
+			guard entries.contains(where: { $0.target == nil }) else { return }
+			entries = entries.filter { $0.target != nil }
+		}
+	}
 
 	public init(skeletonFactory: @escaping () -> SkeletonView = { .init() }) {
 		self.skeletonFactory = skeletonFactory
 	}
 
-	private func cleanUp(for imageView: UIImageView) {
-		if let cancellable = imageToCancellable.object(forKey: imageView) {
-			cancellable.cancel()
-			cancellables.remove(cancellable)
-			imageToCancellable.removeObject(forKey: imageView)
-
-			imageToSkeleton.object(forKey: imageView)?.removeFromSuperview()
-			imageToSkeleton.removeObject(forKey: imageView)
+	private func cleanUp(for target: AsynchronousImageLoaderTarget) {
+		if let entry = entries.first(where: { $0.target === target }) {
+			entry.cancellable.cancel()
+			entry.skeleton.removeFromSuperview()
+			entries.removeFirst { $0.target === target }
 		}
 	}
 
-	public func loadImage<T>(from provider: T?, into imageView: UIImageView, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage? {
-		cleanUp(for: imageView)
+	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage? {
+		cleanUp(for: target)
 		guard let provider = provider else {
-			imageView.image = nil
+			target.image = nil
 			return
 		}
 
 		let skeleton = skeletonFactory()
-		imageView.insertSubview(skeleton, at: 0)
+		target.insertSubview(skeleton, at: 0)
 		skeleton.edgesToSuperview().activate()
 
 		let publisher = provider.resource()
 		let cancellable = publisher
 			.receive(on: DispatchQueue.main)
 			.catch(errorHandler)
-			.onCancel { [weak self, weak imageView] in
-				guard let self = self, let imageView = imageView else { return }
-				self.cleanUp(for: imageView)
+			.onCancel { [weak self, weak target] in
+				guard let self = self, let target = target else { return }
+				self.cleanUp(for: target)
 			}
 			.sink(
-				receiveCompletion: { [weak self, weak imageView] _ in
-					guard let self = self, let imageView = imageView else { return }
-					self.cleanUp(for: imageView)
+				receiveCompletion: { [weak self, weak target] _ in
+					guard let self = self, let target = target else { return }
+					self.cleanUp(for: target)
 				},
-				receiveValue: { [weak imageView] image in
-					imageView?.image = image
+				receiveValue: { [weak target] image in
+					target?.image = image
 					successCallback?(image)
 				}
 			)
-
-		cancellables.insert(cancellable)
-		imageToCancellable.setObject(cancellable, forKey: imageView)
-		imageToSkeleton.setObject(skeleton, forKey: imageView)
+		entries.append(.init(target: target, cancellable: cancellable, skeleton: skeleton))
 	}
 }
 #endif

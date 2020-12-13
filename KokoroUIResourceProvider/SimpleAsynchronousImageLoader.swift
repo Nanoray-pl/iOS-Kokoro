@@ -9,13 +9,23 @@ import KokoroResourceProvider
 import UIKit
 
 public class SimpleAsynchronousImageLoader: AsynchronousImageLoader {
-	private let cancellables = NSMapTable<UIImageView, Combine.AnyCancellable>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+	private struct Entry {
+		private(set) weak var target: AsynchronousImageLoaderTarget?
+		let cancellable: Combine.AnyCancellable
+	}
 
-	public func loadImage<T>(from provider: T?, into imageView: UIImageView, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage? {
-		cancellables.object(forKey: imageView)?.cancel()
+	private var entries = [Entry]() {
+		didSet {
+			guard entries.contains(where: { $0.target == nil }) else { return }
+			entries = entries.filter { $0.target != nil }
+		}
+	}
+
+	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T : ResourceProvider, T.Resource == UIImage? {
+		entries.first { $0.target === target }?.cancellable.cancel()
 		guard let provider = provider else {
-			imageView.image = nil
-			cancellables.removeObject(forKey: imageView)
+			target.image = nil
+			entries.removeFirst { $0.target === target }
 			return
 		}
 
@@ -24,19 +34,19 @@ public class SimpleAsynchronousImageLoader: AsynchronousImageLoader {
 			.buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
 			.receive(on: DispatchQueue.main)
 			.catch(errorHandler)
-			.onCancel { [weak cancellables, weak imageView] in
-				cancellables?.removeObject(forKey: imageView)
+			.onCancel { [weak self, weak target] in
+				self?.entries.removeFirst { $0.target === target }
 			}
 			.sink(
-				receiveCompletion: { [weak cancellables, weak imageView] _ in
-					cancellables?.removeObject(forKey: imageView)
+				receiveCompletion: { [weak self, weak target] _ in
+					self?.entries.removeFirst { $0.target === target }
 				},
-				receiveValue: { [weak imageView] image in
-					imageView?.image = image
+				receiveValue: { [weak target] image in
+					target?.image = image
 					successCallback?(image)
 				}
 			)
-		cancellables.setObject(cancellable, forKey: imageView)
+		entries.append(.init(target: target, cancellable: cancellable))
 	}
 }
 #endif

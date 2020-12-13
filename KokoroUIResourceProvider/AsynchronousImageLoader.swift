@@ -10,10 +10,11 @@ import KokoroUtils
 import KokoroResourceProvider
 import UIKit
 
-public protocol AsynchronousImageLoaderTarget {
+public protocol AsynchronousImageLoaderTarget: class {
 	var image: UIImage? { get set }
 
 	func addSubview(_ subview: UIView)
+	func insertSubview(_ subview: UIView, at index: Int)
 }
 
 extension UIImageView: AsynchronousImageLoaderTarget {}
