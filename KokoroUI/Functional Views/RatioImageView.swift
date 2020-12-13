@@ -11,6 +11,7 @@ import UIKit
 public class RatioImageView: UIView {
 	public var image: UIImage? {
 		didSet {
+			imageView.image = image
 			if let image = image, isAutomaticallyChangingRatio {
 				setRatio(image.size)
 			}
