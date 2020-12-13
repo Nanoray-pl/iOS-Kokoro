@@ -262,7 +262,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
-	public func availableColumnLength() -> CGFloat {
+	private func availableColumnLength() -> CGFloat {
 		guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
 		return orientational(collectionView.bounds, vertical: \.width, horizontal: \.height) - orientational(contentInsets, vertical: \.horizontal, horizontal: \.vertical)
 	}
@@ -288,7 +288,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	}
 
 	private func columnCount(forColumnLength columnLength: CGFloat, availableColumnLength: CGFloat) -> Int {
-		return Int((availableColumnLength + columnSpacing) / columnLength)
+		return max(Int((availableColumnLength + columnSpacing) / columnLength), 1)
 	}
 
 	public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -305,7 +305,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		if isLayoutInvalidated { return true }
 		if let layout = calculatedLayoutStorage {
 			guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
-			return (0 ..< layout.sections.count).contains { sectionIndex in layout.sections[sectionIndex].rows.flatMap { $0.cells.map { $0.indexPath } }.count != collectionView.numberOfItems(inSection: sectionIndex) }
+			return (0 ..< layout.sections.count).contains { sectionIndex in layout.sections[sectionIndex].rows.flatMap { $0.cells.map(\.indexPath) }.count != collectionView.numberOfItems(inSection: sectionIndex) }
 		} else {
 			return true
 		}
