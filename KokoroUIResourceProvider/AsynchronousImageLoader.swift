@@ -30,8 +30,8 @@ public extension AsynchronousImageLoader {
 		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: successCallback)
 	}
 
-	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
-		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: successCallback)
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>) where T: ResourceProvider, T.Resource == UIImage? {
+		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: nil)
 	}
 
 	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
