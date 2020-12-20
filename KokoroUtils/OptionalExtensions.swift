@@ -24,7 +24,7 @@ extension Optional: OptionalConvertible {
 		return self
 	}
 
-	func unwrap() throws -> Wrapped {
+	public func unwrap() throws -> Wrapped {
 		switch self {
 		case let .some(value):
 			return value
