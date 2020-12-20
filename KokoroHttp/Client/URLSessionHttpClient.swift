@@ -16,10 +16,26 @@ public class URLSessionHttpClient: HttpClient {
 	private let decoder: JSONDecoder
 	private let allowedStatusCodes: Set<Int>
 
-	init(session: URLSession, decoder: JSONDecoder, allowedStatusCodes: Set<Int> = Set(200 ..< 400)) {
+	private lazy var detailedJsonDecodingErrorFactory = DetailedJsonDecodingErrorFactory()
+
+	public init(session: URLSession, decoder: JSONDecoder, allowedStatusCodes: Set<Int> = Set(200 ..< 400)) {
 		self.session = session
 		self.decoder = decoder
 		self.allowedStatusCodes = allowedStatusCodes
+	}
+
+	private func decodeClosure<Output: Decodable>() -> ((_ data: Data) throws -> Output) {
+		return { [decoder, detailedJsonDecodingErrorFactory] data in
+			do {
+				return try decoder.decode(Output.self, from: data)
+			} catch {
+				if let error = error as? DecodingError {
+					throw detailedJsonDecodingErrorFactory.detailedError(from: error, for: data)
+				} else {
+					throw DetailedJsonDecodingError.undetailed(error)
+				}
+			}
+		}
 	}
 
 	private func publisher(for request: URLRequest) -> AnyPublisher<HttpClientOutput<(data: Data, response: URLResponse)>, Error> {
@@ -47,13 +63,14 @@ public class URLSessionHttpClient: HttpClient {
 	}
 
 	public func requestOptional<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output?>, Error> {
+		let decodeClosure: (_ data: Data) throws -> Output = self.decodeClosure()
 		return publisher(for: request)
-			.tryMap { [decoder] in
+			.tryMap {
 				return try $0.map { data, response in
 					if let response = response as? HTTPURLResponse, response.statusCode == 204 {
 						return nil
 					} else {
-						return try decoder.decode(Output.self, from: data)
+						return try decodeClosure(data)
 					}
 				}
 			}
@@ -61,8 +78,9 @@ public class URLSessionHttpClient: HttpClient {
 	}
 
 	public func request<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output>, Error> {
+		let decodeClosure: (_ data: Data) throws -> Output = self.decodeClosure()
 		return publisher(for: request)
-			.tryMap { [decoder] in try $0.map { try decoder.decode(Output.self, from: $0.data) } }
+			.tryMap { try $0.map { try decodeClosure($0.data) } }
 			.eraseToAnyPublisher()
 	}
 

@@ -80,8 +80,8 @@ public extension Logger {
 		log(.error, message(), file: file, function: function, line: line)
 	}
 
-	func log(_ level: LogLevel, _ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
-		log(level, message(), file: file, function: function, line: line)
+	func log(_ level: LogLevel, _ message: @autoclosure () -> String = "", sourceFile: String = #file, sourceFunction: String = #function, sourceLine: Int = #line) {
+		log(level, message(), file: sourceFile, function: sourceFunction, line: sourceLine)
 	}
 }
 

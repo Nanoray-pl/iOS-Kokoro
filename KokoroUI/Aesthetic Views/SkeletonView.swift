@@ -6,22 +6,24 @@
 #if canImport(UIKit)
 import UIKit
 
-public class SkeletonEntry: Equatable {
+public struct SkeletonEntry: Equatable {
+	public enum CoordinateSpace {
+		case transformed, untransformed
+	}
+
 	public enum Style: Equatable {
 		case rectangle(cornerRadius: RoundedView.CornerRadius? = nil)
 		case ellipse
 	}
 
 	public private(set) weak var view: UIView?
+	public let coordinateSpace: CoordinateSpace
 	public let style: Style
 
-	public init(masking view: UIView, style: Style) {
+	public init(masking view: UIView, coordinateSpace: CoordinateSpace = .transformed, style: Style) {
 		self.view = view
+		self.coordinateSpace = coordinateSpace
 		self.style = style
-	}
-
-	public static func == (lhs: SkeletonEntry, rhs: SkeletonEntry) -> Bool {
-		return lhs.view === rhs.view && lhs.style == rhs.style
 	}
 }
 
@@ -78,7 +80,10 @@ public class SkeletonView: UIView {
 
 	public var maskEntries = [SkeletonEntry]() {
 		didSet {
-			if maskEntries != oldValue {
+			if maskEntries == oldValue { return }
+			if maskEntries.contains(where: { $0.view == nil }) {
+				maskEntries = maskEntries.filter { $0.view != nil }
+			} else {
 				updateMask()
 			}
 		}
@@ -134,7 +139,19 @@ public class SkeletonView: UIView {
 		maskEntries.forEach {
 			guard let view = $0.view else { return }
 			if masksHiddenViews || !view.isHiddenIncludingSuperviews {
-				let frame = view.convert(view.bounds, to: self)
+				let frame: CGRect
+				switch $0.coordinateSpace {
+				case .transformed:
+					frame = view.convert(view.bounds, to: self)
+				case .untransformed:
+					let untransformedFrame = CGRect(
+						x: view.center.x - view.bounds.width * 0.5,
+						y: view.center.y - view.bounds.height * 0.5,
+						width: view.bounds.width,
+						height: view.bounds.height
+					)
+					frame = view.superview!.convert(untransformedFrame, to: self)
+				}
 				switch $0.style {
 				case let .rectangle(cornerRadius?):
 					let cornerRadiusPoints = cornerRadius.points(for: frame.size)

@@ -131,7 +131,7 @@ public class DefaultJobManager: JobManager, ObjectWith {
 		lock.acquireAndRun {
 			logger.debug("Unregistering handler: \(handler) (\(handler.identifier))")
 
-			let jobs = entryStorage.jobs(for: handler).map { $0.job }
+			let jobs = entryStorage.jobs(for: handler).map(\.job)
 			jobs.forEach { cancelJob($0) }
 
 			handlers[handler.identifier] = nil
