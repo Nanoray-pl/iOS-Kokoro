@@ -48,18 +48,6 @@ public extension Dictionary {
 	}
 }
 
-public extension Collection {
-	func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
-		var count = 0
-		try forEach {
-			if try predicate($0) {
-				count += 1
-			}
-		}
-		return count
-	}
-}
-
 public extension Array {
 	@discardableResult
 	mutating func removeFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
@@ -85,6 +73,25 @@ public extension Array {
 }
 
 public extension Sequence {
+	func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
+		var count = 0
+		try forEach {
+			if try predicate($0) {
+				count += 1
+			}
+		}
+		return count
+	}
+
+	func compactMapFirst<T>(_ mapper: (Element) throws -> T?) rethrows -> T? {
+		for element in self {
+			if let value = try mapper(element) {
+				return value
+			}
+		}
+		return nil
+	}
+
 	func sorted<A: Comparable>(by mapper: (Element) throws -> A, _ order: KeyPathSortOrder = .ascending) rethrows -> [Element] {
 		return try sorted { try order.areInOrder(lhs: $0, rhs: $1, mapper: mapper) }
 	}
