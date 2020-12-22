@@ -284,10 +284,10 @@ class FlexColumnCollectionViewLayoutViewController: UIViewController {
 	@objc private func didChangeLastColumnAlignmentSegmentedControlValue(_ sender: UISegmentedControl) {
 		switch layout.orientation {
 		case let .vertical(fillDirection, _, itemDistribution):
-			let values: [FlexColumnCollectionViewLayout.Orientation.LastColumnAlignment.Vertical] = [.left, .center, .right, .fillEqually]
+			let values: [FlexColumnCollectionViewLayout.Orientation.LastColumnAlignment.Vertical] = [.left, .center, .right, .fillEqually()]
 			layout.orientation = .vertical(fillDirection: fillDirection, lastColumnAlignment: values[sender.selectedSegmentIndex], itemDistribution: itemDistribution)
 		case let .horizontal(fillDirection, _, itemDistribution):
-			let values: [FlexColumnCollectionViewLayout.Orientation.LastColumnAlignment.Horizontal] = [.top, .center, .bottom, .fillEqually]
+			let values: [FlexColumnCollectionViewLayout.Orientation.LastColumnAlignment.Horizontal] = [.top, .center, .bottom, .fillEqually()]
 			layout.orientation = .horizontal(fillDirection: fillDirection, lastColumnAlignment: values[sender.selectedSegmentIndex], itemDistribution: itemDistribution)
 		}
 	}

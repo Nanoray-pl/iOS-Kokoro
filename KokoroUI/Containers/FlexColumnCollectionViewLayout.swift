@@ -87,12 +87,12 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 
 		public enum LastColumnAlignment {
-			public enum Vertical {
-				case left, center, right, fillEqually
+			public enum Vertical: Hashable {
+				case left, center, right, fillEqually(maxItemsToRedistributePerRow: Int = 0)
 			}
 
-			public enum Horizontal {
-				case top, center, bottom, fillEqually
+			public enum Horizontal: Hashable {
+				case top, center, bottom, fillEqually(maxItemsToRedistributePerRow: Int = 0)
 			}
 		}
 
@@ -371,6 +371,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		calculatedContentLength = leadingRowOffset + currentRowOffset + trailingRowOffset
 	}
 
+	// swiftlint:disable:next cyclomatic_complexity
 	private func calculateLayout() -> CalculatedLayout {
 		guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
 
@@ -379,6 +380,17 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 		var calculatedSections = [CalculatedLayout.Section]()
 		var calculatedSectionSpacings = [CGFloat]()
+
+		let isFillingRowEqually: Bool
+		let maxItemsToRedistributePerRow: Int
+		switch orientation {
+		case let .vertical(_, lastColumnAlignment: .fillEqually(orientationMaxItemsToRedistributePerRow), _), let .horizontal(_, lastColumnAlignment: .fillEqually(orientationMaxItemsToRedistributePerRow), _):
+			isFillingRowEqually = true
+			maxItemsToRedistributePerRow = orientationMaxItemsToRedistributePerRow
+		case .vertical, .horizontal:
+			isFillingRowEqually = false
+			maxItemsToRedistributePerRow = 0
+		}
 
 		for sectionIndex in 0 ..< collectionView.numberOfSections {
 			if sectionIndex > 0 {
@@ -391,6 +403,8 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 			let numberOfItems = collectionView.numberOfItems(inSection: sectionIndex)
 			var rowIndex = 0
 			var itemIndex = 0
+			var baseRowAttributesList = [RowAttributes]()
+			var rowItemIndexPaths = [[IndexPath?]]()
 
 			while itemIndex < numberOfItems {
 				let baseRowAttributes: RowAttributes
@@ -407,31 +421,62 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 				let rowAttributes: RowAttributes
 				let itemSlotCountInRow: Int
-				let isFillingRowEqually: Bool
 				switch orientation {
 				case .vertical(_, lastColumnAlignment: .left, _), .horizontal(_, lastColumnAlignment: .top, _), .vertical(_, lastColumnAlignment: .center, _), .horizontal(_, lastColumnAlignment: .center, _), .vertical(_, lastColumnAlignment: .right, _), .horizontal(_, lastColumnAlignment: .bottom, _):
-					isFillingRowEqually = false
 					itemSlotCountInRow = baseRowAttributes.columnCount
 					rowAttributes = baseRowAttributes
 				case .vertical(_, lastColumnAlignment: .fillEqually, _), .horizontal(_, lastColumnAlignment: .fillEqually, _):
-					isFillingRowEqually = true
 					itemSlotCountInRow = itemCountInRow
 					rowAttributes = (itemCountInRow != baseRowAttributes.columnCount ? calculateRowAttributes(availableColumnLength: availableColumnLength, columnConstraint: .count(itemSlotCountInRow)) : baseRowAttributes)
 				}
 
 				var itemIndexPaths: [IndexPath?] = (0 ..< itemCountInRow).map { IndexPath(item: itemIndex + $0, section: sectionIndex) }
+				itemIndexPaths.append(contentsOf: Array(repeating: nil, count: rowAttributes.columnCount - itemIndexPaths.count))
+				rowItemIndexPaths.append(itemIndexPaths)
+				baseRowAttributesList.append(baseRowAttributes)
+				rowIndex += 1
+				itemIndex += itemCountInRow
+			}
+
+			if isFillingRowEqually, rowItemIndexPaths.count >= 2, maxItemsToRedistributePerRow > 0, let maxColumnCount = baseRowAttributesList.last?.columnCount, var currentColumnCount = rowItemIndexPaths.last?.count, currentColumnCount < maxColumnCount - 1 {
+				// redistribute items
+				var redistributedCounts = rowItemIndexPaths.map { _ in 0 }
+				while true {
+					var modified = false
+					for sourceRowIndex in (0 ... rowItemIndexPaths.count - 2).reversed() where redistributedCounts[sourceRowIndex] < maxItemsToRedistributePerRow && baseRowAttributesList[sourceRowIndex].columnCount - rowItemIndexPaths[sourceRowIndex].count < maxColumnCount - currentColumnCount && rowItemIndexPaths[sourceRowIndex].count > currentColumnCount + 1 {
+						for targetRowIndex in sourceRowIndex + 1 ..< rowItemIndexPaths.count {
+							let indexPath = rowItemIndexPaths[targetRowIndex - 1].removeLast()
+							rowItemIndexPaths[targetRowIndex].insert(indexPath, at: 0)
+						}
+						redistributedCounts[sourceRowIndex] += 1
+						currentColumnCount += 1
+						if currentColumnCount >= maxColumnCount - 1 { break }
+						modified = true
+					}
+					if !modified { break }
+				}
+			}
+
+			itemIndex = 0
+			for rowIndex in 0 ..< rowItemIndexPaths.count {
+				let baseRowAttributes = baseRowAttributesList[rowIndex]
+				var itemIndexPaths = rowItemIndexPaths[rowIndex]
+				let itemSlotCountInRow = itemIndexPaths.count
+				let itemCountInRow = itemIndexPaths.count { $0 != nil }
 				switch orientation {
 				case .vertical(fillDirection: .leftToRight, _, _), .horizontal(fillDirection: .topToBottom, _, _):
 					break
 				case .vertical(fillDirection: .rightToLeft, _, _), .horizontal(fillDirection: .bottomToTop, _, _):
 					itemIndexPaths = itemIndexPaths.reversed()
 				}
-				itemIndexPaths.append(contentsOf: Array(repeating: nil, count: rowAttributes.columnCount - itemIndexPaths.count))
 
-				let columnSpacings = (1 ..< rowAttributes.columnCount).map { columnIndex in min(delegate?.columnSpacing(between: (indexPath: itemIndexPaths[optional: columnIndex - 1].flatMap { $0 }, columnIndex: columnIndex - 1), and: (indexPath: itemIndexPaths[optional: columnIndex].flatMap { $0 }, columnIndex: columnIndex), inRow: rowIndex, inSection: sectionIndex, in: self, in: collectionView) ?? columnSpacing, columnSpacing) }
-				let columnLength = (columnSpacings.allSatisfy { $0 == columnSpacing } ? rowAttributes.columnLength : self.columnLength(forColumnCount: itemSlotCountInRow, availableColumnLength: availableColumnLength, columnSpacings: columnSpacings))
+				let columnSpacings = (1 ..< itemIndexPaths.count).map { columnIndex in min(delegate?.columnSpacing(between: (indexPath: itemIndexPaths[optional: columnIndex - 1].flatMap { $0 }, columnIndex: columnIndex - 1), and: (indexPath: itemIndexPaths[optional: columnIndex].flatMap { $0 }, columnIndex: columnIndex), inRow: rowIndex, inSection: sectionIndex, in: self, in: collectionView) ?? columnSpacing, columnSpacing) }
+				let columnLength = self.columnLength(forColumnCount: itemSlotCountInRow, availableColumnLength: availableColumnLength)
 
-				let totalRowLength = CGFloat(itemCountInRow) * columnLength + columnSpacings.reduce(0, +)
+				let firstIndexPathIndex = itemIndexPaths.firstIndex { $0 != nil }!
+				let lastIndexPathIndex = itemIndexPaths.lastIndex { $0 != nil }!
+				let usedColumnSpacingSum = firstIndexPathIndex == lastIndexPathIndex ? 0 : columnSpacings[firstIndexPathIndex ..< lastIndexPathIndex].reduce(0, +)
+				let totalRowLength = CGFloat(itemCountInRow) * columnLength + usedColumnSpacingSum
 				let alignmentColumnOffset: CGFloat
 				switch orientation {
 				case .vertical(_, lastColumnAlignment: .left, _), .horizontal(_, lastColumnAlignment: .top, _):
@@ -490,7 +535,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 					.init(
 						index: rowIndex,
 						rowLength: maxItemRowLength,
-						maxColumnCount: rowAttributes.columnCount,
+						maxColumnCount: baseRowAttributes.columnCount,
 						isFillingEqually: isFillingRowEqually,
 						columnLength: columnLength,
 						cells: calculatedCells,
@@ -498,7 +543,6 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 						columnOffset: alignmentColumnOffset
 					)
 				)
-				rowIndex += 1
 			}
 
 			calculatedSections.append(
