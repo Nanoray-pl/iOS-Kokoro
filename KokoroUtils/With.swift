@@ -50,6 +50,7 @@ extension Bool: ValueWith {}
 extension Int: ValueWith {}
 extension Float: ValueWith {}
 extension Double: ValueWith {}
+extension Decimal: ValueWith {}
 extension String: ValueWith {}
 
 #if canImport(ObjectiveC)
@@ -62,6 +63,7 @@ extension NSObject: ObjectWith {}
 import Foundation
 
 extension URLRequest: ValueWith {}
+extension Date: ValueWith {}
 extension DateComponents: ValueWith {}
 #endif
 
@@ -73,6 +75,7 @@ extension CGPoint: ValueWith {}
 extension CGVector: ValueWith {}
 extension CGPath: ValueWith {}
 extension CGSize: ValueWith {}
+extension CGAffineTransform: ValueWith {}
 #endif
 
 #if canImport(QuartzCore)

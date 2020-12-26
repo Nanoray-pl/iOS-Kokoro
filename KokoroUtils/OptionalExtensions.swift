@@ -34,12 +34,6 @@ extension Optional: OptionalConvertible {
 	}
 }
 
-public extension Optional where Wrapped: StringProtocol {
-	var isEmpty: Bool {
-		return self?.isEmpty != false
-	}
-}
-
 public extension Result where Failure == Error {
 	func tryMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Failure> {
 		switch self {

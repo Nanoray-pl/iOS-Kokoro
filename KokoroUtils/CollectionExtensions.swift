@@ -3,10 +3,48 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public extension Set {
+public protocol EmptyInitializableCollection: Collection {
+	init()
+}
+
+public extension Collection {
+	var nonEmpty: Self? {
+		return isEmpty ? nil : self
+	}
+}
+
+public extension Optional where Wrapped: Collection {
+	var isEmpty: Bool {
+		return self?.isEmpty != false
+	}
+
+	var nonEmpty: Wrapped? {
+		switch self {
+		case let .some(collection):
+			return collection.nonEmpty
+		case .none:
+			return nil
+		}
+	}
+}
+
+public extension Optional where Wrapped: EmptyInitializableCollection {
+	var nonNil: Wrapped {
+		switch self {
+		case let .some(collection):
+			return collection
+		case .none:
+			return .init()
+		}
+	}
+}
+
+extension String: EmptyInitializableCollection {}
+
+extension Set: EmptyInitializableCollection {
 	/// Toggles an element in the Set (that is, if the element exists in the Set, it gets removed from it; otherwise it gets inserted). Returns whether the set contains the element after the operation.
 	@discardableResult
-	mutating func toggle(_ element: Element) -> Bool {
+	public mutating func toggle(_ element: Element) -> Bool {
 		if contains(element) {
 			remove(element)
 			return false
@@ -21,12 +59,12 @@ public enum DictionaryMergePolicy {
 	case keepCurrent, overwrite
 }
 
-public extension Dictionary {
-	mutating func computeIfAbsent(for key: Key, initializer: @autoclosure () throws -> Value) rethrows -> Value {
+extension Dictionary: EmptyInitializableCollection {
+	public mutating func computeIfAbsent(for key: Key, initializer: @autoclosure () throws -> Value) rethrows -> Value {
 		return try computeIfAbsent(for: key) { _ in try initializer() }
 	}
 
-	mutating func computeIfAbsent(for key: Key, initializer: (_ key: Key) throws -> Value) rethrows -> Value {
+	public mutating func computeIfAbsent(for key: Key, initializer: (_ key: Key) throws -> Value) rethrows -> Value {
 		if let value = self[key] {
 			return value
 		}
@@ -36,7 +74,7 @@ public extension Dictionary {
 		return value
 	}
 
-	func merging(_ other: [Key: Value], withMergePolicy mergePolicy: DictionaryMergePolicy) -> [Key: Value] {
+	public func merging(_ other: [Key: Value], withMergePolicy mergePolicy: DictionaryMergePolicy) -> [Key: Value] {
 		return merging(other, uniquingKeysWith: { current, new in
 			switch mergePolicy {
 			case .keepCurrent:
@@ -48,9 +86,9 @@ public extension Dictionary {
 	}
 }
 
-public extension Array {
+extension Array: EmptyInitializableCollection {
 	@discardableResult
-	mutating func removeFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+	public mutating func removeFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
 		if let index = try firstIndex(where: predicate) {
 			return remove(at: index)
 		} else {
@@ -59,7 +97,7 @@ public extension Array {
 	}
 
 	@discardableResult
-	mutating func removeLast(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+	public mutating func removeLast(where predicate: (Element) throws -> Bool) rethrows -> Element? {
 		if let index = try lastIndex(where: predicate) {
 			return remove(at: index)
 		} else {
@@ -67,7 +105,7 @@ public extension Array {
 		}
 	}
 
-	subscript(optional index: Index) -> Element? {
+	public subscript(optional index: Index) -> Element? {
 		return index >= startIndex && index < endIndex ? self[index] : nil
 	}
 }
@@ -129,3 +167,9 @@ public enum KeyPathSortOrder {
 		return areInOrder(lhs: try mapper(lhs), rhs: try mapper(rhs))
 	}
 }
+
+#if canImport(Foundation)
+import Foundation
+
+extension Data: EmptyInitializableCollection {}
+#endif
