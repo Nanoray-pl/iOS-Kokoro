@@ -57,8 +57,8 @@ public extension CGRect {
 public extension CGPoint {
 	static let horizontalMirror = CGPoint(x: -1, y: 1)
 	static let verticalMirror = CGPoint(x: 1, y: -1)
-	static let onlyWidth = CGPoint(x: 1, y: 0)
-	static let onlyHeight = CGPoint(x: 0, y: 1)
+	static let onlyX = CGPoint(x: 1, y: 0)
+	static let onlyY = CGPoint(x: 0, y: 1)
 
 	static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
 		return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
@@ -90,8 +90,6 @@ public extension CGPoint {
 }
 
 public extension CGSize {
-	static let horizontalMirror = CGSize(width: -1, height: 1)
-	static let verticalMirror = CGSize(width: 1, height: -1)
 	static let onlyWidth = CGSize(width: 1, height: 0)
 	static let onlyHeight = CGSize(width: 0, height: 1)
 

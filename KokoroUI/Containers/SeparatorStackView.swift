@@ -7,21 +7,29 @@
 import UIKit
 
 /// A `UIStackView`-like view, which automatically adds separators between its arranged subviews, which can either be fixed size or dynamically sized via Auto Layout.
-public class SeparatorStackView: UIView {
-	public enum SeparatorLength: Hashable {
-		case fixed(points: CGFloat)
+public class SeparatorStackView<ContentView: UIView>: UIView {
+	public enum SeparatorLength: ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral, Hashable {
+		case fixed(_ points: CGFloat)
 		case dynamic
+
+		public init(integerLiteral value: IntegerLiteralType) {
+			self = .fixed(CGFloat(value))
+		}
+
+		public init(floatLiteral value: FloatLiteralType) {
+			self = .fixed(CGFloat(value))
+		}
 	}
 
 	private class EntryView: UIView {
-		let contentView: UIView
+		let contentView: ContentView
 		weak var separatorView: UIView?
 		var customSeparatorLength: SeparatorLength?
 		private let observation: NSKeyValueObservation
 
 		private(set) var stackView: UIStackView!
 
-		init(with contentView: UIView, observation: NSKeyValueObservation) {
+		init(with contentView: ContentView, observation: NSKeyValueObservation) {
 			self.contentView = contentView
 			self.observation = observation
 			super.init(frame: .zero)
@@ -44,7 +52,7 @@ public class SeparatorStackView: UIView {
 			}
 		}
 
-		func setupSeparator(owner: SeparatorStackView) {
+		func setupSeparator(owner: SeparatorStackView<ContentView>) {
 			isHidden = contentView.isHidden
 			separatorView?.removeFromSuperview()
 			if owner.entryViews.last(where: { !$0.contentView.isHidden }) != self {
@@ -74,7 +82,7 @@ public class SeparatorStackView: UIView {
 		}
 	}
 
-	public var separatorBuilder: (_ previousView: UIView, _ nextView: UIView) -> UIView = { _, _ in UIView() } {
+	public var separatorBuilder: (_ previousView: ContentView, _ nextView: ContentView) -> UIView = { _, _ in UIView() } {
 		didSet {
 			updateSeparators()
 		}
@@ -92,10 +100,28 @@ public class SeparatorStackView: UIView {
 		}
 	}
 
-	public var separatorLength = SeparatorLength.fixed(points: 0) {
+	public var separatorLength: SeparatorLength = 0 {
 		didSet {
 			guard separatorLength != oldValue else { return }
 			updateSeparators()
+		}
+	}
+
+	public var insetsContentLayoutMarginsFromSafeArea: Bool {
+		get {
+			return stackView.insetsLayoutMarginsFromSafeArea
+		}
+		set {
+			stackView.insetsLayoutMarginsFromSafeArea = newValue
+		}
+	}
+
+	public var isContentLayoutMarginsRelativeArrangement: Bool {
+		get {
+			return stackView.isLayoutMarginsRelativeArrangement
+		}
+		set {
+			stackView.isLayoutMarginsRelativeArrangement = newValue
 		}
 	}
 
@@ -106,6 +132,10 @@ public class SeparatorStackView: UIView {
 		set {
 			stackView.layoutMargins = newValue
 		}
+	}
+
+	public var arrangedSubviews: [ContentView] {
+		return entryViews.map(\.contentView)
 	}
 
 	private var entryViews = [EntryView]()
@@ -126,18 +156,16 @@ public class SeparatorStackView: UIView {
 		defer { constraints.activate() }
 
 		stackView = UIStackView().with { [parent = self] in
-			$0.isLayoutMarginsRelativeArrangement = true
-			$0.insetsLayoutMarginsFromSafeArea = false
 			parent.addSubview($0)
 			constraints += $0.edgesToSuperview()
 		}
 	}
 
-	public func addArrangedSubview(_ view: UIView) {
+	public func addArrangedSubview(_ view: ContentView) {
 		insertArrangedSubview(view, at: entryViews.count)
 	}
 
-	public func insertArrangedSubview(_ view: UIView, at index: Int) {
+	public func insertArrangedSubview(_ view: ContentView, at index: Int) {
 		let observation = view.observe(\.isHidden) { [weak self] _, _ in
 			self?.updateSeparators()
 		}
@@ -148,7 +176,7 @@ public class SeparatorStackView: UIView {
 		updateSeparators()
 	}
 
-	public func removeArrangedSubview(_ view: UIView) {
+	public func removeArrangedSubview(_ view: ContentView) {
 		guard let index = entryViews.firstIndex(where: { $0.contentView == view }) else { return }
 		let entryView = entryViews[index]
 		entryViews.remove(at: index)
@@ -156,7 +184,7 @@ public class SeparatorStackView: UIView {
 		updateSeparators()
 	}
 
-	public func setCustomSeparatorLength(_ separatorLength: SeparatorLength?, after view: UIView) {
+	public func setCustomSeparatorLength(_ separatorLength: SeparatorLength?, after view: ContentView) {
 		guard let index = entryViews.firstIndex(where: { $0.contentView == view }) else { return }
 		let entryView = entryViews[index]
 		if entryView.customSeparatorLength != separatorLength {
