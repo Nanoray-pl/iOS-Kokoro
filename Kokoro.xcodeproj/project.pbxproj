@@ -18,6 +18,7 @@
 		AA16EBE1257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */; };
 		AA16EBF1257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */; };
 		AA3E3069258F618800981F90 /* DetailedJsonDecodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E3068258F618800981F90 /* DetailedJsonDecodingError.swift */; };
+		AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */; };
 		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
 		AA42D3C4256A752E004604D2 /* RatioImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3C3256A752E004604D2 /* RatioImageView.swift */; };
 		AA42D3D9256A781D004604D2 /* KokoroUIResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA42D3D7256A781D004604D2 /* KokoroUIResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -267,6 +268,7 @@
 		AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayout.swift; sourceTree = "<group>"; };
 		AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayoutViewController.swift; sourceTree = "<group>"; };
 		AA3E3068258F618800981F90 /* DetailedJsonDecodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedJsonDecodingError.swift; sourceTree = "<group>"; };
+		AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunLoopScheduler.swift; sourceTree = "<group>"; };
 		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
 		AA42D3C3256A752E004604D2 /* RatioImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatioImageView.swift; sourceTree = "<group>"; };
 		AA42D3D5256A781D004604D2 /* KokoroUIResourceProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUIResourceProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -536,6 +538,7 @@
 			children = (
 				AA16EAFA257A7818001C30E9 /* Scheduler.swift */,
 				AA16EB09257A78F0001C30E9 /* DispatchQueueScheduler.swift */,
+				AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */,
 				AA16EB23257A7917001C30E9 /* SynchronousScheduler.swift */,
 			);
 			path = Scheduler;
@@ -1794,6 +1797,7 @@
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
 				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
+				AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */,
 				AA16EAE1257A74DA001C30E9 /* Lock.swift in Sources */,
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */,

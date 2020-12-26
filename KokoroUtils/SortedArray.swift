@@ -54,7 +54,7 @@ public struct SortedArray<Element>: Collection {
 	}
 
 	public mutating func removeAll() {
-		array = []
+		array.removeAll()
 	}
 
 	private static func areEqual<Element>(lhs: Element, rhs: Element, comparator: @escaping (Element, Element) -> Bool) -> Bool {

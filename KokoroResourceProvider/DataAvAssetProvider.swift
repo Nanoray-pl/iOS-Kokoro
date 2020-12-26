@@ -7,6 +7,7 @@
 import AVFoundation
 import Combine
 import Foundation
+import KokoroUtils
 
 public class DataAvAssetProviderFactory: ResourceProviderFactory {
 	public typealias Input = (data: Data, identifier: String)
@@ -24,7 +25,7 @@ public class DataAvAssetProvider: ResourceProvider {
 
 	private let data: Data
 	private let dataIdentifier: String
-	private let queue = DispatchQueue(label: "uk.os.SecretStories.DataAvAssetProvider.queue", attributes: .concurrent)
+	private let lock = ObjcLock()
 	private var fileUrl: URL?
 
 	public var identifier: String {
@@ -46,7 +47,7 @@ public class DataAvAssetProvider: ResourceProvider {
 		var instance: DataAvAssetProvider! = self
 		return Deferred {
 			return Future { promise in
-				instance.queue.sync {
+				instance.lock.acquireAndRun {
 					if instance.fileUrl == nil {
 						do {
 							let url = FileManager.default.temporaryDirectory.appendingPathComponent("asset-\(UUID().uuidString)")

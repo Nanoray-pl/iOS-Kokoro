@@ -9,10 +9,7 @@ public protocol ValueWith: AnyWith {}
 
 public extension AnyWith {
 	func takeIf(_ block: (Self) throws -> Bool) rethrows -> Self? {
-		if try block(self) {
-			return self
-		}
-		return nil
+		return try block(self) ? self : nil
 	}
 }
 

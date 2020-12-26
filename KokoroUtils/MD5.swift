@@ -7,7 +7,7 @@
 import CryptoKit
 import Foundation
 
-public struct MD5: CustomStringConvertible {
+public struct MD5: Hashable, CustomStringConvertible {
 	public let digest: Data
 
 	public var hex: String {

@@ -6,7 +6,7 @@
 #if canImport(UIKit)
 import UIKit
 
-public enum Animated {
+public enum Animated: ExpressibleByBooleanLiteral {
 	public static let defaultDuration: TimeInterval = 0.4
 
 	case motionBased, `false`, `true`
@@ -20,6 +20,10 @@ public enum Animated {
 		case .true:
 			return true
 		}
+	}
+
+	public init(booleanLiteral value: Bool) {
+		self = (value ? .true : .false)
 	}
 
 	@discardableResult
@@ -86,14 +90,6 @@ public enum Animated {
 			completion?()
 			return nil
 		}
-	}
-}
-
-extension Animated: ExpressibleByBooleanLiteral {
-	public typealias BooleanLiteralType = Bool
-
-	public init(booleanLiteral value: Bool) {
-		self = (value ? .true : .false)
 	}
 }
 

@@ -34,8 +34,8 @@ extension Optional: OptionalConvertible {
 	}
 }
 
-public extension Result where Failure == Error {
-	func tryMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Failure> {
+public extension Result {
+	func tryMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Error> {
 		switch self {
 		case let .success(success):
 			do {
