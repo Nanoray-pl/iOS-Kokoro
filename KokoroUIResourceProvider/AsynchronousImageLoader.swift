@@ -25,7 +25,7 @@ public protocol AsynchronousImageLoader: class {
 }
 
 public extension AsynchronousImageLoader {
-	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
 		let provider: AnyResourceProvider<UIImage?>? = provider.flatMap { (provider: T) -> AnyResourceProvider<UIImage?> in MapResourceProvider(wrapping: provider, identifier: PrivateSourceLocation().description, mapFunction: .init { $0 }).eraseToAnyResourceProvider() }
 		let errorHandler: (Error) -> AnyPublisher<UIImage?, Never> = { errorHandler($0).map { $0 }.eraseToAnyPublisher() }
 		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: successCallback)
@@ -35,7 +35,7 @@ public extension AsynchronousImageLoader {
 		loadImage(from: provider, into: target, errorHandler: errorHandler, successCallback: nil)
 	}
 
-	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage? = nil, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage? {
 		loadImage(
 			from: provider,
 			into: target,
@@ -47,7 +47,7 @@ public extension AsynchronousImageLoader {
 		)
 	}
 
-	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
+	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, logger: Logger, placeholder: UIImage? = nil, file: String = #file, function: String = #function, line: Int = #line, successCallback: ((UIImage?) -> Void)? = nil) where T: ResourceProvider, T.Resource == UIImage {
 		loadImage(
 			from: provider,
 			into: target,
