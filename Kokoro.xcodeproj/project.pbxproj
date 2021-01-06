@@ -27,6 +27,10 @@
 		AA42D423256A8056004604D2 /* SimpleAsynchronousImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D422256A8056004604D2 /* SimpleAsynchronousImageLoader.swift */; };
 		AA42D449256A80EA004604D2 /* SkeletonAsynchronousImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D448256A80EA004604D2 /* SkeletonAsynchronousImageLoader.swift */; };
 		AA42D457256A8154004604D2 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D456256A8154004604D2 /* SkeletonView.swift */; };
+		AA58BA3F259DF04200ED6214 /* DiffableDataSourceSnapshotDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA58BA3E259DF04200ED6214 /* DiffableDataSourceSnapshotDifference.swift */; };
+		AA58BA5B259E25C100ED6214 /* CollectionDiffStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA58BA5A259E25C100ED6214 /* CollectionDiffStrategy.swift */; };
+		AA58BA85259E27A200ED6214 /* InsertionRemovalCollectionDiffStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA58BA84259E27A200ED6214 /* InsertionRemovalCollectionDiffStrategy.swift */; };
+		AA58BA94259E293900ED6214 /* InsertionRemovalMoveCollectionDiffStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA58BA93259E293900ED6214 /* InsertionRemovalMoveCollectionDiffStrategy.swift */; };
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
 		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
@@ -279,6 +283,10 @@
 		AA42D422256A8056004604D2 /* SimpleAsynchronousImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAsynchronousImageLoader.swift; sourceTree = "<group>"; };
 		AA42D448256A80EA004604D2 /* SkeletonAsynchronousImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonAsynchronousImageLoader.swift; sourceTree = "<group>"; };
 		AA42D456256A8154004604D2 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
+		AA58BA3E259DF04200ED6214 /* DiffableDataSourceSnapshotDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableDataSourceSnapshotDifference.swift; sourceTree = "<group>"; };
+		AA58BA5A259E25C100ED6214 /* CollectionDiffStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDiffStrategy.swift; sourceTree = "<group>"; };
+		AA58BA84259E27A200ED6214 /* InsertionRemovalCollectionDiffStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertionRemovalCollectionDiffStrategy.swift; sourceTree = "<group>"; };
+		AA58BA93259E293900ED6214 /* InsertionRemovalMoveCollectionDiffStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertionRemovalMoveCollectionDiffStrategy.swift; sourceTree = "<group>"; };
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
 		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
@@ -606,6 +614,16 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AA58BA69259E25C400ED6214 /* CollectionDiffStrategy */ = {
+			isa = PBXGroup;
+			children = (
+				AA58BA5A259E25C100ED6214 /* CollectionDiffStrategy.swift */,
+				AA58BA84259E27A200ED6214 /* InsertionRemovalCollectionDiffStrategy.swift */,
+				AA58BA93259E293900ED6214 /* InsertionRemovalMoveCollectionDiffStrategy.swift */,
+			);
+			path = CollectionDiffStrategy;
+			sourceTree = "<group>";
+		};
 		AA5AEB8D25557D7700516C8D /* KokoroJobs */ = {
 			isa = PBXGroup;
 			children = (
@@ -724,6 +742,7 @@
 			children = (
 				AAD3549A25286A16007C63EF /* Bootstrap */,
 				AA16EB08257A7849001C30E9 /* Scheduler */,
+				AA58BA69259E25C400ED6214 /* CollectionDiffStrategy */,
 				AAD354A025286B1C007C63EF /* With.swift */,
 				AAD355C72528B3D7007C63EF /* Identifier.swift */,
 				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
@@ -779,6 +798,7 @@
 			children = (
 				AAD354C025287281007C63EF /* Geometry.swift */,
 				AAD354C4252872C8007C63EF /* Insets.swift */,
+				AA58BA3E259DF04200ED6214 /* DiffableDataSourceSnapshotDifference.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -1802,10 +1822,13 @@
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,
+				AA58BA5B259E25C100ED6214 /* CollectionDiffStrategy.swift in Sources */,
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
+				AA58BA94259E293900ED6214 /* InsertionRemovalMoveCollectionDiffStrategy.swift in Sources */,
 				AA5AECEA2556B10D00516C8D /* MD5.swift in Sources */,
 				AA16EB0A257A78F0001C30E9 /* DispatchQueueScheduler.swift in Sources */,
 				AA16EB24257A7917001C30E9 /* SynchronousScheduler.swift in Sources */,
+				AA58BA85259E27A200ED6214 /* InsertionRemovalCollectionDiffStrategy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1816,6 +1839,7 @@
 				AAEFB1302542DACB003AA60E /* BorderedView.swift in Sources */,
 				AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */,
 				AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */,
+				AA58BA3F259DF04200ED6214 /* DiffableDataSourceSnapshotDifference.swift in Sources */,
 				AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */,
 				AAD3550225288947007C63EF /* ClickThroughCollectionView.swift in Sources */,
 				AAD354C125287281007C63EF /* Geometry.swift in Sources */,
