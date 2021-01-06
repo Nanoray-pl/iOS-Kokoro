@@ -45,6 +45,20 @@ public protocol FlexColumnCollectionViewLayoutObserver: class {
 }
 
 public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
+	private static let contentBackgroundZIndex = -6
+	private static let insetContentBackgroundZIndex = -5
+	private static let sectionBackgroundZIndex = -4
+	private static let rowBackgroundZIndex = -3
+	private static let columnBackgroundZIndex = -2
+	private static let itemBackgroundZIndex = -1
+
+	public static let contentBackgroundElementKind = UUID().uuidString
+	public static let insetContentBackgroundElementKind = UUID().uuidString
+	public static let sectionBackgroundElementKind = UUID().uuidString
+	public static let rowBackgroundElementKind = UUID().uuidString
+	public static let columnBackgroundElementKind = UUID().uuidString
+	public static let itemBackgroundElementKind = UUID().uuidString
+
 	private struct WeakObserver {
 		weak var wrapped: FlexColumnCollectionViewLayoutObserver?
 
@@ -110,6 +124,27 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		case horizontal(fillDirection: FillDirection.Horizontal = .topToBottom, lastColumnAlignment: LastColumnAlignment.Horizontal = .top, itemDistribution: ItemDistribution.Horizontal = .left)
 	}
 
+	public struct BackgroundConfig: Equatable {
+		public var content = EnablementState.disabled
+		public var insetContent = EnablementState.disabled
+		public var section = EnablementState.disabled
+		public var row = EnablementState.disabled
+
+		/// - Warning: A column background will only be used if `orientation.lastColumnAlignment` is `.left`, `.right`, `.top` or `.bottom` and if all rows have the same number of (used or not) columns (via either the same `columnConstraint`, or a `columnConstraint` which results in the same number of columns for all of the rows) and if all corresponding `columnSpacing`s are the same.
+		public var column = EnablementState.disabled
+
+		public var item = EnablementState.disabled
+	}
+
+	public enum SupplementaryView: Equatable {
+		case contentBackground
+		case insetContentBackground
+		case sectionBackground(index: Int)
+		case rowBackground(sectionIndex: Int, rowIndex: Int)
+		case columnBackground(sectionIndex: Int, columnIndex: Int)
+		case itemBackground(indexPath: IndexPath)
+	}
+
 	public struct CalculatedLayout: Equatable {
 		public struct Section: Equatable {
 			public let index: Int
@@ -153,6 +188,16 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	fileprivate struct RowAttributes: Equatable {
 		let columnCount: Int
 		let columnLength: CGFloat
+	}
+
+	private struct RowIndexPath: Hashable {
+		let section: Int
+		let row: Int
+	}
+
+	private struct ColumnIndexPath: Hashable {
+		let section: Int
+		let column: Int
 	}
 
 	public var contentInsets = UIEdgeInsets.zero {
@@ -204,6 +249,13 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
+	public var backgrounds = BackgroundConfig() {
+		didSet {
+			if oldValue == backgrounds { return }
+			invalidateLayout()
+		}
+	}
+
 	public var calculatedLayout: CalculatedLayout {
 		if let calculatedLayout = calculatedLayoutStorage {
 			return calculatedLayout
@@ -217,6 +269,23 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	private var isLayoutInvalidated = true
 	private var calculatedContentLength: CGFloat = 0
 	private var attributes = [IndexPath: UICollectionViewLayoutAttributes]()
+	private var contentBackgroundAttribute: UICollectionViewLayoutAttributes?
+	private var insetContentBackgroundAttribute: UICollectionViewLayoutAttributes?
+	private var sectionBackgroundAttributes = [UICollectionViewLayoutAttributes]()
+	private var rowBackgroundAttributes = [RowIndexPath: UICollectionViewLayoutAttributes]()
+	private var columnBackgroundAttributes = [ColumnIndexPath: UICollectionViewLayoutAttributes]()
+	private var itemBackgroundAttributes = [IndexPath: UICollectionViewLayoutAttributes]()
+
+	private var allAttributes: [UICollectionViewLayoutAttributes] {
+		var attributes = [UICollectionViewLayoutAttributes]()
+		attributes.append(contentsOf: [contentBackgroundAttribute, insetContentBackgroundAttribute].compactMap { $0 })
+		attributes.append(contentsOf: sectionBackgroundAttributes)
+		attributes.append(contentsOf: rowBackgroundAttributes.values)
+		attributes.append(contentsOf: columnBackgroundAttributes.values)
+		attributes.append(contentsOf: itemBackgroundAttributes.values)
+		attributes.append(contentsOf: self.attributes.values)
+		return attributes
+	}
 
 	private var calculatedLayoutStorage: CalculatedLayout? {
 		didSet {
@@ -321,21 +390,30 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		}
 	}
 
+	// swiftlint:disable:next cyclomatic_complexity
 	public override func prepare() {
 		super.prepare()
+		guard let collectionView = collectionView else { fatalError("FlexColumnCollectionViewLayout cannot be used without a collectionView set") }
 		recalculateLayoutIfNeeded(prepare: false)
 		attributes.removeAll()
+		contentBackgroundAttribute = nil
+		insetContentBackgroundAttribute = nil
+		sectionBackgroundAttributes.removeAll()
+		rowBackgroundAttributes.removeAll()
+		columnBackgroundAttributes.removeAll()
+		itemBackgroundAttributes.removeAll()
 
 		let layout = calculatedLayout
 		let leadingColumnOffset = orientational(contentInsets, vertical: \.left, horizontal: \.top)
 		let leadingRowOffset = orientational(contentInsets, vertical: \.top, horizontal: \.left)
-		var currentRowOffset: CGFloat = 0
+		var currentRowOffset = leadingRowOffset
 
 		for sectionIndex in 0 ..< layout.sections.count {
 			if sectionIndex > 0 {
 				currentRowOffset += layout.sectionSpacings[sectionIndex - 1]
 			}
 			let section = layout.sections[sectionIndex]
+			let sectionRowOffset = currentRowOffset
 
 			for rowIndex in 0 ..< section.rows.count {
 				if rowIndex > 0 {
@@ -351,24 +429,101 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 					let cell = row.cells[columnIndex]
 					if let indexPath = cell.indexPath {
 						let frameColumnOffset = leadingColumnOffset + currentColumnOffset
-						let frameRowOffset = leadingRowOffset + currentRowOffset + cell.rowOffset
-						let attribute = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-						attribute.frame = .init(
+						let frameRowOffset = currentRowOffset + cell.rowOffset
+						let attributeFrame = CGRect(
 							x: orientational(vertical: frameColumnOffset, horizontal: frameRowOffset),
 							y: orientational(vertical: frameRowOffset, horizontal: frameColumnOffset),
 							width: orientational(vertical: row.columnLength, horizontal: cell.rowLength),
 							height: orientational(vertical: cell.rowLength, horizontal: row.columnLength)
 						)
-						attributes[indexPath] = attribute
+						attributes[indexPath] = UICollectionViewLayoutAttributes(forCellWith: indexPath).with {
+							$0.frame = attributeFrame
+						}
+						if backgrounds.item == .enabled {
+							itemBackgroundAttributes[indexPath] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.itemBackgroundElementKind, with: indexPath).with {
+								$0.frame = attributeFrame
+								$0.zIndex = Self.itemBackgroundZIndex
+							}
+						}
 					}
 					currentColumnOffset += row.columnLength
 				}
+
+				if backgrounds.row == .enabled {
+					rowBackgroundAttributes[.init(section: sectionIndex, row: rowIndex)] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.rowBackgroundElementKind, with: .init(item: rowIndex, section: sectionIndex)).with {
+						$0.frame = .init(
+							x: orientational(vertical: leadingColumnOffset, horizontal: currentRowOffset),
+							y: orientational(vertical: currentRowOffset, horizontal: leadingColumnOffset),
+							width: orientational(vertical: collectionView.frame.width - contentInsets.horizontal, horizontal: row.rowLength),
+							height: orientational(vertical: row.rowLength, horizontal: collectionView.frame.height - contentInsets.vertical)
+						)
+						$0.zIndex = Self.rowBackgroundZIndex
+					}
+				}
+
 				currentRowOffset += row.rowLength
+			}
+
+			if backgrounds.column == .enabled && Set(section.rows.map(\.maxColumnCount)).count == 1 && Set(section.rows.map(\.columnSpacings)).count == 1 {
+				switch orientation {
+				case .vertical(_, lastColumnAlignment: .left, _), .vertical(_, lastColumnAlignment: .right, _), .horizontal(_, lastColumnAlignment: .top, _), .horizontal(_, lastColumnAlignment: .bottom, _):
+					let columnCount = section.rows[0].maxColumnCount
+					var currentColumnOffset = leadingColumnOffset
+					for columnIndex in 0 ..< columnCount {
+						if columnIndex > 0 {
+							currentColumnOffset += section.rows[0].columnSpacings[columnIndex - 1]
+						}
+						columnBackgroundAttributes[.init(section: sectionIndex, column: columnIndex)] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.columnBackgroundElementKind, with: .init(item: columnIndex, section: sectionIndex)).with {
+							$0.frame = .init(
+								x: orientational(vertical: currentColumnOffset, horizontal: sectionRowOffset),
+								y: orientational(vertical: sectionRowOffset, horizontal: currentColumnOffset),
+								width: orientational(vertical: section.rows[0].columnLength, horizontal: currentRowOffset - sectionRowOffset),
+								height: orientational(vertical: currentRowOffset - sectionRowOffset, horizontal: section.rows[0].columnLength)
+							)
+							$0.zIndex = Self.columnBackgroundZIndex
+						}
+						currentColumnOffset += section.rows[0].columnLength
+					}
+				case .vertical(_, lastColumnAlignment: .center, _), .horizontal(_, lastColumnAlignment: .center, _), .vertical(_, lastColumnAlignment: .fillEqually, _), .horizontal(_, lastColumnAlignment: .fillEqually, _):
+					// cannot create column backgrounds for potentially uneven columns, ignoring
+					break
+				}
+			}
+
+			if backgrounds.section == .enabled {
+				sectionBackgroundAttributes.append(UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.sectionBackgroundElementKind, with: .init(item: 0, section: sectionIndex)).with {
+					$0.frame = .init(
+						x: orientational(vertical: leadingColumnOffset, horizontal: sectionRowOffset),
+						y: orientational(vertical: sectionRowOffset, horizontal: leadingColumnOffset),
+						width: orientational(vertical: collectionView.frame.width - contentInsets.horizontal, horizontal: currentRowOffset - sectionRowOffset),
+						height: orientational(vertical: currentRowOffset - sectionRowOffset, horizontal: collectionView.frame.height - contentInsets.vertical)
+					)
+					$0.zIndex = Self.sectionBackgroundZIndex
+				})
 			}
 		}
 
 		let trailingRowOffset = orientational(contentInsets, vertical: \.bottom, horizontal: \.right)
-		calculatedContentLength = leadingRowOffset + currentRowOffset + trailingRowOffset
+		calculatedContentLength = currentRowOffset + trailingRowOffset
+
+		if backgrounds.content == .enabled {
+			contentBackgroundAttribute = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.contentBackgroundElementKind, with: .init(item: 0, section: 0)).with {
+				$0.frame = .init(origin: .zero, size: collectionViewContentSize)
+				$0.zIndex = Self.contentBackgroundZIndex
+			}
+		}
+		if backgrounds.insetContent == .enabled {
+			let contentSize = collectionViewContentSize
+			insetContentBackgroundAttribute = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.insetContentBackgroundElementKind, with: .init(item: 0, section: 0)).with {
+				$0.frame = .init(
+					x: contentInsets.left,
+					y: contentInsets.top,
+					width: contentSize.width - contentInsets.horizontal,
+					height: contentSize.height - contentInsets.vertical
+				)
+				$0.zIndex = Self.insetContentBackgroundZIndex
+			}
+		}
 	}
 
 	// swiftlint:disable:next cyclomatic_complexity
@@ -565,11 +720,30 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 
 	public override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 		recalculateLayoutIfNeeded(prepare: true)
-		return attributes.values.filter { $0.frame.intersects(rect) }
+		return allAttributes.filter { $0.frame.intersects(rect) }
 	}
 
 	public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		return attributes[indexPath]
+	}
+
+	public static func supplementaryView(for kind: String, indexPath: IndexPath) -> SupplementaryView? {
+		switch kind {
+		case contentBackgroundElementKind:
+			return .contentBackground
+		case insetContentBackgroundElementKind:
+			return .insetContentBackground
+		case sectionBackgroundElementKind:
+			return .sectionBackground(index: indexPath.section)
+		case rowBackgroundElementKind:
+			return .rowBackground(sectionIndex: indexPath.section, rowIndex: indexPath.item)
+		case columnBackgroundElementKind:
+			return .columnBackground(sectionIndex: indexPath.section, columnIndex: indexPath.item)
+		case itemBackgroundElementKind:
+			return .itemBackground(indexPath: indexPath)
+		default:
+			return nil
+		}
 	}
 
 	public func addObserver(_ observer: FlexColumnCollectionViewLayoutObserver) {
