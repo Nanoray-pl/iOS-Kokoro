@@ -60,28 +60,36 @@ public protocol Logger {
 }
 
 public extension Logger {
-	func verbose(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+	func verbose(_ message: @autoclosure () -> String = "", file: String = #file, function: String = #function, line: Int = #line) {
 		log(.verbose, message(), file: file, function: function, line: line)
 	}
 
-	func debug(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+	func debug(_ message: @autoclosure () -> String = "", file: String = #file, function: String = #function, line: Int = #line) {
 		log(.debug, message(), file: file, function: function, line: line)
 	}
 
-	func info(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+	func info(_ message: @autoclosure () -> String = "", file: String = #file, function: String = #function, line: Int = #line) {
 		log(.info, message(), file: file, function: function, line: line)
 	}
 
-	func warning(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+	func warning(_ message: @autoclosure () -> String = "", file: String = #file, function: String = #function, line: Int = #line) {
 		log(.warning, message(), file: file, function: function, line: line)
 	}
 
-	func error(_ message: @autoclosure () -> String, file: String = #file, function: String = #function, line: Int = #line) {
+	func error(_ message: @autoclosure () -> String = "", file: String = #file, function: String = #function, line: Int = #line) {
 		log(.error, message(), file: file, function: function, line: line)
 	}
 
 	func log(_ level: LogLevel, _ message: @autoclosure () -> String = "", sourceFile: String = #file, sourceFunction: String = #function, sourceLine: Int = #line) {
 		log(level, message(), file: sourceFile, function: sourceFunction, line: sourceLine)
+	}
+
+	func assert(_ predicate: @autoclosure () -> Bool, _ level: LogLevel = .warning, file: String = #file, function: String = #function, line: Int = #line, additionalMessage: @autoclosure () -> String = "") {
+		guard level >= self.level else { return }
+		if !predicate() {
+			let components = ["Assertion failure", additionalMessage()]
+			log(level, components.filter { !$0.isEmpty }.joined(separator: ": "), file: file, function: function, line: line)
+		}
 	}
 }
 
