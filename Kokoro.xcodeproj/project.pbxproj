@@ -54,6 +54,7 @@
 		AA9F220625D85F2D001C6A46 /* MockingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */; };
 		AA9F221625D85F52001C6A46 /* DecodingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F221525D85F52001C6A46 /* DecodingHttpClient.swift */; };
 		AA9F223225D85F62001C6A46 /* JsonDecodingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F223125D85F62001C6A46 /* JsonDecodingHttpClient.swift */; };
+		AA9F229225D8663C001C6A46 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F229125D8663C001C6A46 /* Routing.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -315,6 +316,7 @@
 		AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockingHttpClient.swift; sourceTree = "<group>"; };
 		AA9F221525D85F52001C6A46 /* DecodingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodingHttpClient.swift; sourceTree = "<group>"; };
 		AA9F223125D85F62001C6A46 /* JsonDecodingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonDecodingHttpClient.swift; sourceTree = "<group>"; };
+		AA9F229125D8663C001C6A46 /* Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -641,6 +643,7 @@
 				AAD3552F252893FD007C63EF /* ButtonMenuConfigurator.swift */,
 				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
 				AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */,
+				AA9F229125D8663C001C6A46 /* Routing.swift */,
 			);
 			path = "Business Logic";
 			sourceTree = "<group>";
@@ -1843,6 +1846,7 @@
 				AAD35530252893FD007C63EF /* ButtonMenuConfigurator.swift in Sources */,
 				AAD354CE252873FD007C63EF /* NonBasicConstraints.swift in Sources */,
 				AAD3551125288BD4007C63EF /* ProgressBar.swift in Sources */,
+				AA9F229225D8663C001C6A46 /* Routing.swift in Sources */,
 				AAD354FE252887F0007C63EF /* Animated.swift in Sources */,
 				AAD354D22528744D007C63EF /* BasicConstraintBuilders.swift in Sources */,
 				AAEFB1262542D860003AA60E /* SeparatorStackView.swift in Sources */,
