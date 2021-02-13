@@ -21,6 +21,10 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 		return elements.count
 	}
 
+	public var isEmpty: Bool {
+		return sortStrategy.elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return dataSources.contains(where: { $0.isFetching })
 	}

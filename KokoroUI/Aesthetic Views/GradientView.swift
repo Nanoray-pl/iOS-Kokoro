@@ -38,6 +38,15 @@ public class GradientView: UIView {
 		}
 	}
 
+	public init() {
+		super.init(frame: .zero)
+		isUserInteractionEnabled = false
+	}
+
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
 	public func setColors(_ colors: [UIColor]) {
 		self.colors = (0 ..< colors.count).map { (location: Double($0) / Double(colors.count - 1), color: colors[$0]) }
 	}

@@ -11,6 +11,10 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 		return elements.count
 	}
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return false
 	}

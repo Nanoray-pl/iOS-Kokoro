@@ -22,6 +22,10 @@ public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: Fetcha
 		return wrapped.error
 	}
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return wrapped.isFetching
 	}

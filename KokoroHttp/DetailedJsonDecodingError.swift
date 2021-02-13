@@ -17,12 +17,12 @@ public enum DetailedJsonDecodingError: Error {
 public class DetailedJsonDecodingErrorFactory {
 	public init() {}
 
-	public func debugValue<CodingPathCollection>(for data: Data, codingPath: CodingPathCollection, originalError: DecodingError) throws -> Any where CodingPathCollection: Collection, CodingPathCollection.Element == CodingKey {
+	private func debugValue<CodingPathCollection>(for data: Data, codingPath: CodingPathCollection, originalError: DecodingError) throws -> Any where CodingPathCollection: Collection, CodingPathCollection.Element == CodingKey {
 		let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
 		return try debugValue(forJsonObject: jsonObject, codingPath: codingPath, originalError: originalError)
 	}
 
-	public func debugValue<CodingPathCollection>(forJsonObject jsonObject: Any, codingPath: CodingPathCollection, originalError: DecodingError) throws -> Any where CodingPathCollection: Collection, CodingPathCollection.Element == CodingKey {
+	private func debugValue<CodingPathCollection>(forJsonObject jsonObject: Any, codingPath: CodingPathCollection, originalError: DecodingError) throws -> Any where CodingPathCollection: Collection, CodingPathCollection.Element == CodingKey {
 		guard let codingPathNode = codingPath.first else {
 			if jsonObject is [String: Any] || jsonObject is [Any] || jsonObject is String {
 				let data = try JSONSerialization.data(withJSONObject: jsonObject, options: .fragmentsAllowed)

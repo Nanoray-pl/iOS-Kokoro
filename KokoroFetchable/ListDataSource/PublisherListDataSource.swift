@@ -25,6 +25,10 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 
 	public private(set) var error: Error?
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return fetchingPageIndex != nil
 	}

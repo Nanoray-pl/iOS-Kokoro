@@ -45,6 +45,10 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 		return elements.count
 	}
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public convenience init(wrapping wrapped: Wrapped, errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy = .byDescription) where Element == Key {
 		self.init(wrapping: wrapped, uniqueKeyFunction: { $0 })
 	}

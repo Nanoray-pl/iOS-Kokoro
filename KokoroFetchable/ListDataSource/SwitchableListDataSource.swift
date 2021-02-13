@@ -24,6 +24,10 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 		return currentDataSource.error
 	}
 
+	public var isEmpty: Bool {
+		return currentDataSource.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return targetDataSource?.isFetching ?? currentDataSource.isFetching
 	}

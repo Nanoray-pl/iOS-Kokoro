@@ -24,6 +24,10 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 		return elements.count
 	}
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return wrapped.isFetching
 	}

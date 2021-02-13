@@ -51,6 +51,9 @@
 		AA5AED082556B2B000516C8D /* KokoroCacheResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AED062556B2B000516C8D /* KokoroCacheResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AED192556B2D200516C8D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AED182556B2D200516C8D /* Extensions.swift */; };
 		AA5AEDA32556B36E00516C8D /* CacheResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */; };
+		AA9F220625D85F2D001C6A46 /* MockingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */; };
+		AA9F221625D85F52001C6A46 /* DecodingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F221525D85F52001C6A46 /* DecodingHttpClient.swift */; };
+		AA9F223225D85F62001C6A46 /* JsonDecodingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F223125D85F62001C6A46 /* JsonDecodingHttpClient.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -309,6 +312,9 @@
 		AA5AED072556B2B000516C8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA5AED182556B2D200516C8D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheResourceProvider.swift; sourceTree = "<group>"; };
+		AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockingHttpClient.swift; sourceTree = "<group>"; };
+		AA9F221525D85F52001C6A46 /* DecodingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodingHttpClient.swift; sourceTree = "<group>"; };
+		AA9F223125D85F62001C6A46 /* JsonDecodingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonDecodingHttpClient.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -678,6 +684,15 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AA9F221425D85F40001C6A46 /* DecodingClient */ = {
+			isa = PBXGroup;
+			children = (
+				AA9F221525D85F52001C6A46 /* DecodingHttpClient.swift */,
+				AA9F223125D85F62001C6A46 /* JsonDecodingHttpClient.swift */,
+			);
+			path = DecodingClient;
+			sourceTree = "<group>";
+		};
 		AAD35483252869D0007C63EF = {
 			isa = PBXGroup;
 			children = (
@@ -896,6 +911,7 @@
 			children = (
 				AAD355E62528B81C007C63EF /* Bootstrap */,
 				AAD3576E25291B13007C63EF /* Client */,
+				AA9F221425D85F40001C6A46 /* DecodingClient */,
 				AAD355E72528B82E007C63EF /* HttpRequestBuilder.swift */,
 				AAD355ED2528B853007C63EF /* HttpBodyEncoder.swift */,
 				AAD355F92528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift */,
@@ -1003,6 +1019,7 @@
 				AAD3577D25291B6C007C63EF /* SchedulingHttpClient.swift */,
 				AAF139D1255838E300C6890F /* AdditionalHeadersHttpClient.swift */,
 				AAF139DE25583ACE00C6890F /* ErrorSimulatingHttpClient.swift */,
+				AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -1882,14 +1899,17 @@
 			files = (
 				AAF139D2255838E300C6890F /* AdditionalHeadersHttpClient.swift in Sources */,
 				AAD355EE2528B853007C63EF /* HttpBodyEncoder.swift in Sources */,
+				AA9F220625D85F2D001C6A46 /* MockingHttpClient.swift in Sources */,
 				AAF139DF25583ACE00C6890F /* ErrorSimulatingHttpClient.swift in Sources */,
 				AA3E3069258F618800981F90 /* DetailedJsonDecodingError.swift in Sources */,
 				AA5AEC772555903A00516C8D /* EndpointUrl.swift in Sources */,
+				AA9F223225D85F62001C6A46 /* JsonDecodingHttpClient.swift in Sources */,
 				AAD3577025291B2D007C63EF /* URLSessionHttpClient.swift in Sources */,
 				AAD3577E25291B6C007C63EF /* SchedulingHttpClient.swift in Sources */,
 				AAD355FA2528B891007C63EF /* URLSessionDataTaskProgressPublisher.swift in Sources */,
 				AAD356002528B8F0007C63EF /* HttpClient.swift in Sources */,
 				AAD355E82528B82E007C63EF /* HttpRequestBuilder.swift in Sources */,
+				AA9F221625D85F52001C6A46 /* DecodingHttpClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

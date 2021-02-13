@@ -52,6 +52,10 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 		return wrapped.error
 	}
 
+	public var isEmpty: Bool {
+		return wrapped.isEmpty && skeletonCount == 0
+	}
+
 	public var isFetching: Bool {
 		return wrapped.isFetching
 	}

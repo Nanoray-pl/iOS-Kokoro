@@ -26,77 +26,19 @@ public enum HttpClientOutput<Output> {
 	}
 }
 
-public protocol HttpClient {
-	func requestOptional<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output?>, Error>
-	func request<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output>, Error>
-	func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Void>, Error>
+public struct HttpClientResponse {
+	public let statusCode: Int
+	public let headers: [String: String]
+	public let data: Data
+
+	public init(statusCode: Int, headers: [String: String], data: Data) {
+		self.statusCode = statusCode
+		self.headers = headers
+		self.data = data
+	}
 }
 
-public extension HttpClient {
-	func requestOptional<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<Output?, Error> {
-		let wrapped: AnyPublisher<HttpClientOutput<Output?>, Error> = requestOptional(request)
-		return wrapped
-			.filter {
-				switch $0 {
-				case .output:
-					return true
-				default:
-					return false
-				}
-			}
-			.map {
-				switch $0 {
-				case let .output(output):
-					return output
-				default:
-					fatalError("This should not happen")
-				}
-			}
-			.eraseToAnyPublisher()
-	}
-
-	func request<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<Output, Error> {
-		let wrapped: AnyPublisher<HttpClientOutput<Output>, Error> = self.request(request)
-		return wrapped
-			.filter {
-				switch $0 {
-				case .output:
-					return true
-				default:
-					return false
-				}
-			}
-			.map {
-				switch $0 {
-				case let .output(output):
-					return output
-				default:
-					fatalError("This should not happen")
-				}
-			}
-			.eraseToAnyPublisher()
-	}
-
-	func request(_ request: URLRequest) -> AnyPublisher<Void, Error> {
-		let wrapped: AnyPublisher<HttpClientOutput<Void>, Error> = self.request(request)
-		return wrapped
-			.filter {
-				switch $0 {
-				case .output:
-					return true
-				default:
-					return false
-				}
-			}
-			.map {
-				switch $0 {
-				case let .output(output):
-					return output
-				default:
-					fatalError("This should not happen")
-				}
-			}
-			.eraseToAnyPublisher()
-	}
+public protocol HttpClient {
+	func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error>
 }
 #endif

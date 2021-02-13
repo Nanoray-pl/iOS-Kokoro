@@ -36,6 +36,7 @@ public protocol FetchableListDataSource: class {
 	var elements: [Element] { get }
 	var count: Int { get }
 	var error: Error? { get }
+	var isEmpty: Bool { get }
 	var isFetching: Bool { get }
 
 	subscript(_ index: Int) -> Element { get }
@@ -54,14 +55,6 @@ public extension FetchableListDataSource {
 		return ObjectIdentifier(self)
 	}
 
-	var elements: [Element] {
-		return (0 ..< count).map { self[$0] }
-	}
-
-	var isEmpty: Bool {
-		return count == 0 // swiftlint:disable:this empty_count
-	}
-
 	var fetchState: DataSourceFetchState<Error> {
 		if isFetching {
 			return .fetching
@@ -78,11 +71,19 @@ public extension FetchableListDataSource {
 }
 
 private class AnyFetchableListDataSourceBase<Element>: FetchableListDataSource {
+	var elements: [Element] {
+		fatalError("Not overriden abstract member")
+	}
+
 	var count: Int {
 		fatalError("Not overriden abstract member")
 	}
 
 	var error: Error? {
+		fatalError("Not overriden abstract member")
+	}
+
+	var isEmpty: Bool {
 		fatalError("Not overriden abstract member")
 	}
 
@@ -117,7 +118,7 @@ private class AnyFetchableListDataSourceBox<Wrapped>: AnyFetchableListDataSource
 
 	private let wrapped: Wrapped
 
-	var elements: [Element] {
+	override var elements: [Element] {
 		return wrapped.elements
 	}
 
@@ -127,6 +128,10 @@ private class AnyFetchableListDataSourceBox<Wrapped>: AnyFetchableListDataSource
 
 	override var error: Error? {
 		return wrapped.error
+	}
+
+	override var isEmpty: Bool {
+		return wrapped.isEmpty
 	}
 
 	override var isFetching: Bool {
@@ -172,6 +177,10 @@ public final class AnyFetchableListDataSource<Element>: FetchableListDataSource 
 
 	public var error: Error? {
 		return box.error
+	}
+
+	public var isEmpty: Bool {
+		return box.isEmpty
 	}
 
 	public var isFetching: Bool {

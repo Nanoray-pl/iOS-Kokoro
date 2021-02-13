@@ -82,7 +82,7 @@ public class HttpRequestBuilderWithParameters: HttpRequestBuilder {
 	private let urlParameters: [String: Any]
 	private let headers: [String: Any]
 
-	init(wrapping wrapped: HttpRequestBuilder, urlParameters: [String: Any], headers: [String: Any]) {
+	public init(wrapping wrapped: HttpRequestBuilder, urlParameters: [String: Any], headers: [String: Any]) {
 		self.wrapped = wrapped
 		self.urlParameters = urlParameters
 		self.headers = headers

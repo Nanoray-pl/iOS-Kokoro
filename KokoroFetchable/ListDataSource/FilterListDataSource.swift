@@ -22,6 +22,10 @@ public class FilterListDataSource<Wrapped: FetchableListDataSource>: FetchableLi
 		return wrapped.error
 	}
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return wrapped.isFetching
 	}

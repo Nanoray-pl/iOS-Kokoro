@@ -50,9 +50,9 @@ public final class ErrorSimulatingHttpClient: HttpClient {
 	}
 
 	private let wrapped: HttpClient
-	public let context: ErrorSimulationContext
-	private let errorFactory: () -> URLError
-	private let mode: Mode
+	public var context: ErrorSimulationContext
+	public var errorFactory: () -> URLError
+	public var mode: Mode
 
 	public init(wrapping wrapped: HttpClient, mode: Mode, context: ErrorSimulationContext, errorFactory: @autoclosure @escaping () -> URLError) {
 		self.wrapped = wrapped
@@ -84,15 +84,7 @@ public final class ErrorSimulatingHttpClient: HttpClient {
 		.eraseToAnyPublisher()
 	}
 
-	public func requestOptional<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output?>, Error> {
-		return modifiedPublisher(wrapped.requestOptional(request))
-	}
-
-	public func request<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output>, Error> {
-		return modifiedPublisher(wrapped.request(request))
-	}
-
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Void>, Error> {
+	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		return modifiedPublisher(wrapped.request(request))
 	}
 }

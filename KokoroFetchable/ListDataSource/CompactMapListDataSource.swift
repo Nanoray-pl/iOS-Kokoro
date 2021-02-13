@@ -22,6 +22,10 @@ public class CompactMapListDataSource<Wrapped: FetchableListDataSource, Output>:
 		return wrapped.error
 	}
 
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
+
 	public var isFetching: Bool {
 		return wrapped.isFetching
 	}

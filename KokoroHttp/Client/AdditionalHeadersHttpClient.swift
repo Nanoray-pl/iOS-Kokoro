@@ -25,15 +25,7 @@ public class AdditionalHeadersHttpClient: HttpClient {
 		}
 	}
 
-	public func requestOptional<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output?>, Error> {
-		return wrapped.requestOptional(modifiedRequest(request))
-	}
-
-	public func request<Output: Decodable>(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Output>, Error> {
-		return wrapped.request(modifiedRequest(request))
-	}
-
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<Void>, Error> {
+	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		return wrapped.request(modifiedRequest(request))
 	}
 }
