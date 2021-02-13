@@ -5,14 +5,14 @@
 
 import UIKit
 
-protocol Router: class {
+public protocol Router: class {
 	var parentRouter: Router? { get }
 	var childRouters: [Router] { get }
 }
 
-protocol Route: class {}
+public protocol Route: class {}
 
-enum RoutingDirection {
+public enum RoutingDirection {
 	/// Route via the first known upstream (parent) router. Best used if context is known (simple navigation) - for example with navigation controllers.
 	case upstream
 
@@ -23,7 +23,7 @@ enum RoutingDirection {
 	case anyDirection
 }
 
-extension UIResponder {
+public extension UIResponder {
 	/// Returns the first `Router` found in the `UIResponder` chain. Best used in simple navigation (when you are sure the router still exists, for example with direct touch handlers).
 	var firstRouter: Router? {
 		var current = self
@@ -68,7 +68,7 @@ extension UIResponder {
 	}
 }
 
-extension Router {
+public extension Router {
 	private func firstUpstreamRouter<RouteType>(for routeType: RouteType.Type) -> RouteType? {
 		return (self as? RouteType) ?? parentRouter?.firstUpstreamRouter(for: routeType)
 	}
