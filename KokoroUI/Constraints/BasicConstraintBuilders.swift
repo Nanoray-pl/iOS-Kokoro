@@ -360,20 +360,18 @@ public extension Constrainable {
 		return verticalEdges(to: constrainable, topInset: insets, bottomInset: insets, relation: relation, identifier: identifier) + horizontalEdges(to: constrainable, leftInset: insets, rightInset: insets, relation: relation, identifier: identifier)
 	}
 
-	func edges(to constrainable: Constrainable, insets: UIEdgeInsets, relation: MultiEdgeRelation = .equal, file: String = #file, function: String = #function, line: Int = #line) -> [NSLayoutConstraint] {
+	func edges(to constrainable: Constrainable, insets: EdgeInsets = UIEdgeInsets(), relation: MultiEdgeRelation = .equal, file: String = #file, function: String = #function, line: Int = #line) -> [NSLayoutConstraint] {
 		return edges(to: constrainable, insets: insets, relation: relation, identifier: identifier(file: file, function: function, line: line))
 	}
 
-	func edges(to constrainable: Constrainable, insets: UIEdgeInsets, relation: MultiEdgeRelation = .equal, identifier: String) -> [NSLayoutConstraint] {
-		return verticalEdges(to: constrainable, topInset: insets.top, bottomInset: insets.bottom, relation: relation, identifier: identifier) + horizontalEdges(to: constrainable, leftInset: insets.left, rightInset: insets.right, relation: relation, identifier: identifier)
-	}
-
-	func edges(to constrainable: Constrainable, insets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(), relation: MultiEdgeRelation = .equal, file: String = #file, function: String = #function, line: Int = #line) -> [NSLayoutConstraint] {
-		return edges(to: constrainable, insets: insets, relation: relation, identifier: identifier(file: file, function: function, line: line))
-	}
-
-	func edges(to constrainable: Constrainable, insets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(), relation: MultiEdgeRelation = .equal, identifier: String) -> [NSLayoutConstraint] {
-		return verticalEdges(to: constrainable, topInset: insets.top, bottomInset: insets.bottom, relation: relation, identifier: identifier) + horizontalEdges(to: constrainable, leadingInset: insets.leading, trailingInset: insets.trailing, relation: relation, identifier: identifier)
+	func edges(to constrainable: Constrainable, insets: EdgeInsets = UIEdgeInsets(), relation: MultiEdgeRelation = .equal, identifier: String) -> [NSLayoutConstraint] {
+		let verticalEdges = self.verticalEdges(to: constrainable, topInset: insets.top, bottomInset: insets.bottom, relation: relation, identifier: identifier)
+		switch insets.typed {
+		case let .simple(insets):
+			return verticalEdges + horizontalEdges(to: constrainable, leftInset: insets.left, rightInset: insets.right, relation: relation, identifier: identifier)
+		case let .directional(insets):
+			return verticalEdges + horizontalEdges(to: constrainable, leadingInset: insets.leading, trailingInset: insets.trailing, relation: relation, identifier: identifier)
+		}
 	}
 
 	// MARK: - Centering

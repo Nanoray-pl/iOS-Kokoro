@@ -6,27 +6,52 @@
 #if canImport(UIKit)
 import UIKit
 
-public extension UIEdgeInsets {
-	var horizontal: CGFloat {
-		return left + right
-	}
+public protocol EdgeInsets {
+	var top: CGFloat { get }
+	var bottom: CGFloat { get }
 
+	var vertical: CGFloat { get }
+	var horizontal: CGFloat { get }
+
+	var typed: TypedEdgeInsets { get }
+}
+
+public enum TypedEdgeInsets: Equatable {
+	case simple(_ insets: UIEdgeInsets)
+	case directional(_ insets: NSDirectionalEdgeInsets)
+}
+
+public extension EdgeInsets {
 	var vertical: CGFloat {
 		return top + bottom
 	}
+}
 
-	init(insets: CGFloat) {
+extension UIEdgeInsets: EdgeInsets {
+	public var horizontal: CGFloat {
+		return left + right
+	}
+
+	public var typed: TypedEdgeInsets {
+		return .simple(self)
+	}
+
+	public init(insets: CGFloat) {
 		self.init(top: insets, left: insets, bottom: insets, right: insets)
 	}
 }
 
-public extension NSDirectionalEdgeInsets {
-	var horizontal: CGFloat {
+extension NSDirectionalEdgeInsets: EdgeInsets {
+	public var horizontal: CGFloat {
 		return leading + trailing
 	}
 
-	var vertical: CGFloat {
-		return top + bottom
+	public var typed: TypedEdgeInsets {
+		return .directional(self)
+	}
+
+	public init(insets: CGFloat) {
+		self.init(top: insets, leading: insets, bottom: insets, trailing: insets)
 	}
 }
 #endif

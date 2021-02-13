@@ -126,11 +126,7 @@ public extension CGSize {
 import UIKit
 
 public extension CGSize {
-	init(insets: UIEdgeInsets) {
-		self.init(width: insets.horizontal, height: insets.vertical)
-	}
-
-	init(insets: NSDirectionalEdgeInsets) {
+	init(insets: EdgeInsets) {
 		self.init(width: insets.horizontal, height: insets.vertical)
 	}
 }

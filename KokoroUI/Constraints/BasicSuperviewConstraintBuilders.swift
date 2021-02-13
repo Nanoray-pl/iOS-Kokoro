@@ -219,20 +219,18 @@ public extension UIView {
 		return verticalEdgesToSuperview(insets: insets, relation: relation, identifier: identifier) + horizontalEdgesToSuperview(insets: insets, relation: relation, identifier: identifier)
 	}
 
-	func edgesToSuperview(insets: UIEdgeInsets, relation: MultiEdgeRelation = .equal, file: String = #file, function: String = #function, line: Int = #line) -> [NSLayoutConstraint] {
+	func edgesToSuperview(insets: EdgeInsets = UIEdgeInsets(), relation: MultiEdgeRelation = .equal, file: String = #file, function: String = #function, line: Int = #line) -> [NSLayoutConstraint] {
 		return edgesToSuperview(insets: insets, relation: relation, identifier: identifier(file: file, function: function, line: line))
 	}
 
-	func edgesToSuperview(insets: UIEdgeInsets, relation: MultiEdgeRelation = .equal, identifier: String) -> [NSLayoutConstraint] {
-		return verticalEdgesToSuperview(topInset: insets.top, bottomInset: insets.bottom, relation: relation, identifier: identifier) + horizontalEdgesToSuperview(leftInset: insets.left, rightInset: insets.right, relation: relation, identifier: identifier)
-	}
-
-	func edgesToSuperview(insets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(), relation: MultiEdgeRelation = .equal, file: String = #file, function: String = #function, line: Int = #line) -> [NSLayoutConstraint] {
-		return edgesToSuperview(insets: insets, relation: relation, identifier: identifier(file: file, function: function, line: line))
-	}
-
-	func edgesToSuperview(insets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(), relation: MultiEdgeRelation = .equal, identifier: String) -> [NSLayoutConstraint] {
-		return verticalEdgesToSuperview(topInset: insets.top, bottomInset: insets.bottom, relation: relation, identifier: identifier) + horizontalEdgesToSuperview(leadingInset: insets.leading, trailingInset: insets.trailing, relation: relation, identifier: identifier)
+	func edgesToSuperview(insets: EdgeInsets = UIEdgeInsets(), relation: MultiEdgeRelation = .equal, identifier: String) -> [NSLayoutConstraint] {
+		let vertical = verticalEdgesToSuperview(topInset: insets.top, bottomInset: insets.bottom, relation: relation, identifier: identifier)
+		switch insets.typed {
+		case let .simple(insets):
+			return vertical + horizontalEdgesToSuperview(leftInset: insets.left, rightInset: insets.right, relation: relation, identifier: identifier)
+		case let .directional(insets):
+			return vertical + horizontalEdgesToSuperview(leadingInset: insets.leading, trailingInset: insets.trailing, relation: relation, identifier: identifier)
+		}
 	}
 
 	// MARK: unsafeSuperview() - Centering
