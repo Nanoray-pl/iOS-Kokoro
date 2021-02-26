@@ -11,8 +11,12 @@ public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: Fetcha
 	private let wrapped: Wrapped
 	private let mappingFunction: (Wrapped.Element) -> Output
 	private lazy var observer = WrappedObserver(parent: self)
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var elements = [Element]()
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	public var count: Int {
 		return elements.count
@@ -55,30 +59,28 @@ public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: Fetcha
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func updateData() {
 		elements = wrapped.elements.map(mappingFunction)
 		let erasedSelf = eraseToAnyFetchableListDataSource()
-		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: MapListDataSource<Wrapped, Output>
+		private weak var parent: MapListDataSource<Wrapped, Output>?
 
 		init(parent: MapListDataSource<Wrapped, Output>) {
 			self.parent = parent
 		}
 
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Wrapped.Element>) {
-			parent.updateData()
+			parent?.updateData()
 		}
 	}
 }

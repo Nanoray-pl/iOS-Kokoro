@@ -4,6 +4,7 @@
 //
 
 #if canImport(UIKit)
+import KokoroUtils
 import UIKit
 
 public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate {
@@ -58,14 +59,6 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	public static let rowBackgroundElementKind = UUID().uuidString
 	public static let columnBackgroundElementKind = UUID().uuidString
 	public static let itemBackgroundElementKind = UUID().uuidString
-
-	private struct WeakObserver {
-		weak var wrapped: FlexColumnCollectionViewLayoutObserver?
-
-		init(wrapping wrapped: FlexColumnCollectionViewLayoutObserver) {
-			self.wrapped = wrapped
-		}
-	}
 
 	public enum ColumnConstraint: Equatable, ExpressibleByIntegerLiteral {
 		case count(_ count: Int)
@@ -291,16 +284,11 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		didSet {
 			if oldValue == calculatedLayoutStorage { return }
 			guard let layout = calculatedLayoutStorage, let collectionView = collectionView else { return }
-			observers.forEach { $0.wrapped?.didRecalculateLayout(to: layout, in: self, in: collectionView) }
+			observers.forEach { $0.didRecalculateLayout(to: layout, in: self, in: collectionView) }
 		}
 	}
 
-	private var observers = [WeakObserver]() {
-		didSet {
-			guard observers.contains(where: { $0.wrapped == nil }) else { return }
-			observers = observers.filter { $0.wrapped != nil }
-		}
-	}
+	private let observers = BoxingObserverSet<FlexColumnCollectionViewLayoutObserver, Void>()
 
 	private var delegate: FlexColumnCollectionViewLayoutDelegate? {
 		return collectionView?.delegate as? FlexColumnCollectionViewLayoutDelegate
@@ -747,11 +735,11 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	}
 
 	public func addObserver(_ observer: FlexColumnCollectionViewLayoutObserver) {
-		observers.append(.init(wrapping: observer))
+		observers.insert(observer)
 	}
 
 	public func removeObserver(_ observer: FlexColumnCollectionViewLayoutObserver) {
-		observers.removeFirst { $0.wrapped === observer }
+		observers.remove(observer)
 	}
 
 	public func itemCountToCompletelyFill(additionalRowCount: Int, existingItemCount: Int, inSection sectionIndex: Int) -> Int {

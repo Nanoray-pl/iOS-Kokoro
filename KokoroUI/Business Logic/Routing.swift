@@ -3,6 +3,7 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 public protocol Router: class {
@@ -108,3 +109,4 @@ public extension Router {
 		routing(router(direction, for: routeType))
 	}
 }
+#endif

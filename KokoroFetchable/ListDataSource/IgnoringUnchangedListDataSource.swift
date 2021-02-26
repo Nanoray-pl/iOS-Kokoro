@@ -36,10 +36,14 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 	private let errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy
 	private let uniqueKeyFunction: (Element) -> Key
 	private lazy var observer = WrappedObserver(parent: self)
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var elements = [Element]()
 	public private(set) var error: Error?
 	public private(set) var isFetching = false
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	public var count: Int {
 		return elements.count
@@ -81,12 +85,11 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func shouldUpdateData(oldData: [Element], newData: [Element]) -> Bool {
@@ -107,20 +110,19 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 			error = wrapped.error
 			isFetching = wrapped.isFetching
 			let erasedSelf = eraseToAnyFetchableListDataSource()
-			observers = observers.filter { $0.weakReference != nil }
 			observers.forEach { $0.didUpdateData(of: erasedSelf) }
 		}
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: IgnoringUnchangedListDataSource<Wrapped, Key>
+		private weak var parent: IgnoringUnchangedListDataSource<Wrapped, Key>?
 
 		init(parent: IgnoringUnchangedListDataSource<Wrapped, Key>) {
 			self.parent = parent
 		}
 
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
-			parent.updateData()
+			parent?.updateData()
 		}
 	}
 }

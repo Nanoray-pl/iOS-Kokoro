@@ -16,9 +16,13 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 	private let errorBehavior: TryMapListDataSourceErrorBehavior
 	private let mappingFunction: (Wrapped.Element) throws -> Output
 	private lazy var observer = WrappedObserver(parent: self)
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var elements = [Element]()
 	public private(set) var error: Error?
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	public var count: Int {
 		return elements.count
@@ -58,12 +62,11 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func updateData() {
@@ -100,19 +103,18 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 		}
 
 		let erasedSelf = eraseToAnyFetchableListDataSource()
-		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: TryMapListDataSource<Wrapped, Output>
+		private weak var parent: TryMapListDataSource<Wrapped, Output>?
 
 		init(parent: TryMapListDataSource<Wrapped, Output>) {
 			self.parent = parent
 		}
 
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Wrapped.Element>) {
-			parent.updateData()
+			parent?.updateData()
 		}
 	}
 }

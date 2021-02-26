@@ -10,8 +10,12 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 	private var sortStrategy: AnyMergeListDataSourceSortStrategy<Element>!
 	private let dataSources: [AnyFetchableListDataSource<Element>]
 	private lazy var observer = DataSourceObserver(parent: self)
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	public private(set) var error: Error?
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	public var elements: [Element] {
 		return sortStrategy.elements
@@ -72,12 +76,11 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func updateData() {
@@ -85,7 +88,6 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 		updateError()
 
 		let erasedSelf = eraseToAnyFetchableListDataSource()
-		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 
@@ -102,14 +104,14 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 	}
 
 	private class DataSourceObserver: FetchableListDataSourceObserver {
-		private unowned let parent: MergeListDataSource<Element>
+		private weak var parent: MergeListDataSource<Element>?
 
 		init(parent: MergeListDataSource<Element>) {
 			self.parent = parent
 		}
 
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
-			parent.updateData()
+			parent?.updateData()
 		}
 	}
 }

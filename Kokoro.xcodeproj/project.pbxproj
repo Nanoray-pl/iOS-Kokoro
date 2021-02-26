@@ -161,6 +161,7 @@
 		AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB14D2542DE74003AA60E /* LazyInitView.swift */; };
 		AAEFB1582542DEB6003AA60E /* KeyboardSpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */; };
 		AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */; };
+		AAF080E325E942A800D5065C /* ObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF080E225E942A800D5065C /* ObserverSet.swift */; };
 		AAF139D2255838E300C6890F /* AdditionalHeadersHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF139D1255838E300C6890F /* AdditionalHeadersHttpClient.swift */; };
 		AAF139DF25583ACE00C6890F /* ErrorSimulatingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF139DE25583ACE00C6890F /* ErrorSimulatingHttpClient.swift */; };
 /* End PBXBuildFile section */
@@ -440,6 +441,7 @@
 		AAEFB14D2542DE74003AA60E /* LazyInitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyInitView.swift; sourceTree = "<group>"; };
 		AAEFB1572542DEB6003AA60E /* KeyboardSpacerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSpacerView.swift; sourceTree = "<group>"; };
 		AAEFB16125443BC3003AA60E /* InteractableUrlTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableUrlTextView.swift; sourceTree = "<group>"; };
+		AAF080E225E942A800D5065C /* ObserverSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverSet.swift; sourceTree = "<group>"; };
 		AAF139D1255838E300C6890F /* AdditionalHeadersHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalHeadersHttpClient.swift; sourceTree = "<group>"; };
 		AAF139DE25583ACE00C6890F /* ErrorSimulatingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSimulatingHttpClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -755,6 +757,7 @@
 				AA5AEC25255585F700516C8D /* CombineExtensions.swift */,
 				AA42D414256A7BBC004604D2 /* PrivateSourceLocation.swift */,
 				AA16EAE0257A74DA001C30E9 /* Lock.swift */,
+				AAF080E225E942A800D5065C /* ObserverSet.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -1815,6 +1818,7 @@
 				AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */,
 				AA42D415256A7BBC004604D2 /* PrivateSourceLocation.swift in Sources */,
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
+				AAF080E325E942A800D5065C /* ObserverSet.swift in Sources */,
 				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */,

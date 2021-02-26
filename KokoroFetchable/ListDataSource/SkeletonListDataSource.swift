@@ -27,7 +27,11 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 	private let wrapped: Wrapped
 	private let behavior: SkeletonListDataSourceBehavior
 	private lazy var observer = WrappedObserver(parent: self)
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	private var skeletonCount: Int {
 		switch (isFetching: wrapped.isFetching, count: wrapped.count) {
@@ -97,29 +101,27 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func updateData() {
 		let erasedSelf = eraseToAnyFetchableListDataSource()
-		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
-		private unowned let parent: SkeletonListDataSource<Wrapped>
+		private weak var parent: SkeletonListDataSource<Wrapped>?
 
 		init(parent: SkeletonListDataSource<Wrapped>) {
 			self.parent = parent
 		}
 
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Wrapped.Element>) {
-			parent.updateData()
+			parent?.updateData()
 		}
 	}
 }

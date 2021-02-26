@@ -12,7 +12,11 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 
 	private let scheduler: Scheduler?
 	private let publisherSupplier: (_ pageIndex: Int) -> AnyPublisher<Page, Error>
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	private var pages = [Page]()
 	public private(set) var elements = [Element]()
@@ -99,18 +103,16 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func updateElements() {
 		elements = pages.flatMap(\.elements)
 		let erasedSelf = eraseToAnyFetchableListDataSource()
-		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 }

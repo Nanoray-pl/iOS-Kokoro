@@ -8,9 +8,13 @@ import KokoroUtils
 public class SwitchableListDataSource<Element>: FetchableListDataSource {
 	private var currentDataSource: AnyFetchableListDataSource<Element>
 	private var targetDataSource: AnyFetchableListDataSource<Element>?
-	private var observers = [WeakFetchableListDataSourceObserver<Element>]()
 	private lazy var currentDataSourceObserver = DataSourceObserver(parent: self)
 	private lazy var targetDataSourceObserver = DataSourceObserver(parent: self)
+
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: { $0.identifier }
+	)
 
 	public var elements: [Element] {
 		return currentDataSource.elements
@@ -53,15 +57,23 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 	}
 
 	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		observers.append(.init(wrapping: observer))
+		observers.insert(.init(wrapping: observer))
 	}
 
 	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
-		let identifier = ObjectIdentifier(observer)
-		observers.removeFirst(where: { $0.identifier == identifier })
+		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
-	public func switchDataSource<DataSource>(to targetDataSource: DataSource) where DataSource: FetchableListDataSource, DataSource.Element == Element {
+	public func switchDataSource<DataSource>(to targetDataSource: DataSource, replacingCurrent: Bool = false) where DataSource: FetchableListDataSource, DataSource.Element == Element {
+		if replacingCurrent {
+			self.targetDataSource?.removeObserver(targetDataSourceObserver)
+			self.targetDataSource = nil
+			currentDataSource.removeObserver(currentDataSourceObserver)
+			currentDataSource = targetDataSource.eraseToAnyFetchableListDataSource()
+			currentDataSource.addObserver(currentDataSourceObserver)
+			updateObservers()
+			return
+		}
 		if let existingTargetDataSource = self.targetDataSource {
 			existingTargetDataSource.removeObserver(targetDataSourceObserver)
 		}
@@ -88,19 +100,18 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 
 	private func updateObservers() {
 		let erasedSelf = eraseToAnyFetchableListDataSource()
-		observers = observers.filter { $0.weakReference != nil }
 		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 
 	private class DataSourceObserver: FetchableListDataSourceObserver {
-		private unowned let parent: SwitchableListDataSource<Element>
+		private weak var parent: SwitchableListDataSource<Element>?
 
 		init(parent: SwitchableListDataSource<Element>) {
 			self.parent = parent
 		}
 
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
-			parent.didUpdateData(of: self, dataSource: dataSource)
+			parent?.didUpdateData(of: self, dataSource: dataSource)
 		}
 	}
 }
