@@ -11,6 +11,10 @@ public extension Collection {
 	var nonEmpty: Self? {
 		return isEmpty ? nil : self
 	}
+
+	subscript(optional index: Index) -> Element? {
+		return index >= startIndex && index < endIndex ? self[index] : nil
+	}
 }
 
 public extension Optional where Wrapped: Collection {
@@ -115,10 +119,6 @@ extension Array: EmptyInitializableCollection {
 		} else {
 			return nil
 		}
-	}
-
-	public subscript(optional index: Index) -> Element? {
-		return index >= startIndex && index < endIndex ? self[index] : nil
 	}
 }
 
