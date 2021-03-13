@@ -116,7 +116,7 @@ public extension Publisher {
 	}
 }
 
-extension Publisher where Failure == Never {
+public extension Publisher where Failure == Never {
 	func sink(storingIn bag: CancelBag, receiveValue: @escaping (Self.Output) -> Void) {
 		return sink(storingIn: bag, receiveCompletion: { _ in }, receiveValue: receiveValue)
 	}
