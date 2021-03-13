@@ -142,6 +142,24 @@ public extension Sequence {
 		return nil
 	}
 
+	func ofType<T>(_ type: T.Type) -> [T] {
+		return filter { $0 is T }.map { $0 as! T }
+	}
+
+	func first<T>(ofType type: T.Type, where closure: ((T) throws -> Bool)? = nil) rethrows -> T? {
+		if let closure = closure {
+			return try first {
+				if let typed = $0 as? T, try closure(typed) {
+					return true
+				} else {
+					return false
+				}
+			} as? T
+		} else {
+			return first { $0 is T } as? T
+		}
+	}
+
 	func sorted<A: Comparable>(by mapper: (Element) throws -> A, _ order: SortOrder = .ascending) rethrows -> [Element] {
 		return try sorted { try order.areInOrder(lhs: $0, rhs: $1, mapper: mapper) }
 	}
@@ -160,6 +178,22 @@ public extension Sequence {
 
 	func max<T: Comparable>(by mapper: (Element) throws -> T) rethrows -> Element? {
 		return try self.max(by: { try SortOrder.ascending.areInOrder(lhs: $0, rhs: $1, mapper: mapper) })
+	}
+}
+
+public extension BidirectionalCollection {
+	func last<T>(ofType type: T.Type, where closure: ((T) throws -> Bool)? = nil) rethrows -> T? {
+		if let closure = closure {
+			return try last {
+				if let typed = $0 as? T, try closure(typed) {
+					return true
+				} else {
+					return false
+				}
+			} as? T
+		} else {
+			return last { $0 is T } as? T
+		}
 	}
 }
 

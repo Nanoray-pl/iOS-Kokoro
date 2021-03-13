@@ -113,7 +113,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	public var navigationControllers: [UINavigationController] {
-		return (wrappedTabBarController.viewControllers ?? []).compactMap { $0 as? UINavigationController }
+		return (wrappedTabBarController.viewControllers ?? []).ofType(UINavigationController.self)
 	}
 
 	public var topViewController: UIViewController? {

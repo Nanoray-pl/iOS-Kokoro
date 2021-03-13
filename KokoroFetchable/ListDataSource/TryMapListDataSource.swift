@@ -93,6 +93,7 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 			}
 		}
 
+		self.elements = elements
 		switch errors.count {
 		case 1:
 			error = errors[0]

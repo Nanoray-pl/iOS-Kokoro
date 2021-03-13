@@ -7,6 +7,7 @@
 import Combine
 import KokoroUtils
 
+/// A `FetchableListDataSource` implementation powered with data from a `Publisher`.
 public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: FetchableListDataSource {
 	public typealias Page = (elements: [Element], isLast: Bool)
 

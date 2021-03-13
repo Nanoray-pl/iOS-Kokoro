@@ -5,12 +5,26 @@
 
 import KokoroUtils
 
+public enum SkeletonListDataSourceBehaviorCount: ExpressibleByIntegerLiteral {
+	case fixed(_ count: Int)
+	case dynamic(_ closure: (_ itemCount: Int) -> Int)
+
+	public init(integerLiteral value: IntegerLiteralType) {
+		self = .fixed(value)
+	}
+}
+
 public struct SkeletonListDataSourceBehavior {
 	/// Amount of skeleton cells to be used initially before any data is fetched.
-	let initialSkeletonCount: Int
+	let initialSkeletonCount: SkeletonListDataSourceBehaviorCount
 
 	/// Amount of skeleton cells to be used additionally when an extra page is requested and being fetched.
-	let additionalSkeletonCount: Int
+	let additionalSkeletonCount: SkeletonListDataSourceBehaviorCount
+
+	public init(initialSkeletonCount: SkeletonListDataSourceBehaviorCount, additionalSkeletonCount: SkeletonListDataSourceBehaviorCount) {
+		self.initialSkeletonCount = initialSkeletonCount
+		self.additionalSkeletonCount = additionalSkeletonCount
+	}
 }
 
 public enum SkeletonListDataSourceElement<WrappedType> {
@@ -21,6 +35,7 @@ public enum SkeletonListDataSourceElement<WrappedType> {
 extension SkeletonListDataSourceElement: Equatable where WrappedType: Equatable {}
 extension SkeletonListDataSourceElement: Hashable where WrappedType: Hashable {}
 
+/// A `FetchableListDataSource` implementation which adds additional "skeleton" elements to the data source it is wrapping while it is in the fetching state.
 public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: FetchableListDataSource {
 	public typealias Element = SkeletonListDataSourceElement<Wrapped.Element>
 
@@ -38,9 +53,19 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 		case (isFetching: false, _):
 			return 0
 		case (isFetching: true, count: 0):
-			return behavior.initialSkeletonCount
+			switch behavior.initialSkeletonCount {
+			case let .fixed(count):
+				return count
+			case let .dynamic(closure):
+				return closure(wrapped.count)
+			}
 		case (isFetching: true, _):
-			return behavior.additionalSkeletonCount
+			switch behavior.additionalSkeletonCount {
+			case let .fixed(count):
+				return count
+			case let .dynamic(closure):
+				return closure(wrapped.count)
+			}
 		}
 	}
 

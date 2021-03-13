@@ -4,6 +4,7 @@
 //
 
 #if canImport(UIKit)
+import KokoroUtils
 import UIKit
 
 public protocol Constrainable: class {
@@ -121,11 +122,11 @@ public extension Constraint {
 	}
 
 	func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return flatMap().compactMap { $0 as? NSLayoutConstraint }
+		return flatMap().ofType(NSLayoutConstraint.self)
 	}
 
 	func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return flatMap().compactMap { $0 as? NonBasicConstraint }
+		return flatMap().ofType(NonBasicConstraint.self)
 	}
 }
 
@@ -135,15 +136,15 @@ extension Array: Constraints where Element: Constraint {
 	}
 
 	public func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return compactMap { $0 as? NSLayoutConstraint }
+		return ofType(NSLayoutConstraint.self)
 	}
 
 	public func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return compactMap { $0 as? NonBasicConstraint }
+		return ofType(NonBasicConstraint.self)
 	}
 
 	public static func += (left: inout Self, right: Constraints) {
-		left.append(contentsOf: right.flatMap().compactMap { $0 as? Element })
+		left.append(contentsOf: right.flatMap().ofType(Element.self))
 	}
 }
 
@@ -181,11 +182,11 @@ public struct ConstraintSet: Constraints {
 	}
 
 	public func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return constraints.compactMap { $0 as? NSLayoutConstraint }
+		return constraints.ofType(NSLayoutConstraint.self)
 	}
 
 	public func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return constraints.compactMap { $0 as? NonBasicConstraint }
+		return constraints.ofType(NonBasicConstraint.self)
 	}
 }
 

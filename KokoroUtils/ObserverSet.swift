@@ -38,7 +38,7 @@ public final class BoxingObserverSet<Observer, AdditionalObserverParameters> {
 	public init() {}
 
 	public func observers<SpecializedObserver>(ofType type: SpecializedObserver.Type) -> [SpecializedObserver] {
-		return self.observers.compactMap { $0 as? SpecializedObserver }
+		return self.observers.ofType(SpecializedObserver.self)
 	}
 
 	public func observersWithParameters<SpecializedObserver>(ofType type: SpecializedObserver.Type) -> [(observer: SpecializedObserver, parameters: AdditionalObserverParameters)] {

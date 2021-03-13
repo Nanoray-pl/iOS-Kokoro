@@ -3,6 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+/// A `FetchableListDataSource` implementation which can be built either from an array of elements or from another data source's current state.
 public class SnapshotListDataSource<Element>: FetchableListDataSource {
 	public let elements: [Element]
 	public let error: Error?

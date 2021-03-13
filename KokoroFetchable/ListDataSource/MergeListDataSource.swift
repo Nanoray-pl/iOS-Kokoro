@@ -26,11 +26,11 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 	}
 
 	public var isEmpty: Bool {
-		return sortStrategy.elements.isEmpty
+		return sortStrategy.isEmpty
 	}
 
 	public var isFetching: Bool {
-		return dataSources.contains(where: { $0.isFetching })
+		return dataSources.contains { $0.isFetching }
 	}
 
 	public convenience init<SortStrategy, T1, T2>(sortStrategySupplier: @escaping ([AnyFetchableListDataSource<Element>]) -> SortStrategy, dataSources dataSource1: T1, _ dataSource2: T2) where SortStrategy: MergeListDataSourceSortStrategy, T1: FetchableListDataSource, T2: FetchableListDataSource, SortStrategy.Element == Element, T1.Element == Element, T2.Element == Element {
@@ -120,20 +120,27 @@ public protocol MergeListDataSourceSortStrategy {
 	associatedtype Element
 
 	var elements: [Element] { get }
+	var isEmpty: Bool { get }
 
 	func updateElements()
 }
 
 public final class AnyMergeListDataSourceSortStrategy<Element>: MergeListDataSourceSortStrategy {
 	private let elementsClosure: () -> [Element]
+	private let isEmptyClosure: () -> Bool
 	private let updateElementsClosure: () -> Void
 
 	public var elements: [Element] {
 		return elementsClosure()
 	}
 
+	public var isEmpty: Bool {
+		return isEmptyClosure()
+	}
+
 	public init<T>(wrapping wrapped: T) where T: MergeListDataSourceSortStrategy, T.Element == Element {
 		elementsClosure = { wrapped.elements }
+		isEmptyClosure = { wrapped.isEmpty }
 		updateElementsClosure = { wrapped.updateElements() }
 	}
 
@@ -151,12 +158,20 @@ public extension MergeListDataSourceSortStrategy {
 private class MergeListDataSourceNoOpSortStrategy<Element>: MergeListDataSourceSortStrategy {
 	let elements = [Element]()
 
+	var isEmpty: Bool {
+		return true
+	}
+
 	func updateElements() {}
 }
 
 public class MergeListDataSourceByDataSourceSortStrategy<Element>: MergeListDataSourceSortStrategy {
 	private let dataSources: [AnyFetchableListDataSource<Element>]
 	public private(set) var elements = [Element]()
+
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
 
 	public init(dataSources: [AnyFetchableListDataSource<Element>]) {
 		self.dataSources = dataSources
@@ -172,6 +187,10 @@ public class MergeListDataSourceByPageSortStrategy<Element, Key: Equatable>: Mer
 	private let uniqueKeyFunction: (Element) -> Key
 	private var dataSourceKeyCache: [[Key]]
 	public private(set) var elements = [Element]()
+
+	public var isEmpty: Bool {
+		return elements.isEmpty
+	}
 
 	public init(dataSources: [AnyFetchableListDataSource<Element>], uniqueKeyFunction: @escaping (Element) -> Key) {
 		self.dataSources = dataSources

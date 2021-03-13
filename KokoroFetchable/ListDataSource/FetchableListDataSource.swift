@@ -55,6 +55,16 @@ public extension FetchableListDataSource {
 		return ObjectIdentifier(self)
 	}
 
+	var fetchable: Fetchable<[Element], Error> {
+		if isFetching {
+			return .fetching
+		} else if let error = error {
+			return .failure(error)
+		} else {
+			return .success(elements)
+		}
+	}
+
 	var fetchState: DataSourceFetchState<Error> {
 		if isFetching {
 			return .fetching

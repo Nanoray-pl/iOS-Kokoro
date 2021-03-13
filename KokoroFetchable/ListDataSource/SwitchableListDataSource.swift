@@ -5,6 +5,7 @@
 
 import KokoroUtils
 
+/// A `FetchableListDataSource` implementation which allows switching the actual data source, keeping the previous data source's data until the new one finishes fetching.
 public class SwitchableListDataSource<Element>: FetchableListDataSource {
 	private var currentDataSource: AnyFetchableListDataSource<Element>
 	private var targetDataSource: AnyFetchableListDataSource<Element>?
@@ -64,6 +65,9 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
+	/// Switches the data source to `targetDataSource`.
+	/// - Parameter targetDataSource: The data source to switch to.
+	/// - Parameter replacingCurrent: Whether the internal data source should be completely replaced, as if it was the initial data source, without waiting for it to finish fetching. Defaults to `false`.
 	public func switchDataSource<DataSource>(to targetDataSource: DataSource, replacingCurrent: Bool = false) where DataSource: FetchableListDataSource, DataSource.Element == Element {
 		if replacingCurrent {
 			self.targetDataSource?.removeObserver(targetDataSourceObserver)
