@@ -9,4 +9,8 @@ public enum Visibility: Hashable {
 
 public enum EnablementState: Hashable {
 	case disabled, enabled
+
+	public var isEnabled: Bool {
+		return self == .enabled
+	}
 }

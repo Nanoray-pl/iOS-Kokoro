@@ -138,7 +138,7 @@ open class NavigationControllerWrapper: UIViewController {
 		if options.navigationBarVisibility == .hidden {
 			hiddenNavigationBarControllers.add(viewController)
 		}
-		if options.swipeBackGestureState == .disabled {
+		if !options.swipeBackGestureState.isEnabled {
 			disabledSwipeBackGestureControllers.add(viewController)
 		}
 		wrappedNavigationController.pushViewController(viewController, animated: animated, completion: completion)

@@ -7,7 +7,7 @@
 import UIKit
 
 public class BorderedView: UIView {
-	public var borderInsets = UIEdgeInsets(top: 1.0 / UIScreen.main.scale, left: 0, bottom: 1.0 / UIScreen.main.scale, right: 0) {
+	public var borderInsets: EdgeInsets = UIEdgeInsets(top: 1.0 / UIScreen.main.scale, left: 0, bottom: 1.0 / UIScreen.main.scale, right: 0) {
 		didSet {
 			updateBorderFrames()
 			updateContentConstraints()
@@ -68,8 +68,8 @@ public class BorderedView: UIView {
 	private func updateBorderFrames() {
 		topBorder.frame = CGRect(x: 0, y: 0, width: frame.width, height: borderInsets.top)
 		bottomBorder.frame = CGRect(x: 0, y: frame.height - borderInsets.bottom, width: frame.width, height: borderInsets.bottom)
-		leftBorder.frame = CGRect(x: 0, y: borderInsets.top, width: borderInsets.left, height: frame.height - borderInsets.top - borderInsets.bottom)
-		rightBorder.frame = CGRect(x: frame.width - borderInsets.right, y: borderInsets.top, width: borderInsets.right, height: frame.height - borderInsets.top - borderInsets.bottom)
+		leftBorder.frame = CGRect(x: 0, y: borderInsets.top, width: borderInsets.left(isRightToLeft: isRightToLeft), height: frame.height - borderInsets.top - borderInsets.bottom)
+		rightBorder.frame = CGRect(x: frame.width - borderInsets.right(isRightToLeft: isRightToLeft), y: borderInsets.top, width: borderInsets.right(isRightToLeft: isRightToLeft), height: frame.height - borderInsets.top - borderInsets.bottom)
 	}
 
 	private func updateBorderColor() {

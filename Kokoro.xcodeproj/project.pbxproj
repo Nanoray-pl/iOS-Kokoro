@@ -154,6 +154,8 @@
 		AAE9D6342615C9360040C91F /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D6332615C9360040C91F /* Either.swift */; };
 		AAE9D6502615C9C00040C91F /* LoggingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D64F2615C9C00040C91F /* LoggingHttpClient.swift */; };
 		AAE9D65F2615CAB80040C91F /* GroupingListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D65E2615CAB80040C91F /* GroupingListDataSource.swift */; };
+		AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D6722615FB4D0040C91F /* Either3.swift */; };
+		AAE9D68F2615FBB40040C91F /* Either4.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D68E2615FBB40040C91F /* Either4.swift */; };
 		AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */; };
 		AAEFB1262542D860003AA60E /* SeparatorStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1252542D860003AA60E /* SeparatorStackView.swift */; };
 		AAEFB1302542DACB003AA60E /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB12F2542DACB003AA60E /* BorderedView.swift */; };
@@ -435,6 +437,8 @@
 		AAE9D6332615C9360040C91F /* Either.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		AAE9D64F2615C9C00040C91F /* LoggingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingHttpClient.swift; sourceTree = "<group>"; };
 		AAE9D65E2615CAB80040C91F /* GroupingListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupingListDataSource.swift; sourceTree = "<group>"; };
+		AAE9D6722615FB4D0040C91F /* Either3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either3.swift; sourceTree = "<group>"; };
+		AAE9D68E2615FBB40040C91F /* Either4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either4.swift; sourceTree = "<group>"; };
 		AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicSuperviewConstraintBuilders.swift; sourceTree = "<group>"; };
 		AAEFB1252542D860003AA60E /* SeparatorStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorStackView.swift; sourceTree = "<group>"; };
 		AAEFB12F2542DACB003AA60E /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
@@ -737,6 +741,7 @@
 			children = (
 				AAD3549A25286A16007C63EF /* Bootstrap */,
 				AA16EB08257A7849001C30E9 /* Scheduler */,
+				AAE9D6712615FB3A0040C91F /* Either */,
 				AAD354A025286B1C007C63EF /* With.swift */,
 				AAD355C72528B3D7007C63EF /* Identifier.swift */,
 				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
@@ -751,7 +756,6 @@
 				AA42D414256A7BBC004604D2 /* PrivateSourceLocation.swift */,
 				AA16EAE0257A74DA001C30E9 /* Lock.swift */,
 				AAF080E225E942A800D5065C /* ObserverSet.swift */,
-				AAE9D6332615C9360040C91F /* Either.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -1084,6 +1088,16 @@
 				AAD57CCF2533B0CA007358D1 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		AAE9D6712615FB3A0040C91F /* Either */ = {
+			isa = PBXGroup;
+			children = (
+				AAE9D6332615C9360040C91F /* Either.swift */,
+				AAE9D6722615FB4D0040C91F /* Either3.swift */,
+				AAE9D68E2615FBB40040C91F /* Either4.swift */,
+			);
+			path = Either;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1815,9 +1829,11 @@
 				AAD355CD2528B4A4007C63EF /* Logger.swift in Sources */,
 				AAF080E325E942A800D5065C /* ObserverSet.swift in Sources */,
 				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
+				AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAE9D6342615C9360040C91F /* Either.swift in Sources */,
 				AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */,
+				AAE9D68F2615FBB40040C91F /* Either4.swift in Sources */,
 				AA16EAE1257A74DA001C30E9 /* Lock.swift in Sources */,
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AA5AEC26255585F700516C8D /* CombineExtensions.swift in Sources */,

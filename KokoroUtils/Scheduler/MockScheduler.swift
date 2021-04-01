@@ -14,7 +14,7 @@ public class MockScheduler: Scheduler {
 
 	public private(set) var currentDate: Date
 	private var workItemsToExecute = [DispatchWorkItem]()
-	private var entries = SortedArray<Entry> { lhs, rhs in lhs.date < rhs.date }
+	private var entries = SortedArray<Entry>(by: \.date)
 
 	public init(startingDate: Date = Date()) {
 		currentDate = startingDate

@@ -17,6 +17,9 @@ public protocol FlexColumnCollectionViewLayoutDelegate: UICollectionViewDelegate
 
 	/// - Warning: The value returned from this method cannot be smaller than `layout.columnSpacing` - if it is, `layout.columnSpacing` will be used instead.
 	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat
+
+	func headerAttributes(forSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.CalculatedLayout.Section.HeaderOrFooter?
+	func footerAttributes(forSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.CalculatedLayout.Section.HeaderOrFooter?
 }
 
 public extension FlexColumnCollectionViewLayoutDelegate {
@@ -39,6 +42,14 @@ public extension FlexColumnCollectionViewLayoutDelegate {
 	func columnSpacing(between preceding: (indexPath: IndexPath?, columnIndex: Int), and following: (indexPath: IndexPath?, columnIndex: Int), inRow rowIndex: Int, inSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> CGFloat {
 		return layout.columnSpacing
 	}
+
+	func headerAttributes(forSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.CalculatedLayout.Section.HeaderOrFooter? {
+		return nil
+	}
+
+	func footerAttributes(forSection sectionIndex: Int, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView) -> FlexColumnCollectionViewLayout.CalculatedLayout.Section.HeaderOrFooter? {
+		return nil
+	}
 }
 
 public protocol FlexColumnCollectionViewLayoutObserver: class {
@@ -59,6 +70,8 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	public static let rowBackgroundElementKind = UUID().uuidString
 	public static let columnBackgroundElementKind = UUID().uuidString
 	public static let itemBackgroundElementKind = UUID().uuidString
+	public static let sectionHeaderElementKind = UUID().uuidString
+	public static let sectionFooterElementKind = UUID().uuidString
 
 	public enum ColumnConstraint: Equatable, ExpressibleByIntegerLiteral {
 		case count(_ count: Int)
@@ -136,13 +149,29 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		case rowBackground(sectionIndex: Int, rowIndex: Int)
 		case columnBackground(sectionIndex: Int, columnIndex: Int)
 		case itemBackground(indexPath: IndexPath)
+		case sectionHeader(index: Int)
+		case sectionFooter(index: Int)
 	}
 
 	public struct CalculatedLayout: Equatable {
 		public struct Section: Equatable {
+			public struct HeaderOrFooter: Equatable {
+				public let length: CGFloat
+				public let offset: CGFloat
+				public let areSidesRelativeToContentInsets: Bool
+
+				public init(length: CGFloat, offset: CGFloat = 0, areSidesRelativeToContentInsets: Bool = false) {
+					self.length = length
+					self.offset = offset
+					self.areSidesRelativeToContentInsets = areSidesRelativeToContentInsets
+				}
+			}
+
 			public let index: Int
 			public let rows: [Row]
 			public let rowSpacings: [CGFloat]
+			public let header: HeaderOrFooter?
+			public let footer: HeaderOrFooter?
 		}
 
 		public struct Row: Equatable {
@@ -268,6 +297,8 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 	private var rowBackgroundAttributes = [RowIndexPath: UICollectionViewLayoutAttributes]()
 	private var columnBackgroundAttributes = [ColumnIndexPath: UICollectionViewLayoutAttributes]()
 	private var itemBackgroundAttributes = [IndexPath: UICollectionViewLayoutAttributes]()
+	private var sectionHeaderAttributes = [Int: UICollectionViewLayoutAttributes]()
+	private var sectionFooterAttributes = [Int: UICollectionViewLayoutAttributes]()
 
 	private var allAttributes: [UICollectionViewLayoutAttributes] {
 		var attributes = [UICollectionViewLayoutAttributes]()
@@ -276,6 +307,8 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		attributes.append(contentsOf: rowBackgroundAttributes.values)
 		attributes.append(contentsOf: columnBackgroundAttributes.values)
 		attributes.append(contentsOf: itemBackgroundAttributes.values)
+		attributes.append(contentsOf: sectionHeaderAttributes.values)
+		attributes.append(contentsOf: sectionFooterAttributes.values)
 		attributes.append(contentsOf: self.attributes.values)
 		return attributes
 	}
@@ -390,6 +423,8 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		rowBackgroundAttributes.removeAll()
 		columnBackgroundAttributes.removeAll()
 		itemBackgroundAttributes.removeAll()
+		sectionHeaderAttributes.removeAll()
+		sectionFooterAttributes.removeAll()
 
 		let layout = calculatedLayout
 		let leadingColumnOffset = orientational(contentInsets, vertical: \.left, horizontal: \.top)
@@ -402,6 +437,18 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 			}
 			let section = layout.sections[sectionIndex]
 			let sectionRowOffset = currentRowOffset
+
+			if let headerAttributes = section.header {
+				sectionHeaderAttributes[sectionIndex] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.sectionHeaderElementKind, with: .init(item: 0, section: sectionIndex)).with {
+					$0.frame = .init(
+						x: orientational(vertical: leadingColumnOffset, horizontal: currentRowOffset),
+						y: orientational(vertical: currentRowOffset, horizontal: leadingColumnOffset),
+						width: orientational(vertical: collectionView.frame.width - (headerAttributes.areSidesRelativeToContentInsets ? contentInsets.horizontal : 0), horizontal: headerAttributes.length),
+						height: orientational(vertical: headerAttributes.length, horizontal: collectionView.frame.height - (headerAttributes.areSidesRelativeToContentInsets ? contentInsets.vertical : 0))
+					)
+				}
+				currentRowOffset += headerAttributes.length + headerAttributes.offset
+			}
 
 			for rowIndex in 0 ..< section.rows.count {
 				if rowIndex > 0 {
@@ -427,7 +474,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 						attributes[indexPath] = UICollectionViewLayoutAttributes(forCellWith: indexPath).with {
 							$0.frame = attributeFrame
 						}
-						if backgrounds.item == .enabled {
+						if backgrounds.item.isEnabled {
 							itemBackgroundAttributes[indexPath] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.itemBackgroundElementKind, with: indexPath).with {
 								$0.frame = attributeFrame
 								$0.zIndex = Self.itemBackgroundZIndex
@@ -437,7 +484,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 					currentColumnOffset += row.columnLength
 				}
 
-				if backgrounds.row == .enabled {
+				if backgrounds.row.isEnabled {
 					rowBackgroundAttributes[.init(section: sectionIndex, row: rowIndex)] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.rowBackgroundElementKind, with: .init(item: rowIndex, section: sectionIndex)).with {
 						$0.frame = .init(
 							x: orientational(vertical: leadingColumnOffset, horizontal: currentRowOffset),
@@ -452,7 +499,7 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 				currentRowOffset += row.rowLength
 			}
 
-			if backgrounds.column == .enabled && Set(section.rows.map(\.maxColumnCount)).count == 1 && Set(section.rows.map(\.columnSpacings)).count == 1 {
+			if backgrounds.column.isEnabled && Set(section.rows.map(\.maxColumnCount)).count == 1 && Set(section.rows.map(\.columnSpacings)).count == 1 {
 				switch orientation {
 				case .vertical(_, lastColumnAlignment: .left, _), .vertical(_, lastColumnAlignment: .right, _), .horizontal(_, lastColumnAlignment: .top, _), .horizontal(_, lastColumnAlignment: .bottom, _):
 					let columnCount = section.rows[0].maxColumnCount
@@ -478,7 +525,20 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 				}
 			}
 
-			if backgrounds.section == .enabled {
+			if let footerAttributes = section.footer {
+				currentRowOffset += footerAttributes.offset
+				sectionFooterAttributes[sectionIndex] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.sectionFooterElementKind, with: .init(item: 0, section: sectionIndex)).with {
+					$0.frame = .init(
+						x: orientational(vertical: leadingColumnOffset, horizontal: currentRowOffset),
+						y: orientational(vertical: currentRowOffset, horizontal: leadingColumnOffset),
+						width: orientational(vertical: collectionView.frame.width - (footerAttributes.areSidesRelativeToContentInsets ? contentInsets.horizontal : 0), horizontal: footerAttributes.length),
+						height: orientational(vertical: footerAttributes.length, horizontal: collectionView.frame.height - (footerAttributes.areSidesRelativeToContentInsets ? contentInsets.vertical : 0))
+					)
+				}
+				currentRowOffset += footerAttributes.length
+			}
+
+			if backgrounds.section.isEnabled {
 				sectionBackgroundAttributes.append(UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.sectionBackgroundElementKind, with: .init(item: 0, section: sectionIndex)).with {
 					$0.frame = .init(
 						x: orientational(vertical: leadingColumnOffset, horizontal: sectionRowOffset),
@@ -494,13 +554,13 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 		let trailingRowOffset = orientational(contentInsets, vertical: \.bottom, horizontal: \.right)
 		calculatedContentLength = currentRowOffset + trailingRowOffset
 
-		if backgrounds.content == .enabled {
+		if backgrounds.content.isEnabled {
 			contentBackgroundAttribute = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.contentBackgroundElementKind, with: .init(item: 0, section: 0)).with {
 				$0.frame = .init(origin: .zero, size: collectionViewContentSize)
 				$0.zIndex = Self.contentBackgroundZIndex
 			}
 		}
-		if backgrounds.insetContent == .enabled {
+		if backgrounds.insetContent.isEnabled {
 			let contentSize = collectionViewContentSize
 			insetContentBackgroundAttribute = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: Self.insetContentBackgroundElementKind, with: .init(item: 0, section: 0)).with {
 				$0.frame = .init(
@@ -692,7 +752,9 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 				.init(
 					index: sectionIndex,
 					rows: calculatedRows,
-					rowSpacings: calculatedRowSpacings
+					rowSpacings: calculatedRowSpacings,
+					header: delegate?.headerAttributes(forSection: sectionIndex, in: self, in: collectionView),
+					footer: delegate?.footerAttributes(forSection: sectionIndex, in: self, in: collectionView)
 				)
 			)
 		}
@@ -729,6 +791,10 @@ public class FlexColumnCollectionViewLayout: UICollectionViewLayout {
 			return .columnBackground(sectionIndex: indexPath.section, columnIndex: indexPath.item)
 		case itemBackgroundElementKind:
 			return .itemBackground(indexPath: indexPath)
+		case sectionHeaderElementKind:
+			return .sectionHeader(index: indexPath.section)
+		case sectionFooterElementKind:
+			return .sectionFooter(index: indexPath.section)
 		default:
 			return nil
 		}

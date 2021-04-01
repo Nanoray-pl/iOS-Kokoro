@@ -10,16 +10,14 @@ public enum TryMapListDataSourceErrorBehavior {
 }
 
 public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: FetchableListDataSource {
-	public typealias Element = Output
-
 	private let wrapped: Wrapped
 	private let errorBehavior: TryMapListDataSourceErrorBehavior
 	private let mappingFunction: (Wrapped.Element) throws -> Output
 	private lazy var observer = WrappedObserver(parent: self)
-	public private(set) var elements = [Element]()
+	public private(set) var elements = [Output]()
 	public private(set) var error: Error?
 
-	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Output>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
 		identity: \.identifier
 	)
@@ -48,7 +46,7 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 		wrapped.removeObserver(observer)
 	}
 
-	public subscript(index: Int) -> Element {
+	public subscript(index: Int) -> Output {
 		return elements[index]
 	}
 
@@ -61,16 +59,16 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 		return wrapped.fetchAdditionalData()
 	}
 
-	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Output {
 		observers.insert(.init(wrapping: observer))
 	}
 
-	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Output {
 		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
 	private func updateData() {
-		var elements = [Element]()
+		var elements = [Output]()
 		var errors = [Error]()
 		if let error = wrapped.error {
 			errors.append(error)

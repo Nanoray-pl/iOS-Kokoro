@@ -8,9 +8,6 @@ import Combine
 import Foundation
 
 public class LocalUrlDataProviderFactory: ResourceProviderFactory {
-	public typealias Input = URL
-	public typealias Resource = Data
-
 	public init() {}
 
 	public func create(for input: URL) -> AnyResourceProvider<Data> {
@@ -22,8 +19,6 @@ public class LocalUrlDataProvider: ResourceProvider {
 	enum Error: Swift.Error {
 		case notLocal
 	}
-
-	public typealias Resource = Data
 
 	public let url: URL
 

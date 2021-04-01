@@ -27,6 +27,12 @@ public protocol Constrainable: class {
 	func prepareForConstraintBasedLayout()
 }
 
+public extension Constrainable {
+	var isRightToLeft: Bool {
+		return UIView.userInterfaceLayoutDirection(for: constrainableView.semanticContentAttribute) == .rightToLeft
+	}
+}
+
 extension UIView: Constrainable {
 	public var constrainableView: UIView {
 		return self
@@ -191,8 +197,6 @@ public struct ConstraintSet: Constraints {
 }
 
 extension ConstraintSet: ExpressibleByArrayLiteral {
-	public typealias ArrayLiteralElement = Constraints
-
 	public init(arrayLiteral elements: Constraints...) {
 		self.constraints = elements.flatMap { $0.flatMap() }
 	}

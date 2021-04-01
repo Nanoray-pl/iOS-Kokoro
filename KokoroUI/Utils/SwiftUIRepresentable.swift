@@ -29,20 +29,18 @@ public func representable<T: UIView>(size: ViewRepresentableSize = .intrinsic, f
 	return ViewRepresentable(size: size, factory: factory).previewLayout(.sizeThatFits)
 }
 
-private struct ViewControllerRepresentable<T: UIViewController>: UIViewControllerRepresentable {
-	typealias UIViewControllerType = T
+private struct ViewControllerRepresentable<UIViewControllerType: UIViewController>: UIViewControllerRepresentable {
+	private let factory: () -> UIViewControllerType
 
-	private let factory: () -> T
-
-	init(factory: @escaping () -> T) {
+	init(factory: @escaping () -> UIViewControllerType) {
 		self.factory = factory
 	}
 
-	func makeUIViewController(context: UIViewControllerRepresentableContext<ViewControllerRepresentable<T>>) -> T {
+	func makeUIViewController(context: UIViewControllerRepresentableContext<ViewControllerRepresentable<UIViewControllerType>>) -> UIViewControllerType {
 		return factory()
 	}
 
-	func updateUIViewController(_ uiViewController: T, context: UIViewControllerRepresentableContext<ViewControllerRepresentable<T>>) {}
+	func updateUIViewController(_ uiViewController: UIViewControllerType, context: UIViewControllerRepresentableContext<ViewControllerRepresentable<UIViewControllerType>>) {}
 }
 
 public struct ViewRepresentableSize: Hashable {
@@ -68,22 +66,20 @@ public enum ViewRepresentableSingleSize: Hashable {
 	case fixed(_ length: CGFloat)
 }
 
-private struct ViewRepresentable<T: UIView>: UIViewRepresentable {
-	typealias UIViewType = UIView
-
+private struct ViewRepresentable<UIViewType: UIView>: UIViewRepresentable {
 	private let size: ViewRepresentableSize
-	private let factory: () -> T
+	private let factory: () -> UIViewType
 
-	init(size: ViewRepresentableSize = .intrinsic, factory: @escaping () -> T) {
+	init(size: ViewRepresentableSize = .intrinsic, factory: @escaping () -> UIViewType) {
 		self.size = size
 		self.factory = factory
 	}
 
-	func makeUIView(context: UIViewRepresentableContext<ViewRepresentable<T>>) -> UIView {
+	func makeUIView(context: UIViewRepresentableContext<ViewRepresentable<UIViewType>>) -> UIView {
 		return Container(wrapping: factory(), size: size)
 	}
 
-	func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<ViewRepresentable<T>>) {
+	func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<ViewRepresentable<UIViewType>>) {
 		uiView.setContentHuggingPriority(.required, for: .vertical)
 		uiView.setContentHuggingPriority(.required, for: .horizontal)
 	}
@@ -152,8 +148,6 @@ private struct ViewRepresentable<T: UIView>: UIViewRepresentable {
 }
 
 public final class TableRepresentable<Item, Cell: UITableViewCell>: NSObject, UIViewRepresentable, UITableViewDataSource {
-	public typealias UIViewType = UITableView
-
 	private let reuseIdentifier = "Cell"
 
 	private let items: [Item]

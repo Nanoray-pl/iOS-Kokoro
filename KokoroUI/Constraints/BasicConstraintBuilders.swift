@@ -125,10 +125,6 @@ public enum MultiEdgeRelation {
 public extension Constrainable {
 	// MARK: - Utilities
 
-	private var isRightToLeft: Bool {
-		return UIView.userInterfaceLayoutDirection(for: constrainableView.semanticContentAttribute) == .rightToLeft
-	}
-
 	private var rightToLeftMultiplier: CGFloat {
 		return isRightToLeft ? -1 : 1
 	}

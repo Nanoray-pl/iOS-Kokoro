@@ -8,8 +8,6 @@ import UIKit
 
 public class ProgressBar: UIView {
 	public enum Value: Hashable, ExpressibleByFloatLiteral {
-		public typealias FloatLiteralType = Double
-
 		case indeterminate
 		case determinate(_ value: Double)
 

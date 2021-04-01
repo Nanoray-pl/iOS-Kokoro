@@ -10,19 +10,14 @@ import Foundation
 import KokoroUtils
 
 public class DataAvAssetProviderFactory: ResourceProviderFactory {
-	public typealias Input = (data: Data, identifier: String)
-	public typealias Resource = AVAsset
-
 	public init() {}
 
-	public func create(for input: Input) -> AnyResourceProvider<AVAsset> {
+	public func create(for input: (data: Data, identifier: String)) -> AnyResourceProvider<AVAsset> {
 		return DataAvAssetProvider(data: input.data, identifier: input.identifier).eraseToAnyResourceProvider()
 	}
 }
 
 public class DataAvAssetProvider: ResourceProvider {
-	public typealias Resource = AVAsset
-
 	private let data: Data
 	private let dataIdentifier: String
 	private let lock = ObjcLock()

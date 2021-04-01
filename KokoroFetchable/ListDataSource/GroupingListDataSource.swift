@@ -14,7 +14,7 @@ public protocol GroupingListDataSourceObserver: class {
 	func didRemoveGroupDataSource(_ groupDataSource: AnyFetchableListDataSource<Element>, from splitDataSource: GroupingListDataSource<Element, Group>)
 }
 
-public final class WeakSplitListDataSourceObserver<Element, Group: Comparable>: GroupingListDataSourceObserver {
+private class WeakSplitListDataSourceObserver<Element, Group: Comparable>: GroupingListDataSourceObserver {
 	public let identifier: ObjectIdentifier
 	public private(set) weak var weakReference: AnyObject?
 	private let didUpdateDataClosure: (_ dataSource: GroupingListDataSource<Element, Group>) -> Void

@@ -13,8 +13,6 @@ public protocol HttpBodyEncoder {
 }
 
 public final class RawHttpBodyEncoder: HttpBodyEncoder {
-	public typealias Input = (contentType: String, body: Data)
-
 	public init() {}
 
 	public func encode(_ input: (contentType: String, body: Data)) throws -> (contentType: String, body: Data) {

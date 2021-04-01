@@ -9,9 +9,6 @@ import Combine
 import Foundation
 
 public class UrlAvAssetProviderFactory: ResourceProviderFactory {
-	public typealias Input = URL
-	public typealias Resource = AVAsset
-
 	public init() {}
 
 	public func create(for input: URL) -> AnyResourceProvider<AVAsset> {
@@ -20,8 +17,6 @@ public class UrlAvAssetProviderFactory: ResourceProviderFactory {
 }
 
 public class UrlAvAssetProvider: ResourceProvider {
-	public typealias Resource = AVAsset
-
 	private let url: URL
 
 	public var identifier: String {

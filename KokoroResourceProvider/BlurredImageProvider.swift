@@ -10,9 +10,6 @@ import KokoroUtils
 import UIKit
 
 public class BlurredImageProviderFactory: ResourceProviderFactory {
-	public typealias Input = AnyResourceProvider<UIImage>
-	public typealias Resource = UIImage
-
 	private let radius: CGFloat
 
 	public init(radius: CGFloat) {
@@ -25,8 +22,6 @@ public class BlurredImageProviderFactory: ResourceProviderFactory {
 }
 
 public class BlurredImageProvider: ResourceProvider {
-	public typealias Resource = UIImage
-
 	private let wrapped: AnyResourceProvider<UIImage>
 	private let radius: CGFloat
 

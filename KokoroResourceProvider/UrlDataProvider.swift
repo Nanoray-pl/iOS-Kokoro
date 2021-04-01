@@ -8,16 +8,13 @@ import Combine
 import Foundation
 
 public class UrlDataProviderFactory: ResourceProviderFactory {
-	public typealias Input = URL
-	public typealias Resource = Data
-
 	private let session: URLSession
 
 	public init(session: URLSession) {
 		self.session = session
 	}
 
-	public func create(for input: URL) -> AnyResourceProvider<Resource> {
+	public func create(for input: URL) -> AnyResourceProvider<Data> {
 		if input.isFileURL {
 			return LocalUrlDataProvider(url: input).eraseToAnyResourceProvider()
 		} else {
@@ -27,8 +24,6 @@ public class UrlDataProviderFactory: ResourceProviderFactory {
 }
 
 public class UrlDataProvider: ResourceProvider {
-	public typealias Resource = Data
-
 	private let session: URLSession
 	private let url: URL
 

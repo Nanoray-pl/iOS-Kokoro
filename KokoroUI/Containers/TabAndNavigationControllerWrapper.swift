@@ -284,7 +284,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		if barShouldHideMap[.tab]! {
 			hiddenTabBarControllers.add(viewController)
 		}
-		if options.swipeBackGestureState == .disabled {
+		if !options.swipeBackGestureState.isEnabled {
 			disabledSwipeBackGestureControllers.add(viewController)
 		}
 		currentNavigationController.pushViewController(viewController, animated: animated, completion: completion)

@@ -320,7 +320,7 @@ public class ButtonMenuConfigurator {
 			switch handler {
 			case let .target(handler):
 				guard let target = handler.target else { return }
-				let selectorArgumentCount = handler.selector.description.count(where: { $0 == ":" })
+				let selectorArgumentCount = handler.selector.description.count { $0 == ":" }
 				switch selectorArgumentCount {
 				case 0:
 					_ = target.perform(handler.selector)

@@ -93,8 +93,8 @@ private class UntypedJob: Job {
 
 public class DefaultJobManager: JobManager, ObjectWith {
 	private let entryStorage: JobEntryStorage
+	private let scheduler: KokoroUtils.Scheduler
 	private let logger: Logger
-	private let dispatchQueue: DispatchQueue
 
 	private let lock = ObjcLock()
 	private var handlers = [JobHandlerIdentifier: UntypedJobHandler]()
@@ -104,10 +104,10 @@ public class DefaultJobManager: JobManager, ObjectWith {
 	private var persistedScheduleParameters = [JobIdentifier: JobManagerPersistedScheduleParameters]()
 	private var workItem: DispatchWorkItem?
 
-	public init(entryStorage: JobEntryStorage, logger: Logger, dispatchQueue: DispatchQueue = .global(qos: .background)) {
+	public init(entryStorage: JobEntryStorage, scheduler: KokoroUtils.Scheduler = DispatchQueue.global(qos: .background), logger: Logger, dispatchQueue: DispatchQueue = .global(qos: .background)) {
 		self.entryStorage = entryStorage
 		self.logger = logger
-		self.dispatchQueue = dispatchQueue
+		self.scheduler = scheduler
 	}
 
 	public func registerHandler<Handler: JobHandler>(_ handler: Handler) {
@@ -187,7 +187,7 @@ public class DefaultJobManager: JobManager, ObjectWith {
 			self.workItem = workItem
 			let delay = persistedScheduleParameters[firstJob.identifier]!.dispatchTime.timeIntervalSince(Date())
 			logger.debug("Rescheduled job \(firstJob.identifier) - will run after \(delay)s")
-			dispatchQueue.asyncAfter(deadline: .now() + delay, execute: workItem)
+			scheduler.schedule(after: delay, execute: workItem)
 		}
 	}
 

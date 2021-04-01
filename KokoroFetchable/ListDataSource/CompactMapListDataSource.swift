@@ -6,14 +6,12 @@
 import KokoroUtils
 
 public class CompactMapListDataSource<Wrapped: FetchableListDataSource, Output>: FetchableListDataSource {
-	public typealias Element = Output
-
 	private let wrapped: Wrapped
 	private let mappingFunction: (Wrapped.Element) -> Output?
 	private lazy var observer = WrappedObserver(parent: self)
-	public private(set) var elements = [Element]()
+	public private(set) var elements = [Output]()
 
-	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
+	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Output>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
 		identity: \.identifier
 	)
@@ -45,7 +43,7 @@ public class CompactMapListDataSource<Wrapped: FetchableListDataSource, Output>:
 		wrapped.removeObserver(observer)
 	}
 
-	public subscript(index: Int) -> Element {
+	public subscript(index: Int) -> Output {
 		return elements[index]
 	}
 
@@ -58,11 +56,11 @@ public class CompactMapListDataSource<Wrapped: FetchableListDataSource, Output>:
 		return wrapped.fetchAdditionalData()
 	}
 
-	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+	public func addObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Output {
 		observers.insert(.init(wrapping: observer))
 	}
 
-	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Element {
+	public func removeObserver<T>(_ observer: T) where T: FetchableListDataSourceObserver, T.Element == Output {
 		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 

@@ -7,11 +7,9 @@
 import Combine
 
 public class ValueResourceProviderFactory<Resource: Hashable>: ResourceProviderFactory {
-	public typealias Input = (value: Resource, identifier: String)
-
 	public init() {}
 
-	public func create(for input: Input) -> AnyResourceProvider<Resource> {
+	public func create(for input: (value: Resource, identifier: String)) -> AnyResourceProvider<Resource> {
 		return ValueResourceProvider<Resource>(value: input.value, identifier: input.identifier).eraseToAnyResourceProvider()
 	}
 }
