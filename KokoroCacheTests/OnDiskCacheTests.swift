@@ -153,8 +153,8 @@ class OnDiskCacheTests: XCTestCase {
 		let fileManager = FileManager.default
 		let cacheDirectoryUrl = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent("/\(UUID().uuidString)", isDirectory: true)
 		defer { try? fileManager.removeItem(at: cacheDirectoryUrl) }
-		let synchronousScheduler = SynchronousScheduler()
-		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer(), scheduler: synchronousScheduler)
+		let mockScheduler = MockScheduler()
+		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer(), scheduler: mockScheduler)
 		cache.options = .init(validity: .afterStorage(0.075), serializeErrorBehavior: .noValue)
 
 		let data = (0...2).map { emptyData(withLength: $0 * 8) }
@@ -176,7 +176,7 @@ class OnDiskCacheTests: XCTestCase {
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1, 2]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 4)
 
-		synchronousScheduler.advanceTime(by: 0.1)
+		mockScheduler.advanceTime(by: 0.1)
 		XCTAssertEqual(cacheValues(), expectedValues([]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 1)
 
@@ -184,7 +184,7 @@ class OnDiskCacheTests: XCTestCase {
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 2)
 
-		synchronousScheduler.advanceTime(by: 0.05)
+		mockScheduler.advanceTime(by: 0.05)
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 2)
 
@@ -192,7 +192,7 @@ class OnDiskCacheTests: XCTestCase {
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 3)
 
-		synchronousScheduler.advanceTime(by: 0.05)
+		mockScheduler.advanceTime(by: 0.05)
 		XCTAssertEqual(cacheValues(), expectedValues([1]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 2)
 
@@ -205,8 +205,8 @@ class OnDiskCacheTests: XCTestCase {
 		let fileManager = FileManager.default
 		let cacheDirectoryUrl = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent("/\(UUID().uuidString)", isDirectory: true)
 		defer { try? fileManager.removeItem(at: cacheDirectoryUrl) }
-		let synchronousScheduler = SynchronousScheduler()
-		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer(), scheduler: synchronousScheduler)
+		let mockScheduler = MockScheduler()
+		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer(), scheduler: mockScheduler)
 		cache.options = .init(validity: .afterAccess(0.075), serializeErrorBehavior: .noValue)
 
 		let data = (0...2).map { emptyData(withLength: $0 * 8) }
@@ -228,7 +228,7 @@ class OnDiskCacheTests: XCTestCase {
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1, 2]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 4)
 
-		synchronousScheduler.advanceTime(by: 0.1)
+		mockScheduler.advanceTime(by: 0.1)
 		XCTAssertEqual(cacheValues(), expectedValues([]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 1)
 
@@ -236,7 +236,7 @@ class OnDiskCacheTests: XCTestCase {
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 2)
 
-		synchronousScheduler.advanceTime(by: 0.05)
+		mockScheduler.advanceTime(by: 0.05)
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 2)
 
@@ -244,7 +244,7 @@ class OnDiskCacheTests: XCTestCase {
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 3)
 
-		synchronousScheduler.advanceTime(by: 0.05)
+		mockScheduler.advanceTime(by: 0.05)
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1]))
 		XCTAssertEqual(try! fileManager.contentsOfDirectory(at: cacheDirectoryUrl, includingPropertiesForKeys: nil, options: []).count, 3)
 

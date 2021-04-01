@@ -45,7 +45,7 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
-		identity: { $0.identifier }
+		identity: \.identifier
 	)
 
 	private var skeletonCount: Int {

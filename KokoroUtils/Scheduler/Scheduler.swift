@@ -6,7 +6,28 @@
 #if canImport(Foundation)
 import Foundation
 
-public protocol Scheduler {
+public protocol Executor {
+	func execute(_ workItem: DispatchWorkItem)
+}
+
+public extension Executor {
+	func execute(_ closure: @escaping () -> Void) {
+		let workItem = DispatchWorkItem(block: closure)
+		execute(workItem)
+	}
+}
+
+public enum SynchronousExecutor: Executor {
+	case shared
+
+	public func execute(_ workItem: DispatchWorkItem) {
+		if !workItem.isCancelled {
+			workItem.perform()
+		}
+	}
+}
+
+public protocol Scheduler: Executor {
 	var currentDate: Date { get }
 
 	func schedule(at date: Date, execute workItem: DispatchWorkItem)

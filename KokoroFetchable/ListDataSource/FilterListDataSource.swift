@@ -15,7 +15,7 @@ public class FilterListDataSource<Wrapped: FetchableListDataSource>: FetchableLi
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
-		identity: { $0.identifier }
+		identity: \.identifier
 	)
 
 	public var count: Int {

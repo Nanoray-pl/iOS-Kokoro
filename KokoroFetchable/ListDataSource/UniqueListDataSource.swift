@@ -15,7 +15,7 @@ public class UniqueListDataSource<Wrapped: FetchableListDataSource, Key: Equatab
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
-		identity: { $0.identifier }
+		identity: \.identifier
 	)
 
 	public var count: Int {

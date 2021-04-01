@@ -3,7 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public struct SortedArray<Element>: Collection {
+public struct SortedArray<Element>: BidirectionalCollection {
 	public typealias Index = Array<Element>.Index
 
 	private var array: [Element]
@@ -16,6 +16,18 @@ public struct SortedArray<Element>: Collection {
 
 	public var endIndex: Index {
 		return array.endIndex
+	}
+
+	public init<A: Comparable>(elements: [Element] = [], by mapper: @escaping (Element) -> A, _ order: SortOrder = .ascending) {
+		self.init(elements: elements, _uniqueValues: false) { order.areInOrder(lhs: $0, rhs: $1, mapper: mapper) }
+	}
+
+	public init<A: Comparable, B: Comparable>(elements: [Element] = [], by firstMapper: @escaping (Element) -> A, _ firstOrder: SortOrder = .ascending, then secondMapper: @escaping (Element) -> B, _ secondOrder: SortOrder = .ascending) {
+		self.init(elements: elements, _uniqueValues: false) { firstOrder.areInOrder(lhs: $0, rhs: $1, mapper: firstMapper) || secondOrder.areInOrder(lhs: $0, rhs: $1, mapper: secondMapper) }
+	}
+
+	public init<A: Comparable, B: Comparable, C: Comparable>(elements: [Element] = [], by firstMapper: @escaping (Element) -> A, _ firstOrder: SortOrder = .ascending, then secondMapper: @escaping (Element) -> B, _ secondOrder: SortOrder = .ascending, then thirdMapper: @escaping (Element) -> C, _ thirdOrder: SortOrder = .ascending) {
+		self.init(elements: elements, _uniqueValues: false) { firstOrder.areInOrder(lhs: $0, rhs: $1, mapper: firstMapper) || secondOrder.areInOrder(lhs: $0, rhs: $1, mapper: secondMapper) || thirdOrder.areInOrder(lhs: $0, rhs: $1, mapper: thirdMapper) }
 	}
 
 	public init(elements: [Element] = [], comparator: @escaping (Element, Element) -> Bool) {
@@ -36,6 +48,10 @@ public struct SortedArray<Element>: Collection {
 
 	public func index(after i: Index) -> Index { // swiftlint:disable:this identifier_name
 		return array.index(after: i)
+	}
+
+	public func index(before i: Index) -> Index { // swiftlint:disable:this identifier_name
+		return array.index(before: i)
 	}
 
 	public mutating func insert(_ element: Element) {

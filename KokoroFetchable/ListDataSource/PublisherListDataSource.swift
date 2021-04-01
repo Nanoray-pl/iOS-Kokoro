@@ -16,7 +16,7 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
-		identity: { $0.identifier }
+		identity: \.identifier
 	)
 
 	private var pages = [Page]()

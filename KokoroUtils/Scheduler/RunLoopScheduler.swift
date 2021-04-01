@@ -11,6 +11,14 @@ extension RunLoop: Scheduler {
 		return Date()
 	}
 
+	public func execute(_ workItem: DispatchWorkItem) {
+		perform {
+			if !workItem.isCancelled {
+				workItem.perform()
+			}
+		}
+	}
+
 	public func schedule(at date: Date, execute workItem: DispatchWorkItem) {
 		schedule(after: .init(date)) {
 			if !workItem.isCancelled {

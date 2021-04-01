@@ -21,12 +21,10 @@ public class SchedulingHttpClient<Scheduler: Combine.Scheduler>: HttpClient {
 	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		if let delay = delay {
 			return wrapped.request(request)
-				.buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
 				.delay(for: delay, scheduler: scheduler)
 				.eraseToAnyPublisher()
 		} else {
 			return wrapped.request(request)
-				.buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
 				.receive(on: scheduler)
 				.eraseToAnyPublisher()
 		}

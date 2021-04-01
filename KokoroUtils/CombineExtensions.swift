@@ -8,20 +8,48 @@ import Combine
 
 public class CancelBag {
 	fileprivate var cancellableSet = Set<AnyCancellable>()
+
+	public init() {}
+}
+
+public extension Future {
+	// used to workaround an Xcode bug crashing SourceKit when wrapping Future with Deferred (too many wrapped closures, Xcode goes dumb)
+	static func deferred(_ attemptToFulfill: @escaping (@escaping Promise) -> Void) -> Deferred<Future<Output, Failure>> {
+		return Deferred { Future(attemptToFulfill) }
+	}
 }
 
 public extension Publisher {
-	func sinkResult(storingIn bag: CancelBag, _ closure: @escaping (Result<Output, Failure>) -> Void) {
+	@discardableResult
+	func sinkResult(storingIn bag: CancelBag, _ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
 		var cancellable: AnyCancellable!
-		cancellable = sinkResult {
+		cancellable = onCancel {
+			bag.cancellableSet.remove(cancellable)
+		}
+		.sinkResult {
 			bag.cancellableSet.remove(cancellable)
 			closure($0)
 		}
+
 		bag.cancellableSet.insert(cancellable)
+		return cancellable
 	}
 
 	func sinkResult(_ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
 		return sink(receiveCompletion: {
+			switch $0 {
+			case .finished:
+				break
+			case let .failure(error):
+				closure(.failure(error))
+			}
+		}, receiveValue: {
+			closure(.success($0))
+		})
+	}
+
+	func sinkResult<Root: AnyObject>(storingIn keyPath: ReferenceWritableKeyPath<Root, Combine.AnyCancellable?>, onWeak object: Root, _ closure: @escaping (Result<Output, Failure>) -> Void) {
+		return sink(storingIn: keyPath, onWeak: object, receiveCompletion: {
 			switch $0 {
 			case .finished:
 				break
@@ -41,18 +69,19 @@ public extension Publisher {
 		object[keyPath: keyPath] = cancellable
 	}
 
-	func sink(storingIn bag: CancelBag, receiveCompletion: @escaping (Subscribers.Completion<Self.Failure>) -> Void, receiveValue: @escaping (Self.Output) -> Void) {
-		// optional, because publishers like Just or Never return a nil cancellable
-		var cancellable: AnyCancellable?
-		cancellable = sink(receiveCompletion: {
-			if let cancellable = cancellable {
-				bag.cancellableSet.remove(cancellable)
-			}
+	@discardableResult
+	func sink(storingIn bag: CancelBag, receiveCompletion: @escaping (Subscribers.Completion<Self.Failure>) -> Void, receiveValue: @escaping (Self.Output) -> Void) -> AnyCancellable {
+		var cancellable: AnyCancellable!
+		cancellable = onCancel {
+			bag.cancellableSet.remove(cancellable)
+		}
+		.sink(receiveCompletion: {
+			bag.cancellableSet.remove(cancellable)
 			receiveCompletion($0)
 		}, receiveValue: receiveValue)
-		if let cancellable = cancellable {
-			bag.cancellableSet.insert(cancellable)
-		}
+
+		bag.cancellableSet.insert(cancellable)
+		return cancellable
 	}
 
 	func onError(_ closure: @escaping (Failure) -> Void) -> Publishers.MapError<Self, Failure> {
@@ -64,6 +93,19 @@ public extension Publisher {
 
 	func onCancel(_ closure: @escaping () -> Void) -> Publishers.HandleEvents<Self> {
 		return handleEvents(receiveCancel: closure)
+	}
+
+	func onStart(_ closure: @escaping () -> Void) -> Publishers.HandleEvents<Self> {
+		let lock = FoundationLock()
+		var didCallClosure = false
+		return handleEvents(receiveSubscription: { _ in
+			lock.acquireAndRun {
+				if !didCallClosure {
+					didCallClosure = true
+					closure()
+				}
+			}
+		})
 	}
 
 	func onOutput(_ closure: @escaping (Self.Output) -> Void) -> Publishers.Map<Self, Self.Output> {
@@ -117,7 +159,8 @@ public extension Publisher {
 }
 
 public extension Publisher where Failure == Never {
-	func sink(storingIn bag: CancelBag, receiveValue: @escaping (Self.Output) -> Void) {
+	@discardableResult
+	func sink(storingIn bag: CancelBag, receiveValue: @escaping (Self.Output) -> Void) -> AnyCancellable {
 		return sink(storingIn: bag, receiveCompletion: { _ in }, receiveValue: receiveValue)
 	}
 
@@ -129,13 +172,15 @@ public extension Publisher where Failure == Never {
 		object[keyPath: keyPath] = cancellable
 	}
 
-	func assign<Root>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, on object: Root, storingIn bag: CancelBag) {
+	@discardableResult
+	func assign<Root>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, on object: Root, storingIn bag: CancelBag) -> AnyCancellable {
 		return sink(storingIn: bag) {
 			object[keyPath: keyPath] = $0
 		}
 	}
 
-	func assign<Root>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output?>, on object: Root, storingIn bag: CancelBag) {
+	@discardableResult
+	func assign<Root>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output?>, on object: Root, storingIn bag: CancelBag) -> AnyCancellable {
 		return sink(storingIn: bag) {
 			object[keyPath: keyPath] = $0
 		}
@@ -147,7 +192,8 @@ public extension Publisher where Failure == Never {
 		}
 	}
 
-	func assign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, onWeak object: Root, storingIn bag: CancelBag) {
+	@discardableResult
+	func assign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, onWeak object: Root, storingIn bag: CancelBag) -> AnyCancellable {
 		return sink(storingIn: bag) { [weak object] in
 			object?[keyPath: keyPath] = $0
 		}
@@ -159,7 +205,8 @@ public extension Publisher where Failure == Never {
 		}
 	}
 
-	func assign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output?>, onWeak object: Root, storingIn bag: CancelBag) {
+	@discardableResult
+	func assign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output?>, onWeak object: Root, storingIn bag: CancelBag) -> AnyCancellable {
 		return sink(storingIn: bag) { [weak object] in
 			object?[keyPath: keyPath] = $0
 		}

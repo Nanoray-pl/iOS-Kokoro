@@ -11,6 +11,10 @@ extension DispatchQueue: Scheduler {
 		return Date()
 	}
 
+	public func execute(_ work: DispatchWorkItem) {
+		async(execute: work)
+	}
+
 	public func schedule(at date: Date, execute workItem: DispatchWorkItem) {
 		asyncAfter(deadline: .now() + date.timeIntervalSinceNow, execute: workItem)
 	}

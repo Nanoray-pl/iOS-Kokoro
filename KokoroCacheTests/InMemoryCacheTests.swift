@@ -77,8 +77,8 @@ class InMemoryCacheTests: XCTestCase {
 	}
 
 	func testStorageDateInvalidation() {
-		let synchronousScheduler = SynchronousScheduler()
-		let cache = InMemoryCache<Int, Data>(scheduler: synchronousScheduler) { $0.count }
+		let mockScheduler = MockScheduler()
+		let cache = InMemoryCache<Int, Data>(scheduler: mockScheduler) { $0.count }
 		cache.options = .init(validity: .afterStorage(0.04))
 
 		let data = (0...2).map { emptyData(withLength: $0 * 8) }
@@ -96,19 +96,19 @@ class InMemoryCacheTests: XCTestCase {
 		cache.store(data[2], for: 2)
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1, 2]))
 
-		synchronousScheduler.advanceTime(by: 0.05)
+		mockScheduler.advanceTime(by: 0.05)
 		XCTAssertEqual(cacheValues(), expectedValues([]))
 
 		cache.store(data[0], for: 0)
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 
-		synchronousScheduler.advanceTime(by: 0.025)
+		mockScheduler.advanceTime(by: 0.025)
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 
 		cache.store(data[1], for: 1)
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1]))
 
-		synchronousScheduler.advanceTime(by: 0.025)
+		mockScheduler.advanceTime(by: 0.025)
 		XCTAssertEqual(cacheValues(), expectedValues([1]))
 
 		cache.invalidateAllValues()
@@ -116,8 +116,8 @@ class InMemoryCacheTests: XCTestCase {
 	}
 
 	func testAccessDataInvalidation() {
-		let synchronousScheduler = SynchronousScheduler()
-		let cache = InMemoryCache<Int, Data>(scheduler: synchronousScheduler) { $0.count }
+		let mockScheduler = MockScheduler()
+		let cache = InMemoryCache<Int, Data>(scheduler: mockScheduler) { $0.count }
 		cache.options = .init(validity: .afterAccess(0.04))
 
 		let data = (0...2).map { emptyData(withLength: $0 * 8) }
@@ -135,19 +135,19 @@ class InMemoryCacheTests: XCTestCase {
 		cache.store(data[2], for: 2)
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1, 2]))
 
-		synchronousScheduler.advanceTime(by: 0.05)
+		mockScheduler.advanceTime(by: 0.05)
 		XCTAssertEqual(cacheValues(), expectedValues([]))
 
 		cache.store(data[0], for: 0)
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 
-		synchronousScheduler.advanceTime(by: 0.025)
+		mockScheduler.advanceTime(by: 0.025)
 		XCTAssertEqual(cacheValues(), expectedValues([0]))
 
 		cache.store(data[1], for: 1)
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1]))
 
-		synchronousScheduler.advanceTime(by: 0.025)
+		mockScheduler.advanceTime(by: 0.025)
 		XCTAssertEqual(cacheValues(), expectedValues([0, 1]))
 
 		cache.invalidateAllValues()

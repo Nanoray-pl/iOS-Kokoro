@@ -8,31 +8,19 @@ import Combine
 import Foundation
 
 public class URLSessionHttpClient: HttpClient {
-	public enum ResponseError: Error {
-		case unexpectedStatusCode(_ statusCode: Int, responseString: String)
-	}
-
 	private let session: URLSession
-	private let allowedStatusCodes: Set<Int>
 
-	private lazy var detailedJsonDecodingErrorFactory = DetailedJsonDecodingErrorFactory()
-
-	public init(session: URLSession, allowedStatusCodes: Set<Int> = Set(200 ..< 400)) {
+	public init(session: URLSession) {
 		self.session = session
-		self.allowedStatusCodes = allowedStatusCodes
 	}
 
 	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		return session.dataTaskProgressPublisher(for: request)
-			.tryMap { [allowedStatusCodes] in
+			.tryMap {
 				switch $0 {
 				case let .output(data, response):
 					if let response = response as? HTTPURLResponse {
-						if allowedStatusCodes.contains(response.statusCode) {
-							return .output(.init(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String], data: data))
-						} else {
-							throw ResponseError.unexpectedStatusCode(response.statusCode, responseString: String(decoding: data, as: UTF8.self))
-						}
+						return .output(.init(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String], data: data))
 					} else {
 						fatalError("Cannot handle non-HTTP response")
 					}

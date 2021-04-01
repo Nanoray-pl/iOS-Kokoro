@@ -6,6 +6,15 @@
 #if canImport(Foundation)
 import Foundation
 
+public enum EndpointUrlPathParameterError: Error {
+	case unusedParameters(_ unusedParameters: [String])
+}
+
+private enum EndpointUrlConstants {
+	static let encodedLeftCurlyBrace = "%7B" // encoded "{"
+	static let encodedRightCurlyBrace = "%7D" // encoded "}"
+}
+
 public struct EndpointUrl<PathParameters, QueryParameters> {
 	public let url: URL
 
@@ -32,10 +41,18 @@ public struct EndpointUrl<PathParameters, QueryParameters> {
 		return components.url!
 	}
 
-	private func urlByReplacingPathParameters<E: Encodable>(_ pathParameters: E, in url: URL) throws -> URL {
-		var absolutePath = url.absoluteString.replacingOccurrences(of: "%7B", with: "{").replacingOccurrences(of: "%7D", with: "}")
+	private func urlByReplacingPathParameters<E: Encodable>(_ pathParameters: E, in url: URL, ignoringUnusedParameters ignoreUnusedParameters: Bool = false) throws -> URL {
+		var absolutePath = url.absoluteString
+		var unusedParameters = [String]()
 		for (key, value) in try dictionary(from: pathParameters) {
-			absolutePath = absolutePath.replacingOccurrences(of: "{\(key)}", with: String(describing: value))
+			let newAbsolutePath = absolutePath.replacingOccurrences(of: "\(EndpointUrlConstants.encodedLeftCurlyBrace)\(key)\(EndpointUrlConstants.encodedRightCurlyBrace)", with: String(describing: value))
+			if newAbsolutePath == absolutePath {
+				unusedParameters.append(key)
+			}
+			absolutePath = newAbsolutePath
+		}
+		if !ignoreUnusedParameters && !unusedParameters.isEmpty {
+			throw EndpointUrlPathParameterError.unusedParameters(unusedParameters)
 		}
 		return URL(string: absolutePath)!
 	}
@@ -54,14 +71,14 @@ public extension EndpointUrl where PathParameters == Void, QueryParameters: Enco
 }
 
 public extension EndpointUrl where PathParameters: Encodable, QueryParameters == Void {
-	func create(pathParameters: PathParameters) throws -> URL {
-		return try urlByReplacingPathParameters(pathParameters, in: url)
+	func create(pathParameters: PathParameters, ignoringUnusedParameters ignoreUnusedParameters: Bool = false) throws -> URL {
+		return try urlByReplacingPathParameters(pathParameters, in: url, ignoringUnusedParameters: ignoreUnusedParameters)
 	}
 }
 
 public extension EndpointUrl where PathParameters: Encodable, QueryParameters: Encodable {
-	func create(pathParameters: PathParameters, queryParameters: QueryParameters) throws -> URL {
-		return try urlByAddingQueryParameters(queryParameters, to: try urlByReplacingPathParameters(pathParameters, in: url))
+	func create(pathParameters: PathParameters, queryParameters: QueryParameters, ignoringUnusedPathParameters ignoreUnusedPathParameters: Bool = false) throws -> URL {
+		return try urlByAddingQueryParameters(queryParameters, to: try urlByReplacingPathParameters(pathParameters, in: url, ignoringUnusedParameters: ignoreUnusedPathParameters))
 	}
 }
 #endif

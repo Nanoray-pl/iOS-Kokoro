@@ -61,9 +61,12 @@ public final class ErrorSimulatingHttpClient: HttpClient {
 		self.errorFactory = errorFactory
 	}
 
-	private func modifiedPublisher<Output>(_ publisher: AnyPublisher<Output, Error>) -> AnyPublisher<Output, Error> {
-		return Deferred { [mode, context, errorFactory] () -> AnyPublisher<Output, Error> in
+	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
+		var wrapped: HttpClient! = self.wrapped
+		return Deferred { [mode, context, errorFactory] () -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> in
 			if context.updateCounterAndReturnIfShouldSucceed() {
+				let publisher = wrapped.request(request)
+				wrapped = nil
 				return publisher
 			} else {
 				switch mode {
@@ -71,6 +74,8 @@ public final class ErrorSimulatingHttpClient: HttpClient {
 					return Fail(error: errorFactory())
 						.eraseToAnyPublisher()
 				case .replacingResponse:
+					let publisher = wrapped.request(request)
+					wrapped = nil
 					return publisher
 						.mapError { _ in errorFactory() }
 						.flatMap { _ in
@@ -82,10 +87,6 @@ public final class ErrorSimulatingHttpClient: HttpClient {
 			}
 		}
 		.eraseToAnyPublisher()
-	}
-
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
-		return modifiedPublisher(wrapped.request(request))
 	}
 }
 

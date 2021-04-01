@@ -14,7 +14,7 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
-		identity: { $0.identifier }
+		identity: \.identifier
 	)
 
 	public var elements: [Element] {

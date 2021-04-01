@@ -6,17 +6,22 @@
 #if canImport(Foundation)
 import Foundation
 
-public class SynchronousScheduler: Scheduler {
+public class MockScheduler: Scheduler {
 	private struct Entry {
 		let date: Date
 		let workItem: DispatchWorkItem
 	}
 
 	public private(set) var currentDate: Date
+	private var workItemsToExecute = [DispatchWorkItem]()
 	private var entries = SortedArray<Entry> { lhs, rhs in lhs.date < rhs.date }
 
 	public init(startingDate: Date = Date()) {
 		currentDate = startingDate
+	}
+
+	public func execute(_ workItem: DispatchWorkItem) {
+		workItemsToExecute.append(workItem)
 	}
 
 	public func schedule(at date: Date, execute workItem: DispatchWorkItem) {
@@ -45,6 +50,13 @@ public class SynchronousScheduler: Scheduler {
 	}
 
 	public func advanceTime(by timeAdvancement: TimeInterval) {
+		workItemsToExecute.forEach {
+			if !$0.isCancelled {
+				$0.perform()
+			}
+		}
+		workItemsToExecute.removeAll()
+
 		guard let entry = entries.first else {
 			currentDate = currentDate.addingTimeInterval(timeAdvancement)
 			return
