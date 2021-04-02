@@ -1301,6 +1301,7 @@
 			buildConfigurationList = AA5AEB9125557D7700516C8D /* Build configuration list for PBXNativeTarget "KokoroJobs" */;
 			buildPhases = (
 				AA5AEB8725557D7700516C8D /* Headers */,
+				AAE9D7C326179C560040C91F /* Linters */,
 				AA5AEB8825557D7700516C8D /* Sources */,
 				AA5AEB8925557D7700516C8D /* Frameworks */,
 				AA5AEB8A25557D7700516C8D /* Resources */,
@@ -1320,6 +1321,7 @@
 			buildConfigurationList = AA5AEC9F2556AF1C00516C8D /* Build configuration list for PBXNativeTarget "KokoroCache" */;
 			buildPhases = (
 				AA5AEC952556AF1C00516C8D /* Headers */,
+				AAE9D7C226179C460040C91F /* Linters */,
 				AA5AEC962556AF1C00516C8D /* Sources */,
 				AA5AEC972556AF1C00516C8D /* Frameworks */,
 				AA5AEC982556AF1C00516C8D /* Resources */,
@@ -1785,7 +1787,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/${TARGET_NAME}Tests\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/${TARGET_NAME}Tests\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		AAD3566B2528BB6A007C63EF /* Linters */ = {
@@ -1846,6 +1848,44 @@
 			showEnvVarsInLog = 0;
 		};
 		AAD57D642533C200007358D1 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAE9D7C226179C460040C91F /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/${TARGET_NAME}Tests\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/${TARGET_NAME}Tests\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAE9D7C326179C560040C91F /* Linters */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
