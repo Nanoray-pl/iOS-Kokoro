@@ -25,6 +25,10 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 		return currentDataSource.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return currentDataSource.expectedTotalCount
+	}
+
 	public var error: Error? {
 		return currentDataSource.error
 	}

@@ -35,6 +35,7 @@ public protocol FetchableListDataSource: class {
 	var identifier: ObjectIdentifier { get }
 	var elements: [Element] { get }
 	var count: Int { get }
+	var expectedTotalCount: Int? { get }
 	var error: Error? { get }
 	var isEmpty: Bool { get }
 	var isFetching: Bool { get }
@@ -90,6 +91,10 @@ private class AnyFetchableListDataSourceBase<Element>: FetchableListDataSource {
 		fatalError("Not overriden abstract member")
 	}
 
+	var expectedTotalCount: Int? {
+		fatalError("Not overriden abstract member")
+	}
+
 	var error: Error? {
 		fatalError("Not overriden abstract member")
 	}
@@ -139,6 +144,10 @@ private class AnyFetchableListDataSourceBox<Wrapped>: AnyFetchableListDataSource
 
 	override var count: Int {
 		return wrapped.count
+	}
+
+	override var expectedTotalCount: Int? {
+		return wrapped.expectedTotalCount
 	}
 
 	override var error: Error? {
@@ -192,6 +201,10 @@ public final class AnyFetchableListDataSource<Element>: FetchableListDataSource 
 
 	public var count: Int {
 		return box.count
+	}
+
+	public var expectedTotalCount: Int? {
+		return box.expectedTotalCount
 	}
 
 	public var error: Error? {

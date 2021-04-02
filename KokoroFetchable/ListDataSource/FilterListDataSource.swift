@@ -22,6 +22,10 @@ public class FilterListDataSource<Wrapped: FetchableListDataSource>: FetchableLi
 		return elements.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return nil // there is no way to know how many elements will match the predicate
+	}
+
 	public var error: Error? {
 		return wrapped.error
 	}

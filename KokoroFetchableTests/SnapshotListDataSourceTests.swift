@@ -81,7 +81,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 
     func testInitFromDataSourceAndIsFetching() {
         let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true)
-        let testedDataSource = originalDataSource.snapshot(isFetching: .snapshot)
+		let testedDataSource = originalDataSource.snapshot(configuration: .init(isFetching: .snapshot))
 
         XCTAssertEqual(testedDataSource.isFetching, true)
         XCTAssertNil(testedDataSource.error)

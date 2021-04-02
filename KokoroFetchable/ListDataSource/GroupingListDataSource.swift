@@ -58,6 +58,10 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 		return wrapped.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return wrapped.expectedTotalCount
+	}
+
 	public var error: Error? {
 		return wrapped.error
 	}
@@ -197,6 +201,10 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 
 		var count: Int {
 			return elements.count
+		}
+
+		var expectedTotalCount: Int? {
+			return nil // there is no way to know how many elements will be in the group
 		}
 
 		var isControllingGroup: Bool {

@@ -25,6 +25,10 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 		return elements.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return dataSources.compactMap(\.expectedTotalCount).takeIf { $0.count == dataSources.count }?.reduce(0, +)
+	}
+
 	public var isEmpty: Bool {
 		return sortStrategy.isEmpty
 	}

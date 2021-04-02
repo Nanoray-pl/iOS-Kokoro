@@ -77,6 +77,10 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 		return wrapped.count + skeletonCount
 	}
 
+	public var expectedTotalCount: Int? {
+		return wrapped.expectedTotalCount
+	}
+
 	public var error: Error? {
 		return wrapped.error
 	}

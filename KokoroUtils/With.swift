@@ -49,6 +49,8 @@ extension Float: ValueWith {}
 extension Double: ValueWith {}
 extension Decimal: ValueWith {}
 extension String: ValueWith {}
+extension Array: ValueWith {}
+extension Dictionary: ValueWith {}
 
 #if canImport(ObjectiveC)
 import ObjectiveC

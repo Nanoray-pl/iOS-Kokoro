@@ -20,6 +20,10 @@ public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: Fetcha
 		return elements.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return wrapped.expectedTotalCount
+	}
+
 	public var error: Error? {
 		return wrapped.error
 	}

@@ -22,6 +22,10 @@ public class UniqueListDataSource<Wrapped: FetchableListDataSource, Key: Equatab
 		return elements.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return nil // there is no way to know how many elements will be unique
+	}
+
 	public var error: Error? {
 		return wrapped.error
 	}

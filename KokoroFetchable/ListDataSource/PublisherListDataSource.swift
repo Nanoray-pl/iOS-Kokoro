@@ -9,7 +9,8 @@ import KokoroUtils
 
 /// A `FetchableListDataSource` implementation powered with data from a `Publisher`.
 public class PublisherListDataSource<Element>: FetchableListDataSource {
-	public typealias Page = (elements: [Element], isLast: Bool)
+	public typealias PageWithoutTotalCount = (elements: [Element], isLast: Bool)
+	public typealias Page = (elements: [Element], isLast: Bool, totalCount: Int?)
 
 	private let publisherSupplier: (_ pageIndex: Int) -> AnyPublisher<Page, Error>
 
@@ -21,6 +22,7 @@ public class PublisherListDataSource<Element>: FetchableListDataSource {
 	private var pages = [Page]()
 	public private(set) var elements = [Element]()
 	private var fetchingPageIndex: Int?
+	public private(set) var expectedTotalCount: Int?
 	private var requestCancellable: AnyCancellable?
 
 	public var count: Int {
@@ -41,6 +43,10 @@ public class PublisherListDataSource<Element>: FetchableListDataSource {
 		return !pages.isEmpty
 	}
 
+	public convenience init<P>(publisherSupplier: @escaping (_ pageIndex: Int) -> P) where P: Publisher, P.Output == PageWithoutTotalCount, P.Failure == Error {
+		self.init { publisherSupplier($0).map { (elements: $0.elements, isLast: $0.isLast, totalCount: nil) } }
+	}
+
 	public init<P>(publisherSupplier: @escaping (_ pageIndex: Int) -> P) where P: Publisher, P.Output == Page, P.Failure == Error {
 		self.publisherSupplier = { publisherSupplier($0).eraseToAnyPublisher() }
 	}
@@ -54,6 +60,7 @@ public class PublisherListDataSource<Element>: FetchableListDataSource {
 		pages = []
 		error = nil
 		fetchingPageIndex = nil
+		expectedTotalCount = nil
 		updateElements()
 	}
 
@@ -92,6 +99,7 @@ public class PublisherListDataSource<Element>: FetchableListDataSource {
 					self.updateElements()
 				},
 				receiveValue: { [weak self] in
+					self?.expectedTotalCount = $0.totalCount
 					self?.pages.append($0)
 				}
 			)

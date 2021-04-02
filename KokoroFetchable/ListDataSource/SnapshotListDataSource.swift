@@ -3,11 +3,56 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public enum SnapshotListDataSourceIsFetchingBehavior: ExpressibleByBooleanLiteral {
-	case `false`, `true`, snapshot
+import KokoroUtils
 
-	public init(booleanLiteral value: BooleanLiteralType) {
-		self = (value ? .true : .false)
+public enum SnapshotListDataSourceBehavior<T> {
+	case snapshot
+	case constant(_ value: T)
+
+	func value(snapshot snapshotClosure: @autoclosure () -> T) -> T {
+		switch self {
+		case .snapshot:
+			return snapshotClosure()
+		case let .constant(value):
+			return value
+		}
+	}
+}
+
+extension SnapshotListDataSourceBehavior: Equatable where T: Equatable {}
+extension SnapshotListDataSourceBehavior: Hashable where T: Hashable {}
+
+extension SnapshotListDataSourceBehavior: ExpressibleByNilLiteral where T: OptionalConvertible {
+	public init(nilLiteral: ()) {
+		self = .constant(T(from: nil))
+	}
+}
+
+extension SnapshotListDataSourceBehavior: ExpressibleByBooleanLiteral where T: _ExpressibleByBuiltinBooleanLiteral {
+	public init(booleanLiteral value: T) {
+		self = .constant(value)
+	}
+}
+
+extension SnapshotListDataSourceBehavior: ExpressibleByIntegerLiteral where T: _ExpressibleByBuiltinIntegerLiteral {
+	public init(integerLiteral value: T) {
+		self = .constant(value)
+	}
+}
+
+public struct SnapshotListDataSourceConfiguration: Hashable {
+	public let isFetching: SnapshotListDataSourceBehavior<Bool>
+	public let isAfterInitialFetch: SnapshotListDataSourceBehavior<Bool>
+	public let expectedTotalCount: SnapshotListDataSourceBehavior<Int?>
+
+	public init(
+		isFetching: SnapshotListDataSourceBehavior<Bool> = false,
+		isAfterInitialFetch: SnapshotListDataSourceBehavior<Bool> = false,
+		expectedTotalCount: SnapshotListDataSourceBehavior<Int?> = .snapshot
+	) {
+		self.isFetching = isFetching
+		self.isAfterInitialFetch = isAfterInitialFetch
+		self.expectedTotalCount = expectedTotalCount
 	}
 }
 
@@ -17,6 +62,7 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 	public let error: Error?
 	public let isFetching: Bool
 	public let isAfterInitialFetch: Bool
+	public let expectedTotalCount: Int?
 
 	public var count: Int {
 		return elements.count
@@ -26,37 +72,26 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 		return elements.isEmpty
 	}
 
-	public convenience init<T>(of wrapped: T, isFetching: SnapshotListDataSourceIsFetchingBehavior = .false, isAfterInitialFetch: SnapshotListDataSourceIsFetchingBehavior = .false) where T: FetchableListDataSource, T.Element == Element {
-		let isFetchingBool: Bool
-		let isAfterInitialFetchBool: Bool
-		switch isFetching {
-		case .false:
-			isFetchingBool = false
-		case .true:
-			isFetchingBool = true
-		case .snapshot:
-			isFetchingBool = wrapped.isFetching
-		}
-		switch isAfterInitialFetch {
-		case .false:
-			isAfterInitialFetchBool = false
-		case .true:
-			isAfterInitialFetchBool = true
-		case .snapshot:
-			isAfterInitialFetchBool = wrapped.isFetching
-		}
-		self.init(elements: wrapped.elements, error: wrapped.error, isFetching: isFetchingBool, isAfterInitialFetch: isAfterInitialFetchBool)
+	public convenience init<T>(of wrapped: T, configuration: SnapshotListDataSourceConfiguration = .init()) where T: FetchableListDataSource, T.Element == Element {
+		self.init(
+			elements: wrapped.elements,
+			error: wrapped.error,
+			isFetching: configuration.isFetching.value(snapshot: wrapped.isFetching),
+			isAfterInitialFetch: configuration.isAfterInitialFetch.value(snapshot: wrapped.isAfterInitialFetch),
+			expectedTotalCount: configuration.expectedTotalCount.value(snapshot: wrapped.expectedTotalCount)
+		)
 	}
 
-	public convenience init(error: Error, isFetching: Bool = false, isAfterInitialFetch: Bool = false) {
-		self.init(elements: [], error: error, isFetching: isFetching)
+	public convenience init(error: Error, isFetching: Bool = false, isAfterInitialFetch: Bool = false, expectedTotalCount: Int? = nil) {
+		self.init(elements: [], error: error, isFetching: isFetching, expectedTotalCount: expectedTotalCount)
 	}
 
-	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false, isAfterInitialFetch: Bool = false) {
+	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false, isAfterInitialFetch: Bool = false, expectedTotalCount: Int? = nil) {
 		self.elements = elements
 		self.error = error
 		self.isFetching = isFetching
 		self.isAfterInitialFetch = isAfterInitialFetch
+		self.expectedTotalCount = expectedTotalCount
 	}
 
 	public subscript(index: Int) -> Element {
@@ -82,7 +117,7 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 }
 
 public extension FetchableListDataSource {
-	func snapshot(isFetching: SnapshotListDataSourceIsFetchingBehavior = .false, isAfterInitialFetch: SnapshotListDataSourceIsFetchingBehavior = .false) -> SnapshotListDataSource<Element> {
-		return SnapshotListDataSource(of: self, isFetching: isFetching, isAfterInitialFetch: isAfterInitialFetch)
+	func snapshot(configuration: SnapshotListDataSourceConfiguration = .init()) -> SnapshotListDataSource<Element> {
+		return SnapshotListDataSource(of: self, configuration: configuration)
 	}
 }

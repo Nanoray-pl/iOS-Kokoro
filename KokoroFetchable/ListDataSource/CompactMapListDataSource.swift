@@ -20,6 +20,10 @@ public class CompactMapListDataSource<Wrapped: FetchableListDataSource, Output>:
 		return elements.count
 	}
 
+	public var expectedTotalCount: Int? {
+		return nil // there is no way to know how many elements will not be nil after mapping
+	}
+
 	public var error: Error? {
 		return wrapped.error
 	}
