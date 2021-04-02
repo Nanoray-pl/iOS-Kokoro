@@ -15,6 +15,7 @@ let package = Package(
 		.library(name: "KokoroResourceProvider", targets: ["KokoroResourceProvider"]),
 		.library(name: "KokoroJobs", targets: ["KokoroJobs"]),
 		.library(name: "KokoroCache", targets: ["KokoroCache"]),
+		.library(name: "KokoroValueStore", targets: ["KokoroValueStore"]),
 		.library(name: "KokoroCacheResourceProvider", targets: ["KokoroCacheResourceProvider"]),
 		.library(name: "KokoroUIResourceProvider", targets: ["KokoroUIResourceProvider"]),
 	],
@@ -34,6 +35,12 @@ let package = Package(
 			name: "KokoroFetchable",
 			dependencies: ["KokoroUtils"],
 			path: "KokoroFetchable",
+			exclude: ["Bootstrap/Info.plist"]
+		),
+		.testTarget(
+			name: "KokoroFetchableTests",
+			dependencies: ["KokoroFetchable"],
+			path: "KokoroFetchableTests",
 			exclude: ["Bootstrap/Info.plist"]
 		),
 		.target(
@@ -69,6 +76,12 @@ let package = Package(
 			name: "KokoroCacheTests",
 			dependencies: ["KokoroCache"],
 			path: "KokoroCacheTests",
+			exclude: ["Bootstrap/Info.plist"]
+		),
+		.target(
+			name: "KokoroValueStore",
+			dependencies: ["KokoroUtils"],
+			path: "KokoroValueStore",
 			exclude: ["Bootstrap/Info.plist"]
 		),
 		.target(
