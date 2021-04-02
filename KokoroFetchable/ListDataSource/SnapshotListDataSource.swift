@@ -83,10 +83,14 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 	}
 
 	public convenience init(error: Error, isFetching: Bool = false, isAfterInitialFetch: Bool = false, expectedTotalCount: Int? = nil) {
-		self.init(elements: [], error: error, isFetching: isFetching, expectedTotalCount: expectedTotalCount)
+		self.init(elements: [], error: error, isFetching: isFetching, isAfterInitialFetch: isAfterInitialFetch, expectedTotalCount: expectedTotalCount)
 	}
 
-	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false, isAfterInitialFetch: Bool = false, expectedTotalCount: Int? = nil) {
+	public convenience init(elements: [Element], error: Error? = nil, isFetching: Bool = false, expectedTotalCount: Int? = nil) {
+		self.init(elements: elements, error: error, isFetching: isFetching, isAfterInitialFetch: !elements.isEmpty, expectedTotalCount: expectedTotalCount)
+	}
+
+	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false, isAfterInitialFetch: Bool, expectedTotalCount: Int? = nil) {
 		self.elements = elements
 		self.error = error
 		self.isFetching = isFetching
