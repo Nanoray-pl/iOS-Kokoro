@@ -34,6 +34,10 @@ public class FilterListDataSource<Wrapped: FetchableListDataSource>: FetchableLi
 		return wrapped.isFetching
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
+	}
+
 	public init(wrapping wrapped: Wrapped, predicateFunction: @escaping (Element) -> Bool) {
 		self.wrapped = wrapped
 		self.predicateFunction = predicateFunction

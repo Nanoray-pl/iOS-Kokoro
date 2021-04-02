@@ -39,6 +39,7 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 	public private(set) var elements = [Element]()
 	public private(set) var error: Error?
 	public private(set) var isFetching = false
+	public private(set) var isAfterInitialFetch = false
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
@@ -105,10 +106,11 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 	}
 
 	private func updateData() {
-		if isFetching != wrapped.isFetching || !errorMatchingStrategy.areMatchingErrors(error, wrapped.error) || shouldUpdateData(oldData: elements, newData: wrapped.elements) {
+		if isFetching != wrapped.isFetching || isAfterInitialFetch != wrapped.isAfterInitialFetch || !errorMatchingStrategy.areMatchingErrors(error, wrapped.error) || shouldUpdateData(oldData: elements, newData: wrapped.elements) {
 			elements = wrapped.elements
 			error = wrapped.error
 			isFetching = wrapped.isFetching
+			isAfterInitialFetch = wrapped.isAfterInitialFetch
 			let erasedSelf = eraseToAnyFetchableListDataSource()
 			observers.forEach { $0.didUpdateData(of: erasedSelf) }
 		}

@@ -33,6 +33,10 @@ public class MergeListDataSource<Element>: FetchableListDataSource {
 		return dataSources.contains { $0.isFetching }
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return dataSources.contains { $0.isAfterInitialFetch }
+	}
+
 	public convenience init<SortStrategy, T1, T2>(sortStrategySupplier: @escaping ([AnyFetchableListDataSource<Element>]) -> SortStrategy, dataSources dataSource1: T1, _ dataSource2: T2) where SortStrategy: MergeListDataSourceSortStrategy, T1: FetchableListDataSource, T2: FetchableListDataSource, SortStrategy.Element == Element, T1.Element == Element, T2.Element == Element {
 		self.init(sortStrategySupplier: sortStrategySupplier, dataSources: [dataSource1.eraseToAnyFetchableListDataSource(), dataSource2.eraseToAnyFetchableListDataSource()])
 	}

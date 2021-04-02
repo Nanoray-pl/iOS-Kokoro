@@ -34,6 +34,10 @@ public class UniqueListDataSource<Wrapped: FetchableListDataSource, Key: Equatab
 		return wrapped.isFetching
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
+	}
+
 	public convenience init(wrapping wrapped: Wrapped) where Element == Key {
 		self.init(wrapping: wrapped, uniqueKeyFunction: { $0 })
 	}

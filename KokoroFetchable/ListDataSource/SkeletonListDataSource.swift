@@ -49,17 +49,17 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 	)
 
 	private var skeletonCount: Int {
-		switch (isFetching: wrapped.isFetching, count: wrapped.count) {
+		switch (isFetching: wrapped.isFetching, isAfterInitialFetch: wrapped.isAfterInitialFetch) {
 		case (isFetching: false, _):
 			return 0
-		case (isFetching: true, count: 0):
+		case (isFetching: true, isAfterInitialFetch: false):
 			switch behavior.initialSkeletonCount {
 			case let .fixed(count):
 				return count
 			case let .dynamic(closure):
 				return closure(wrapped.count)
 			}
-		case (isFetching: true, _):
+		case (isFetching: true, isAfterInitialFetch: true):
 			switch behavior.additionalSkeletonCount {
 			case let .fixed(count):
 				return count
@@ -87,6 +87,10 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 
 	public var isFetching: Bool {
 		return wrapped.isFetching
+	}
+
+	public var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
 	}
 
 	public init(wrapping wrapped: Wrapped, behavior: SkeletonListDataSourceBehavior) {

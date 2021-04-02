@@ -40,7 +40,7 @@ class SkeletonListDataSourceTests: XCTestCase {
     }
 
     func testFetchingWithElements() {
-        let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true)
+		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true, isAfterInitialFetch: true)
         let testedDataSource = originalDataSource.withSkeletons(behavior: skeletonBehavior)
 
         XCTAssertEqual(testedDataSource.isFetching, true)

@@ -66,6 +66,10 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 		return wrapped.isFetching
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
+	}
+
 	private let wrapped: AnyFetchableListDataSource<Element>
 	private let controllingGroups: SplitListDataSourceControllingGroup<Group>
 	private let inherentGroup: Group?
@@ -152,6 +156,7 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 		groupDataSources.forEach {
 			$0.error = $0.isControllingGroup ? wrapped.error : nil
 			$0.isFetching = $0.isControllingGroup && wrapped.isFetching
+			$0.isAfterInitialFetch = isAfterInitialFetch
 		}
 
 		removedDataSources.forEach { groupDataSource in
@@ -184,6 +189,7 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 		var elements = [Element]()
 		var error: Error?
 		var isFetching = false
+		var isAfterInitialFetch = false
 
 		var isEmpty: Bool {
 			return elements.isEmpty

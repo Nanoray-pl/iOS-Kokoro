@@ -37,6 +37,10 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 		return targetDataSource?.isFetching ?? currentDataSource.isFetching
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return targetDataSource?.isAfterInitialFetch ?? currentDataSource.isAfterInitialFetch
+	}
+
 	public subscript(index: Int) -> Element {
 		return currentDataSource[index]
 	}

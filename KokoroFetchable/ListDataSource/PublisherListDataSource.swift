@@ -37,6 +37,10 @@ public class PublisherListDataSource<Element>: FetchableListDataSource {
 		return fetchingPageIndex != nil
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return !pages.isEmpty
+	}
+
 	public init<P>(publisherSupplier: @escaping (_ pageIndex: Int) -> P) where P: Publisher, P.Output == Page, P.Failure == Error {
 		self.publisherSupplier = { publisherSupplier($0).eraseToAnyPublisher() }
 	}

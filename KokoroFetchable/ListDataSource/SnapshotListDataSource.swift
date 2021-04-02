@@ -16,6 +16,7 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 	public let elements: [Element]
 	public let error: Error?
 	public let isFetching: Bool
+	public let isAfterInitialFetch: Bool
 
 	public var count: Int {
 		return elements.count
@@ -25,8 +26,9 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 		return elements.isEmpty
 	}
 
-	public convenience init<T>(of wrapped: T, isFetching: SnapshotListDataSourceIsFetchingBehavior = .false) where T: FetchableListDataSource, T.Element == Element {
+	public convenience init<T>(of wrapped: T, isFetching: SnapshotListDataSourceIsFetchingBehavior = .false, isAfterInitialFetch: SnapshotListDataSourceIsFetchingBehavior = .false) where T: FetchableListDataSource, T.Element == Element {
 		let isFetchingBool: Bool
+		let isAfterInitialFetchBool: Bool
 		switch isFetching {
 		case .false:
 			isFetchingBool = false
@@ -35,17 +37,26 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 		case .snapshot:
 			isFetchingBool = wrapped.isFetching
 		}
-		self.init(elements: wrapped.elements, error: wrapped.error, isFetching: isFetchingBool)
+		switch isAfterInitialFetch {
+		case .false:
+			isAfterInitialFetchBool = false
+		case .true:
+			isAfterInitialFetchBool = true
+		case .snapshot:
+			isAfterInitialFetchBool = wrapped.isFetching
+		}
+		self.init(elements: wrapped.elements, error: wrapped.error, isFetching: isFetchingBool, isAfterInitialFetch: isAfterInitialFetchBool)
 	}
 
-	public convenience init(error: Error, isFetching: Bool = false) {
+	public convenience init(error: Error, isFetching: Bool = false, isAfterInitialFetch: Bool = false) {
 		self.init(elements: [], error: error, isFetching: isFetching)
 	}
 
-	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false) {
+	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false, isAfterInitialFetch: Bool = false) {
 		self.elements = elements
 		self.error = error
 		self.isFetching = isFetching
+		self.isAfterInitialFetch = isAfterInitialFetch
 	}
 
 	public subscript(index: Int) -> Element {
@@ -71,7 +82,7 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 }
 
 public extension FetchableListDataSource {
-	func snapshot(isFetching: SnapshotListDataSourceIsFetchingBehavior = .false) -> SnapshotListDataSource<Element> {
-		return SnapshotListDataSource(of: self, isFetching: isFetching)
+	func snapshot(isFetching: SnapshotListDataSourceIsFetchingBehavior = .false, isAfterInitialFetch: SnapshotListDataSourceIsFetchingBehavior = .false) -> SnapshotListDataSource<Element> {
+		return SnapshotListDataSource(of: self, isFetching: isFetching, isAfterInitialFetch: isAfterInitialFetch)
 	}
 }

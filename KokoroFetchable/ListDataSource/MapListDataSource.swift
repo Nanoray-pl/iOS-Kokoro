@@ -32,6 +32,10 @@ public class MapListDataSource<Wrapped: FetchableListDataSource, Output>: Fetcha
 		return wrapped.isFetching
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
+	}
+
 	public init(wrapping wrapped: Wrapped, mappingFunction: @escaping (Wrapped.Element) -> Output) {
 		self.wrapped = wrapped
 		self.mappingFunction = mappingFunction

@@ -34,6 +34,10 @@ public class TryMapListDataSource<Wrapped: FetchableListDataSource, Output>: Fet
 		return wrapped.isFetching
 	}
 
+	public var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
+	}
+
 	public init(wrapping wrapped: Wrapped, errorBehavior: TryMapListDataSourceErrorBehavior = .skipElement, mappingFunction: @escaping (Wrapped.Element) throws -> Output) {
 		self.wrapped = wrapped
 		self.errorBehavior = errorBehavior

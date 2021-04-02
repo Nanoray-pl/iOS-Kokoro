@@ -38,6 +38,7 @@ public protocol FetchableListDataSource: class {
 	var error: Error? { get }
 	var isEmpty: Bool { get }
 	var isFetching: Bool { get }
+	var isAfterInitialFetch: Bool { get }
 
 	subscript(_ index: Int) -> Element { get }
 
@@ -101,6 +102,10 @@ private class AnyFetchableListDataSourceBase<Element>: FetchableListDataSource {
 		fatalError("Not overriden abstract member")
 	}
 
+	var isAfterInitialFetch: Bool {
+		fatalError("Not overriden abstract member")
+	}
+
 	subscript(_ index: Int) -> Element {
 		fatalError("Not overriden abstract member")
 	}
@@ -146,6 +151,10 @@ private class AnyFetchableListDataSourceBox<Wrapped>: AnyFetchableListDataSource
 
 	override var isFetching: Bool {
 		return wrapped.isFetching
+	}
+
+	override var isAfterInitialFetch: Bool {
+		return wrapped.isAfterInitialFetch
 	}
 
 	override subscript(index: Int) -> Element {
@@ -195,6 +204,10 @@ public final class AnyFetchableListDataSource<Element>: FetchableListDataSource 
 
 	public var isFetching: Bool {
 		return box.isFetching
+	}
+
+	public var isAfterInitialFetch: Bool {
+		return box.isAfterInitialFetch
 	}
 
 	public subscript(index: Int) -> Element {
