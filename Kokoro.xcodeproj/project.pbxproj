@@ -156,6 +156,19 @@
 		AAE9D65F2615CAB80040C91F /* GroupingListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D65E2615CAB80040C91F /* GroupingListDataSource.swift */; };
 		AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D6722615FB4D0040C91F /* Either3.swift */; };
 		AAE9D68F2615FBB40040C91F /* Either4.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D68E2615FBB40040C91F /* Either4.swift */; };
+		AAE9D6C226176BA40040C91F /* KokoroFetchable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD355582528A818007C63EF /* KokoroFetchable.framework */; };
+		AAE9D77D26176C250040C91F /* MergeListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77126176C240040C91F /* MergeListDataSourceTests.swift */; };
+		AAE9D77E26176C250040C91F /* TryMapListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77226176C240040C91F /* TryMapListDataSourceTests.swift */; };
+		AAE9D77F26176C250040C91F /* SwitchableListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77326176C240040C91F /* SwitchableListDataSourceTests.swift */; };
+		AAE9D78026176C250040C91F /* FilterListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77426176C240040C91F /* FilterListDataSourceTests.swift */; };
+		AAE9D78126176C250040C91F /* SkeletonListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77526176C250040C91F /* SkeletonListDataSourceTests.swift */; };
+		AAE9D78226176C250040C91F /* SnapshotListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77626176C250040C91F /* SnapshotListDataSourceTests.swift */; };
+		AAE9D78326176C250040C91F /* UniqueListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77726176C250040C91F /* UniqueListDataSourceTests.swift */; };
+		AAE9D78426176C250040C91F /* GroupingListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77826176C250040C91F /* GroupingListDataSourceTests.swift */; };
+		AAE9D78526176C250040C91F /* MapListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77926176C250040C91F /* MapListDataSourceTests.swift */; };
+		AAE9D78626176C250040C91F /* IgnoringUnchangedListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77A26176C250040C91F /* IgnoringUnchangedListDataSourceTests.swift */; };
+		AAE9D78726176C250040C91F /* CompactMapListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77B26176C250040C91F /* CompactMapListDataSourceTests.swift */; };
+		AAE9D78826176C250040C91F /* PublisherListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D77C26176C250040C91F /* PublisherListDataSourceTests.swift */; };
 		AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */; };
 		AAEFB1262542D860003AA60E /* SeparatorStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1252542D860003AA60E /* SeparatorStackView.swift */; };
 		AAEFB1302542DACB003AA60E /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB12F2542DACB003AA60E /* BorderedView.swift */; };
@@ -260,6 +273,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AAD354B025287210007C63EF;
 			remoteInfo = KokoroUI;
+		};
+		AAE9D6C326176BA40040C91F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD355572528A818007C63EF;
+			remoteInfo = KokoroFetchable;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -439,6 +459,20 @@
 		AAE9D65E2615CAB80040C91F /* GroupingListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupingListDataSource.swift; sourceTree = "<group>"; };
 		AAE9D6722615FB4D0040C91F /* Either3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either3.swift; sourceTree = "<group>"; };
 		AAE9D68E2615FBB40040C91F /* Either4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either4.swift; sourceTree = "<group>"; };
+		AAE9D6BD26176BA40040C91F /* KokoroFetchableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KokoroFetchableTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAE9D6C126176BA40040C91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AAE9D77126176C240040C91F /* MergeListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MergeListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77226176C240040C91F /* TryMapListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TryMapListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77326176C240040C91F /* SwitchableListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77426176C240040C91F /* FilterListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77526176C250040C91F /* SkeletonListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkeletonListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77626176C250040C91F /* SnapshotListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77726176C250040C91F /* UniqueListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniqueListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77826176C250040C91F /* GroupingListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupingListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77926176C250040C91F /* MapListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77A26176C250040C91F /* IgnoringUnchangedListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IgnoringUnchangedListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77B26176C250040C91F /* CompactMapListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompactMapListDataSourceTests.swift; sourceTree = "<group>"; };
+		AAE9D77C26176C250040C91F /* PublisherListDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherListDataSourceTests.swift; sourceTree = "<group>"; };
 		AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicSuperviewConstraintBuilders.swift; sourceTree = "<group>"; };
 		AAEFB1252542D860003AA60E /* SeparatorStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorStackView.swift; sourceTree = "<group>"; };
 		AAEFB12F2542DACB003AA60E /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
@@ -543,6 +577,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAE9D6BA26176BA40040C91F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAE9D6C226176BA40040C91F /* KokoroFetchable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,6 +745,7 @@
 				AAD354B225287210007C63EF /* KokoroUI */,
 				AAD57CC52533B0C8007358D1 /* KokoroUIDemo */,
 				AAD355592528A818007C63EF /* KokoroFetchable */,
+				AAE9D6BE26176BA40040C91F /* KokoroFetchableTests */,
 				AAD355D72528B7F7007C63EF /* KokoroHttp */,
 				AAD3560B2528BAC9007C63EF /* KokoroCoreData */,
 				AAD356162528BAC9007C63EF /* KokoroCoreDataTests */,
@@ -732,6 +775,7 @@
 				AA5AED042556B2B000516C8D /* KokoroCacheResourceProvider.framework */,
 				AA42D3D5256A781D004604D2 /* KokoroUIResourceProvider.framework */,
 				AA16EB41257A7AAC001C30E9 /* KokoroCacheTests.xctest */,
+				AAE9D6BD26176BA40040C91F /* KokoroFetchableTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1100,6 +1144,34 @@
 			path = Either;
 			sourceTree = "<group>";
 		};
+		AAE9D6BE26176BA40040C91F /* KokoroFetchableTests */ = {
+			isa = PBXGroup;
+			children = (
+				AAE9D77026176C090040C91F /* Bootstrap */,
+				AAE9D77626176C250040C91F /* SnapshotListDataSourceTests.swift */,
+				AAE9D77526176C250040C91F /* SkeletonListDataSourceTests.swift */,
+				AAE9D77C26176C250040C91F /* PublisherListDataSourceTests.swift */,
+				AAE9D77126176C240040C91F /* MergeListDataSourceTests.swift */,
+				AAE9D77726176C250040C91F /* UniqueListDataSourceTests.swift */,
+				AAE9D77A26176C250040C91F /* IgnoringUnchangedListDataSourceTests.swift */,
+				AAE9D77426176C240040C91F /* FilterListDataSourceTests.swift */,
+				AAE9D77926176C250040C91F /* MapListDataSourceTests.swift */,
+				AAE9D77B26176C250040C91F /* CompactMapListDataSourceTests.swift */,
+				AAE9D77226176C240040C91F /* TryMapListDataSourceTests.swift */,
+				AAE9D77326176C240040C91F /* SwitchableListDataSourceTests.swift */,
+				AAE9D77826176C250040C91F /* GroupingListDataSourceTests.swift */,
+			);
+			path = KokoroFetchableTests;
+			sourceTree = "<group>";
+		};
+		AAE9D77026176C090040C91F /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AAE9D6C126176BA40040C91F /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1439,13 +1511,31 @@
 			productReference = AAD57CC42533B0C8007358D1 /* KokoroUIDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AAE9D6BC26176BA40040C91F /* KokoroFetchableTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAE9D6C526176BA40040C91F /* Build configuration list for PBXNativeTarget "KokoroFetchableTests" */;
+			buildPhases = (
+				AAE9D6B926176BA40040C91F /* Sources */,
+				AAE9D6BA26176BA40040C91F /* Frameworks */,
+				AAE9D6BB26176BA40040C91F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAE9D6C426176BA40040C91F /* PBXTargetDependency */,
+			);
+			name = KokoroFetchableTests;
+			productName = KokoroFetchableTests;
+			productReference = AAE9D6BD26176BA40040C91F /* KokoroFetchableTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		AAD35484252869D0007C63EF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1220;
+				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Nanoray;
 				TargetAttributes = {
@@ -1499,6 +1589,9 @@
 					AAD57CC32533B0C8007358D1 = {
 						CreatedOnToolsVersion = 12.0.1;
 					};
+					AAE9D6BC26176BA40040C91F = {
+						CreatedOnToolsVersion = 12.4;
+					};
 				};
 			};
 			buildConfigurationList = AAD35487252869D0007C63EF /* Build configuration list for PBXProject "Kokoro" */;
@@ -1520,6 +1613,7 @@
 				AAD354B025287210007C63EF /* KokoroUI */,
 				AAD57CC32533B0C8007358D1 /* KokoroUIDemo */,
 				AAD355572528A818007C63EF /* KokoroFetchable */,
+				AAE9D6BC26176BA40040C91F /* KokoroFetchableTests */,
 				AAD355D52528B7F7007C63EF /* KokoroHttp */,
 				AAD356092528BAC9007C63EF /* KokoroCoreData */,
 				AAD356112528BAC9007C63EF /* KokoroCoreDataTests */,
@@ -1624,6 +1718,13 @@
 			files = (
 				AAD57CD02533B0CA007358D1 /* Assets.xcassets in Resources */,
 				AAD57D372533B363007358D1 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAE9D6BB26176BA40040C91F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2003,6 +2104,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AAE9D6B926176BA40040C91F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAE9D78626176C250040C91F /* IgnoringUnchangedListDataSourceTests.swift in Sources */,
+				AAE9D78726176C250040C91F /* CompactMapListDataSourceTests.swift in Sources */,
+				AAE9D78826176C250040C91F /* PublisherListDataSourceTests.swift in Sources */,
+				AAE9D78026176C250040C91F /* FilterListDataSourceTests.swift in Sources */,
+				AAE9D78526176C250040C91F /* MapListDataSourceTests.swift in Sources */,
+				AAE9D77E26176C250040C91F /* TryMapListDataSourceTests.swift in Sources */,
+				AAE9D78326176C250040C91F /* UniqueListDataSourceTests.swift in Sources */,
+				AAE9D78226176C250040C91F /* SnapshotListDataSourceTests.swift in Sources */,
+				AAE9D78126176C250040C91F /* SkeletonListDataSourceTests.swift in Sources */,
+				AAE9D77F26176C250040C91F /* SwitchableListDataSourceTests.swift in Sources */,
+				AAE9D78426176C250040C91F /* GroupingListDataSourceTests.swift in Sources */,
+				AAE9D77D26176C250040C91F /* MergeListDataSourceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2070,6 +2190,11 @@
 			isa = PBXTargetDependency;
 			target = AAD354B025287210007C63EF /* KokoroUI */;
 			targetProxy = AAD57D242533B2DB007358D1 /* PBXContainerItemProxy */;
+		};
+		AAE9D6C426176BA40040C91F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD355572528A818007C63EF /* KokoroFetchable */;
+			targetProxy = AAE9D6C326176BA40040C91F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2611,10 +2736,7 @@
 		AAD3561F2528BAC9007C63EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PT4XKN3RDP;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2622,7 +2744,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreDataTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -2630,10 +2751,7 @@
 		AAD356202528BAC9007C63EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PT4XKN3RDP;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2714,6 +2832,36 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUIDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AAE9D6C626176BA40040C91F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroFetchableTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AAE9D6C726176BA40040C91F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroFetchableTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -2844,6 +2992,15 @@
 			buildConfigurations = (
 				AAD57CD62533B0CA007358D1 /* Debug */,
 				AAD57CD72533B0CA007358D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAE9D6C526176BA40040C91F /* Build configuration list for PBXNativeTarget "KokoroFetchableTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAE9D6C626176BA40040C91F /* Debug */,
+				AAE9D6C726176BA40040C91F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

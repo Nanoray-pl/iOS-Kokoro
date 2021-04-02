@@ -8,10 +8,9 @@ import Combine
 import KokoroUtils
 
 /// A `FetchableListDataSource` implementation powered with data from a `Publisher`.
-public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: FetchableListDataSource {
+public class PublisherListDataSource<Element>: FetchableListDataSource {
 	public typealias Page = (elements: [Element], isLast: Bool)
 
-	private let scheduler: Scheduler?
 	private let publisherSupplier: (_ pageIndex: Int) -> AnyPublisher<Page, Error>
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
@@ -38,8 +37,7 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 		return fetchingPageIndex != nil
 	}
 
-	public init<P>(scheduler: Scheduler? = nil, publisherSupplier: @escaping (_ pageIndex: Int) -> P) where P: Publisher, P.Output == Page, P.Failure == Error {
-		self.scheduler = scheduler
+	public init<P>(publisherSupplier: @escaping (_ pageIndex: Int) -> P) where P: Publisher, P.Output == Page, P.Failure == Error {
 		self.publisherSupplier = { publisherSupplier($0).eraseToAnyPublisher() }
 	}
 
@@ -76,15 +74,7 @@ public class PublisherListDataSource<Element, Scheduler: Combine.Scheduler>: Fet
 		error = nil
 		updateElements()
 
-		var publisher = publisherSupplier(index).eraseToAnyPublisher()
-		if let scheduler = scheduler {
-			publisher = publisher
-				.buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest)
-				.receive(on: scheduler)
-				.eraseToAnyPublisher()
-		}
-
-		requestCancellable = publisher
+		requestCancellable = publisherSupplier(index)
 			.sink(
 				receiveCompletion: { [weak self] in
 					guard let self = self else { return }

@@ -3,10 +3,19 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
+public enum SnapshotListDataSourceIsFetchingBehavior: ExpressibleByBooleanLiteral {
+	case `false`, `true`, snapshot
+
+	public init(booleanLiteral value: BooleanLiteralType) {
+		self = (value ? .true : .false)
+	}
+}
+
 /// A `FetchableListDataSource` implementation which can be built either from an array of elements or from another data source's current state.
 public class SnapshotListDataSource<Element>: FetchableListDataSource {
 	public let elements: [Element]
 	public let error: Error?
+	public let isFetching: Bool
 
 	public var count: Int {
 		return elements.count
@@ -16,21 +25,27 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 		return elements.isEmpty
 	}
 
-	public var isFetching: Bool {
-		return false
+	public convenience init<T>(of wrapped: T, isFetching: SnapshotListDataSourceIsFetchingBehavior = .false) where T: FetchableListDataSource, T.Element == Element {
+		let isFetchingBool: Bool
+		switch isFetching {
+		case .false:
+			isFetchingBool = false
+		case .true:
+			isFetchingBool = true
+		case .snapshot:
+			isFetchingBool = wrapped.isFetching
+		}
+		self.init(elements: wrapped.elements, error: wrapped.error, isFetching: isFetchingBool)
 	}
 
-	convenience init<T>(of wrapped: T) where T: FetchableListDataSource, T.Element == Element {
-		self.init(elements: wrapped.elements, error: wrapped.error)
+	public convenience init(error: Error, isFetching: Bool = false) {
+		self.init(elements: [], error: error, isFetching: isFetching)
 	}
 
-	convenience init(error: Error) {
-		self.init(elements: [], error: error)
-	}
-
-	init(elements: [Element], error: Error? = nil) {
+	public init(elements: [Element], error: Error? = nil, isFetching: Bool = false) {
 		self.elements = elements
 		self.error = error
+		self.isFetching = isFetching
 	}
 
 	public subscript(index: Int) -> Element {
@@ -55,8 +70,8 @@ public class SnapshotListDataSource<Element>: FetchableListDataSource {
 	}
 }
 
-extension FetchableListDataSource {
-	func snapshot() -> SnapshotListDataSource<Element> {
-		return SnapshotListDataSource(of: self)
+public extension FetchableListDataSource {
+	func snapshot(isFetching: SnapshotListDataSourceIsFetchingBehavior = .false) -> SnapshotListDataSource<Element> {
+		return SnapshotListDataSource(of: self, isFetching: isFetching)
 	}
 }

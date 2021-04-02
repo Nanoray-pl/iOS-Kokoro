@@ -9,8 +9,6 @@ import UIKit
 public protocol EdgeInsets {
 	var top: CGFloat { get set }
 	var bottom: CGFloat { get set }
-	var leading: CGFloat { get set }
-	var trailing: CGFloat { get set }
 
 	var vertical: CGFloat { get }
 	var horizontal: CGFloat { get }
@@ -38,24 +36,6 @@ public extension EdgeInsets {
 extension UIEdgeInsets: EdgeInsets {
 	public var horizontal: CGFloat {
 		return left + right
-	}
-
-	public var leading: CGFloat {
-		get {
-			return left
-		}
-		set {
-			left = newValue
-		}
-	}
-
-	public var trailing: CGFloat {
-		get {
-			return right
-		}
-		set {
-			right = newValue
-		}
 	}
 
 	public var typed: TypedEdgeInsets {

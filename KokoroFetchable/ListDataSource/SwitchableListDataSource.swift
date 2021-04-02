@@ -69,7 +69,7 @@ public class SwitchableListDataSource<Element>: FetchableListDataSource {
 	/// - Parameter targetDataSource: The data source to switch to.
 	/// - Parameter replacingCurrent: Whether the internal data source should be completely replaced, as if it was the initial data source, without waiting for it to finish fetching. Defaults to `false`.
 	public func switchDataSource<DataSource>(to targetDataSource: DataSource, replacingCurrent: Bool = false) where DataSource: FetchableListDataSource, DataSource.Element == Element {
-		if replacingCurrent {
+		if replacingCurrent || (!targetDataSource.isFetching && (!targetDataSource.isEmpty || targetDataSource.error != nil)) {
 			self.targetDataSource?.removeObserver(targetDataSourceObserver)
 			self.targetDataSource = nil
 			currentDataSource.removeObserver(currentDataSourceObserver)
