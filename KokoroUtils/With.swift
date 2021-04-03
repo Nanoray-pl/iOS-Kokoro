@@ -7,9 +7,21 @@ public protocol AnyWith {}
 public protocol ObjectWith: class, AnyWith {}
 public protocol ValueWith: AnyWith {}
 
+private enum CastError: Error {
+	case error
+}
+
 public extension AnyWith {
 	func takeIf(_ block: (Self) throws -> Bool) rethrows -> Self? {
 		return try block(self) ? self : nil
+	}
+
+	func cast<NewType>(to newType: NewType.Type) throws -> NewType {
+		if let result = self as? NewType {
+			return result
+		} else {
+			throw CastError.error
+		}
 	}
 }
 
@@ -51,6 +63,7 @@ extension Decimal: ValueWith {}
 extension String: ValueWith {}
 extension Array: ValueWith {}
 extension Dictionary: ValueWith {}
+extension Optional: ValueWith {}
 
 #if canImport(ObjectiveC)
 import ObjectiveC
