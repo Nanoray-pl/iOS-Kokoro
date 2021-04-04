@@ -21,7 +21,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 		case output(data: Data, response: URLResponse)
 
 		public enum Progress: Hashable {
-			case indeterminate
+			case indeterminate(processedByteCount: Int = 0)
 			case determinate(processedByteCount: Int, expectedByteCount: Int)
 		}
 	}
@@ -30,7 +30,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 
 	private let session: URLSession
 	private let request: URLRequest
-	private let subject = PassthroughSubject<Output, Failure>()
+	private let subject = CurrentValueSubject<Output, Failure>(.sendProgress(.indeterminate()))
 	private let lock = ObjcLock()
 	private var subscriptionCount = 0
 	private var dataTask: URLSessionDataTask?
@@ -77,17 +77,36 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	}
 
 	private func updateProgress() {
-		guard let dataTask = dataTask else { return }
-		let progress = dataTask.progress
+		lock.acquireAndRun {
+			guard let dataTask = dataTask else { return }
 
-		if dataTask.countOfBytesExpectedToSend <= 0 {
-			subject.send(.sendProgress(.indeterminate))
-		} else if dataTask.countOfBytesSent < dataTask.countOfBytesExpectedToSend {
-			subject.send(.sendProgress(.determinate(processedByteCount: Int(dataTask.countOfBytesSent), expectedByteCount: Int(dataTask.countOfBytesExpectedToSend))))
-		} else if progress.isIndeterminate || dataTask.countOfBytesExpectedToReceive < 0 || (dataTask.countOfBytesExpectedToReceive == 0 && dataTask.countOfBytesReceived == 0) {
-			subject.send(.receiveProgress(.indeterminate))
-		} else {
-			subject.send(.receiveProgress(.determinate(processedByteCount: Int(dataTask.countOfBytesReceived), expectedByteCount: Int(dataTask.countOfBytesExpectedToReceive))))
+			if dataTask.countOfBytesExpectedToReceive > 0 {
+				publishProgressValue(.receiveProgress(.determinate(
+					processedByteCount: Swift.max(Int(dataTask.countOfBytesReceived), 0),
+					expectedByteCount: Swift.max(Int(dataTask.countOfBytesExpectedToReceive), 0)
+				)))
+			} else if dataTask.countOfBytesReceived > 0 {
+				publishProgressValue(.receiveProgress(.indeterminate(
+					processedByteCount: Swift.max(Int(dataTask.countOfBytesReceived), 0)
+				)))
+			} else if dataTask.countOfBytesExpectedToSend > 0 {
+				publishProgressValue(.sendProgress(.determinate(
+					processedByteCount: Swift.max(Int(dataTask.countOfBytesSent), 0),
+					expectedByteCount: Swift.max(Int(dataTask.countOfBytesExpectedToSend), 0)
+				)))
+			} else {
+				publishProgressValue(.sendProgress(.indeterminate(
+					processedByteCount: Swift.max(Int(dataTask.countOfBytesSent), 0)
+				)))
+			}
+		}
+	}
+
+	private func publishProgressValue(_ value: Output) {
+		lock.acquireAndRun {
+			if subject.value != value {
+				subject.send(value)
+			}
 		}
 	}
 
