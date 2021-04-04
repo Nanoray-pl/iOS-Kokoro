@@ -27,7 +27,7 @@ public class LoggingHttpClient: HttpClient {
 		public typealias ErrorCallback = (RequestId, URLRequest, Error) -> Void
 		public typealias CancelCallback = (RequestId, URLRequest) -> Void
 
-		private static let binaryOnlyCharacters: [Character] = (Array(0x00 ... 0x08) + Array(0x0E ... 0x1F) + [0x0B, 0x0C]).map { Character(UnicodeScalar($0)) }
+		private static let binaryOnlyBytes: Set<UInt8> = Set(0x00 ... 0x1F).subtracting([0x09, 0x10, 0x0D])
 
 		public let request: RequestCallback?
 		public let output: OutputCallback?
@@ -41,13 +41,13 @@ public class LoggingHttpClient: HttpClient {
 			self.cancel = cancel
 		}
 
-		public init(loggingClosure: @escaping (_ logLineType: LogLineType, _ line: String) -> Void) {
+		public init(maxRequestLength: Int? = nil, maxOutputLength: Int? = nil, loggingClosure: @escaping (_ logLineType: LogLineType, _ line: String) -> Void) {
 			self.init(
 				request: { requestId, request in
 					guard let httpMethod = request.httpMethod, let url = request.url else { return }
 					loggingClosure(.request(.baseInfo), ">>> [\(requestId)] HTTP \(httpMethod.uppercased()) \(url)")
 					loggingClosure(.request(.headers), ">>> [\(requestId)] \(Self.logHeaders(request.allHTTPHeaderFields))")
-					loggingClosure(.request(.body), ">>> [\(requestId)] \(Self.logBody(request.httpBody))")
+					loggingClosure(.request(.body), ">>> [\(requestId)] \(Self.logBody(request.httpBody, maxLength: maxRequestLength))")
 				},
 				output: { requestId, request, output in
 					switch output {
@@ -69,7 +69,7 @@ public class LoggingHttpClient: HttpClient {
 						guard let httpMethod = request.httpMethod, let url = request.url else { return }
 						loggingClosure(.response(.baseInfo), "<<< [\(requestId)] HTTP \(output.statusCode) for \(httpMethod.uppercased()) \(url)")
 						loggingClosure(.response(.headers), "<<< [\(requestId)] \(Self.logHeaders(output.headers))")
-						loggingClosure(.response(.body), "<<< [\(requestId)] \(Self.logBody(output.data))")
+						loggingClosure(.response(.body), "<<< [\(requestId)] \(Self.logBody(output.data, maxLength: maxOutputLength))")
 					}
 				},
 				error: { requestId, _, error in
@@ -92,16 +92,25 @@ public class LoggingHttpClient: HttpClient {
 			return lines.joined(separator: "\n")
 		}
 
-		private static func logBody(_ data: Data?) -> String {
+		private static func logBody(_ data: Data?, maxLength: Int?) -> String {
 			var lines = [String]()
 			if let body = data.nonEmpty {
-				if let bodyText = String(data: body, encoding: .utf8), !bodyText.contains(where: { Self.binaryOnlyCharacters.contains($0) }) {
+				let outputSummaryOnly: Bool
+				if let maxLength = maxLength, body.count > maxLength {
+					outputSummaryOnly = true
+				} else if body.contains(where: { Self.binaryOnlyBytes.contains($0) }) {
+					outputSummaryOnly = true
+				} else {
+					outputSummaryOnly = false
+				}
+
+				if !outputSummaryOnly, let bodyText = String(data: body, encoding: .utf8) {
 					lines.append("Data: UTF-8 text")
 					lines.append("==========")
 					lines.append(bodyText)
 					lines.append("==========")
 				} else {
-					lines.append("Data: binary (\(body.count) byte(s))")
+					lines.append("Data: (\(body.count) byte(s))")
 				}
 			} else {
 				lines.append("Data: <none>")
