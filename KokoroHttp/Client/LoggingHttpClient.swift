@@ -41,42 +41,46 @@ public class LoggingHttpClient: HttpClient {
 			self.cancel = cancel
 		}
 
-		public init(maxRequestLength: Int? = nil, maxOutputLength: Int? = nil, loggingClosure: @escaping (_ logLineType: LogLineType, _ line: String) -> Void) {
+		public init(maxRequestLength: Int? = nil, maxOutputLength: Int? = nil, loggingClosure: @escaping (_ logLineType: LogLineType, _ line: () -> String) -> Void) {
 			self.init(
 				request: { requestId, request in
 					guard let httpMethod = request.httpMethod, let url = request.url else { return }
-					loggingClosure(.request(.baseInfo), ">>> [\(requestId)] HTTP \(httpMethod.uppercased()) \(url)")
-					loggingClosure(.request(.headers), ">>> [\(requestId)] \(Self.logHeaders(request.allHTTPHeaderFields))")
-					loggingClosure(.request(.body), ">>> [\(requestId)] \(Self.logBody(request.httpBody, maxLength: maxRequestLength))")
+					loggingClosure(.request(.baseInfo)) { ">>> [\(requestId)] HTTP \(httpMethod.uppercased()) \(url)" }
+					loggingClosure(.request(.headers)) { ">>> [\(requestId)] \(Self.logHeaders(request.allHTTPHeaderFields))" }
+					loggingClosure(.request(.body)) { ">>> [\(requestId)] \(Self.logBody(request.httpBody, maxLength: maxRequestLength))" }
 				},
 				output: { requestId, request, output in
 					switch output {
 					case let .sendProgress(progress):
 						switch progress {
 						case let .determinate(processedByteCount, expectedByteCount) where processedByteCount > 0 && expectedByteCount > 0:
-							loggingClosure(.request(.progress), ">>> [\(requestId)] Send progress: \(processedByteCount)/\(expectedByteCount) byte(s) (\(Int(Double(processedByteCount) / Double(expectedByteCount) * 100)))")
+							loggingClosure(.request(.progress)) { ">>> [\(requestId)] Send progress: \(processedByteCount)/\(expectedByteCount) byte(s) (\(Int(Double(processedByteCount) / Double(expectedByteCount) * 100))%)" }
+						case let .indeterminate(processedByteCount) where processedByteCount > 0:
+							loggingClosure(.request(.progress)) { ">>> [\(requestId)] Send progress: \(processedByteCount) byte(s)" }
 						case .determinate, .indeterminate:
 							break
 						}
 					case let .receiveProgress(progress):
 						switch progress {
 						case let .determinate(processedByteCount, expectedByteCount) where processedByteCount > 0 && expectedByteCount > 0:
-							loggingClosure(.response(.progress), "<<< [\(requestId)] Receive progress: \(processedByteCount)/\(expectedByteCount) byte(s) (\(Int(Double(processedByteCount) / Double(expectedByteCount) * 100)))")
+							loggingClosure(.request(.progress)) { "<<< [\(requestId)] Receive progress: \(processedByteCount)/\(expectedByteCount) byte(s) (\(Int(Double(processedByteCount) / Double(expectedByteCount) * 100))%)" }
+						case let .indeterminate(processedByteCount) where processedByteCount > 0:
+							loggingClosure(.request(.progress)) { "<<< [\(requestId)] Receive progress: \(processedByteCount) byte(s)" }
 						case .determinate, .indeterminate:
 							break
 						}
 					case let .output(output):
 						guard let httpMethod = request.httpMethod, let url = request.url else { return }
-						loggingClosure(.response(.baseInfo), "<<< [\(requestId)] HTTP \(output.statusCode) for \(httpMethod.uppercased()) \(url)")
-						loggingClosure(.response(.headers), "<<< [\(requestId)] \(Self.logHeaders(output.headers))")
-						loggingClosure(.response(.body), "<<< [\(requestId)] \(Self.logBody(output.data, maxLength: maxOutputLength))")
+						loggingClosure(.response(.baseInfo)) { "<<< [\(requestId)] HTTP \(output.statusCode) for \(httpMethod.uppercased()) \(url)" }
+						loggingClosure(.response(.headers)) { "<<< [\(requestId)] \(Self.logHeaders(output.headers))" }
+						loggingClosure(.response(.body)) { "<<< [\(requestId)] \(Self.logBody(output.data, maxLength: maxOutputLength))" }
 					}
 				},
 				error: { requestId, _, error in
-					loggingClosure(.error, "<<< [\(requestId)] Error: \(error)")
+					loggingClosure(.error) { "<<< [\(requestId)] Error: \(error)" }
 				},
 				cancel: { requestId, _ in
-					loggingClosure(.cancel, "<<< [\(requestId)] Cancelled")
+					loggingClosure(.cancel) { "<<< [\(requestId)] Cancelled" }
 				}
 			)
 		}
