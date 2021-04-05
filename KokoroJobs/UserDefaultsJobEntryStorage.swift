@@ -23,16 +23,20 @@ public class UserDefaultsJobEntryStorage: JobEntryStorage {
 
 	private let userDefaults: UserDefaults
 	private let userDefaultsKey: String
-	private let encoder: JSONEncoder
-	private let decoder: JSONDecoder
+	private let decoder: AnyTopLevelDecoder<Data>
+	private let encoder: AnyTopLevelEncoder<Data>
 	private var complexJobInfos: [ComplexJobInfo]
 
-	public init(logger: Logger, userDefaults: UserDefaults = .standard, key userDefaultsKey: String, encoder: JSONEncoder = .init(), decoder: JSONDecoder = .init()) {
+	public convenience init(logger: Logger, userDefaults: UserDefaults = .standard, key userDefaultsKey: String) {
+		self.init(logger: logger, userDefaults: userDefaults, key: userDefaultsKey, decoder: JSONDecoder(), encoder: JSONEncoder())
+	}
+
+	public init<Decoder, Encoder>(logger: Logger, userDefaults: UserDefaults = .standard, key userDefaultsKey: String, decoder: Decoder, encoder: Encoder) where Decoder: TopLevelDecoder, Decoder.Input == Data, Encoder: TopLevelEncoder, Encoder.Output == Data {
 		self.logger = logger
 		self.userDefaults = userDefaults
 		self.userDefaultsKey = userDefaultsKey
-		self.encoder = encoder
-		self.decoder = decoder
+		self.encoder = encoder.eraseToAnyTopLevelEncoder()
+		self.decoder = decoder.eraseToAnyTopLevelDecoder()
 
 		complexJobInfos = []
 		if let data = userDefaults.data(forKey: userDefaultsKey) {

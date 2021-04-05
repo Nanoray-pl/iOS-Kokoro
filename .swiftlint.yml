@@ -21,6 +21,7 @@ disabled_rules:
     - trailing_whitespace
     - opening_brace
     - trailing_comma
+    - large_tuple
 cyclomatic_complexity:
     ignores_case_statements: true
 generic_type_name:
