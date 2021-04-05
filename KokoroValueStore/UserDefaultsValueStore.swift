@@ -124,7 +124,7 @@ public extension UserDefaultsValueStore where Element == String? {
 	}
 }
 
-public extension ThrowingUserDefaultsValueStore where Element: OptionalConvertible, Element.Wrapped: Encodable, Element.Wrapped: Decodable {
+public extension ThrowingUserDefaultsValueStore where Element: OptionalConvertible, Element.Wrapped: Codable {
 	convenience init(userDefaults: UserDefaults = .standard, key: String, encoder: JSONEncoder = .init(), decoder: JSONDecoder = .init()) {
 		self.init(
 			userDefaults: userDefaults,

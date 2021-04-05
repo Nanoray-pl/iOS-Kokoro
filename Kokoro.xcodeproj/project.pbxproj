@@ -179,6 +179,7 @@
 		AAE9D8592617B2FB0040C91F /* ErrorHandlingValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D8582617B2FB0040C91F /* ErrorHandlingValueStore.swift */; };
 		AAE9D8692617B35B0040C91F /* MapValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D8682617B35B0040C91F /* MapValueStore.swift */; };
 		AAE9D88E2617E5B10040C91F /* CodableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D88D2617E5B10040C91F /* CodableExtensions.swift */; };
+		AAE9D8FB261B39C20040C91F /* FileManagerValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D8FA261B39C20040C91F /* FileManagerValueStore.swift */; };
 		AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */; };
 		AAEFB1262542D860003AA60E /* SeparatorStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB1252542D860003AA60E /* SeparatorStackView.swift */; };
 		AAEFB1302542DACB003AA60E /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEFB12F2542DACB003AA60E /* BorderedView.swift */; };
@@ -521,6 +522,7 @@
 		AAE9D8582617B2FB0040C91F /* ErrorHandlingValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandlingValueStore.swift; sourceTree = "<group>"; };
 		AAE9D8682617B35B0040C91F /* MapValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapValueStore.swift; sourceTree = "<group>"; };
 		AAE9D88D2617E5B10040C91F /* CodableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableExtensions.swift; sourceTree = "<group>"; };
+		AAE9D8FA261B39C20040C91F /* FileManagerValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerValueStore.swift; sourceTree = "<group>"; };
 		AAEFAFA62539A582003AA60E /* BasicSuperviewConstraintBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicSuperviewConstraintBuilders.swift; sourceTree = "<group>"; };
 		AAEFB1252542D860003AA60E /* SeparatorStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorStackView.swift; sourceTree = "<group>"; };
 		AAEFB12F2542DACB003AA60E /* BorderedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedView.swift; sourceTree = "<group>"; };
@@ -1237,6 +1239,7 @@
 				AAE9D8172617AFBF0040C91F /* Bootstrap */,
 				AAE9D8182617B0660040C91F /* ValueStore.swift */,
 				AAE9D8282617B1520040C91F /* UserDefaultsValueStore.swift */,
+				AAE9D8FA261B39C20040C91F /* FileManagerValueStore.swift */,
 				AAE9D8382617B2190040C91F /* CachedValueStore.swift */,
 				AAE9D8482617B27E0040C91F /* DefaultValueValueStore.swift */,
 				AAE9D8582617B2FB0040C91F /* ErrorHandlingValueStore.swift */,
@@ -2311,6 +2314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAE9D8FB261B39C20040C91F /* FileManagerValueStore.swift in Sources */,
 				AAE9D8292617B1520040C91F /* UserDefaultsValueStore.swift in Sources */,
 				AAE9D8192617B0660040C91F /* ValueStore.swift in Sources */,
 				AAE9D8692617B35B0040C91F /* MapValueStore.swift in Sources */,
