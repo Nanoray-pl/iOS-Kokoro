@@ -63,9 +63,9 @@ public class LoggingHttpClient: HttpClient {
 					case let .receiveProgress(progress):
 						switch progress {
 						case let .determinate(processedByteCount, expectedByteCount) where processedByteCount > 0 && expectedByteCount > 0:
-							loggingClosure(.request(.progress)) { "<<< [\(requestId)] Receive progress: \(processedByteCount)/\(expectedByteCount) byte(s) (\(Int(Double(processedByteCount) / Double(expectedByteCount) * 100))%)" }
+							loggingClosure(.response(.progress)) { "<<< [\(requestId)] Receive progress: \(processedByteCount)/\(expectedByteCount) byte(s) (\(Int(Double(processedByteCount) / Double(expectedByteCount) * 100))%)" }
 						case let .indeterminate(processedByteCount) where processedByteCount > 0:
-							loggingClosure(.request(.progress)) { "<<< [\(requestId)] Receive progress: \(processedByteCount) byte(s)" }
+							loggingClosure(.response(.progress)) { "<<< [\(requestId)] Receive progress: \(processedByteCount) byte(s)" }
 						case .determinate, .indeterminate:
 							break
 						}

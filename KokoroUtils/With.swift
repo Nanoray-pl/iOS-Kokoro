@@ -4,8 +4,11 @@
 //
 
 public protocol AnyWith {}
-public protocol ObjectWith: class, AnyWith {}
 public protocol ValueWith: AnyWith {}
+
+public protocol ObjectWith: class, AnyWith {
+	typealias Proxy<T> = AnyProxy<Self, T>
+}
 
 private enum CastError: Error {
 	case error

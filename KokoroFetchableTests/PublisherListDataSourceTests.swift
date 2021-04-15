@@ -83,4 +83,34 @@ class PublisherListDataSourceTests: XCTestCase {
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
 	}
+
+	func testCorrectPageIndex() {
+		enum Error: Swift.Error {
+			case error
+		}
+
+		var expectedPageIndex = 0
+		var shouldReturnError = false
+
+		let testedDataSource = PublisherListDataSource<Int> { (pageIndex: Int) -> AnyPublisher<(elements: [Int], isLast: Bool), Swift.Error> in
+			XCTAssertEqual(expectedPageIndex, pageIndex)
+			if shouldReturnError {
+				return Fail(error: Error.error)
+					.eraseToAnyPublisher()
+			} else {
+				return Just((elements: [], isLast: false))
+					.setFailureType(to: Swift.Error.self)
+					.eraseToAnyPublisher()
+			}
+		}
+
+		testedDataSource.fetchAdditionalData()
+		expectedPageIndex = 1
+		testedDataSource.fetchAdditionalData()
+		expectedPageIndex = 2
+		shouldReturnError = true
+		testedDataSource.fetchAdditionalData()
+		shouldReturnError = false
+		testedDataSource.fetchAdditionalData()
+	}
 }

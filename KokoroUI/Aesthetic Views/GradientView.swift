@@ -13,23 +13,11 @@ public class GradientView: UIView {
 
 	private lazy var gradient = layer as! CAGradientLayer
 
-	public var startPoint: CGPoint {
-		get {
-			return gradient.startPoint
-		}
-		set {
-			gradient.startPoint = newValue
-		}
-	}
+	@Proxy(\.gradient.startPoint)
+	public var startPoint: CGPoint
 
-	public var endPoint: CGPoint {
-		get {
-			return gradient.endPoint
-		}
-		set {
-			gradient.endPoint = newValue
-		}
-	}
+	@Proxy(\.gradient.endPoint)
+	public var endPoint: CGPoint
 
 	public var colors: [(location: Double, color: UIColor)]? {
 		didSet {

@@ -84,6 +84,19 @@ public extension Publisher {
 		return cancellable
 	}
 
+	func delayStart<S: Combine.Scheduler>(for interval: S.SchedulerTimeType.Stride, tolerance: S.SchedulerTimeType.Stride? = nil, scheduler: S, options: S.SchedulerOptions? = nil) -> AnyPublisher<Output, Failure> {
+		var instance: Self! = self
+		return Deferred { Just(()) }
+			.setFailureType(to: Failure.self)
+			.delay(for: interval, tolerance: tolerance, scheduler: scheduler, options: options)
+			.flatMap { _ -> Self in
+				let result = instance!
+				instance = nil
+				return result
+			}
+			.eraseToAnyPublisher()
+	}
+
 	func onError(_ closure: @escaping (Failure) -> Void) -> Publishers.MapError<Self, Failure> {
 		return mapError {
 			closure($0)

@@ -70,7 +70,7 @@ public class PublisherListDataSource<Element>: FetchableListDataSource {
 
 		if let currentPage = pages.last {
 			if !currentPage.isLast {
-				fetchPage(pages.count + 1)
+				fetchPage(pages.count)
 			} else {
 				return false
 			}

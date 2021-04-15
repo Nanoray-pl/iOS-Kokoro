@@ -51,6 +51,7 @@
 		AA5AED082556B2B000516C8D /* KokoroCacheResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AED062556B2B000516C8D /* KokoroCacheResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AED192556B2D200516C8D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AED182556B2D200516C8D /* Extensions.swift */; };
 		AA5AEDA32556B36E00516C8D /* CacheResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */; };
+		AA880B2C261EFA12001AE8C3 /* ProxyPropertyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA880B2B261EFA12001AE8C3 /* ProxyPropertyWrapper.swift */; };
 		AA9F220625D85F2D001C6A46 /* MockingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */; };
 		AA9F229225D8663C001C6A46 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F229125D8663C001C6A46 /* Routing.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -376,6 +377,7 @@
 		AA5AED072556B2B000516C8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA5AED182556B2D200516C8D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheResourceProvider.swift; sourceTree = "<group>"; };
+		AA880B2B261EFA12001AE8C3 /* ProxyPropertyWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPropertyWrapper.swift; sourceTree = "<group>"; };
 		AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockingHttpClient.swift; sourceTree = "<group>"; };
 		AA9F229125D8663C001C6A46 /* Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -861,6 +863,7 @@
 				AA42D414256A7BBC004604D2 /* PrivateSourceLocation.swift */,
 				AA16EAE0257A74DA001C30E9 /* Lock.swift */,
 				AAF080E225E942A800D5065C /* ObserverSet.swift */,
+				AA880B2B261EFA12001AE8C3 /* ProxyPropertyWrapper.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -2117,6 +2120,7 @@
 				AAF080E325E942A800D5065C /* ObserverSet.swift in Sources */,
 				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
 				AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */,
+				AA880B2C261EFA12001AE8C3 /* ProxyPropertyWrapper.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAE9D6342615C9360040C91F /* Either.swift in Sources */,
 				AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */,

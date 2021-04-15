@@ -107,32 +107,14 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 		}
 	}
 
-	public var insetsContentLayoutMarginsFromSafeArea: Bool {
-		get {
-			return stackView.insetsLayoutMarginsFromSafeArea
-		}
-		set {
-			stackView.insetsLayoutMarginsFromSafeArea = newValue
-		}
-	}
+	@Proxy(\.stackView.insetsLayoutMarginsFromSafeArea)
+	public var insetsContentLayoutMarginsFromSafeArea: Bool
 
-	public var isContentLayoutMarginsRelativeArrangement: Bool {
-		get {
-			return stackView.isLayoutMarginsRelativeArrangement
-		}
-		set {
-			stackView.isLayoutMarginsRelativeArrangement = newValue
-		}
-	}
+	@Proxy(\.stackView.isLayoutMarginsRelativeArrangement)
+	public var isContentLayoutMarginsRelativeArrangement: Bool
 
-	public var contentLayoutMargins: UIEdgeInsets {
-		get {
-			return stackView.layoutMargins
-		}
-		set {
-			stackView.layoutMargins = newValue
-		}
-	}
+	@Proxy(\.stackView.layoutMargins)
+	public var contentLayoutMargins: UIEdgeInsets
 
 	public var arrangedSubviews: [ContentView] {
 		return entryViews.map(\.contentView)
