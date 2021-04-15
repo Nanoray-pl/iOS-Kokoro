@@ -21,12 +21,12 @@ public extension Future {
 
 public extension Publisher {
 	@discardableResult
-	func sinkResult(storingIn bag: CancelBag, _ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
+	func result(storingIn bag: CancelBag, _ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
 		var cancellable: AnyCancellable!
 		cancellable = onCancel {
 			bag.cancellableSet.remove(cancellable)
 		}
-		.sinkResult {
+		.result {
 			bag.cancellableSet.remove(cancellable)
 			closure($0)
 		}
@@ -35,29 +35,35 @@ public extension Publisher {
 		return cancellable
 	}
 
-	func sinkResult(_ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
+	func result(_ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
+		var completionClosure: ((Result<Output, Failure>) -> Void)! = closure
 		return sink(receiveCompletion: {
 			switch $0 {
 			case .finished:
 				break
 			case let .failure(error):
-				closure(.failure(error))
+				completionClosure(.failure(error))
+				completionClosure = nil
 			}
 		}, receiveValue: {
-			closure(.success($0))
+			completionClosure(.success($0))
+			completionClosure = nil
 		})
 	}
 
-	func sinkResult<Root: AnyObject>(storingIn keyPath: ReferenceWritableKeyPath<Root, Combine.AnyCancellable?>, onWeak object: Root, _ closure: @escaping (Result<Output, Failure>) -> Void) {
+	func result<Root: AnyObject>(storingIn keyPath: ReferenceWritableKeyPath<Root, Combine.AnyCancellable?>, onWeak object: Root, _ closure: @escaping (Result<Output, Failure>) -> Void) {
+		var completionClosure: ((Result<Output, Failure>) -> Void)! = closure
 		return sink(storingIn: keyPath, onWeak: object, receiveCompletion: {
 			switch $0 {
 			case .finished:
 				break
 			case let .failure(error):
-				closure(.failure(error))
+				completionClosure(.failure(error))
+				completionClosure = nil
 			}
 		}, receiveValue: {
-			closure(.success($0))
+			completionClosure(.success($0))
+			completionClosure = nil
 		})
 	}
 
