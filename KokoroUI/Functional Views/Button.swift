@@ -54,13 +54,12 @@ open class Button: UIControl {
 	}
 
 	private func buildUI(type buttonType: UIButton.ButtonType = .system) {
-		var constraints = ConstraintSet()
-		defer { constraints.activate() }
+		let constraints = ConstraintSession.current
 
 		isAccessibilityElement = true
 		accessibilityTraits.insert(.button)
 
-		contentView = UIView(frame: .zero).with { [parent = self] in
+		contentView = UIView().with { [parent = self] in
 			parent.addSubview($0)
 			topConstraint = $0.topToSuperview()
 			bottomConstraint = $0.bottomToSuperview()

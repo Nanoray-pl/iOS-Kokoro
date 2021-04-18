@@ -196,6 +196,57 @@ public struct ConstraintSet: Constraints {
 	}
 }
 
+public class ConstraintSession: Constraints {
+	private static weak var privateCurrent: ConstraintSession?
+
+	public static var current: ConstraintSession {
+		if let current = privateCurrent {
+			return current
+		} else {
+			let current = ConstraintSession(isStatic: true)
+			privateCurrent = current
+			return current
+		}
+	}
+
+	private let isStatic: Bool
+	private var constraints = [Constraint]()
+
+	public init() {
+		isStatic = false
+	}
+
+	private init(isStatic: Bool) {
+		self.isStatic = isStatic
+	}
+
+	deinit {
+		if isStatic {
+			activate()
+		}
+	}
+
+	public static func += (left: ConstraintSession, right: [Constraints]) {
+		left.constraints.append(contentsOf: right.flatMap { $0.flatMap() })
+	}
+
+	public static func += (left: ConstraintSession, right: Constraints) {
+		left.constraints.append(contentsOf: right.flatMap())
+	}
+
+	public func flatMap() -> [Constraint] {
+		return constraints
+	}
+
+	public func flatMapBasicConstraints() -> [NSLayoutConstraint] {
+		return constraints.ofType(NSLayoutConstraint.self)
+	}
+
+	public func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
+		return constraints.ofType(NonBasicConstraint.self)
+	}
+}
+
 extension ConstraintSet: ExpressibleByArrayLiteral {
 	public init(arrayLiteral elements: Constraints...) {
 		self.constraints = elements.flatMap { $0.flatMap() }

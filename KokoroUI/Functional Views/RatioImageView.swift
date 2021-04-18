@@ -48,10 +48,9 @@ public class RatioImageView: UIView {
 	}
 
 	private func buildUI() {
-		var constraints = ConstraintSet()
-		defer { constraints.activate() }
+		let constraints = ConstraintSession.current
 
-		imageView = UIImageView(frame: .zero).with { [parent = self] in
+		imageView = UIImageView().with { [parent = self] in
 			$0.contentMode = .scaleAspectFill
 			$0.clipsToBounds = true
 			parent.addSubview($0)

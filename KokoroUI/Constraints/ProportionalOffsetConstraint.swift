@@ -87,7 +87,7 @@ public class ProportionalOffsetConstraint: NonBasicConstraint, ObjectWith {
 		var constraints = ConstraintSet()
 		defer { constraints.activate() }
 
-		helper = UIView(frame: .zero).with {
+		helper = UIView().with {
 			$0.isUserInteractionEnabled = false
 			common.addSubview($0)
 

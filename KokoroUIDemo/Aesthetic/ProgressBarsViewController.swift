@@ -31,8 +31,7 @@ class ProgressBarsViewController: UIViewController {
 
 	override func loadView() {
 		super.loadView()
-		var constraints = ConstraintSet()
-		defer { constraints.activate() }
+		let constraints = ConstraintSession.current
 
 		view.backgroundColor = .systemBackground
 

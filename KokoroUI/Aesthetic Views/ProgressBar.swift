@@ -109,8 +109,7 @@ public class ProgressBar: UIView {
 	}
 
 	private func buildUI() {
-		var constraints = ConstraintSet()
-		defer { constraints.activate() }
+		let constraints = ConstraintSession.current
 
 		roundedView = RoundedView().with { [parent = self] in
 			$0.backgroundColor = .systemGray4

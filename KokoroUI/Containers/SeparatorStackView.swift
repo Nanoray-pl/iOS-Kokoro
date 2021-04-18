@@ -41,8 +41,7 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 		}
 
 		private func buildUI() {
-			var constraints = ConstraintSet()
-			defer { constraints.activate() }
+			let constraints = ConstraintSession.current
 
 			stackView = UIStackView().with { [parent = self] in
 				$0.addArrangedSubview(contentView)
@@ -134,8 +133,7 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 	}
 
 	private func buildUI() {
-		var constraints = ConstraintSet()
-		defer { constraints.activate() }
+		let constraints = ConstraintSession.current
 
 		stackView = UIStackView().with { [parent = self] in
 			parent.addSubview($0)
