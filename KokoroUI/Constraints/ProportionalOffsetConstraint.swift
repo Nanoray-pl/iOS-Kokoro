@@ -44,11 +44,9 @@ public class ProportionalOffsetConstraint: NonBasicConstraint, ObjectWith {
 
 	private weak var helper: UIView? {
 		didSet {
-			if helper == nil {
-				if isActive {
-					deactivate()
-					activate()
-				}
+			if helper == nil && isActive {
+				deactivate()
+				activate()
 			}
 		}
 	}

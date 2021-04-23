@@ -57,24 +57,12 @@ open class RoundedView: UIView {
 		}
 	}
 
-	// double values, because half of the border is masked away
-	public var borderWidth: CGFloat {
-		get {
-			return borderLayer.lineWidth / 2
-		}
-		set {
-			borderLayer.lineWidth = newValue * 2
-		}
-	}
+	// half of the border is masked away
+	@Proxy(\.borderLayer.lineWidth, multiplier: 0.5)
+	public var borderWidth: CGFloat
 
-	public var borderColor: UIColor? {
-		get {
-			return borderLayer.strokeColor.flatMap { UIColor(cgColor: $0) }
-		}
-		set {
-			borderLayer.strokeColor = newValue?.cgColor
-		}
-	}
+	@Proxy(\.borderLayer.strokeColor, getMapper: { $0.flatMap { UIColor(cgColor: $0) } }, setMapper: { $0?.cgColor })
+	public var borderColor: UIColor?
 
 	public override var bounds: CGRect {
 		didSet {

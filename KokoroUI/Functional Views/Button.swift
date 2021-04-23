@@ -14,7 +14,7 @@ import UIKit
 ///
 /// Additionally, a subclass should call `wrappedButton?.setTitle("<any>", for: .normal)` after completing its setup to trigger `tintColor` update.
 open class Button: UIControl {
-	public var insets: UIEdgeInsets = .zero {
+	public var insets = UIEdgeInsets.zero {
 		didSet {
 			topConstraint.constant = insets.top
 			bottomConstraint.constant = -insets.bottom

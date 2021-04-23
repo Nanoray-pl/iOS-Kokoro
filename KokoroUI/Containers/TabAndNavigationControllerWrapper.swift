@@ -106,14 +106,8 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public var currentNavigationController: UINavigationController {
-		get {
-			return wrappedTabBarController.selectedViewController as! UINavigationController
-		}
-		set {
-			wrappedTabBarController.selectedViewController = newValue
-		}
-	}
+	@Proxy(\.wrappedTabBarController.selectedViewController, getMapper: { $0 as! UINavigationController }, setMapper: { $0 })
+	public var currentNavigationController: UINavigationController
 
 	public var navigationControllers: [UINavigationController] {
 		return (wrappedTabBarController.viewControllers ?? []).ofType(UINavigationController.self)
