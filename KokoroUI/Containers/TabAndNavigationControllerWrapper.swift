@@ -76,6 +76,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	private var isCustomModalInPresentationValueSet = false
 	private weak var targetOrCurrentViewController: UIViewController?
 	private lazy var internalDelegate = InternalDelegate(parent: self) // swiftlint:disable:this weak_delegate
+	private lazy var toolbarStackFrameObservingDelegate = ToolbarStackFrameObservingDelegate(parent: self) // swiftlint:disable:this weak_delegate
 
 	open override var childForHomeIndicatorAutoHidden: UIViewController? {
 		return targetOrCurrentViewController ?? super.childForHomeIndicatorAutoHidden
@@ -136,6 +137,8 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		return !tabBar.frame.intersects(view.frame)
 	}
 
+	public private(set) var toolbarStack: UIStackView!
+
 	private var tabBarAnimator: UIViewPropertyAnimator? {
 		willSet {
 			tabBarAnimator?.with {
@@ -174,6 +177,10 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 			}
 			setupTabItem(tabItems[index], for: item)
 		}
+
+		if isViewLoaded {
+			updateAdditionalSafeAreaInsets()
+		}
 	}
 
 	public required init?(coder: NSCoder) {
@@ -194,11 +201,29 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 
 	open override func loadView() {
 		super.loadView()
+		let constraints = ConstraintSession.current
 
 		addChild(wrappedTabBarController)
 		view.addSubview(wrappedTabBarController.view)
 		wrappedTabBarController.view.edgesToSuperview().activate()
 		wrappedTabBarController.didMove(toParent: self)
+
+		FrameObservingView().with { [parent = view!] in
+			$0.delegate = toolbarStackFrameObservingDelegate
+
+			toolbarStack = UIStackView().with { [parent = $0] in
+				$0.axis = .vertical
+
+				parent.addSubview($0)
+				constraints += $0.edgesToSuperview()
+			}
+
+			parent.addSubview($0)
+			constraints += [
+				$0.horizontalEdgesToSuperview(),
+				$0.bottomToTop(of: tabBar),
+			]
+		}
 	}
 
 	private func navigationControllers(for navigateScope: NavigateScope) -> [UINavigationController] {
@@ -354,23 +379,9 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 	}
 
-	private class PrecedingControllerNavigatorImplementation: PrecedingControllerNavigator {
-		private unowned let parent: TabAndNavigationControllerWrapper
-
-		init(parent: TabAndNavigationControllerWrapper) {
-			self.parent = parent
-		}
-
-		func precedingNavigationItems(for controller: UIViewController) -> [UINavigationItem] {
-			guard let navigationController = parent.navigationControllers.first(where: { $0.viewControllers.contains(controller) }) else { return [] }
-			guard let index = navigationController.viewControllers.firstIndex(of: controller) else { return [] }
-			return navigationController.viewControllers.prefix(index).map(\.navigationItem)
-		}
-
-		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
-			guard let controller = parent.navigationControllers.flatMap(\.viewControllers).first(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
-			parent.popToViewController(controller, animated: animated, completion: completion)
-		}
+	private func updateAdditionalSafeAreaInsets() {
+		let toolbarHeight = toolbarStack.isHidden ? 0 : toolbarStack.frame.height
+		navigationControllers.forEach { $0.additionalSafeAreaInsets.bottom = toolbarHeight }
 	}
 
 	private func setupBarVisibility(for navigationState: NavigationState, setupNavigationBar: Bool = true, animated: Bool) {
@@ -413,6 +424,37 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 
 		targetOrCurrentViewController = controller
 		updateDelegatedChildViewControllers()
+	}
+
+	private class PrecedingControllerNavigatorImplementation: PrecedingControllerNavigator {
+		private unowned let parent: TabAndNavigationControllerWrapper
+
+		init(parent: TabAndNavigationControllerWrapper) {
+			self.parent = parent
+		}
+
+		func precedingNavigationItems(for controller: UIViewController) -> [UINavigationItem] {
+			guard let navigationController = parent.navigationControllers.first(where: { $0.viewControllers.contains(controller) }) else { return [] }
+			guard let index = navigationController.viewControllers.firstIndex(of: controller) else { return [] }
+			return navigationController.viewControllers.prefix(index).map(\.navigationItem)
+		}
+
+		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
+			guard let controller = parent.navigationControllers.flatMap(\.viewControllers).first(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+			parent.popToViewController(controller, animated: animated, completion: completion)
+		}
+	}
+
+	private class ToolbarStackFrameObservingDelegate: FrameObservingViewDelegate {
+		private unowned let parent: TabAndNavigationControllerWrapper
+
+		init(parent: TabAndNavigationControllerWrapper) {
+			self.parent = parent
+		}
+
+		func didChangeFrame(from oldFrame: CGRect, to newFrame: CGRect, in view: FrameObservingView) {
+			parent.updateAdditionalSafeAreaInsets()
+		}
 	}
 
 	private class InternalDelegate: NSObject, UITabBarControllerDelegate, UINavigationControllerDelegate {
