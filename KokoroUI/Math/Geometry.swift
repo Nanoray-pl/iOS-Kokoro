@@ -4,6 +4,13 @@
 //
 
 import CoreGraphics
+import UIKit
+
+public extension CGFloat {
+	static var pixel: CGFloat {
+		return 1.0 / UIScreen.main.scale
+	}
+}
 
 public extension CGRect {
 	var topLeft: CGPoint {

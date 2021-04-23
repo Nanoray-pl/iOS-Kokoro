@@ -12,7 +12,7 @@ public protocol NonBasicConstraint: Constraint {}
 private var nonBasicConstraintsKey: UInt8 = 0
 
 public extension Constrainable {
-	private var nonBasicConstraints: [NonBasicConstraint] {
+	private(set) var nonBasicConstraints: [NonBasicConstraint] {
 		get {
 			return ((objc_getAssociatedObject(self, &nonBasicConstraintsKey) as? NSArray) as? [NonBasicConstraint]) ?? []
 		}
