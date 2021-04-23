@@ -22,13 +22,15 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		let title: String
 		let icon: UIImage?
 		let selectedIcon: UIImage?
+		let navigationControllerFactory: (_ rootViewController: UIViewController) -> UINavigationController
 		let navigationBarVisibility: Visibility
 
-		public init(controller: UIViewController, title: String, icon: UIImage?, selectedIcon: UIImage? = nil, withNavigationBar navigationBarVisibility: Visibility) {
+		public init(controller: UIViewController, title: String, icon: UIImage?, selectedIcon: UIImage? = nil, navigationControllerFactory: @escaping (_ rootViewController: UIViewController) -> UINavigationController = { UINavigationController(rootViewController: $0) }, withNavigationBar navigationBarVisibility: Visibility) {
 			self.controller = controller
 			self.title = title
 			self.icon = icon
 			self.selectedIcon = selectedIcon
+			self.navigationControllerFactory = navigationControllerFactory
 			self.navigationBarVisibility = navigationBarVisibility
 		}
 	}
@@ -138,6 +140,15 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	public private(set) var toolbarStack: UIStackView!
+	private var toolbarStackBottomConstraint: NSLayoutConstraint!
+
+	public var toolbarStackGap: CGFloat = 0 {
+		didSet {
+			guard isViewLoaded else { return }
+			toolbarStackBottomConstraint.constant = -toolbarStackGap
+			updateAdditionalSafeAreaInsets()
+		}
+	}
 
 	private var tabBarAnimator: UIViewPropertyAnimator? {
 		willSet {
@@ -188,7 +199,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	private static func createNavigationController(for item: Item) -> UINavigationController {
-		return UINavigationController(rootViewController: item.controller).with {
+		return item.navigationControllerFactory(item.controller).with {
 			$0.interactivePopGestureRecognizer?.delegate = nil // allows the swipe-from-left-edge back gesture to work
 		}
 	}
@@ -221,8 +232,15 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 			parent.addSubview($0)
 			constraints += [
 				$0.horizontalEdgesToSuperview(),
-				$0.bottomToTop(of: tabBar),
+				$0.bottomToTop(of: tabBar, inset: toolbarStackGap).with { toolbarStackBottomConstraint = $0 },
 			]
+		}
+	}
+
+	public func setToolbarStackGap(_ value: CGFloat, animated: Bool) {
+		Animated(booleanLiteral: animated).run { [weak self] in
+			self?.toolbarStackGap = value
+			self?.toolbarStack.superview?.layoutIfNeeded()
 		}
 	}
 
@@ -380,7 +398,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	private func updateAdditionalSafeAreaInsets() {
-		let toolbarHeight = toolbarStack.isHidden ? 0 : toolbarStack.frame.height
+		let toolbarHeight = (toolbarStack.isHidden ? 0 : toolbarStack.frame.height) + toolbarStackGap
 		navigationControllers.forEach { $0.additionalSafeAreaInsets.bottom = toolbarHeight }
 	}
 
