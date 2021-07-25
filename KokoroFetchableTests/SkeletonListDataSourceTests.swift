@@ -13,7 +13,7 @@ class SkeletonListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource<Int>(elements: [], isFetching: false)
 		let testedDataSource = originalDataSource.withSkeletons(behavior: skeletonBehavior)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
@@ -23,7 +23,7 @@ class SkeletonListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: false)
 		let testedDataSource = originalDataSource.withSkeletons(behavior: skeletonBehavior)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3].map { .element($0) })
@@ -33,7 +33,7 @@ class SkeletonListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource<Int>(elements: [], isFetching: true)
 		let testedDataSource = originalDataSource.withSkeletons(behavior: skeletonBehavior)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, Array(repeating: .skeleton, count: 3))
@@ -43,7 +43,7 @@ class SkeletonListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true, isAfterInitialFetch: true)
 		let testedDataSource = originalDataSource.withSkeletons(behavior: skeletonBehavior)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 4)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3].map { .element($0) } + [.skeleton])
@@ -57,7 +57,7 @@ class SkeletonListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], error: Error.error)
 		let testedDataSource = originalDataSource.withSkeletons(behavior: skeletonBehavior)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3].map { .element($0) })
 

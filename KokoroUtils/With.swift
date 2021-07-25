@@ -6,7 +6,7 @@
 public protocol AnyWith {}
 public protocol ValueWith: AnyWith {}
 
-public protocol ObjectWith: class, AnyWith {
+public protocol ObjectWith: AnyObject, AnyWith {
 	typealias Proxy<T> = AnyProxy<Self, T>
 }
 

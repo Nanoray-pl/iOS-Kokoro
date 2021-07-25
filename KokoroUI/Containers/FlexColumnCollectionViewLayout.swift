@@ -52,7 +52,7 @@ public extension FlexColumnCollectionViewLayoutDelegate {
 	}
 }
 
-public protocol FlexColumnCollectionViewLayoutObserver: class {
+public protocol FlexColumnCollectionViewLayoutObserver: AnyObject {
 	func didRecalculateLayout(to calculatedLayout: FlexColumnCollectionViewLayout.CalculatedLayout, in layout: FlexColumnCollectionViewLayout, in collectionView: UICollectionView)
 }
 

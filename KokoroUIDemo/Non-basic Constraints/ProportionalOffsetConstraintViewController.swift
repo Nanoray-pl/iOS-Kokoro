@@ -6,7 +6,7 @@
 import KokoroUI
 import UIKit
 
-protocol ProportionalOffsetConstraintRoute: class {
+protocol ProportionalOffsetConstraintRoute: AnyObject {
 	func showProportionalOffsetConstraint(animated: Bool)
 }
 

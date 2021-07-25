@@ -16,9 +16,9 @@ public final class BoxingObserverSet<Observer, AdditionalObserverParameters> {
 		}
 	}
 
-	private let boxedObservers = BoxedObserverSet<WeakBox, ObjectIdentifier>(
+	private let boxedObservers = BoxedObserverSet<WeakBox, ObjectIdentifier?>(
 		isValid: { $0.observer != nil },
-		identity: { ObjectIdentifier($0) }
+		identity: { $0.observer.flatMap { ObjectIdentifier($0) } }
 	)
 
 	public var observers: [Observer] {
@@ -38,7 +38,7 @@ public final class BoxingObserverSet<Observer, AdditionalObserverParameters> {
 	public init() {}
 
 	public func observers<SpecializedObserver>(ofType type: SpecializedObserver.Type) -> [SpecializedObserver] {
-		return self.observers.ofType(SpecializedObserver.self)
+		return self.observers.compactMap { $0 as? SpecializedObserver }
 	}
 
 	public func observersWithParameters<SpecializedObserver>(ofType type: SpecializedObserver.Type) -> [(observer: SpecializedObserver, parameters: AdditionalObserverParameters)] {

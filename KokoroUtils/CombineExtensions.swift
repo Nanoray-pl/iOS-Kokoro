@@ -21,49 +21,50 @@ public extension Future {
 
 public extension Publisher {
 	@discardableResult
-	func result(storingIn bag: CancelBag, _ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
-		var cancellable: AnyCancellable!
-		cancellable = onCancel {
-			bag.cancellableSet.remove(cancellable)
+	func sinkResult(storingIn bag: CancelBag, _ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
+		var capturedCancellable: AnyCancellable?
+		let cancellable = onCancel {
+			if let cancellable = capturedCancellable {
+				bag.cancellableSet.remove(cancellable)
+				capturedCancellable = nil
+			}
 		}
-		.result {
-			bag.cancellableSet.remove(cancellable)
+		.sinkResult {
+			if let cancellable = capturedCancellable {
+				bag.cancellableSet.remove(cancellable)
+				capturedCancellable = nil
+			}
 			closure($0)
 		}
+		capturedCancellable = cancellable
 
 		bag.cancellableSet.insert(cancellable)
 		return cancellable
 	}
 
-	func result(_ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
-		var completionClosure: ((Result<Output, Failure>) -> Void)! = closure
+	func sinkResult(_ closure: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
 		return sink(receiveCompletion: {
 			switch $0 {
 			case .finished:
 				break
 			case let .failure(error):
-				completionClosure(.failure(error))
-				completionClosure = nil
+				closure(.failure(error))
 			}
 		}, receiveValue: {
-			completionClosure(.success($0))
-			completionClosure = nil
+			closure(.success($0))
 		})
 	}
 
-	func result<Root: AnyObject>(storingIn keyPath: ReferenceWritableKeyPath<Root, Combine.AnyCancellable?>, onWeak object: Root, _ closure: @escaping (Result<Output, Failure>) -> Void) {
-		var completionClosure: ((Result<Output, Failure>) -> Void)! = closure
+	func sinkResult<Root: AnyObject>(storingIn keyPath: ReferenceWritableKeyPath<Root, Combine.AnyCancellable?>, onWeak object: Root, _ closure: @escaping (Result<Output, Failure>) -> Void) {
 		return sink(storingIn: keyPath, onWeak: object, receiveCompletion: {
 			switch $0 {
 			case .finished:
 				break
 			case let .failure(error):
-				completionClosure(.failure(error))
-				completionClosure = nil
+				closure(.failure(error))
 			}
 		}, receiveValue: {
-			completionClosure(.success($0))
-			completionClosure = nil
+			closure(.success($0))
 		})
 	}
 
@@ -77,14 +78,21 @@ public extension Publisher {
 
 	@discardableResult
 	func sink(storingIn bag: CancelBag, receiveCompletion: @escaping (Subscribers.Completion<Self.Failure>) -> Void, receiveValue: @escaping (Self.Output) -> Void) -> AnyCancellable {
-		var cancellable: AnyCancellable!
-		cancellable = onCancel {
-			bag.cancellableSet.remove(cancellable)
+		var capturedCancellable: AnyCancellable?
+		let cancellable = onCancel {
+			if let cancellable = capturedCancellable {
+				bag.cancellableSet.remove(cancellable)
+				capturedCancellable = nil
+			}
 		}
 		.sink(receiveCompletion: {
-			bag.cancellableSet.remove(cancellable)
+			if let cancellable = capturedCancellable {
+				bag.cancellableSet.remove(cancellable)
+				capturedCancellable = nil
+			}
 			receiveCompletion($0)
 		}, receiveValue: receiveValue)
+		capturedCancellable = cancellable
 
 		bag.cancellableSet.insert(cancellable)
 		return cancellable

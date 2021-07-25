@@ -3,7 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public protocol ResourceProviderFactory: class {
+public protocol ResourceProviderFactory: AnyObject {
 	associatedtype Input
 	associatedtype Resource
 

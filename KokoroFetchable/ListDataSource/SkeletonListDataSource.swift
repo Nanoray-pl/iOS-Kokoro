@@ -27,9 +27,19 @@ public struct SkeletonListDataSourceBehavior {
 	}
 }
 
-public enum SkeletonListDataSourceElement<WrappedType> {
+public protocol SkeletonListDataSourceElementProtocol {
+	associatedtype WrappedType
+
+	func skeletonListDataSourceElement() -> SkeletonListDataSourceElement<WrappedType>
+}
+
+public enum SkeletonListDataSourceElement<WrappedType>: SkeletonListDataSourceElementProtocol {
 	case skeleton
 	case element(_ element: WrappedType)
+
+	public func skeletonListDataSourceElement() -> SkeletonListDataSourceElement<WrappedType> {
+		return self
+	}
 }
 
 extension SkeletonListDataSourceElement: Equatable where WrappedType: Equatable {}
@@ -162,5 +172,20 @@ public class SkeletonListDataSource<Wrapped: FetchableListDataSource>: Fetchable
 public extension FetchableListDataSource {
 	func withSkeletons(behavior: SkeletonListDataSourceBehavior) -> SkeletonListDataSource<Self> {
 		return SkeletonListDataSource(wrapping: self, behavior: behavior)
+	}
+}
+
+public extension Sequence where Element: SkeletonListDataSourceElementProtocol {
+	func filterNonSkeleton() -> [Element.WrappedType] {
+		var results = [Element.WrappedType]()
+		forEach {
+			switch $0.skeletonListDataSourceElement() {
+			case let .element(element):
+				results.append(element)
+			case .skeleton:
+				break
+			}
+		}
+		return results
 	}
 }

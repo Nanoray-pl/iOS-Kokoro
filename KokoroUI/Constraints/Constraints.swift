@@ -7,7 +7,7 @@
 import KokoroUtils
 import UIKit
 
-public protocol Constrainable: class {
+public protocol Constrainable: AnyObject {
 	var window: UIWindow? { get }
 	var frame: CGRect { get }
 	var constrainableView: UIView { get }
@@ -71,7 +71,7 @@ extension UILayoutGuide: Constrainable {
 	}
 }
 
-public protocol Constraint: class, Constraints {
+public protocol Constraint: AnyObject, Constraints {
 	var isActive: Bool { get }
 	var priority: UILayoutPriority { get set }
 
@@ -164,6 +164,7 @@ public func activate(_ constraints: Constraints...) {
 }
 
 public func deactivate(_ constraints: [Constraints]) {
+	// swiftformat:disable:next preferKeyPath
 	NSLayoutConstraint.deactivate(constraints.flatMap { $0.flatMapBasicConstraints() }.filter { $0.isActive })
 	constraints.flatMap { $0.flatMapNonBasicConstraints() }.forEach { $0.deactivate() }
 }

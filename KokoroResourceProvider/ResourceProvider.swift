@@ -6,7 +6,7 @@
 #if canImport(Combine)
 import Combine
 
-public protocol ResourceProvider: class, Hashable {
+public protocol ResourceProvider: AnyObject, Hashable {
 	associatedtype Resource
 
 	var identifier: String { get }

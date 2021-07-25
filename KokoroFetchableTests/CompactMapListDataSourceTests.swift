@@ -11,7 +11,7 @@ class CompactMapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3, 4, 5])
 		let testedDataSource = originalDataSource.compactMap { $0 % 2 == 0 ? String(repeating: "a", count: $0) : nil }
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 2)
 		XCTAssertEqual(testedDataSource.elements, ["aa", "aaaa"])
@@ -25,7 +25,7 @@ class CompactMapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3, 4, 5], error: Error.error)
 		let testedDataSource = originalDataSource.compactMap { $0 % 2 == 0 ? String(repeating: "a", count: $0) : nil }
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 2)
 		XCTAssertEqual(testedDataSource.elements, ["aa", "aaaa"])
 
@@ -41,7 +41,7 @@ class CompactMapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3, 4, 5], isFetching: true)
 		let testedDataSource = originalDataSource.compactMap { $0 % 2 == 0 ? String(repeating: "a", count: $0) : nil }
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 2)
 		XCTAssertEqual(testedDataSource.elements, ["aa", "aaaa"])

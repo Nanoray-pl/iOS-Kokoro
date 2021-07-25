@@ -3,13 +3,13 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
-public protocol ValueStore: class {
+public protocol ValueStore: AnyObject {
 	associatedtype Element
 
 	var value: Element { get set }
 }
 
-public protocol ThrowingValueStore: class {
+public protocol ThrowingValueStore: AnyObject {
 	associatedtype Element
 
 	func value() throws -> Element

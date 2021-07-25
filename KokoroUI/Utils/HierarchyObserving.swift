@@ -8,7 +8,7 @@ import UIKit
 
 private var observersKey: UInt8 = 0
 
-@objc public protocol UIViewSubviewObserver: class, NSObjectProtocol {
+@objc public protocol UIViewSubviewObserver: NSObjectProtocol {
 	func didAddSubview(_ subview: UIView, to view: UIView)
 	func didRemoveSubview(_ subview: UIView, from view: UIView)
 }

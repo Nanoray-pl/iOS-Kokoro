@@ -173,6 +173,8 @@ private class MergeListDataSourceNoOpSortStrategy<Element>: MergeListDataSourceS
 	func updateElements() {}
 }
 
+/// A `MergeListDataSourceSortStrategy` implementation which outputs elements from its data sources in such a way, that all of the elements from the first data source will be first, then from the second, etc.
+/// - Note: This sort strategy is unstable - an element which was previously found at a specific index may after an update end up at a different index.
 public class MergeListDataSourceByDataSourceSortStrategy<Element>: MergeListDataSourceSortStrategy {
 	private let dataSources: [AnyFetchableListDataSource<Element>]
 	public private(set) var elements = [Element]()
@@ -190,6 +192,9 @@ public class MergeListDataSourceByDataSourceSortStrategy<Element>: MergeListData
 	}
 }
 
+/// A `MergeListDataSourceSortStrategy` implementation which outputs elements from its data sources in the insertion order. For example, if there are two data sources, one with elements `["1", "2", "3"]`, and the other with elements `["A", "B", "C"]` and then both data sources update to `["1", "2", "3", "4", "5"]` and `["A", "B", "C", "D", "E"]` accordingly, then the output list will be `["1", "2", "3", "A", "B", "C", "4", "5", "D", "E"]`.
+/// - Note: This sort strategy is stable - an element which was previously found at a specific index will always be at the same index after an update.
+/// - Warning: This sort strategy requires its input data sources to provide elements in an incremental way. No elements may be removed, moved or changed from either of the input data sources. Doing so will cause a `fatalError` to be thrown.
 public class MergeListDataSourceByPageSortStrategy<Element, Key: Equatable>: MergeListDataSourceSortStrategy {
 	private let dataSources: [AnyFetchableListDataSource<Element>]
 	private let uniqueKeyFunction: (Element) -> Key

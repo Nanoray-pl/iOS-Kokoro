@@ -42,7 +42,7 @@ public struct JobManagerPersistedScheduleParameters: Codable {
 	}
 }
 
-public protocol JobManager: class {
+public protocol JobManager: AnyObject {
 	func registerHandler<Handler: JobHandler>(_ handler: Handler)
 	func unregisterHandler<Handler: JobHandler>(_ handler: Handler)
 

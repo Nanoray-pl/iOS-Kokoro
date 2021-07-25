@@ -1,87 +1,30 @@
 //
-//  Created on 01/04/2021.
+//  Created on 25/07/2021.
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
 import KokoroUtils
 
-public protocol GroupingListDataSourceObserver: class {
-	associatedtype Element
-	associatedtype Group: Comparable
-
-	func didUpdateData(of dataSource: GroupingListDataSource<Element, Group>)
-	func didCreateGroupDataSource(_ groupDataSource: AnyFetchableListDataSource<Element>, to splitDataSource: GroupingListDataSource<Element, Group>)
-	func didRemoveGroupDataSource(_ groupDataSource: AnyFetchableListDataSource<Element>, from splitDataSource: GroupingListDataSource<Element, Group>)
-}
-
-private class WeakSplitListDataSourceObserver<Element, Group: Comparable>: GroupingListDataSourceObserver {
-	public let identifier: ObjectIdentifier
-	public private(set) weak var weakReference: AnyObject?
-	private let didUpdateDataClosure: (_ dataSource: GroupingListDataSource<Element, Group>) -> Void
-	private let didCreateGroupDataSourceClosure: (_ groupDataSource: AnyFetchableListDataSource<Element>, _ splitDataSource: GroupingListDataSource<Element, Group>) -> Void
-	private let didRemoveGroupDataSourceClosure: (_ groupDataSource: AnyFetchableListDataSource<Element>, _ splitDataSource: GroupingListDataSource<Element, Group>) -> Void
-
-	public init<T>(wrapping wrapped: T) where T: GroupingListDataSourceObserver, T.Element == Element, T.Group == Group {
-		identifier = ObjectIdentifier(wrapped)
-		weakReference = wrapped
-		didUpdateDataClosure = { [weak wrapped] in wrapped?.didUpdateData(of: $0) }
-		didCreateGroupDataSourceClosure = { [weak wrapped] in wrapped?.didCreateGroupDataSource($0, to: $1) }
-		didRemoveGroupDataSourceClosure = { [weak wrapped] in wrapped?.didRemoveGroupDataSource($0, from: $1) }
-	}
-
-	public func didUpdateData(of dataSource: GroupingListDataSource<Element, Group>) {
-		didUpdateDataClosure(dataSource)
-	}
-
-	public func didCreateGroupDataSource(_ groupDataSource: AnyFetchableListDataSource<Element>, to splitDataSource: GroupingListDataSource<Element, Group>) {
-		didCreateGroupDataSourceClosure(groupDataSource, splitDataSource)
-	}
-
-	public func didRemoveGroupDataSource(_ groupDataSource: AnyFetchableListDataSource<Element>, from splitDataSource: GroupingListDataSource<Element, Group>) {
-		didRemoveGroupDataSourceClosure(groupDataSource, splitDataSource)
-	}
-}
-
-public enum SplitListDataSourceControllingGroup<Group: Comparable> {
+public enum GroupingListDataSourceControllingGroup<Group: Comparable> {
 	case none, first, last, all
 	case group(_ group: Group)
 	case closure(_ predicate: (Group) -> Bool)
 }
 
 /// A type which groups elements from a `FetchableListDataSource` it wraps into separate data sources.
-public class GroupingListDataSource<Element, Group: Comparable> {
+public class GroupingListDataSource<Element, Group: Comparable>: GroupedListDataSource {
 	public var dataSources: [(dataSource: AnyFetchableListDataSource<Element>, group: Group)] {
 		return groupDataSources.map { (dataSource: $0.erased, group: $0.group) }
 	}
 
-	public var count: Int {
-		return wrapped.count
-	}
-
-	public var expectedTotalCount: Int? {
-		return wrapped.expectedTotalCount
-	}
-
-	public var error: Error? {
-		return wrapped.error
-	}
-
-	public var isFetching: Bool {
-		return wrapped.isFetching
-	}
-
-	public var isAfterInitialFetch: Bool {
-		return wrapped.isAfterInitialFetch
-	}
-
 	private let wrapped: AnyFetchableListDataSource<Element>
-	private let controllingGroups: SplitListDataSourceControllingGroup<Group>
+	private let controllingGroups: GroupingListDataSourceControllingGroup<Group>
 	private let inherentGroup: Group?
 	private let groupingClosure: (Element) -> Group
 	private lazy var observer = WrappedObserver(parent: self)
 	private var groupDataSources = SortedArray<GroupDataSource<Element>>(by: \.group)
 
-	private let observers = BoxedObserverSet<WeakSplitListDataSourceObserver<Element, Group>, ObjectIdentifier>(
+	private let observers = BoxedObserverSet<WeakGroupedListDataSourceObserver<Element, Group>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
 		identity: \.identifier
 	)
@@ -90,7 +33,7 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 	/// - Parameter inherentGroup: A group which should always exist in the resulting smaller data sources, even if there are no elements in it.
 	/// - Parameter controllingGroups: Groups which should inherit the `error` and `isFetching` values, and whose' data source `reset()` and `fetchAdditionalData()` calls should be passed over to the wrapped data source.
 	/// - Parameter groupingClosure: A closure deciding which group an element goes in.
-	public init<DataSource>(wrapping wrapped: DataSource, inherentGroup: Group? = nil, controllingGroups: SplitListDataSourceControllingGroup<Group>, groupingClosure: @escaping (Element) -> Group) where DataSource: FetchableListDataSource, DataSource.Element == Element {
+	public init<DataSource>(wrapping wrapped: DataSource, inherentGroup: Group? = nil, controllingGroups: GroupingListDataSourceControllingGroup<Group>, groupingClosure: @escaping (Element) -> Group) where DataSource: FetchableListDataSource, DataSource.Element == Element {
 		self.wrapped = wrapped.eraseToAnyFetchableListDataSource()
 		self.inherentGroup = inherentGroup
 		self.controllingGroups = controllingGroups
@@ -103,11 +46,11 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 		wrapped.removeObserver(observer)
 	}
 
-	public func addObserver<T>(_ observer: T) where T: GroupingListDataSourceObserver, Element == T.Element, Group == T.Group {
+	public func addObserver<T>(_ observer: T) where T: GroupedListDataSourceObserver, Element == T.Element, Group == T.Group {
 		observers.insert(.init(wrapping: observer))
 	}
 
-	public func removeObserver<T>(_ observer: T) where T: GroupingListDataSourceObserver, Element == T.Element, Group == T.Group {
+	public func removeObserver<T>(_ observer: T) where T: GroupedListDataSourceObserver, Element == T.Element, Group == T.Group {
 		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
@@ -160,17 +103,18 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 		groupDataSources.forEach {
 			$0.error = $0.isControllingGroup ? wrapped.error : nil
 			$0.isFetching = $0.isControllingGroup && wrapped.isFetching
-			$0.isAfterInitialFetch = isAfterInitialFetch
+			$0.isAfterInitialFetch = wrapped.isAfterInitialFetch
 		}
 
+		let erasedSelf = eraseToAnyGroupedListDataSource()
 		removedDataSources.forEach { groupDataSource in
-			observers.forEach { $0.didRemoveGroupDataSource(groupDataSource.erased, from: self) }
+			observers.forEach { $0.didRemoveGroupDataSource(groupDataSource.erased, for: groupDataSource.group, from: erasedSelf) }
 		}
 		createdDataSources.forEach { groupDataSource in
-			observers.forEach { $0.didCreateGroupDataSource(groupDataSource.erased, to: self) }
+			observers.forEach { $0.didCreateGroupDataSource(groupDataSource.erased, for: groupDataSource.group, to: erasedSelf) }
 		}
 		newGroupDataSources.forEach { $0.updateObservers() }
-		observers.forEach { $0.didUpdateData(of: self) }
+		observers.forEach { $0.didUpdateData(of: erasedSelf) }
 	}
 
 	private class WrappedObserver: FetchableListDataSourceObserver {
@@ -266,5 +210,11 @@ public class GroupingListDataSource<Element, Group: Comparable> {
 				return false
 			}
 		}
+	}
+}
+
+public extension FetchableListDataSource {
+	func grouping<Group: Comparable>(inherentGroup: Group? = nil, controllingGroups: GroupingListDataSourceControllingGroup<Group>, groupingClosure: @escaping (Element) -> Group) -> GroupingListDataSource<Element, Group> {
+		return .init(wrapping: self, inherentGroup: inherentGroup, controllingGroups: controllingGroups, groupingClosure: groupingClosure)
 	}
 }

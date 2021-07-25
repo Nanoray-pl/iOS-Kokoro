@@ -9,7 +9,7 @@ import Foundation
 
 public typealias JobHandlerIdentifier = String
 
-public protocol JobHandler: class {
+public protocol JobHandler: AnyObject {
 	associatedtype JobType: Job
 	associatedtype Parameters: Encodable & Decodable
 
@@ -83,7 +83,7 @@ public final class AnyJobHandler<JobType: Job, Parameters: Encodable & Decodable
 
 public typealias JobIdentifier = UUID
 
-public protocol Job: class {
+public protocol Job: AnyObject {
 	associatedtype Output
 	associatedtype Failure: Error
 

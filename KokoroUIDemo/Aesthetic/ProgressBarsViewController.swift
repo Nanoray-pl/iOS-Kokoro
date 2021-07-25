@@ -6,7 +6,7 @@
 import KokoroUI
 import UIKit
 
-protocol ProgressBarsRoute: class {
+protocol ProgressBarsRoute: AnyObject {
 	func showProgressBars(animated: Bool)
 }
 

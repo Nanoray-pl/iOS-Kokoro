@@ -11,7 +11,7 @@ class SwitchableListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3])
 		let testedDataSource = SwitchableListDataSource(initialDataSource: originalDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -25,7 +25,7 @@ class SwitchableListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], error: Error.error)
 		let testedDataSource = SwitchableListDataSource(initialDataSource: originalDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
@@ -41,7 +41,7 @@ class SwitchableListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true)
 		let testedDataSource = SwitchableListDataSource(initialDataSource: originalDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -53,21 +53,21 @@ class SwitchableListDataSourceTests: XCTestCase {
 		let thirdDataSource = SnapshotListDataSource(elements: [1, 2, 3, 4, 5])
 		let testedDataSource = SwitchableListDataSource(initialDataSource: firstDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
 		testedDataSource.switchDataSource(to: secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
 		testedDataSource.switchDataSource(to: thirdDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 5)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, 4, 5])
@@ -78,14 +78,14 @@ class SwitchableListDataSourceTests: XCTestCase {
 		let secondDataSource = SnapshotListDataSource<Int>(elements: [], isFetching: true)
 		let testedDataSource = SwitchableListDataSource(initialDataSource: firstDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
 		testedDataSource.switchDataSource(to: secondDataSource, replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])

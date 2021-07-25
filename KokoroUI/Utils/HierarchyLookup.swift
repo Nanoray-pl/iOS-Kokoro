@@ -7,6 +7,20 @@
 import UIKit
 
 public extension UIView {
+	var viewHierarchy: [UIView] {
+		var superviews = [UIView]()
+		var current: UIView? = self
+		while let view = current {
+			superviews.append(view)
+			current = view.superview
+		}
+		return superviews.reversed()
+	}
+
+	var superviewHierarchy: [UIView] {
+		return viewHierarchy.dropLast()
+	}
+
 	var isHiddenIncludingSuperviews: Bool {
 		var current: UIView? = self
 		while let testing = current {

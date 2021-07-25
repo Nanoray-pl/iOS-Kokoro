@@ -7,7 +7,7 @@ public enum FetchableListDataSourceError: Error {
 	case multipleErrors(_ errors: [Error])
 }
 
-public protocol FetchableListDataSourceObserver: class {
+public protocol FetchableListDataSourceObserver: AnyObject {
 	associatedtype Element
 
 	func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>)
@@ -29,19 +29,15 @@ public final class WeakFetchableListDataSourceObserver<Element>: FetchableListDa
 	}
 }
 
-public protocol FetchableListDataSource: class {
+public protocol FetchableListDataSource: AnyObject, RandomAccessCollection where Index == Int {
 	associatedtype Element
 
 	var identifier: ObjectIdentifier { get }
 	var elements: [Element] { get }
-	var count: Int { get }
 	var expectedTotalCount: Int? { get }
 	var error: Error? { get }
-	var isEmpty: Bool { get }
 	var isFetching: Bool { get }
 	var isAfterInitialFetch: Bool { get }
-
-	subscript(_ index: Int) -> Element { get }
 
 	func reset()
 
@@ -73,12 +69,20 @@ public extension FetchableListDataSource {
 		} else if let error = error {
 			return .failure(error)
 		} else {
-			return .finished
+			return .success
 		}
 	}
 
 	func eraseToAnyFetchableListDataSource() -> AnyFetchableListDataSource<Element> {
 		return (self as? AnyFetchableListDataSource<Element>) ?? .init(wrapping: self)
+	}
+
+	var startIndex: Int {
+		return 0
+	}
+
+	var endIndex: Int {
+		return count
 	}
 }
 

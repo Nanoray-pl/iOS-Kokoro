@@ -21,7 +21,7 @@ class TryMapListDataSourceTests: XCTestCase {
 			}
 		}
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 2)
 		XCTAssertEqual(testedDataSource.elements, ["aa", "aaaa"])
 
@@ -48,7 +48,7 @@ class TryMapListDataSourceTests: XCTestCase {
 			}
 		}
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
 
@@ -68,7 +68,7 @@ class TryMapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1], error: Error.error)
 		let testedDataSource = originalDataSource.tryMap { $0 }
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 1)
 		XCTAssertEqual(testedDataSource.elements, [1])
 
@@ -88,7 +88,7 @@ class TryMapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1], error: Error.error)
 		let testedDataSource = originalDataSource.tryMap { (_: Int) -> Int in throw TryMapError.error }
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
 
@@ -109,7 +109,7 @@ class TryMapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1], isFetching: true)
 		let testedDataSource = originalDataSource.tryMap { $0 }
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 1)
 		XCTAssertEqual(testedDataSource.elements, [1])

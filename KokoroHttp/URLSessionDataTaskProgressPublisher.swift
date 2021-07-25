@@ -34,7 +34,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	private let lock = ObjcLock()
 	private var subscriptionCount = 0
 	private var dataTask: URLSessionDataTask?
-	private var observations = [NSKeyValueObservation]()
+	private lazy var kvoObserver = KVOObserver { [weak self] in self?.updateProgress() }
 
 	public init(session: URLSession, request: URLRequest) {
 		self.session = session
@@ -60,13 +60,11 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 					self.subject.send(completion: .finished)
 				}
 
-				observations = [
-					dataTask.progress.observe(\.isIndeterminate, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-					dataTask.observe(\.countOfBytesSent, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-					dataTask.observe(\.countOfBytesExpectedToSend, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-					dataTask.observe(\.countOfBytesReceived, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-					dataTask.observe(\.countOfBytesExpectedToReceive, changeHandler: { [weak self] _, _ in self?.updateProgress() }),
-				]
+				kvoObserver.observe(\.isIndeterminate, of: dataTask.progress)
+				kvoObserver.observe(\.countOfBytesSent, of: dataTask)
+				kvoObserver.observe(\.countOfBytesExpectedToSend, of: dataTask)
+				kvoObserver.observe(\.countOfBytesReceived, of: dataTask)
+				kvoObserver.observe(\.countOfBytesExpectedToReceive, of: dataTask)
 				self.dataTask = dataTask
 				dataTask.resume()
 			}
@@ -114,7 +112,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 		lock.acquireAndRun {
 			subscriptionCount -= 1
 			if subscriptionCount == 0 {
-				observations = []
+				kvoObserver.stopObservingAll()
 				dataTask?.cancel()
 				dataTask = nil
 			}

@@ -3,7 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public protocol CancellableProtocol: class {
+public protocol CancellableProtocol: AnyObject {
 	func cancel()
 }
 

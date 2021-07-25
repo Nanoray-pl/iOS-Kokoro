@@ -11,7 +11,7 @@ class UniqueListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3, 4, 5])
 		let uniqueDataSource = originalDataSource.uniquing()
 
-		XCTAssertEqual(uniqueDataSource.isFetching, false)
+		XCTAssertFalse(uniqueDataSource.isFetching)
 		XCTAssertNil(uniqueDataSource.error)
 		XCTAssertEqual(uniqueDataSource.count, 5)
 		XCTAssertEqual(uniqueDataSource.elements, [1, 2, 3, 4, 5])
@@ -21,7 +21,7 @@ class UniqueListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 1, 2, 2, 2])
 		let uniqueDataSource = originalDataSource.uniquing()
 
-		XCTAssertEqual(uniqueDataSource.isFetching, false)
+		XCTAssertFalse(uniqueDataSource.isFetching)
 		XCTAssertNil(uniqueDataSource.error)
 		XCTAssertEqual(uniqueDataSource.count, 2)
 		XCTAssertEqual(uniqueDataSource.elements, [1, 2])
@@ -35,7 +35,7 @@ class UniqueListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource<Int>(elements: [], error: Error.error)
 		let uniqueDataSource = originalDataSource.uniquing()
 
-		XCTAssertEqual(uniqueDataSource.isFetching, false)
+		XCTAssertFalse(uniqueDataSource.isFetching)
 		XCTAssertEqual(uniqueDataSource.count, 0)
 		XCTAssertEqual(uniqueDataSource.elements, [])
 
@@ -51,7 +51,7 @@ class UniqueListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource<Int>(elements: [], isFetching: true)
 		let uniqueDataSource = originalDataSource.uniquing()
 
-		XCTAssertEqual(uniqueDataSource.isFetching, true)
+		XCTAssertTrue(uniqueDataSource.isFetching)
 		XCTAssertNil(uniqueDataSource.error)
 		XCTAssertEqual(uniqueDataSource.count, 0)
 		XCTAssertEqual(uniqueDataSource.elements, [])

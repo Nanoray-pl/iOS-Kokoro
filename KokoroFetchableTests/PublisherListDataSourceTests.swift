@@ -20,17 +20,17 @@ class PublisherListDataSourceTests: XCTestCase {
 			return subject
 		}
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
 
 		fetchAdditionalDataResult = testedDataSource.fetchAdditionalData()
-		XCTAssertEqual(fetchAdditionalDataResult, true)
+		XCTAssertTrue(fetchAdditionalDataResult)
 
 		subject.send(completion: .failure(Error.error))
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
 
@@ -42,9 +42,9 @@ class PublisherListDataSourceTests: XCTestCase {
 		}
 
 		fetchAdditionalDataResult = testedDataSource.fetchAdditionalData()
-		XCTAssertEqual(fetchAdditionalDataResult, true)
+		XCTAssertTrue(fetchAdditionalDataResult)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
@@ -52,33 +52,33 @@ class PublisherListDataSourceTests: XCTestCase {
 		subject.send((elements: [1, 2, 3], isLast: false))
 		subject.send(completion: .finished)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
 		fetchAdditionalDataResult = testedDataSource.fetchAdditionalData()
-		XCTAssertEqual(fetchAdditionalDataResult, true)
+		XCTAssertTrue(fetchAdditionalDataResult)
 
 		subject.send((elements: [1, 2, 3], isLast: true))
 		subject.send(completion: .finished)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, 1, 2, 3])
 
 		fetchAdditionalDataResult = testedDataSource.fetchAdditionalData()
-		XCTAssertEqual(fetchAdditionalDataResult, false)
+		XCTAssertFalse(fetchAdditionalDataResult)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, 1, 2, 3])
 
 		testedDataSource.reset()
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 0)
 		XCTAssertEqual(testedDataSource.elements, [])
@@ -93,11 +93,11 @@ class PublisherListDataSourceTests: XCTestCase {
 		var shouldReturnError = false
 
 		let testedDataSource = PublisherListDataSource<Int> { (pageIndex: Int) -> AnyPublisher<(elements: [Int], isLast: Bool), Swift.Error> in
-			XCTAssertEqual(expectedPageIndex, pageIndex)
 			if shouldReturnError {
 				return Fail(error: Error.error)
 					.eraseToAnyPublisher()
 			} else {
+				XCTAssertEqual(expectedPageIndex, pageIndex)
 				return Just((elements: [], isLast: false))
 					.setFailureType(to: Swift.Error.self)
 					.eraseToAnyPublisher()
@@ -107,9 +107,10 @@ class PublisherListDataSourceTests: XCTestCase {
 		testedDataSource.fetchAdditionalData()
 		expectedPageIndex = 1
 		testedDataSource.fetchAdditionalData()
-		expectedPageIndex = 2
+
 		shouldReturnError = true
 		testedDataSource.fetchAdditionalData()
+		expectedPageIndex = 2
 		shouldReturnError = false
 		testedDataSource.fetchAdditionalData()
 	}

@@ -10,7 +10,7 @@ import KokoroUtils
 import KokoroResourceProvider
 import UIKit
 
-public protocol AsynchronousImageLoaderTarget: class {
+public protocol AsynchronousImageLoaderTarget: AnyObject {
 	var image: UIImage? { get set }
 
 	func addSubview(_ subview: UIView)
@@ -20,7 +20,7 @@ public protocol AsynchronousImageLoaderTarget: class {
 extension UIImageView: AsynchronousImageLoaderTarget {}
 extension RatioImageView: AsynchronousImageLoaderTarget {}
 
-public protocol AsynchronousImageLoader: class {
+public protocol AsynchronousImageLoader: AnyObject {
 	func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage?
 }
 

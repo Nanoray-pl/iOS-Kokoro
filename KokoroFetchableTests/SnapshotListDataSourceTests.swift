@@ -11,7 +11,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 		let elements = [1, 2, 3]
 		let testedDataSource = SnapshotListDataSource(elements: elements)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -26,7 +26,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 		let error = Error.error
 		let testedDataSource = SnapshotListDataSource(elements: elements, error: error)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
@@ -43,7 +43,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 		let isFetching = true
 		let testedDataSource = SnapshotListDataSource(elements: elements, isFetching: isFetching)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -53,7 +53,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3])
 		let testedDataSource = originalDataSource.snapshot()
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -67,7 +67,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], error: Error.error)
 		let testedDataSource = originalDataSource.snapshot()
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
 
@@ -83,7 +83,7 @@ class SnapshotListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true)
 		let testedDataSource = originalDataSource.snapshot(configuration: .init(isFetching: .snapshot))
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])

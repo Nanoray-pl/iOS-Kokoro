@@ -4,13 +4,6 @@
 //
 
 import CoreGraphics
-import UIKit
-
-public extension CGFloat {
-	static var pixel: CGFloat {
-		return 1.0 / UIScreen.main.scale
-	}
-}
 
 public extension CGRect {
 	var topLeft: CGPoint {
@@ -131,6 +124,12 @@ public extension CGSize {
 
 #if canImport(UIKit)
 import UIKit
+
+public extension CGFloat {
+	static var pixel: CGFloat {
+		return 1.0 / UIScreen.main.scale
+	}
+}
 
 public extension CGSize {
 	init(insets: EdgeInsets) {

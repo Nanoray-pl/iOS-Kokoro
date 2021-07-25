@@ -6,7 +6,7 @@
 #if canImport(UIKit)
 import UIKit
 
-public protocol FrameObservingViewDelegate: class {
+public protocol FrameObservingViewDelegate: AnyObject {
 	func didChangeFrame(from oldFrame: CGRect, to newFrame: CGRect, in view: FrameObservingView)
 }
 

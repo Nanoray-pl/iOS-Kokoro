@@ -6,7 +6,7 @@
 #if canImport(CoreData)
 import CoreData
 
-public protocol ManagedObject: class {
+public protocol ManagedObject: AnyObject {
 	static var entityName: String { get }
 }
 

@@ -6,7 +6,7 @@
 import KokoroUI
 import UIKit
 
-protocol FlexColumnCollectionViewLayoutRoute: class {
+protocol FlexColumnCollectionViewLayoutRoute: AnyObject {
 	func showFlexColumnCollectionViewLayout(animated: Bool)
 }
 

@@ -26,7 +26,7 @@ class IgnoringUnchangedListDataSourceTests: XCTestCase {
 		let observer = ClosureDataSourceObserver<Int> { _ in changeCounter += 1 }
 		testedDataSource.addObserver(observer)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -34,7 +34,7 @@ class IgnoringUnchangedListDataSourceTests: XCTestCase {
 
 		switchableDataSource.switchDataSource(to: SnapshotListDataSource(elements: [1, 2, 3], isFetching: true), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3])
@@ -42,7 +42,7 @@ class IgnoringUnchangedListDataSourceTests: XCTestCase {
 
 		switchableDataSource.switchDataSource(to: SnapshotListDataSource(elements: [1, 2, 3, 4]), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 4)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, 4])
@@ -50,7 +50,7 @@ class IgnoringUnchangedListDataSourceTests: XCTestCase {
 
 		switchableDataSource.switchDataSource(to: SnapshotListDataSource(elements: [1, 2, 3, 4]), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 4)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, 4])

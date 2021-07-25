@@ -16,7 +16,7 @@ public struct JobInfo {
 	}
 }
 
-public protocol JobEntryStorage: class {
+public protocol JobEntryStorage: AnyObject {
 	var jobInfos: [JobInfo] { get }
 
 	func jobs<Handler: JobHandler>(for handler: Handler) -> [(job: Handler.JobType, parameters: Handler.Parameters, persistedScheduleParameters: JobManagerPersistedScheduleParameters)]

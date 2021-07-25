@@ -3,7 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public protocol Cache: class, Equatable {
+public protocol Cache: AnyObject, Equatable {
 	associatedtype Key
 	associatedtype Value
 

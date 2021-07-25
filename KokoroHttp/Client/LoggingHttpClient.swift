@@ -22,19 +22,30 @@ public class LoggingHttpClient: HttpClient {
 	}
 
 	public struct Configuration {
+		public struct Error {
+			public typealias Callback = (RequestId, URLRequest, Swift.Error) -> Void
+
+			public let onlyUnlogged: Bool
+			public let callback: Callback
+
+			public init(onlyUnlogged: Bool = true, callback: @escaping Callback) {
+				self.onlyUnlogged = onlyUnlogged
+				self.callback = callback
+			}
+		}
+
 		public typealias RequestCallback = (RequestId, URLRequest) -> Void
 		public typealias OutputCallback = (RequestId, URLRequest, HttpClientOutput<HttpClientResponse>) -> Void
-		public typealias ErrorCallback = (RequestId, URLRequest, Error) -> Void
 		public typealias CancelCallback = (RequestId, URLRequest) -> Void
 
 		private static let binaryOnlyBytes: Set<UInt8> = Set(0x00 ... 0x1F).subtracting([0x09, 0x10, 0x0D])
 
 		public let request: RequestCallback?
 		public let output: OutputCallback?
-		public let error: ErrorCallback?
+		public let error: Error?
 		public let cancel: CancelCallback?
 
-		public init(request: RequestCallback? = nil, output: OutputCallback? = nil, error: ErrorCallback? = nil, cancel: CancelCallback? = nil) {
+		public init(request: RequestCallback? = nil, output: OutputCallback? = nil, error: Error? = nil, cancel: CancelCallback? = nil) {
 			self.request = request
 			self.output = output
 			self.error = error
@@ -76,7 +87,7 @@ public class LoggingHttpClient: HttpClient {
 						loggingClosure(.response(.body)) { "<<< [\(requestId)] \(Self.logBody(output.data, maxLength: maxOutputLength))" }
 					}
 				},
-				error: { requestId, _, error in
+				error: .init { requestId, _, error in
 					loggingClosure(.error) { "<<< [\(requestId)] Error: \(error)" }
 				},
 				cancel: { requestId, _ in
@@ -145,9 +156,20 @@ public class LoggingHttpClient: HttpClient {
 					break
 				}
 			}
-			.onError { [configuration] in
-				configuration.error?(requestId, request, $0)
+			.mapError { [configuration] in
 				finished = true
+				if let errorConfiguration = configuration.error {
+					let unloggedError = ($0 as? LoggedError)?.wrappedError ?? $0
+
+					if !errorConfiguration.onlyUnlogged || !($0 is LoggedError) {
+						errorConfiguration.callback(requestId, request, unloggedError)
+						return LoggedError(wrapping: $0)
+					} else {
+						return LoggedError(wrapping: unloggedError)
+					}
+				} else {
+					return $0
+				}
 			}
 			.onCancel { [configuration] in
 				if !finished {

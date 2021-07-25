@@ -6,7 +6,7 @@
 #if canImport(UIKit)
 import UIKit
 
-public protocol PrecedingControllerNavigator: class {
+public protocol PrecedingControllerNavigator: AnyObject {
 	func precedingNavigationItems(for controller: UIViewController) -> [UINavigationItem]
 	func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?)
 }

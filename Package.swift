@@ -25,11 +25,20 @@ let package = Package(
 			path: "KokoroUtils",
 			exclude: ["Bootstrap/Info.plist"]
 		),
+		.testTarget(
+			name: "KokoroUtilsTests",
+			dependencies: ["KokoroUtils"],
+			path: "KokoroUtilsTests",
+			exclude: ["Bootstrap/Info.plist"]
+		),
 		.target(
 			name: "KokoroUI",
 			dependencies: ["KokoroUtils"],
 			path: "KokoroUI",
-			exclude: ["Bootstrap/Info.plist"]
+			exclude: ["Bootstrap/Info.plist"],
+			swiftSettings: [
+				.define("DEBUG", .when(configuration: .debug))
+			]
 		),
 		.target(
 			name: "KokoroFetchable",

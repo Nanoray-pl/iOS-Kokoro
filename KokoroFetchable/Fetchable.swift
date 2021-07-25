@@ -53,7 +53,7 @@ public enum Fetchable<T, Failure: Error> {
 		case .fetching:
 			return .fetching
 		case .success:
-			return .finished
+			return .success
 		case let .failure(error):
 			return DataSourceFetchState<Failure>.failure(error)
 		}

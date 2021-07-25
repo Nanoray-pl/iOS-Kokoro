@@ -5,35 +5,11 @@
 
 import KokoroUtils
 
-public enum IgnoringUnchangedListDataSourceErrorMatchingStrategy {
-	case byPresenceOnly
-	case byDescription
-	case custom(_ function: (Error, Error) -> Bool)
-
-	func areMatchingErrors(_ error1: Error?, _ error2: Error?) -> Bool {
-		switch (error1, error2) {
-		case (.none, .none):
-			return true
-		case (.none, .some), (.some, .none):
-			return false
-		case let (.some(error1), .some(error2)):
-			switch self {
-			case .byPresenceOnly:
-				return false
-			case .byDescription:
-				return "\(error1)" == "\(error2)"
-			case let .custom(function):
-				return function(error1, error2)
-			}
-		}
-	}
-}
-
 public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, Key: Equatable>: FetchableListDataSource {
 	public typealias Element = Wrapped.Element
 
 	private let wrapped: Wrapped
-	private let errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy
+	private let errorMatchingStrategy: ErrorMatchingStrategy
 	private let uniqueKeyFunction: (Element) -> Key
 	private lazy var observer = WrappedObserver(parent: self)
 	public private(set) var elements = [Element]()
@@ -55,11 +31,11 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 		return elements.isEmpty
 	}
 
-	public convenience init(wrapping wrapped: Wrapped, errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy = .byDescription) where Element == Key {
+	public convenience init(wrapping wrapped: Wrapped, errorMatchingStrategy: ErrorMatchingStrategy = .byDescription) where Element == Key {
 		self.init(wrapping: wrapped, uniqueKeyFunction: { $0 })
 	}
 
-	public init(wrapping wrapped: Wrapped, errorMatchingStrategy: IgnoringUnchangedListDataSourceErrorMatchingStrategy = .byDescription, uniqueKeyFunction: @escaping (Element) -> Key) {
+	public init(wrapping wrapped: Wrapped, errorMatchingStrategy: ErrorMatchingStrategy = .byDescription, uniqueKeyFunction: @escaping (Element) -> Key) {
 		self.wrapped = wrapped
 		self.errorMatchingStrategy = errorMatchingStrategy
 		self.uniqueKeyFunction = uniqueKeyFunction
@@ -135,13 +111,13 @@ public class IgnoringUnchangedListDataSource<Wrapped: FetchableListDataSource, K
 }
 
 public extension FetchableListDataSource where Element: Equatable {
-	func ignoringUnchanged() -> IgnoringUnchangedListDataSource<Self, Element> {
-		return IgnoringUnchangedListDataSource(wrapping: self)
+	func ignoringUnchanged(errorMatchingStrategy: ErrorMatchingStrategy = .byDescription) -> IgnoringUnchangedListDataSource<Self, Element> {
+		return IgnoringUnchangedListDataSource(wrapping: self, errorMatchingStrategy: errorMatchingStrategy)
 	}
 }
 
 public extension FetchableListDataSource {
-	func ignoringUnchanged<Key: Equatable>(via uniqueKeyFunction: @escaping (Element) -> Key) -> IgnoringUnchangedListDataSource<Self, Key> {
-		return IgnoringUnchangedListDataSource(wrapping: self, uniqueKeyFunction: uniqueKeyFunction)
+	func ignoringUnchanged<Key: Equatable>(errorMatchingStrategy: ErrorMatchingStrategy = .byDescription, via uniqueKeyFunction: @escaping (Element) -> Key) -> IgnoringUnchangedListDataSource<Self, Key> {
+		return IgnoringUnchangedListDataSource(wrapping: self, errorMatchingStrategy: errorMatchingStrategy, uniqueKeyFunction: uniqueKeyFunction)
 	}
 }

@@ -11,7 +11,7 @@ class MapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3])
 		let testedDataSource = originalDataSource.map { String(repeating: "a", count: $0) }
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, ["a", "aa", "aaa"])
@@ -25,7 +25,7 @@ class MapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], error: Error.error)
 		let testedDataSource = originalDataSource.map { String(repeating: "a", count: $0) }
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, ["a", "aa", "aaa"])
 
@@ -41,7 +41,7 @@ class MapListDataSourceTests: XCTestCase {
 		let originalDataSource = SnapshotListDataSource(elements: [1, 2, 3], isFetching: true)
 		let testedDataSource = originalDataSource.map { String(repeating: "a", count: $0) }
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 3)
 		XCTAssertEqual(testedDataSource.elements, ["a", "aa", "aaa"])

@@ -11,10 +11,6 @@ public extension Collection {
 	var nonEmpty: Self? {
 		return isEmpty ? nil : self
 	}
-
-	subscript(optional index: Index) -> Element? {
-		return index >= startIndex && index < endIndex ? self[index] : nil
-	}
 }
 
 public extension Optional where Wrapped: Collection {
@@ -122,6 +118,12 @@ extension Array: EmptyInitializableCollection {
 	}
 }
 
+public extension RandomAccessCollection {
+	subscript(optional index: Index) -> Element? {
+		return index >= startIndex && index < endIndex ? self[index] : nil
+	}
+}
+
 public extension Sequence {
 	func count(where predicate: (Element) throws -> Bool) rethrows -> Int {
 		var count = 0
@@ -142,7 +144,7 @@ public extension Sequence {
 		return nil
 	}
 
-	func ofType<T>(_ type: T.Type) -> [T] {
+	func filter<T>(ofType type: T.Type) -> [T] {
 		return filter { $0 is T }.map { $0 as! T }
 	}
 

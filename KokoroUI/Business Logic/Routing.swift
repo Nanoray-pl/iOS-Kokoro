@@ -6,12 +6,12 @@
 #if canImport(UIKit)
 import UIKit
 
-public protocol Router: class {
+public protocol Router: AnyObject {
 	var parentRouter: Router? { get }
 	var childRouters: [Router] { get }
 }
 
-public protocol Route: class {}
+public protocol Route: AnyObject {}
 
 public enum RoutingDirection {
 	/// Route via the first known upstream (parent) router. Best used if context is known (simple navigation) - for example with navigation controllers.

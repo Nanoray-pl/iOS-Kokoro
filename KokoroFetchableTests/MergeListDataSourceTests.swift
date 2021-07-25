@@ -12,21 +12,21 @@ class MergeListDataSourceTests: XCTestCase {
 		let secondDataSource = SwitchableListDataSource(initialDataSource: SnapshotListDataSource(elements: [-1, -2, -3]))
 		let testedDataSource = MergeListDataSource(sortStrategySupplier: { MergeListDataSourceByDataSourceSortStrategy(dataSources: $0) }, dataSources: firstDataSource, secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3])
 
 		secondDataSource.switchDataSource(to: SnapshotListDataSource(elements: [42]), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 4)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, 42])
 
 		firstDataSource.switchDataSource(to: SnapshotListDataSource(elements: [0]), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 2)
 		XCTAssertEqual(testedDataSource.elements, [0, 42])
@@ -37,21 +37,21 @@ class MergeListDataSourceTests: XCTestCase {
 		let secondDataSource = SwitchableListDataSource(initialDataSource: SnapshotListDataSource(elements: [-1, -2, -3]))
 		let testedDataSource = MergeListDataSource(sortStrategySupplier: { MergeListDataSourceByPageSortStrategy(dataSources: $0) }, dataSources: firstDataSource, secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3])
 
 		secondDataSource.switchDataSource(to: SnapshotListDataSource(elements: [-1, -2, -3, -4]), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 7)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3, -4])
 
 		firstDataSource.switchDataSource(to: SnapshotListDataSource(elements: [1, 2, 3, 4]), replacingCurrent: true)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 8)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3, -4, 4])
@@ -66,7 +66,7 @@ class MergeListDataSourceTests: XCTestCase {
 		let secondDataSource = SwitchableListDataSource(initialDataSource: SnapshotListDataSource(elements: [-1, -2, -3]))
 		let testedDataSource = MergeListDataSource(sortStrategySupplier: { MergeListDataSourceByDataSourceSortStrategy(dataSources: $0) }, dataSources: firstDataSource, secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3])
 
@@ -87,7 +87,7 @@ class MergeListDataSourceTests: XCTestCase {
 		let secondDataSource = SwitchableListDataSource(initialDataSource: SnapshotListDataSource(elements: [-1, -2, -3], error: Error.error))
 		let testedDataSource = MergeListDataSource(sortStrategySupplier: { MergeListDataSourceByDataSourceSortStrategy(dataSources: $0) }, dataSources: firstDataSource, secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, false)
+		XCTAssertFalse(testedDataSource.isFetching)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3])
 
@@ -109,7 +109,7 @@ class MergeListDataSourceTests: XCTestCase {
 		let secondDataSource = SwitchableListDataSource(initialDataSource: SnapshotListDataSource(elements: [-1, -2, -3]))
 		let testedDataSource = MergeListDataSource(sortStrategySupplier: { MergeListDataSourceByDataSourceSortStrategy(dataSources: $0) }, dataSources: firstDataSource, secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3])
@@ -120,7 +120,7 @@ class MergeListDataSourceTests: XCTestCase {
 		let secondDataSource = SwitchableListDataSource(initialDataSource: SnapshotListDataSource(elements: [-1, -2, -3], isFetching: true))
 		let testedDataSource = MergeListDataSource(sortStrategySupplier: { MergeListDataSourceByDataSourceSortStrategy(dataSources: $0) }, dataSources: firstDataSource, secondDataSource)
 
-		XCTAssertEqual(testedDataSource.isFetching, true)
+		XCTAssertTrue(testedDataSource.isFetching)
 		XCTAssertNil(testedDataSource.error)
 		XCTAssertEqual(testedDataSource.count, 6)
 		XCTAssertEqual(testedDataSource.elements, [1, 2, 3, -1, -2, -3])
