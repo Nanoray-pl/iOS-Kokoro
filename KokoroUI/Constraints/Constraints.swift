@@ -128,11 +128,11 @@ public extension Constraint {
 	}
 
 	func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return flatMap().ofType(NSLayoutConstraint.self)
+		return flatMap().filter(ofType: NSLayoutConstraint.self)
 	}
 
 	func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return flatMap().ofType(NonBasicConstraint.self)
+		return flatMap().filter(ofType: NonBasicConstraint.self)
 	}
 }
 
@@ -142,15 +142,15 @@ extension Array: Constraints where Element: Constraint {
 	}
 
 	public func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return ofType(NSLayoutConstraint.self)
+		return filter(ofType: NSLayoutConstraint.self)
 	}
 
 	public func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return ofType(NonBasicConstraint.self)
+		return filter(ofType: NonBasicConstraint.self)
 	}
 
 	public static func += (left: inout Self, right: Constraints) {
-		left.append(contentsOf: right.flatMap().ofType(Element.self))
+		left.append(contentsOf: right.flatMap().filter(ofType: Element.self))
 	}
 }
 
@@ -189,11 +189,11 @@ public struct ConstraintSet: Constraints {
 	}
 
 	public func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return constraints.ofType(NSLayoutConstraint.self)
+		return constraints.filter(ofType: NSLayoutConstraint.self)
 	}
 
 	public func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return constraints.ofType(NonBasicConstraint.self)
+		return constraints.filter(ofType: NonBasicConstraint.self)
 	}
 }
 
@@ -240,11 +240,11 @@ public class ConstraintSession: Constraints {
 	}
 
 	public func flatMapBasicConstraints() -> [NSLayoutConstraint] {
-		return constraints.ofType(NSLayoutConstraint.self)
+		return constraints.filter(ofType: NSLayoutConstraint.self)
 	}
 
 	public func flatMapNonBasicConstraints() -> [NonBasicConstraint] {
-		return constraints.ofType(NonBasicConstraint.self)
+		return constraints.filter(ofType: NonBasicConstraint.self)
 	}
 }
 
