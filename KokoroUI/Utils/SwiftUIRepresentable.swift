@@ -200,22 +200,20 @@ private struct ViewRepresentable<T: UIView>: UIViewRepresentable {
 	}
 }
 
-final class TableRepresentable<Item, Cell: UITableViewCell>: NSObject, UIViewRepresentable, UITableViewDataSource {
-	typealias UIViewType = UITableView
-
+public final class TableRepresentable<Item, Cell: UITableViewCell>: NSObject, UIViewRepresentable, UITableViewDataSource {
 	private let reuseIdentifier = "Cell"
 
 	private let items: [Item]
 	private let rowHeight: CGFloat
 	private let configurator: (_ cell: Cell, _ item: Item) -> Void
 
-	init(items: [Item], rowHeight: CGFloat = 44, configurator: @escaping (_ cell: Cell, _ item: Item) -> Void) {
+	public init(items: [Item], rowHeight: CGFloat = 44, configurator: @escaping (_ cell: Cell, _ item: Item) -> Void) {
 		self.items = items
 		self.rowHeight = rowHeight
 		self.configurator = configurator
 	}
 
-	func makeUIView(context: UIViewRepresentableContext<TableRepresentable<Item, Cell>>) -> UITableView {
+	public func makeUIView(context: UIViewRepresentableContext<TableRepresentable<Item, Cell>>) -> UITableView {
 		return UITableView(frame: .zero, style: .plain).with {
 			$0.rowHeight = rowHeight
 			$0.dataSource = self
@@ -223,16 +221,16 @@ final class TableRepresentable<Item, Cell: UITableViewCell>: NSObject, UIViewRep
 		}
 	}
 
-	func updateUIView(_ uiView: UITableView, context: UIViewRepresentableContext<TableRepresentable<Item, Cell>>) {
+	public func updateUIView(_ uiView: UITableView, context: UIViewRepresentableContext<TableRepresentable<Item, Cell>>) {
 		uiView.setContentHuggingPriority(.required, for: .vertical)
 		uiView.setContentHuggingPriority(.required, for: .horizontal)
 	}
 
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return items.count
 	}
 
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		return (tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! Cell).with {
 			configurator($0, items[indexPath.row])
 		}
