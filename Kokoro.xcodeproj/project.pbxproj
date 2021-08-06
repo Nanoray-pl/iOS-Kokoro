@@ -20,6 +20,8 @@
 		AA262FFD26BD53A60016BF3B /* ScrollableContentBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */; };
 		AA262FFF26BD543F0016BF3B /* FittableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */; };
 		AA26300126BD54910016BF3B /* FittableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA26300026BD54910016BF3B /* FittableTableView.swift */; };
+		AA26301526BDBD180016BF3B /* KokoroCoreDataFetchable.h in Headers */ = {isa = PBXBuildFile; fileRef = AA26301326BDBD180016BF3B /* KokoroCoreDataFetchable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA26301B26BDBD600016BF3B /* CoreDataListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA26301A26BDBD600016BF3B /* CoreDataListDataSource.swift */; };
 		AA3E3069258F618800981F90 /* DetailedJsonDecodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E3068258F618800981F90 /* DetailedJsonDecodingError.swift */; };
 		AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */; };
 		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
@@ -217,6 +219,20 @@
 			remoteGlobalIDString = AA5AEC992556AF1C00516C8D;
 			remoteInfo = KokoroCache;
 		};
+		AA26301C26BDBD700016BF3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD356092528BAC9007C63EF;
+			remoteInfo = KokoroCoreData;
+		};
+		AA26301E26BDBD700016BF3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD355572528A818007C63EF;
+			remoteInfo = KokoroFetchable;
+		};
 		AA42D3EA256A7833004604D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -360,6 +376,10 @@
 		AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContentBehavior.swift; sourceTree = "<group>"; };
 		AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableScrollView.swift; sourceTree = "<group>"; };
 		AA26300026BD54910016BF3B /* FittableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableTableView.swift; sourceTree = "<group>"; };
+		AA26301126BDBD180016BF3B /* KokoroCoreDataFetchable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroCoreDataFetchable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA26301326BDBD180016BF3B /* KokoroCoreDataFetchable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroCoreDataFetchable.h; sourceTree = "<group>"; };
+		AA26301426BDBD180016BF3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA26301A26BDBD600016BF3B /* CoreDataListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataListDataSource.swift; sourceTree = "<group>"; };
 		AA3E3068258F618800981F90 /* DetailedJsonDecodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedJsonDecodingError.swift; sourceTree = "<group>"; };
 		AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunLoopScheduler.swift; sourceTree = "<group>"; };
 		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
@@ -585,6 +605,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA26300E26BDBD180016BF3B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA42D3D2256A781D004604D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -743,6 +770,24 @@
 				AA26300026BD54910016BF3B /* FittableTableView.swift */,
 			);
 			path = Scrollable;
+			sourceTree = "<group>";
+		};
+		AA26301226BDBD180016BF3B /* KokoroCoreDataFetchable */ = {
+			isa = PBXGroup;
+			children = (
+				AA26301926BDBD200016BF3B /* Bootstrap */,
+				AA26301A26BDBD600016BF3B /* CoreDataListDataSource.swift */,
+			);
+			path = KokoroCoreDataFetchable;
+			sourceTree = "<group>";
+		};
+		AA26301926BDBD200016BF3B /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AA26301326BDBD180016BF3B /* KokoroCoreDataFetchable.h */,
+				AA26301426BDBD180016BF3B /* Info.plist */,
+			);
+			path = Bootstrap;
 			sourceTree = "<group>";
 		};
 		AA42D3112566B04B004604D2 /* Aesthetic */ = {
@@ -910,6 +955,7 @@
 				AAE9D7EE2617AF7C0040C91F /* KokoroValueStore */,
 				AA5AED052556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AA42D3D6256A781D004604D2 /* KokoroUIResourceProvider */,
+				AA26301226BDBD180016BF3B /* KokoroCoreDataFetchable */,
 				AAD3548E252869D0007C63EF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -933,6 +979,7 @@
 				AAE9D6BD26176BA40040C91F /* KokoroFetchableTests.xctest */,
 				AAE9D7ED2617AF7C0040C91F /* KokoroValueStore.framework */,
 				AA974CEB26AD5D01005D6ADE /* KokoroUtilsTests.xctest */,
+				AA26301126BDBD180016BF3B /* KokoroCoreDataFetchable.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1365,6 +1412,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		AA26300C26BDBD180016BF3B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA26301526BDBD180016BF3B /* KokoroCoreDataFetchable.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA42D3D0256A781D004604D2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1473,6 +1528,26 @@
 			productName = KokoroCacheTests;
 			productReference = AA16EB41257A7AAC001C30E9 /* KokoroCacheTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AA26301026BDBD180016BF3B /* KokoroCoreDataFetchable */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA26301826BDBD180016BF3B /* Build configuration list for PBXNativeTarget "KokoroCoreDataFetchable" */;
+			buildPhases = (
+				AA26300C26BDBD180016BF3B /* Headers */,
+				AA26300D26BDBD180016BF3B /* Sources */,
+				AA26300E26BDBD180016BF3B /* Frameworks */,
+				AA26300F26BDBD180016BF3B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA26301D26BDBD700016BF3B /* PBXTargetDependency */,
+				AA26301F26BDBD700016BF3B /* PBXTargetDependency */,
+			);
+			name = KokoroCoreDataFetchable;
+			productName = KokoroCoreDataFetchable;
+			productReference = AA26301126BDBD180016BF3B /* KokoroCoreDataFetchable.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		AA42D3D4256A781D004604D2 /* KokoroUIResourceProvider */ = {
 			isa = PBXNativeTarget;
@@ -1782,6 +1857,10 @@
 					AA16EB40257A7AAC001C30E9 = {
 						CreatedOnToolsVersion = 12.2;
 					};
+					AA26301026BDBD180016BF3B = {
+						CreatedOnToolsVersion = 12.5.1;
+						LastSwiftMigration = 1250;
+					};
 					AA42D3D4256A781D004604D2 = {
 						CreatedOnToolsVersion = 12.2;
 						LastSwiftMigration = 1220;
@@ -1873,12 +1952,20 @@
 				AAE9D7EC2617AF7C0040C91F /* KokoroValueStore */,
 				AA5AED032556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AA42D3D4256A781D004604D2 /* KokoroUIResourceProvider */,
+				AA26301026BDBD180016BF3B /* KokoroCoreDataFetchable */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AA16EB3F257A7AAC001C30E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA26300F26BDBD180016BF3B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2197,6 +2284,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA26300D26BDBD180016BF3B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA26301B26BDBD600016BF3B /* CoreDataListDataSource.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA42D3D1256A781D004604D2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2489,6 +2584,16 @@
 			target = AA5AEC992556AF1C00516C8D /* KokoroCache */;
 			targetProxy = AA16EB47257A7AAC001C30E9 /* PBXContainerItemProxy */;
 		};
+		AA26301D26BDBD700016BF3B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD356092528BAC9007C63EF /* KokoroCoreData */;
+			targetProxy = AA26301C26BDBD700016BF3B /* PBXContainerItemProxy */;
+		};
+		AA26301F26BDBD700016BF3B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD355572528A818007C63EF /* KokoroFetchable */;
+			targetProxy = AA26301E26BDBD700016BF3B /* PBXContainerItemProxy */;
+		};
 		AA42D3EB256A7833004604D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AAD357892529C468007C63EF /* KokoroResourceProvider */;
@@ -2602,6 +2707,50 @@
 			};
 			name = Release;
 		};
+		AA26301626BDBD180016BF3B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreDataFetchable;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA26301726BDBD180016BF3B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreDataFetchable;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		AA42D3DA256A781D004604D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2619,7 +2768,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUIResourceProvider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -3289,7 +3437,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroValueStore;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -3323,6 +3470,15 @@
 			buildConfigurations = (
 				AA16EB4A257A7AAC001C30E9 /* Debug */,
 				AA16EB4B257A7AAC001C30E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA26301826BDBD180016BF3B /* Build configuration list for PBXNativeTarget "KokoroCoreDataFetchable" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA26301626BDBD180016BF3B /* Debug */,
+				AA26301726BDBD180016BF3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

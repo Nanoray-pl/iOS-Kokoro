@@ -8,6 +8,7 @@ public protocol ValueWith: AnyWith {}
 
 public protocol ObjectWith: AnyObject, AnyWith {
 	typealias Proxy<T> = AnyProxy<Self, T>
+	typealias Locked<T, LockType: Lock> = AnyLocked<Self, T, LockType>
 }
 
 private enum CastError: Error {

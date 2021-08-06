@@ -105,6 +105,12 @@ let package = Package(
 			path: "KokoroUIResourceProvider",
 			exclude: ["Bootstrap/Info.plist"]
 		),
+		.target(
+			name: "KokoroCoreDataFetchable",
+			dependencies: ["KokoroUtils", "KokoroCoreData", "KokoroFetchable"],
+			path: "KokoroCoreDataFetchable",
+			exclude: ["Bootstrap/Info.plist"]
+		),
 //		.testTarget(
 //			name: "KokoroCoreDataTests",
 //			dependencies: ["KokoroCoreData"],

@@ -91,6 +91,14 @@ public class CoreDataPerformingContext {
 		return try fetch(request.asNSFetchRequest())
 	}
 
+	public func count<ResultType: NSManagedObject>(for request: NSFetchRequest<ResultType>) throws -> Int {
+		return try wrapped.count(for: request)
+	}
+
+	public func count<ResultType: NSManagedObject & ManagedObject>(for request: FetchRequest<ResultType>) throws -> Int {
+		return try count(for: request.asNSFetchRequest())
+	}
+
 	public func insert(_ object: NSManagedObject) {
 		wrapped.insert(object)
 	}

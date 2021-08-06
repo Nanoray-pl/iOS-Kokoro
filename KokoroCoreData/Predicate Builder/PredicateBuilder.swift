@@ -102,14 +102,16 @@ extension NSManagedObjectID: CVarArgConvertible {
 public struct FetchRequest<ResultType: NSManagedObject & ManagedObject> {
 	public var predicate: AnyPredicateBuilder<ResultType>
 	public var limit: Int?
+	public var offset: Int
 
-	public init(limit: Int? = nil) {
-		self.init(predicate: BoolPredicateBuilder<ResultType>.true, limit: limit)
+	public init(limit: Int? = nil, offset: Int = 0) {
+		self.init(predicate: BoolPredicateBuilder<ResultType>.true, limit: limit, offset: offset)
 	}
 
-	public init<P>(predicate: P, limit: Int? = nil) where P: PredicateBuilder, P.ResultType == ResultType {
+	public init<P>(predicate: P, limit: Int? = nil, offset: Int = 0) where P: PredicateBuilder, P.ResultType == ResultType {
 		self.predicate = predicate.eraseToAnyPredicateBuilder()
 		self.limit = limit
+		self.offset = offset
 	}
 
 	public init(objectID: NSManagedObjectID) {

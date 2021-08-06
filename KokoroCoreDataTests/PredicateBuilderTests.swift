@@ -5,6 +5,7 @@
 
 import CoreData
 import Foundation
+import KokoroUtils
 import XCTest
 @testable import KokoroCoreData
 
@@ -25,12 +26,30 @@ class PredicateBuilderTests: XCTestCase {
 
 	private func makeTestValues(context: CoreDataPerformingContext) -> [TestEntity] {
 		return [
-			{ $0.requiredString = "a"; $0.extraInt = 0; return $0 }(TestEntity(context: context)),
-			{ $0.requiredString = "b"; $0.extraInt = 1; return $0 }(TestEntity(context: context)),
-			{ $0.requiredString = "c"; $0.extraInt = 2; return $0 }(TestEntity(context: context)),
-			{ $0.requiredString = "a"; $0.extraInt = 3; return $0 }(TestEntity(context: context)),
-			{ $0.requiredString = "b"; $0.extraInt = 4; return $0 }(TestEntity(context: context)),
-			{ $0.requiredString = "c"; $0.extraInt = 5; return $0 }(TestEntity(context: context)),
+			TestEntity(context: context).with {
+				$0.requiredString = "a"
+				$0.extraInt = 0
+			},
+			TestEntity(context: context).with {
+				$0.requiredString = "b"
+				$0.extraInt = 1
+			},
+			TestEntity(context: context).with {
+				$0.requiredString = "c"
+				$0.extraInt = 2
+			},
+			TestEntity(context: context).with {
+				$0.requiredString = "a"
+				$0.extraInt = 3
+			},
+			TestEntity(context: context).with {
+				$0.requiredString = "b"
+				$0.extraInt = 4
+			},
+			TestEntity(context: context).with {
+				$0.requiredString = "c"
+				$0.extraInt = 5
+			},
 		]
 	}
 

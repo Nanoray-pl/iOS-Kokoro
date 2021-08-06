@@ -46,3 +46,33 @@ public class FoundationLock: Lock {
 	}
 }
 #endif
+
+@propertyWrapper
+public struct AnyLocked<EnclosingSelf, Value, LockType: Lock> {
+	private let lockKeyPath: KeyPath<EnclosingSelf, LockType>
+	private var value: Value
+
+	@available(*, unavailable, message: "@(Any)Locked can only be applied to classes")
+	public var wrappedValue: Value {
+		get { fatalError("@(Any)Locked can only be applied to classes") }
+		set { fatalError("@(Any)Locked can only be applied to classes") } // swiftlint:disable:this unused_setter_value
+	}
+
+	public static subscript(_enclosingInstance observed: EnclosingSelf, wrapped wrappedKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Value>, storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Self>) -> Value {
+		get {
+			let storageValue = observed[keyPath: storageKeyPath]
+			let lock = observed[keyPath: storageValue.lockKeyPath]
+			return lock.acquireAndRun { storageValue.value }
+		}
+		set {
+			var storageValue = observed[keyPath: storageKeyPath]
+			let lock = observed[keyPath: storageValue.lockKeyPath]
+			lock.acquireAndRun { storageValue.value = newValue }
+		}
+	}
+
+	public init(wrappedValue value: Value, via lockKeyPath: KeyPath<EnclosingSelf, LockType>) {
+		self.value = value
+		self.lockKeyPath = lockKeyPath
+	}
+}
