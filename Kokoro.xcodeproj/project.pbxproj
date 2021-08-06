@@ -17,6 +17,9 @@
 		AA16EBC5257A7FB3001C30E9 /* Fetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */; };
 		AA16EBE1257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */; };
 		AA16EBF1257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */; };
+		AA262FFD26BD53A60016BF3B /* ScrollableContentBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */; };
+		AA262FFF26BD543F0016BF3B /* FittableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */; };
+		AA26300126BD54910016BF3B /* FittableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA26300026BD54910016BF3B /* FittableTableView.swift */; };
 		AA3E3069258F618800981F90 /* DetailedJsonDecodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E3068258F618800981F90 /* DetailedJsonDecodingError.swift */; };
 		AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */; };
 		AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */; };
@@ -354,6 +357,9 @@
 		AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fetchable.swift; sourceTree = "<group>"; };
 		AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayout.swift; sourceTree = "<group>"; };
 		AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayoutViewController.swift; sourceTree = "<group>"; };
+		AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContentBehavior.swift; sourceTree = "<group>"; };
+		AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableScrollView.swift; sourceTree = "<group>"; };
+		AA26300026BD54910016BF3B /* FittableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableTableView.swift; sourceTree = "<group>"; };
 		AA3E3068258F618800981F90 /* DetailedJsonDecodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedJsonDecodingError.swift; sourceTree = "<group>"; };
 		AA3E320D2597CCCC00981F90 /* RunLoopScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunLoopScheduler.swift; sourceTree = "<group>"; };
 		AA42D3132566B071004604D2 /* ProportionalOffsetConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProportionalOffsetConstraintViewController.swift; sourceTree = "<group>"; };
@@ -728,6 +734,17 @@
 			path = Containers;
 			sourceTree = "<group>";
 		};
+		AA262FFB26BD538F0016BF3B /* Scrollable */ = {
+			isa = PBXGroup;
+			children = (
+				AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */,
+				AAEFB1392542DBC2003AA60E /* HeaderFooterCollectionView.swift */,
+				AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */,
+				AA26300026BD54910016BF3B /* FittableTableView.swift */,
+			);
+			path = Scrollable;
+			sourceTree = "<group>";
+		};
 		AA42D3112566B04B004604D2 /* Aesthetic */ = {
 			isa = PBXGroup;
 			children = (
@@ -1049,12 +1066,12 @@
 		AAD3551C25288CE4007C63EF /* Containers */ = {
 			isa = PBXGroup;
 			children = (
+				AA262FFB26BD538F0016BF3B /* Scrollable */,
 				AAD3551D25288D04007C63EF /* ContainerViewController.swift */,
 				AAD3552525288F0A007C63EF /* PrecedingControllerNavigator.swift */,
 				AAD3552125288E3F007C63EF /* NavigationControllerWrapper.swift */,
 				AAD3552B25289175007C63EF /* TabAndNavigationControllerWrapper.swift */,
 				AAEFB1252542D860003AA60E /* SeparatorStackView.swift */,
-				AAEFB1392542DBC2003AA60E /* HeaderFooterCollectionView.swift */,
 				AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */,
 			);
 			path = Containers;
@@ -2276,6 +2293,7 @@
 				AAD3550B25288A0F007C63EF /* GradientView.swift in Sources */,
 				AAD354EB25287A0B007C63EF /* HierarchyLookup.swift in Sources */,
 				AA16EBE1257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift in Sources */,
+				AA26300126BD54910016BF3B /* FittableTableView.swift in Sources */,
 				AAD354F4252882AA007C63EF /* FrameObservingView.swift in Sources */,
 				AAD35530252893FD007C63EF /* ButtonMenuConfigurator.swift in Sources */,
 				AAD354CE252873FD007C63EF /* NonBasicConstraints.swift in Sources */,
@@ -2297,10 +2315,12 @@
 				AAD3554A2528A03F007C63EF /* ForceTouchGestureRecognizer.swift in Sources */,
 				AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */,
 				AA5AEC5825558B8F00516C8D /* SystemUILocalizable.swift in Sources */,
+				AA262FFD26BD53A60016BF3B /* ScrollableContentBehavior.swift in Sources */,
 				AAD3552225288E3F007C63EF /* NavigationControllerWrapper.swift in Sources */,
 				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
 				AA5AEC3B255587FF00516C8D /* HapticFeedbackGenerator.swift in Sources */,
 				AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */,
+				AA262FFF26BD543F0016BF3B /* FittableScrollView.swift in Sources */,
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
 				AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */,
 				AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */,

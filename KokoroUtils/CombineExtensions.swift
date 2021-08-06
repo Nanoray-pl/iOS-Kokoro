@@ -7,9 +7,22 @@
 import Combine
 
 public class CancelBag {
-	fileprivate var cancellableSet = Set<AnyCancellable>()
+	private var cancellableSet = Set<AnyCancellable>()
+	private let lock = FoundationLock()
 
 	public init() {}
+
+	public func insert(_ cancellable: AnyCancellable) {
+		lock.acquireAndRun {
+			_ = cancellableSet.insert(cancellable)
+		}
+	}
+
+	public func remove(_ cancellable: AnyCancellable) {
+		lock.acquireAndRun {
+			_ = cancellableSet.remove(cancellable)
+		}
+	}
 }
 
 public extension Future {
@@ -25,20 +38,20 @@ public extension Publisher {
 		var capturedCancellable: AnyCancellable?
 		let cancellable = onCancel {
 			if let cancellable = capturedCancellable {
-				bag.cancellableSet.remove(cancellable)
+				bag.remove(cancellable)
 				capturedCancellable = nil
 			}
 		}
 		.sinkResult {
 			if let cancellable = capturedCancellable {
-				bag.cancellableSet.remove(cancellable)
+				bag.remove(cancellable)
 				capturedCancellable = nil
 			}
 			closure($0)
 		}
 		capturedCancellable = cancellable
 
-		bag.cancellableSet.insert(cancellable)
+		bag.insert(cancellable)
 		return cancellable
 	}
 
@@ -81,20 +94,20 @@ public extension Publisher {
 		var capturedCancellable: AnyCancellable?
 		let cancellable = onCancel {
 			if let cancellable = capturedCancellable {
-				bag.cancellableSet.remove(cancellable)
+				bag.remove(cancellable)
 				capturedCancellable = nil
 			}
 		}
 		.sink(receiveCompletion: {
 			if let cancellable = capturedCancellable {
-				bag.cancellableSet.remove(cancellable)
+				bag.remove(cancellable)
 				capturedCancellable = nil
 			}
 			receiveCompletion($0)
 		}, receiveValue: receiveValue)
 		capturedCancellable = cancellable
 
-		bag.cancellableSet.insert(cancellable)
+		bag.insert(cancellable)
 		return cancellable
 	}
 

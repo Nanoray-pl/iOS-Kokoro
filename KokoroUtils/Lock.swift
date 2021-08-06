@@ -4,7 +4,15 @@
 //
 
 public protocol Lock {
-	func acquireAndRun<T>(_ closure: () throws -> T) rethrows -> T
+	func acquireAndRun<R>(_ closure: () throws -> R) rethrows -> R
+}
+
+public extension Lock {
+	func acquireAndRun<T, R>(with input: T, _ closure: (T) throws -> R) rethrows -> R {
+		return try acquireAndRun {
+			try closure(input)
+		}
+	}
 }
 
 #if canImport(ObjectiveC)
@@ -15,7 +23,7 @@ public class ObjcLock: Lock {
 
 	public init() {}
 
-	public func acquireAndRun<T>(_ closure: () throws -> T) rethrows -> T {
+	public func acquireAndRun<R>(_ closure: () throws -> R) rethrows -> R {
 		objc_sync_enter(object)
 		defer { objc_sync_exit(object) }
 		return try closure()
@@ -31,7 +39,7 @@ public class FoundationLock: Lock {
 
 	public init() {}
 
-	public func acquireAndRun<T>(_ closure: () throws -> T) rethrows -> T {
+	public func acquireAndRun<R>(_ closure: () throws -> R) rethrows -> R {
 		lock.lock()
 		defer { lock.unlock() }
 		return try closure()

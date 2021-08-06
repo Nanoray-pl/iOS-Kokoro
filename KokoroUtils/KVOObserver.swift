@@ -18,6 +18,7 @@ public class KVOObserver: NSObject {
 	}
 
 	private let callback: () -> Void
+	private let lock = FoundationLock()
 	private var observations = [Entry]()
 
 	public init(callback: @escaping () -> Void) {
@@ -30,34 +31,42 @@ public class KVOObserver: NSObject {
 
 	public func observe<Root: NSObject, Value>(_ keyPath: KeyPath<Root, Value>, of object: Root) {
 		let keyPathString = NSExpression(forKeyPath: keyPath).keyPath
-		observations.append(.init(object: object, keyPath: keyPathString))
-		object.addObserver(self, forKeyPath: keyPathString, options: [], context: nil)
+		lock.acquireAndRun {
+			observations.append(.init(object: object, keyPath: keyPathString))
+			object.addObserver(self, forKeyPath: keyPathString, options: [], context: nil)
+		}
 	}
 
 	public func stopObserving<Root: NSObject, Value>(_ keyPath: KeyPath<Root, Value>, of object: Root) {
 		let keyPathString = NSExpression(forKeyPath: keyPath).keyPath
-		if let index = observations.firstIndex(where: { $0.object === object && $0.keyPath == keyPathString }) {
-			observations.remove(at: index)
-			object.removeObserver(self, forKeyPath: keyPathString)
+		lock.acquireAndRun {
+			if let index = observations.firstIndex(where: { $0.object === object && $0.keyPath == keyPathString }) {
+				observations.remove(at: index)
+				object.removeObserver(self, forKeyPath: keyPathString)
+			}
 		}
 	}
 
 	public func stopObservingAll() {
-		observations.forEach {
-			$0.object?.removeObserver(self, forKeyPath: $0.keyPath)
+		lock.acquireAndRun {
+			observations.forEach {
+				$0.object?.removeObserver(self, forKeyPath: $0.keyPath)
+			}
+			observations.removeAll()
 		}
-		observations.removeAll()
 	}
 
 	// swiftlint:disable:next block_based_kvo
 	public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-		for entry in observations {
-			if entry.object === object as AnyObject && entry.keyPath == keyPath {
-				callback()
-				return
+		lock.acquireAndRun {
+			for entry in observations {
+				if entry.object === object as AnyObject && entry.keyPath == keyPath {
+					callback()
+					return
+				}
 			}
+			super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
 		}
-		super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
 	}
 }
 #endif

@@ -303,7 +303,7 @@ struct ProgressBarPreviews: PreviewProvider {
 	static var previews: some View {
 		Group {
 			ForEach([ProgressBar.Direction.leftToRight, ProgressBar.Direction.rightToLeft], id: \.self) { direction in
-				representable {
+				representable(width: .device, height: .fixed(4)) {
 					ProgressBar(direction: direction).with {
 						$0.setValue(.determinate(0.7), animated: false)
 					}

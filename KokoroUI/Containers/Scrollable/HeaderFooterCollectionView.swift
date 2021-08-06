@@ -9,22 +9,19 @@ import UIKit
 public class HeaderFooterCollectionView: UICollectionView {
 	private var contentSizeObservation: NSKeyValueObservation?
 
-	/// Whether scrolling should be disabled and scroll offset be locked at the top of the content.
-	public var isScrollLocked = false {
-		didSet {
-			isScrollEnabled = !isScrollLocked
-		}
+	public var realContentOffset: CGPoint {
+		return .init(x: contentOffset.x, y: contentOffset.y + contentInset.top + (headerViewWrapper?.frame.height ?? 0))
 	}
 
 	public var topInset: CGFloat = 0 {
 		didSet {
-			contentInset.top = topInset + (headerViewWrapper?.frame.height ?? 0)
+			updateTopInset()
 		}
 	}
 
 	public var bottomInset: CGFloat = 0 {
 		didSet {
-			contentInset.bottom = bottomInset + (footerViewWrapper?.frame.height ?? 0)
+			updateBottomInset()
 		}
 	}
 
@@ -80,16 +77,44 @@ public class HeaderFooterCollectionView: UICollectionView {
 		}
 	}
 
+	private lazy var privateDelegate = PrivateDelegate(parent: self) // swiftlint:disable:this weak_delegate
 	private var footerViewWrapperVerticalConstraint: NSLayoutConstraint?
+	private var lastContentSize = CGSize.zero
 
-	private lazy var privateDelegate = Delegate(parent: self) // swiftlint:disable:this weak_delegate
+	public let scrollableContentBehavior: ScrollableContentBehavior
 
-	public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-		super.init(frame: frame, collectionViewLayout: layout)
-		contentSizeObservation = observe(\.contentSize) { [weak self] _, _ in self?.updateFooterConstraint() }
+	public override var intrinsicContentSize: CGSize {
+		switch scrollableContentBehavior {
+		case .fitContent:
+			var height = collectionViewLayout.collectionViewContentSize.height + (headerViewWrapper?.frame.height ?? 0) + (footerViewWrapper?.frame.height ?? 0)
+			if height == 0 && (0 ..< numberOfSections).map({ numberOfItems(inSection: $0) }).reduce(0, +) > 0 {
+				// forcing a non-0 height to let the layout actually calculate its attributes - otherwise `contentSize.height` will always be 0
+				height = UIScreen.main.bounds.height
+			}
+			return .init(
+				width: collectionViewLayout.collectionViewContentSize.width,
+				height: height
+			)
+		case .scrollable:
+			return super.intrinsicContentSize
+		}
 	}
 
-	public required init?(coder: NSCoder) {
+	public init(frame: CGRect = .init(origin: .zero, size: UIScreen.main.bounds.size), scrollableContentBehavior: ScrollableContentBehavior = .scrollable, collectionViewLayout layout: UICollectionViewLayout) {
+		self.scrollableContentBehavior = scrollableContentBehavior
+		super.init(frame: frame, collectionViewLayout: layout)
+		contentSizeObservation = observe(\.contentSize) { [weak self] _, _ in self?.didChangeContentSize() }
+
+		switch scrollableContentBehavior {
+		case .scrollable:
+			isScrollEnabled = true
+		case .fitContent:
+			isScrollEnabled = false
+			contentInsetAdjustmentBehavior = .never
+		}
+	}
+
+	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 
@@ -103,9 +128,24 @@ public class HeaderFooterCollectionView: UICollectionView {
 		collectionViewLayout.invalidateLayout()
 	}
 
+	public func setRealContentOffset(_ offset: CGPoint, animated: Animated) {
+		setContentOffset(.init(x: offset.x, y: offset.y - contentInset.top - (headerViewWrapper?.frame.height ?? 0)), animated: animated.value)
+	}
+
+	private func didChangeContentSize() {
+		let intrinsicContentSize = self.intrinsicContentSize
+		if bounds.size != intrinsicContentSize && intrinsicContentSize.width >= 0 && intrinsicContentSize.height >= 0 {
+			updateFooterConstraint()
+			invalidateIntrinsicContentSize()
+		}
+	}
+
 	private func updateTopInset() {
 		contentInset.top = topInset + (headerViewWrapper?.frame.height ?? 0)
-		if isScrollLocked {
+		switch scrollableContentBehavior {
+		case .scrollable:
+			break
+		case .fitContent:
 			contentOffset.y = -contentInset.top
 		}
 	}
@@ -118,14 +158,15 @@ public class HeaderFooterCollectionView: UICollectionView {
 		footerViewWrapperVerticalConstraint?.constant = contentSize.height
 	}
 
-	private class Delegate: FrameObservingViewDelegate {
-		private unowned let parent: HeaderFooterCollectionView
+	private class PrivateDelegate: FrameObservingViewDelegate {
+		private weak var parent: HeaderFooterCollectionView?
 
 		init(parent: HeaderFooterCollectionView) {
 			self.parent = parent
 		}
 
 		func didChangeFrame(from oldFrame: CGRect, to newFrame: CGRect, in view: FrameObservingView) {
+			guard let parent = parent else { return }
 			switch view {
 			case parent.headerViewWrapper:
 				parent.contentOffset.y -= (newFrame.height - oldFrame.height)
