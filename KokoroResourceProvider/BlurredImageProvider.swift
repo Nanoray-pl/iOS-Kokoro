@@ -34,24 +34,28 @@ public class BlurredImageProvider: ResourceProvider {
 		self.radius = radius
 	}
 
-	public func resource() -> AnyPublisher<UIImage, Error> {
-		return wrapped.resource()
-			.map { [radius] unprocessedImage in
-				let ciInput = unprocessedImage.ciImage!
-				let blurFilter = CIFilter(name: "CIGaussianBlur")!.with {
-					$0.setValue(ciInput, forKey: kCIInputImageKey)
-					$0.setValue(radius, forKey: kCIInputRadiusKey)
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<UIImage, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
+		let wrapped = self.wrapped.resourceAndAwaitTimeMagnitude()
+		return (
+			resource: wrapped.resource
+				.map { [radius] unprocessedImage in
+					let ciInput = unprocessedImage.ciImage ?? CIImage(cgImage: unprocessedImage.cgImage!)
+					let blurFilter = CIFilter(name: "CIGaussianBlur")!.with {
+						$0.setValue(ciInput, forKey: kCIInputImageKey)
+						$0.setValue(radius, forKey: kCIInputRadiusKey)
+					}
+					let cropFilter = CIFilter(name: "CICrop")!.with {
+						$0.setValue(blurFilter.outputImage!, forKey: kCIInputImageKey)
+						$0.setValue(CIVector(cgRect: ciInput.extent), forKey: "inputRectangle")
+					}
+					let context = CIContext()
+					let ciOutput = cropFilter.outputImage!
+					let cgImage = context.createCGImage(ciOutput, from: ciOutput.extent)!
+					return UIImage(cgImage: cgImage)
 				}
-				let cropFilter = CIFilter(name: "CICrop")!.with {
-					$0.setValue(blurFilter.outputImage!, forKey: kCIInputImageKey)
-					$0.setValue(CIVector(cgRect: ciInput.extent), forKey: "inputRectangle")
-				}
-				let context = CIContext()
-				let ciOutput = cropFilter.outputImage!
-				let cgImage = context.createCGImage(ciOutput, from: ciOutput.extent)!
-				return UIImage(cgImage: cgImage)
-			}
-			.eraseToAnyPublisher()
+				.eraseToAnyPublisher(),
+			awaitTimeMagnitude: wrapped.awaitTimeMagnitude + .computational
+		)
 	}
 
 	public static func == (lhs: BlurredImageProvider, rhs: BlurredImageProvider) -> Bool {

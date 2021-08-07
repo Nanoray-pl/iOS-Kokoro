@@ -36,15 +36,20 @@ public class UrlDataProvider: ResourceProvider {
 		self.url = url
 	}
 
-	public func resource() -> AnyPublisher<Data, Error> {
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<Data, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
 		enum Error: Swift.Error {
 			case noData
 		}
 
-		return session.dataTaskPublisher(for: url)
-			.map(\.data)
-			.mapError { $0 as Swift.Error }
-			.eraseToAnyPublisher()
+		return (
+			resource: session.dataTaskPublisher(for: url)
+				// swiftformat:disable:next preferKeyPath
+				.map { $0.data }
+				.mapError { $0 as Swift.Error }
+				.replaceNilWithError(Error.noData)
+				.eraseToAnyPublisher(),
+			awaitTimeMagnitude: .networkAccess
+		)
 	}
 
 	public static func == (lhs: UrlDataProvider, rhs: UrlDataProvider) -> Bool {

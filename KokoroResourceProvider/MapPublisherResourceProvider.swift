@@ -8,13 +8,23 @@ import Combine
 import Foundation
 import KokoroUtils
 
+private let defaultAwaitTimeMagnitude: AwaitTimeMagnitude? = nil
+
 public extension ResourceProviderFactory {
+	func mapPublisher<NewPublisher>(awaitTimeMagnitude: AwaitTimeMagnitude?, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<Resource, Error>) -> NewPublisher>) -> MapPublisherResourceProviderFactory<Self, NewPublisher> where NewPublisher: Publisher, NewPublisher.Failure == Error {
+		return MapPublisherResourceProviderFactory(wrapping: self, awaitTimeMagnitude: awaitTimeMagnitude, identifier: identifier, mapFunction: mapFunction)
+	}
+
+	func mapPublisher<NewPublisher>(awaitTimeMagnitude: AwaitTimeMagnitude?, identifier: String, mapFunction: @escaping (AnyPublisher<Resource, Error>) -> NewPublisher) -> MapPublisherResourceProviderFactory<Self, NewPublisher> where NewPublisher: Publisher, NewPublisher.Failure == Error {
+		return mapPublisher(awaitTimeMagnitude: awaitTimeMagnitude, identifier: identifier, mapFunction: .init(mapFunction))
+	}
+
 	func mapPublisher<NewPublisher>(identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<Resource, Error>) -> NewPublisher>) -> MapPublisherResourceProviderFactory<Self, NewPublisher> where NewPublisher: Publisher, NewPublisher.Failure == Error {
-		return MapPublisherResourceProviderFactory(wrapping: self, identifier: identifier, mapFunction: mapFunction)
+		return mapPublisher(awaitTimeMagnitude: defaultAwaitTimeMagnitude, identifier: identifier, mapFunction: mapFunction)
 	}
 
 	func mapPublisher<NewPublisher>(identifier: String, mapFunction: @escaping (AnyPublisher<Resource, Error>) -> NewPublisher) -> MapPublisherResourceProviderFactory<Self, NewPublisher> where NewPublisher: Publisher, NewPublisher.Failure == Error {
-		return mapPublisher(identifier: identifier, mapFunction: .init(mapFunction))
+		return mapPublisher(awaitTimeMagnitude: defaultAwaitTimeMagnitude, identifier: identifier, mapFunction: mapFunction)
 	}
 }
 
@@ -23,17 +33,19 @@ public class MapPublisherResourceProviderFactory<Factory, NewPublisher>: Resourc
 	public typealias Resource = NewPublisher.Output
 
 	private let wrapped: Factory
+	private let awaitTimeMagnitude: AwaitTimeMagnitude?
 	private let identifier: String
 	private let mapFunction: Identifiable<UUID, (AnyPublisher<Factory.Resource, Error>) -> NewPublisher>
 
-	public init(wrapping wrapped: Factory, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<Factory.Resource, Error>) -> NewPublisher>) {
+	public init(wrapping wrapped: Factory, awaitTimeMagnitude: AwaitTimeMagnitude?, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<Factory.Resource, Error>) -> NewPublisher>) {
 		self.wrapped = wrapped
+		self.awaitTimeMagnitude = awaitTimeMagnitude
 		self.identifier = identifier
 		self.mapFunction = mapFunction
 	}
 
 	public func create(for input: Input) -> AnyResourceProvider<Resource> {
-		return MapPublisherResourceProvider(wrapping: wrapped.create(for: input), identifier: identifier, mapFunction: mapFunction).eraseToAnyResourceProvider()
+		return MapPublisherResourceProvider(wrapping: wrapped.create(for: input), awaitTimeMagnitude: awaitTimeMagnitude, identifier: identifier, mapFunction: mapFunction).eraseToAnyResourceProvider()
 	}
 }
 
@@ -41,6 +53,7 @@ public class MapPublisherResourceProvider<OldResource, NewPublisher>: ResourcePr
 	public typealias Resource = NewPublisher.Output
 
 	private let wrapped: AnyResourceProvider<OldResource>
+	private let awaitTimeMagnitude: AwaitTimeMagnitude?
 	private let mapperIdentifier: String
 	private let mapFunction: Identifiable<UUID, (AnyPublisher<OldResource, Error>) -> NewPublisher>
 
@@ -48,14 +61,23 @@ public class MapPublisherResourceProvider<OldResource, NewPublisher>: ResourcePr
 		return "MapPublisherResourceProvider[identifier: \(mapperIdentifier), value: \(wrapped.identifier)]"
 	}
 
-	public init<Wrapped>(wrapping wrapped: Wrapped, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<OldResource, Error>) -> NewPublisher>) where Wrapped: ResourceProvider, Wrapped.Resource == OldResource {
+	public init<Wrapped>(wrapping wrapped: Wrapped, awaitTimeMagnitude: AwaitTimeMagnitude?, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<OldResource, Error>) -> NewPublisher>) where Wrapped: ResourceProvider, Wrapped.Resource == OldResource {
 		self.wrapped = wrapped.eraseToAnyResourceProvider()
+		self.awaitTimeMagnitude = awaitTimeMagnitude
 		mapperIdentifier = identifier
 		self.mapFunction = mapFunction
 	}
 
-	public func resource() -> AnyPublisher<NewPublisher.Output, Error> {
-		return mapFunction.element(wrapped.resource()).eraseToAnyPublisher()
+	public convenience init<Wrapped>(wrapping wrapped: Wrapped, identifier: String, mapFunction: Identifiable<UUID, (AnyPublisher<OldResource, Error>) -> NewPublisher>) where Wrapped: ResourceProvider, Wrapped.Resource == OldResource {
+		self.init(wrapping: wrapped, awaitTimeMagnitude: defaultAwaitTimeMagnitude, identifier: identifier, mapFunction: mapFunction)
+	}
+
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<NewPublisher.Output, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
+		let wrapped = self.wrapped.resourceAndAwaitTimeMagnitude()
+		return (
+			resource: mapFunction.element(wrapped.resource).eraseToAnyPublisher(),
+			awaitTimeMagnitude: wrapped.awaitTimeMagnitude + awaitTimeMagnitude
+		)
 	}
 
 	public static func == (lhs: MapPublisherResourceProvider<OldResource, NewPublisher>, rhs: MapPublisherResourceProvider<OldResource, NewPublisher>) -> Bool {

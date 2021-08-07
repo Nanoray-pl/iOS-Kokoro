@@ -27,10 +27,13 @@ public class UrlAvAssetProvider: ResourceProvider {
 		self.url = url
 	}
 
-	public func resource() -> AnyPublisher<AVAsset, Error> {
-		return Just(AVAsset(url: url))
-			.setFailureType(to: Error.self)
-			.eraseToAnyPublisher()
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<AVAsset, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
+		return (
+			resource: Just(AVAsset(url: url))
+				.setFailureType(to: Error.self)
+				.eraseToAnyPublisher(),
+			awaitTimeMagnitude: url.isFileURL ? .diskAccess : .networkAccess
+		)
 	}
 
 	public static func == (lhs: UrlAvAssetProvider, rhs: UrlAvAssetProvider) -> Bool {

@@ -27,10 +27,13 @@ public class ValueResourceProvider<Resource: Hashable>: ResourceProvider {
 		valueIdentifier = identifier
 	}
 
-	public func resource() -> AnyPublisher<Resource, Error> {
-		return Just(value)
-			.setFailureType(to: Error.self)
-			.eraseToAnyPublisher()
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<Resource, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
+		return (
+			resource: Just(value)
+				.setFailureType(to: Error.self)
+				.eraseToAnyPublisher(),
+			awaitTimeMagnitude: AwaitTimeMagnitude.none
+		)
 	}
 
 	public static func == (lhs: ValueResourceProvider<Resource>, rhs: ValueResourceProvider<Resource>) -> Bool {

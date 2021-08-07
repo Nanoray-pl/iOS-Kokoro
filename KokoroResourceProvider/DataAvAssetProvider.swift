@@ -12,24 +12,26 @@ import KokoroUtils
 public class DataAvAssetProviderFactory: ResourceProviderFactory {
 	public init() {}
 
-	public func create(for input: (data: Data, identifier: String)) -> AnyResourceProvider<AVAsset> {
-		return DataAvAssetProvider(data: input.data, identifier: input.identifier).eraseToAnyResourceProvider()
+	public func create(for input: (data: Data, identifier: String, fileExtension: String)) -> AnyResourceProvider<AVAsset> {
+		return DataAvAssetProvider(data: input.data, identifier: input.identifier, fileExtension: input.fileExtension).eraseToAnyResourceProvider()
 	}
 }
 
 public class DataAvAssetProvider: ResourceProvider {
 	private let data: Data
 	private let dataIdentifier: String
-	private let lock = ObjcLock()
+	private let fileExtension: String
+	private let queue = DispatchQueue(label: "pl.nanoray.KokoroResourceProvider.DataAvAssetProvider.queue.\(UUID())", attributes: .concurrent)
 	private var fileUrl: URL?
 
 	public var identifier: String {
 		return "DataAvAssetProvider[identifier: \(dataIdentifier)]"
 	}
 
-	public init(data: Data, identifier: String) {
+	public init(data: Data, identifier: String, fileExtension: String) {
 		self.data = data
 		dataIdentifier = identifier
+		self.fileExtension = fileExtension
 	}
 
 	deinit {
@@ -38,14 +40,14 @@ public class DataAvAssetProvider: ResourceProvider {
 		}
 	}
 
-	public func resource() -> AnyPublisher<AVAsset, Error> {
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<AVAsset, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
 		var instance: DataAvAssetProvider! = self
-		return Deferred {
-			return Future { promise in
-				instance.lock.acquireAndRun {
+		return (
+			resource: Future.deferred { promise in
+				instance.queue.sync {
 					if instance.fileUrl == nil {
 						do {
-							let url = FileManager.default.temporaryDirectory.appendingPathComponent("asset-\(UUID().uuidString)")
+							let url = FileManager.default.temporaryDirectory.appendingPathComponent("asset-\(UUID().uuidString).\(instance.fileExtension)")
 							try instance.data.write(to: url)
 							instance.fileUrl = url
 						} catch {
@@ -60,8 +62,9 @@ public class DataAvAssetProvider: ResourceProvider {
 					promise(.success(AVAsset(url: fileUrl)))
 				}
 			}
-		}
-		.eraseToAnyPublisher()
+			.eraseToAnyPublisher(),
+			awaitTimeMagnitude: .diskAccess
+		)
 	}
 
 	public static func == (lhs: DataAvAssetProvider, rhs: DataAvAssetProvider) -> Bool {

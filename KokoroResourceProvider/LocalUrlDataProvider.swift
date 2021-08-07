@@ -30,9 +30,10 @@ public class LocalUrlDataProvider: ResourceProvider {
 		self.url = url
 	}
 
-	public func resource() -> AnyPublisher<Data, Swift.Error> {
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<Data, Swift.Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
+		let publisher: AnyPublisher<Data, Swift.Error>
 		if url.isFileURL {
-			return Deferred { [url] () -> AnyPublisher<Data, Swift.Error> in
+			publisher = Deferred { [url] () -> AnyPublisher<Data, Swift.Error> in
 				do {
 					return Just(try Data(contentsOf: url))
 						.setFailureType(to: Swift.Error.self)
@@ -44,9 +45,13 @@ public class LocalUrlDataProvider: ResourceProvider {
 			}
 			.eraseToAnyPublisher()
 		} else {
-			return Fail(error: Error.notLocal)
+			publisher = Fail(error: Error.notLocal)
 				.eraseToAnyPublisher()
 		}
+		return (
+			resource: publisher,
+			awaitTimeMagnitude: .diskAccess
+		)
 	}
 
 	public static func == (lhs: LocalUrlDataProvider, rhs: LocalUrlDataProvider) -> Bool {

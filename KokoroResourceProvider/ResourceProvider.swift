@@ -11,13 +11,20 @@ public protocol ResourceProvider: AnyObject, Hashable {
 
 	var identifier: String { get }
 
+	func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<Resource, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?)
 	func resource() -> AnyPublisher<Resource, Error>
+}
+
+public extension ResourceProvider {
+	func resource() -> AnyPublisher<Resource, Error> {
+		return resourceAndAwaitTimeMagnitude().resource
+	}
 }
 
 public final class AnyResourceProvider<Resource>: ResourceProvider {
 	private let hashable: AnyHashable
 	private let identifierClosure: () -> String
-	private let publisherClosure: () -> AnyPublisher<Resource, Error>
+	private let publisherClosure: () -> (resource: AnyPublisher<Resource, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?)
 
 	public var identifier: String {
 		return identifierClosure()
@@ -26,10 +33,10 @@ public final class AnyResourceProvider<Resource>: ResourceProvider {
 	public init<T: ResourceProvider>(wrapping wrapped: T) where T.Resource == Resource {
 		hashable = AnyHashable(wrapped)
 		identifierClosure = { [unowned wrapped] in wrapped.identifier }
-		publisherClosure = { [unowned wrapped] in wrapped.resource() }
+		publisherClosure = { [unowned wrapped] in wrapped.resourceAndAwaitTimeMagnitude() }
 	}
 
-	public func resource() -> AnyPublisher<Resource, Error> {
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<Resource, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
 		return publisherClosure()
 	}
 
