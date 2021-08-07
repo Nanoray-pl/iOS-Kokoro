@@ -16,7 +16,7 @@ class InMemoryCacheTests: XCTestCase {
 		let cache = InMemoryCache<Int, Data> { $0.count }
 		cache.options = .init(validity: .forever, entryCountLimit: 2)
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: $0) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -51,7 +51,7 @@ class InMemoryCacheTests: XCTestCase {
 		let cache = InMemoryCache<Int, Data> { $0.count }
 		cache.options = .init(validity: .forever, totalSizeLimit: 3)
 
-		let data = (0...3).map { emptyData(withLength: $0) }
+		let data = (0 ... 3).map { emptyData(withLength: $0) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: $0) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -81,7 +81,7 @@ class InMemoryCacheTests: XCTestCase {
 		let cache = InMemoryCache<Int, Data>(scheduler: mockScheduler) { $0.count }
 		cache.options = .init(validity: .afterStorage(0.04))
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: $0) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -120,7 +120,7 @@ class InMemoryCacheTests: XCTestCase {
 		let cache = InMemoryCache<Int, Data>(scheduler: mockScheduler) { $0.count }
 		cache.options = .init(validity: .afterAccess(0.04))
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: $0) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 

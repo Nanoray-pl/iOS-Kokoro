@@ -10,8 +10,8 @@ import KokoroResourceProvider
 import KokoroUtils
 
 public extension ResourceProviderFactory {
-	func caching(in cache: AnyCache<AnyResourceProvider<Resource>, Resource>, identifier: String) -> CacheResourceProviderFactory<Self> {
-		return CacheResourceProviderFactory(wrapping: self, identifier: identifier, cache: cache)
+	func caching<CacheType>(in cache: CacheType, awaitTimeMagnitude: AwaitTimeMagnitude, identifier: String) -> CacheResourceProviderFactory<Self> where CacheType: Cache, CacheType.Key == AnyResourceProvider<Resource>, CacheType.Value == Resource {
+		return CacheResourceProviderFactory(wrapping: self, awaitTimeMagnitude: awaitTimeMagnitude, identifier: identifier, cache: cache)
 	}
 }
 
@@ -20,22 +20,25 @@ public class CacheResourceProviderFactory<Factory: ResourceProviderFactory>: Res
 	public typealias Resource = Factory.Resource
 
 	private let wrapped: Factory
+	private let awaitTimeMagnitude: AwaitTimeMagnitude
 	private let identifier: String
 	private let cache: AnyCache<AnyResourceProvider<Resource>, Resource>
 
-	public init(wrapping wrapped: Factory, identifier: String, cache: AnyCache<AnyResourceProvider<Resource>, Resource>) {
+	public init<CacheType>(wrapping wrapped: Factory, awaitTimeMagnitude: AwaitTimeMagnitude, identifier: String, cache: CacheType) where CacheType: Cache, CacheType.Key == AnyResourceProvider<Resource>, CacheType.Value == Resource {
 		self.wrapped = wrapped
+		self.awaitTimeMagnitude = awaitTimeMagnitude
 		self.identifier = identifier
-		self.cache = cache
+		self.cache = cache.eraseToAnyCache()
 	}
 
 	public func create(for input: Input) -> AnyResourceProvider<Resource> {
-		return CacheResourceProvider<Input, Resource>(wrapping: wrapped.create(for: input), identifier: identifier, cache: cache).eraseToAnyResourceProvider()
+		return CacheResourceProvider<Input, Resource>(wrapping: wrapped.create(for: input), awaitTimeMagnitude: awaitTimeMagnitude, identifier: identifier, cache: cache).eraseToAnyResourceProvider()
 	}
 }
 
 public class CacheResourceProvider<Input, Resource>: ResourceProvider {
 	private let wrapped: AnyResourceProvider<Resource>
+	private let awaitTimeMagnitude: AwaitTimeMagnitude
 	private let cacheIdentifier: String
 	private let cache: AnyCache<AnyResourceProvider<Resource>, Resource>
 
@@ -43,25 +46,30 @@ public class CacheResourceProvider<Input, Resource>: ResourceProvider {
 		return "CacheResourceProvider[identifier: \(cacheIdentifier), value: \(wrapped.identifier)]"
 	}
 
-	public init<Wrapped>(wrapping wrapped: Wrapped, identifier: String, cache: AnyCache<AnyResourceProvider<Resource>, Resource>) where Wrapped: ResourceProvider, Wrapped.Resource == Resource {
+	public init<Wrapped>(wrapping wrapped: Wrapped, awaitTimeMagnitude: AwaitTimeMagnitude, identifier: String, cache: AnyCache<AnyResourceProvider<Resource>, Resource>) where Wrapped: ResourceProvider, Wrapped.Resource == Resource {
 		self.wrapped = wrapped.eraseToAnyResourceProvider()
+		self.awaitTimeMagnitude = awaitTimeMagnitude
 		cacheIdentifier = identifier
 		self.cache = cache
 	}
 
-	public func resource() -> AnyPublisher<Resource, Error> {
-		return Deferred { [cache, wrapped] () -> AnyPublisher<Resource, Error> in
-			if let cached = cache.value(for: wrapped) {
-				return Just(cached)
+	public func resourceAndAwaitTimeMagnitude() -> (resource: AnyPublisher<Resource, Error>, awaitTimeMagnitude: AwaitTimeMagnitude?) {
+		if let cached = cache.value(for: wrapped) {
+			return (
+				resource: Just(cached)
 					.setFailureType(to: Error.self)
-					.eraseToAnyPublisher()
-			} else {
-				return wrapped.resource()
-					.onOutput { cache.store($0, for: wrapped) }
-					.eraseToAnyPublisher()
-			}
+					.eraseToAnyPublisher(),
+				awaitTimeMagnitude: awaitTimeMagnitude
+			)
+		} else {
+			let wrappedResult = self.wrapped.resourceAndAwaitTimeMagnitude()
+			return (
+				resource: wrappedResult.resource
+					.onOutput { [cache, wrapped] in cache.store($0, for: wrapped) }
+					.eraseToAnyPublisher(),
+				awaitTimeMagnitude: wrappedResult.awaitTimeMagnitude
+			)
 		}
-		.eraseToAnyPublisher()
 	}
 
 	public static func == (lhs: CacheResourceProvider<Input, Resource>, rhs: CacheResourceProvider<Input, Resource>) -> Bool {

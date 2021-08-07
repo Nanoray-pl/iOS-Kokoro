@@ -31,7 +31,7 @@ class OnDiskCacheTests: XCTestCase {
 		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer())
 		cache.options = .init(validity: .forever, serializeErrorBehavior: .noValue)
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: .init(integerLiteral: $0)) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -70,7 +70,7 @@ class OnDiskCacheTests: XCTestCase {
 		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer())
 		cache.options = .init(validity: .forever, entryCountLimit: 2, serializeErrorBehavior: .noValue)
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: .init(integerLiteral: $0)) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -117,7 +117,7 @@ class OnDiskCacheTests: XCTestCase {
 		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer())
 		cache.options = .init(validity: .forever, totalSizeLimit: 3, serializeErrorBehavior: .noValue)
 
-		let data = (0...3).map { emptyData(withLength: $0) }
+		let data = (0 ... 3).map { emptyData(withLength: $0) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: .init(integerLiteral: $0)) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -157,7 +157,7 @@ class OnDiskCacheTests: XCTestCase {
 		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer(), scheduler: mockScheduler)
 		cache.options = .init(validity: .afterStorage(0.075), serializeErrorBehavior: .noValue)
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: .init(integerLiteral: $0)) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
@@ -209,7 +209,7 @@ class OnDiskCacheTests: XCTestCase {
 		let cache = OnDiskCache<IntKey, OnDiskSerializableSerializer<Data>>(cacheDirectoryUrl: cacheDirectoryUrl, fileManager: fileManager, serializer: OnDiskSerializableSerializer(), scheduler: mockScheduler)
 		cache.options = .init(validity: .afterAccess(0.075), serializeErrorBehavior: .noValue)
 
-		let data = (0...2).map { emptyData(withLength: $0 * 8) }
+		let data = (0 ... 2).map { emptyData(withLength: $0 * 8) }
 		let cacheValues: () -> [Data?] = { data.indices.map { cache.value(for: .init(integerLiteral: $0)) } }
 		let expectedValues: (_ indexes: [Int]) -> [Data?] = { indexes in data.indices.map { indexes.contains($0) ? data[$0] : nil } }
 
