@@ -9,6 +9,8 @@ import KokoroResourceProvider
 import UIKit
 
 public class SynchronousImageLoader: AsynchronousImageLoader {
+	public init() {}
+
 	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage? {
 		switch provider?.resource().catch(errorHandler).syncResult() {
 		case let .success(image):
