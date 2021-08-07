@@ -21,7 +21,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 	private let predicate: AnyPredicateBuilder<CoreDataType>
 	private let pageSize: Int
 	private let expectedTotalCountUpdateBehavior: CoreDataListDataSourceExpectedTotalCountUpdateBehavior
-	private let mapper: (CoreDataType) -> LightweightType
+	private let mapper: (CoreDataType) throws -> LightweightType
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
 		isValid: { $0.weakReference != nil },
@@ -58,7 +58,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 		predicate: AnyPredicateBuilder<CoreDataType> = BoolPredicateBuilder.true.eraseToAnyPredicateBuilder(),
 		pageSize: Int = 50,
 		expectedTotalCountUpdateBehavior: CoreDataListDataSourceExpectedTotalCountUpdateBehavior = .always,
-		mapper: @escaping (CoreDataType) -> LightweightType
+		mapper: @escaping (CoreDataType) throws -> LightweightType
 	) {
 		self.stack = stack
 		self.predicate = predicate
@@ -128,7 +128,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 							self.expectedTotalCount = try context.count(for: request)
 						}
 						let elements = try context.fetch(request)
-						self.pages.append((elements: elements.map(mapper), isLast: elements.count < pageSize))
+						self.pages.append((elements: try elements.map(mapper), isLast: elements.count < pageSize))
 					} catch {
 						self.error = error
 					}
