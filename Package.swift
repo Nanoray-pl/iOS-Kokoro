@@ -18,6 +18,7 @@ let package = Package(
 		.library(name: "KokoroValueStore", targets: ["KokoroValueStore"]),
 		.library(name: "KokoroCacheResourceProvider", targets: ["KokoroCacheResourceProvider"]),
 		.library(name: "KokoroUIResourceProvider", targets: ["KokoroUIResourceProvider"]),
+		.library(name: "KokoroCoreDataFetchable", targets: ["KokoroCoreDataFetchable"]),
 	],
 	targets: [
 		.target(
