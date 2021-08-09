@@ -29,16 +29,15 @@ public final class WeakFetchableListDataSourceObserver<Element>: FetchableListDa
 	}
 }
 
-public protocol FetchableListDataSource: AnyObject, RandomAccessCollection where Index == Int {
-	associatedtype Element
-
-	var identifier: ObjectIdentifier { get }
+public protocol FetchableListDataSourceState: RandomAccessCollection where Index == Int {
 	var elements: [Element] { get }
 	var expectedTotalCount: Int? { get }
 	var error: Error? { get }
 	var isFetching: Bool { get }
 	var isAfterInitialFetch: Bool { get }
+}
 
+public protocol FetchableListDataSource: AnyObject, FetchableListDataSourceState {
 	func reset()
 
 	@discardableResult

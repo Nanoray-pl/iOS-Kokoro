@@ -1157,10 +1157,10 @@
 			children = (
 				AAD3556D2528A8A6007C63EF /* Bootstrap */,
 				AAD355802528A919007C63EF /* ListDataSource */,
+				AA974CDA26AD5B8F005D6ADE /* GroupedListDataSource */,
 				AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */,
 				AAD355812528A92E007C63EF /* DataSourceFetchState.swift */,
 				AA974CD826AD5B6A005D6ADE /* ErrorMatchingStrategy.swift */,
-				AA974CDA26AD5B8F005D6ADE /* GroupedListDataSource */,
 			);
 			path = KokoroFetchable;
 			sourceTree = "<group>";

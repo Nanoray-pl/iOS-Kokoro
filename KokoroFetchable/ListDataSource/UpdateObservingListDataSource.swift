@@ -3,13 +3,27 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
+import Combine
 import KokoroUtils
 
 public class UpdateObservingListDataSource<Wrapped: FetchableListDataSource>: FetchableListDataSource {
+	public class Update {
+		public weak var context: UpdateObservingListDataSource<Wrapped>?
+		public let state: SnapshotListDataSource<Element>
+
+		public init(context: UpdateObservingListDataSource<Wrapped>, state: SnapshotListDataSource<Element>) {
+			self.context = context
+			self.state = state
+		}
+	}
+
 	public typealias Element = Wrapped.Element
 
+	private lazy var subject = CurrentValueSubject<Update, Never>(.init(context: self, state: currentSnapshot()))
+	public private(set) lazy var publisher = subject.eraseToAnyPublisher()
+
 	private let wrapped: Wrapped
-	private let closure: (_ dataSource: AnyFetchableListDataSource<Element>) -> Void
+	private let closure: ((_ dataSource: AnyFetchableListDataSource<Element>) -> Void)?
 	private lazy var observer = WrappedObserver(parent: self)
 
 	private let observers = BoxedObserverSet<WeakFetchableListDataSourceObserver<Element>, ObjectIdentifier>(
@@ -49,14 +63,16 @@ public class UpdateObservingListDataSource<Wrapped: FetchableListDataSource>: Fe
 		return wrapped[index]
 	}
 
-	public init(wrapping wrapped: Wrapped, closure: @escaping (_ dataSource: AnyFetchableListDataSource<Element>) -> Void) {
+	public init(wrapping wrapped: Wrapped, closure: ((_ dataSource: AnyFetchableListDataSource<Element>) -> Void)? = nil) {
 		self.wrapped = wrapped
 		self.closure = closure
 		wrapped.addObserver(observer)
+		_ = subject
 	}
 
 	deinit {
 		wrapped.removeObserver(observer)
+		subject.send(completion: .finished)
 	}
 
 	public func reset() {
@@ -76,6 +92,10 @@ public class UpdateObservingListDataSource<Wrapped: FetchableListDataSource>: Fe
 		observers.remove(withIdentity: ObjectIdentifier(observer))
 	}
 
+	private func currentSnapshot() -> SnapshotListDataSource<Element> {
+		return snapshot(configuration: .init(isFetching: .snapshot, isAfterInitialFetch: .snapshot, expectedTotalCount: .snapshot))
+	}
+
 	private class WrappedObserver: FetchableListDataSourceObserver {
 		private weak var parent: UpdateObservingListDataSource<Wrapped>?
 
@@ -86,14 +106,15 @@ public class UpdateObservingListDataSource<Wrapped: FetchableListDataSource>: Fe
 		func didUpdateData(of dataSource: AnyFetchableListDataSource<Element>) {
 			guard let parent = parent else { return }
 			let erasedParent = parent.eraseToAnyFetchableListDataSource()
-			parent.closure(erasedParent)
+			parent.closure?(erasedParent)
+			parent.subject.send(.init(context: parent, state: parent.currentSnapshot()))
 			parent.observers.forEach { $0.didUpdateData(of: erasedParent) }
 		}
 	}
 }
 
 public extension FetchableListDataSource {
-	func observingUpdates(via closure: @escaping (_ dataSource: AnyFetchableListDataSource<Element>) -> Void) -> UpdateObservingListDataSource<Self> {
+	func observingUpdates(via closure: ((_ dataSource: AnyFetchableListDataSource<Element>) -> Void)? = nil) -> UpdateObservingListDataSource<Self> {
 		return UpdateObservingListDataSource(wrapping: self, closure: closure)
 	}
 }
