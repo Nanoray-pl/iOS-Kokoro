@@ -17,7 +17,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 	public typealias Page = (elements: [Element], isLast: Bool)
 	public typealias Element = LightweightType
 
-	private let stack: CoreDataStack
+	private let contextProvider: CoreDataContextProvider
 	private let predicate: AnyPredicateBuilder<CoreDataType>
 	private let pageSize: Int
 	private let expectedTotalCountUpdateBehavior: CoreDataListDataSourceExpectedTotalCountUpdateBehavior
@@ -54,13 +54,13 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 	}
 
 	public init(
-		stack: CoreDataStack,
+		contextProvider: CoreDataContextProvider,
 		predicate: AnyPredicateBuilder<CoreDataType> = BoolPredicateBuilder.true.eraseToAnyPredicateBuilder(),
 		pageSize: Int = 50,
 		expectedTotalCountUpdateBehavior: CoreDataListDataSourceExpectedTotalCountUpdateBehavior = .always,
 		mapper: @escaping (CoreDataType) throws -> LightweightType
 	) {
-		self.stack = stack
+		self.contextProvider = contextProvider
 		self.predicate = predicate
 		self.pageSize = pageSize
 		self.expectedTotalCountUpdateBehavior = expectedTotalCountUpdateBehavior
@@ -109,7 +109,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 			updateElements()
 
 			let request = FetchRequest<CoreDataType>(predicate: predicate, limit: pageSize, offset: index * pageSize)
-			stack.backgroundContext.perform { [weak self, lock, expectedTotalCountUpdateBehavior, mapper, pageSize] context in
+			contextProvider.backgroundContext.perform { [weak self, lock, expectedTotalCountUpdateBehavior, mapper, pageSize] context in
 				lock.acquireAndRun {
 					guard let self = self else { return }
 					guard fetchingId == self.fetchingId else { return }
