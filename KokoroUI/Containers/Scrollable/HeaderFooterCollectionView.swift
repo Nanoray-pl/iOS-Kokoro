@@ -135,9 +135,9 @@ public class HeaderFooterCollectionView: UICollectionView {
 	private func didChangeContentSize() {
 		let intrinsicContentSize = self.intrinsicContentSize
 		if bounds.size != intrinsicContentSize && intrinsicContentSize.width >= 0 && intrinsicContentSize.height >= 0 {
-			updateFooterConstraint()
 			invalidateIntrinsicContentSize()
 		}
+		updateFooterConstraint()
 	}
 
 	private func updateTopInset() {

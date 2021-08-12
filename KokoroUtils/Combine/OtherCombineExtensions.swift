@@ -13,6 +13,20 @@ public extension Future {
 	}
 }
 
+public extension Future where Failure == Error {
+	static func `try`(_ attemptToFulfill: @escaping () throws -> Output) -> Deferred<Future<Output, Error>> {
+		return Deferred {
+			Future {
+				do {
+					$0(.success(try attemptToFulfill()))
+				} catch {
+					$0(.failure(error))
+				}
+			}
+		}
+	}
+}
+
 public extension Publisher {
 	func delayStart<S: Combine.Scheduler>(for interval: S.SchedulerTimeType.Stride, tolerance: S.SchedulerTimeType.Stride? = nil, scheduler: S, options: S.SchedulerOptions? = nil) -> AnyPublisher<Output, Failure> {
 		var instance: Self! = self
