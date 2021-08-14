@@ -19,6 +19,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 
 	private let contextProvider: CoreDataContextProvider
 	private let predicate: AnyPredicateBuilder<CoreDataType>
+	private let sortDescriptors: [FetchRequest<CoreDataType>.SortDescriptor]
 	private let pageSize: Int
 	private let expectedTotalCountUpdateBehavior: CoreDataListDataSourceExpectedTotalCountUpdateBehavior
 	private let mapper: (CoreDataType) throws -> LightweightType
@@ -56,11 +57,13 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 	public init(
 		contextProvider: CoreDataContextProvider,
 		predicate: AnyPredicateBuilder<CoreDataType> = BoolPredicateBuilder.true.eraseToAnyPredicateBuilder(),
+		sortDescriptors: [FetchRequest<CoreDataType>.SortDescriptor] = [],
 		pageSize: Int = 50,
 		expectedTotalCountUpdateBehavior: CoreDataListDataSourceExpectedTotalCountUpdateBehavior = .always,
 		mapper: @escaping (CoreDataType) throws -> LightweightType
 	) {
 		self.contextProvider = contextProvider
+		self.sortDescriptors = sortDescriptors
 		self.predicate = predicate
 		self.pageSize = pageSize
 		self.expectedTotalCountUpdateBehavior = expectedTotalCountUpdateBehavior
@@ -108,7 +111,7 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 			self.fetchingId = fetchingId
 			updateElements()
 
-			let request = FetchRequest<CoreDataType>(predicate: predicate, limit: pageSize, offset: index * pageSize)
+			let request = FetchRequest<CoreDataType>(predicate: predicate, sortDescriptors: sortDescriptors, limit: pageSize, offset: index * pageSize)
 			contextProvider.backgroundContext.perform { [weak self, lock, expectedTotalCountUpdateBehavior, mapper, pageSize] context in
 				lock.acquireAndRun {
 					guard let self = self else { return }
