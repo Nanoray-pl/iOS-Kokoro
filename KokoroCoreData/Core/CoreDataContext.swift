@@ -26,6 +26,17 @@ public class CoreDataContext {
 		return result
 	}
 
+	/// Synchronously performs a given block on the context’s queue. The `context: CoreDataPerformingContext` passed in the closure wraps a Core Data context as an `unowned` reference, so you should make sure the reference will still be valid by the time the closure is executed.
+	@discardableResult
+	public func performAndWait<T>(_ block: (_ context: CoreDataPerformingContext) throws -> T) throws -> T {
+		var result: Result<T, Error>!
+		let context = CoreDataPerformingContext(wrapping: wrapped)
+		wrapped.performAndWait {
+			result = Result { try block(context) }
+		}
+		return try result.get()
+	}
+
 	/// Asynchronously performs a given block on the context’s queue. The `context: CoreDataPerformingContext` passed in the closure wraps a Core Data context as an `unowned` reference, so you should make sure the reference will still be valid by the time the closure is executed.
 	public func perform(_ block: @escaping (_ context: CoreDataPerformingContext) -> Void) {
 		let context = CoreDataPerformingContext(wrapping: wrapped)
