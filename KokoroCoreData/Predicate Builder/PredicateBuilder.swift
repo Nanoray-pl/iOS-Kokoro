@@ -5,6 +5,7 @@
 
 #if canImport(CoreData)
 import CoreData
+import KokoroUtils
 
 public protocol ManagedObject: AnyObject {
 	static var entityName: String { get }
@@ -100,16 +101,28 @@ extension NSManagedObjectID: CVarArgConvertible {
 }
 
 public struct FetchRequest<ResultType: NSManagedObject & ManagedObject> {
+	public struct SortDescriptor {
+		public let keyPathString: String
+		public let order: SortOrder
+
+		public init<T>(keyPath: KeyPath<ResultType, T>, order: SortOrder) {
+			keyPathString = NSExpression(forKeyPath: keyPath).keyPath
+			self.order = order
+		}
+	}
+
 	public var predicate: AnyPredicateBuilder<ResultType>
+	public var sortDescriptors: [SortDescriptor]
 	public var limit: Int?
 	public var offset: Int
 
-	public init(limit: Int? = nil, offset: Int = 0) {
-		self.init(predicate: BoolPredicateBuilder<ResultType>.true, limit: limit, offset: offset)
+	public init(sortDescriptors: [SortDescriptor] = [], limit: Int? = nil, offset: Int = 0) {
+		self.init(predicate: BoolPredicateBuilder<ResultType>.true, sortDescriptors: sortDescriptors, limit: limit, offset: offset)
 	}
 
-	public init<P>(predicate: P, limit: Int? = nil, offset: Int = 0) where P: PredicateBuilder, P.ResultType == ResultType {
+	public init<P>(predicate: P, sortDescriptors: [SortDescriptor] = [], limit: Int? = nil, offset: Int = 0) where P: PredicateBuilder, P.ResultType == ResultType {
 		self.predicate = predicate.eraseToAnyPredicateBuilder()
+		self.sortDescriptors = sortDescriptors
 		self.limit = limit
 		self.offset = offset
 	}
@@ -121,6 +134,7 @@ public struct FetchRequest<ResultType: NSManagedObject & ManagedObject> {
 	public func asNSFetchRequest() -> NSFetchRequest<ResultType> {
 		let request = NSFetchRequest<ResultType>(entityName: ResultType.entityName)
 		request.predicate = predicate.build()
+		request.sortDescriptors = sortDescriptors.map { NSSortDescriptor(key: $0.keyPathString, ascending: $0.order == .ascending) }.nonEmpty
 		if let limit = limit {
 			request.fetchLimit = limit
 		}

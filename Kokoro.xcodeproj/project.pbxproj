@@ -254,6 +254,13 @@
 			remoteGlobalIDString = AAD354B025287210007C63EF;
 			remoteInfo = KokoroUI;
 		};
+		AA469EC026C83C600061B6C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
+		};
 		AA5AEBE52555801000516C8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -1770,6 +1777,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				AA469EC126C83C600061B6C5 /* PBXTargetDependency */,
 			);
 			name = KokoroCoreData;
 			productName = KokoroCoreData;
@@ -2639,6 +2647,11 @@
 			isa = PBXTargetDependency;
 			target = AAD354B025287210007C63EF /* KokoroUI */;
 			targetProxy = AA42D3EC256A7833004604D2 /* PBXContainerItemProxy */;
+		};
+		AA469EC126C83C600061B6C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AA469EC026C83C600061B6C5 /* PBXContainerItemProxy */;
 		};
 		AA5AEBE62555801000516C8D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

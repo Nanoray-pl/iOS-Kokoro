@@ -61,6 +61,7 @@ let package = Package(
 		),
 		.target(
 			name: "KokoroCoreData",
+			dependencies: ["KokoroUtils"],
 			path: "KokoroCoreData",
 			exclude: ["Bootstrap/Info.plist"]
 		),
