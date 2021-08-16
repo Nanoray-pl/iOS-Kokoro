@@ -30,6 +30,13 @@ class CardDeckViewController: UIViewController {
 		}
 	}
 
+	private var cardDeckViewConstraints = [NSLayoutConstraint]() {
+		didSet {
+			oldValue.deactivate()
+			cardDeckViewConstraints.activate()
+		}
+	}
+
 	init() {
 		super.init(nibName: nil, bundle: nil)
 		items = [newItem(index: 0), newItem(index: 1), newItem(index: 2), newItem(index: 3)]
@@ -55,6 +62,7 @@ class CardDeckViewController: UIViewController {
 			UILabel().with { [parent = $0] in
 				$0.textColor = .label
 				$0.text = "Orientation"
+				$0.setContentHuggingPriority(.required, for: .vertical)
 
 				parent.addArrangedSubview($0)
 				parent.setCustomSpacing(4, after: $0)
@@ -63,12 +71,14 @@ class CardDeckViewController: UIViewController {
 			orientationSegmentedControl = UISegmentedControl(items: ["L⇨R", "R⇨L", "T⇨B", "B⇨T"]).with { [parent = $0] in
 				$0.addTarget(self, action: #selector(didChangeOrientationSegmentedControlValue(_:)), for: .valueChanged)
 				$0.selectedSegmentIndex = 0
+				$0.setContentHuggingPriority(.required, for: .vertical)
 				parent.addArrangedSubview($0)
 			}
 
 			UILabel().with { [parent = $0] in
 				$0.textColor = .label
 				$0.text = "Split Card Group Position"
+				$0.setContentHuggingPriority(.required, for: .vertical)
 
 				parent.addArrangedSubview($0)
 				parent.setCustomSpacing(4, after: $0)
@@ -77,12 +87,14 @@ class CardDeckViewController: UIViewController {
 			splitCardGroupPositionSegmentedControl = UISegmentedControl(items: ["Near", "Far"]).with { [parent = $0] in
 				$0.addTarget(self, action: #selector(didChangeSplitCardGroupPositionSegmentedControlValue(_:)), for: .valueChanged)
 				$0.selectedSegmentIndex = 0
+				$0.setContentHuggingPriority(.required, for: .vertical)
 				parent.addArrangedSubview($0)
 			}
 
 			splitSpacingLabel = UILabel().with { [parent = $0] in
 				$0.textColor = .label
 				$0.text = "Split Spacing"
+				$0.setContentHuggingPriority(.required, for: .vertical)
 
 				parent.addArrangedSubview($0)
 				parent.setCustomSpacing(4, after: $0)
@@ -92,12 +104,14 @@ class CardDeckViewController: UIViewController {
 				$0.minimumValue = 0
 				$0.maximumValue = 40
 				$0.addTarget(self, action: #selector(didChangeSplitSpacingSliderValue(_:)), for: .valueChanged)
+				$0.setContentHuggingPriority(.required, for: .vertical)
 				parent.addArrangedSubview($0)
 			}
 
 			maxGroupedSpacingLabel = UILabel().with { [parent = $0] in
 				$0.textColor = .label
 				$0.text = "Max Grouped Spacing"
+				$0.setContentHuggingPriority(.required, for: .vertical)
 
 				parent.addArrangedSubview($0)
 				parent.setCustomSpacing(4, after: $0)
@@ -116,6 +130,7 @@ class CardDeckViewController: UIViewController {
 					$0.minimumValue = 0
 					$0.maximumValue = 40
 					$0.addTarget(self, action: #selector(didChangeMaxGroupedSpacingSliderValue(_:)), for: .valueChanged)
+					$0.setContentHuggingPriority(.required, for: .vertical)
 					parent.addArrangedSubview($0)
 				}
 
@@ -129,6 +144,7 @@ class CardDeckViewController: UIViewController {
 
 				itemCountLabel = UILabel().with { [parent = $0] in
 					$0.textColor = .label
+					$0.setContentHuggingPriority(.required, for: .vertical)
 					parent.addArrangedSubview($0)
 				}
 
@@ -149,16 +165,18 @@ class CardDeckViewController: UIViewController {
 		}
 
 		let cardDeckViewContainer = UIView().with { [parent = view!] in
+			$0.backgroundColor = .secondarySystemBackground
 			$0.setContentHuggingPriority(.defaultLow, for: .vertical)
+			$0.setContentCompressionResistancePriority(.required, for: .vertical)
 
 			cardDeckView = CardDeckView().with { [parent = $0] in
-				$0.contentInsets = .init(top: 0, left: 20, bottom: 20, right: 20)
+				$0.backgroundColor = .tertiarySystemBackground
+				$0.contentInsets = .init(insets: 20)
+				$0.setContentHuggingPriority(.defaultLow, for: .vertical)
+				$0.setContentCompressionResistancePriority(.required, for: .vertical)
 
 				parent.addSubview($0)
-				constraints += [
-					$0.centerInSuperview(),
-					$0.edgesToSuperview().priority(.defaultHigh),
-				]
+				constraints += $0.centerInSuperview()
 			}
 
 			parent.addSubview($0)
@@ -174,6 +192,7 @@ class CardDeckViewController: UIViewController {
 		updateSplitSpacingUI()
 		updateMaxGroupedSpacingUI()
 		updateItemCountUI()
+		updateCardDeckViewConstraints()
 		items.forEach { cardDeckView.addArrangedSubview($0) }
 	}
 
@@ -190,6 +209,7 @@ class CardDeckViewController: UIViewController {
 		default:
 			fatalError("Unhandled")
 		}
+		updateCardDeckViewConstraints()
 	}
 
 	@objc private func didChangeSplitCardGroupPositionSegmentedControlValue(_ sender: UISegmentedControl) {
@@ -237,7 +257,6 @@ class CardDeckViewController: UIViewController {
 			UIButton(type: .system).with { [parent = $0] in
 				$0.backgroundColor = colors[index % colors.count]
 				$0.setTitle("B", for: .normal)
-				$0.addTarget(self, action: #selector(didTapCard), for: .touchUpInside)
 
 				parent.addSubview($0)
 				$0.edgesToSuperview().activate()
@@ -245,8 +264,13 @@ class CardDeckViewController: UIViewController {
 		}
 	}
 
-	@objc private func didTapCard() {
-		print("didTapCard")
+	private func updateCardDeckViewConstraints() {
+		switch cardDeckView.orientation {
+		case .leftToRight, .rightToLeft:
+			cardDeckViewConstraints = cardDeckView.horizontalEdgesToSuperview() + [cardDeckView.height(of: 180).priority(.defaultHigh)]
+		case .topToBottom, .bottomToTop:
+			cardDeckViewConstraints = cardDeckView.verticalEdgesToSuperview() + [cardDeckView.width(of: 140).priority(.defaultHigh)]
+		}
 	}
 
 	private func updateSplitSpacingUI() {

@@ -85,9 +85,9 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		}
 	}
 
-	public var itemSize = CGSize(width: 100, height: 140) {
+	public var itemRatio: CGFloat = 5.0 / 7.0 {
 		didSet {
-			if oldValue == itemSize { return }
+			if oldValue == itemRatio { return }
 			isDirty = true
 			DispatchQueue.main.async { self.updateLayoutIfNeeded() }
 		}
@@ -117,6 +117,13 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		}
 	}
 
+	private var itemSize: CGSize {
+		return orientational(
+			vertical: .init(width: frame.width - contentInsets.horizontal, height: (frame.width - contentInsets.horizontal) / itemRatio),
+			horizontal: .init(width: (frame.height - contentInsets.vertical) * itemRatio, height: frame.height - contentInsets.vertical)
+		)
+	}
+
 	public var scrollingLocksOntoItems = true
 
 	private var scrollView: UIScrollView!
@@ -127,13 +134,6 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 	private var entryViews = [EntryView]()
 	private var scrollIndex = 0
 	private var lastItemScrollLength: CGFloat = 0
-
-	private var lengthConstraint: NSLayoutConstraint? {
-		didSet {
-			oldValue?.deactivate()
-			lengthConstraint?.activate()
-		}
-	}
 
 	private var contentOffsetConstraint: NSLayoutConstraint? {
 		didSet {
@@ -236,16 +236,13 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		isDirty = false
 
 		cleanUpEntryViews(andUpdateLayout: false)
-		lengthConstraint = orientational(
-			vertical: width(of: itemSize.width + contentInsets.horizontal),
-			horizontal: height(of: itemSize.height + contentInsets.vertical)
-		)
 		updateLayoutConstraints()
 	}
 
 	private func updateLayoutConstraints() {
 		let visibleEntryViews = entryViews.filter { $0.contentView?.isHidden == false }
 		if visibleEntryViews.isEmpty { return }
+		let itemSize = self.itemSize
 		let itemLength = orientational(itemSize, vertical: \.height, horizontal: \.width)
 		let collectionViewLength = orientational(frame, vertical: \.height, horizontal: \.width)
 		let workingLength = collectionViewLength - orientational(contentInsets, vertical: \.vertical, horizontal: \.horizontal)
@@ -332,7 +329,7 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 					entryView.bottomToSuperview(inset: contentInsets.bottom),
 				]
 			)
-			constraints.append(contentsOf: entryView.size(of: itemSize))
+			constraints += entryView.ratio(size: .init(width: max(itemSize.width, 1), height: max(itemSize.height, 1)))
 
 			let position: CGFloat
 			if visibleEntryViews.count == 1 {
