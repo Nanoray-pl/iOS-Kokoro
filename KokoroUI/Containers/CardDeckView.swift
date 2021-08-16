@@ -315,17 +315,6 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		secondGroupStart = secondGroupEnd - newSecondGroupLength
 
 		visibleEntryViews.enumerated().forEach { index, entryView in
-			let itemIndexFraction = visibleEntryViews.count == 1 ? 0 : CGFloat(index) / CGFloat(visibleEntryViews.count - 1)
-			var firstPosition = firstGroupStart + (abs(firstGroupLength) - itemLength) * itemIndexFraction * directionMultiplier
-			var secondPosition = secondGroupStart + (abs(secondGroupLength) - itemLength) * itemIndexFraction * directionMultiplier
-			switch orientation {
-			case .rightToLeft, .bottomToTop:
-				firstPosition -= itemLength
-				secondPosition -= itemLength
-			case .leftToRight, .topToBottom:
-				break
-			}
-
 			var constraints: [NSLayoutConstraint] = orientational(
 				vertical: [
 					entryView.leftToSuperview(inset: contentInsets.left),
@@ -338,8 +327,30 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			)
 			constraints.append(contentsOf: entryView.size(of: itemSize))
 
-			let fraction = (mappedScrollPosition - CGFloat(visibleEntryViews.count - 1) + CGFloat(index)).clamped(to: 0 ... 1)
-			let position = firstPosition + (secondPosition - firstPosition) * fraction
+			let position: CGFloat
+			if visibleEntryViews.count == 1 {
+				switch orientation {
+				case .leftToRight, .topToBottom:
+					position = firstGroupStart
+				case .rightToLeft, .bottomToTop:
+					position = firstGroupStart - itemLength
+				}
+			} else {
+				let itemIndexFraction = visibleEntryViews.count == 1 ? 0 : CGFloat(index) / CGFloat(visibleEntryViews.count - 1)
+				var firstPosition = firstGroupStart + (abs(firstGroupLength) - itemLength) * itemIndexFraction * directionMultiplier
+				var secondPosition = secondGroupStart + (abs(secondGroupLength) - itemLength) * itemIndexFraction * directionMultiplier
+				switch orientation {
+				case .rightToLeft, .bottomToTop:
+					firstPosition -= itemLength
+					secondPosition -= itemLength
+				case .leftToRight, .topToBottom:
+					break
+				}
+
+				let fraction = (mappedScrollPosition - CGFloat(visibleEntryViews.count - 1) + CGFloat(index)).clamped(to: 0 ... 1)
+				position = firstPosition + (secondPosition - firstPosition) * fraction
+			}
+
 			switch orientation {
 			case .leftToRight, .rightToLeft:
 				constraints += entryView.leftToSuperview(inset: position.isNaN ? 0 : position)
