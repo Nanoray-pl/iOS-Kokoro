@@ -135,6 +135,13 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		}
 	}
 
+	private var contentOffsetConstraint: NSLayoutConstraint? {
+		didSet {
+			oldValue?.deactivate()
+			contentOffsetConstraint?.activate()
+		}
+	}
+
 	public init() {
 		super.init(frame: .zero)
 		buildUI()
@@ -154,16 +161,16 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			constraints += $0.edgesToSuperview()
 		}
 
-		contentView = UIView().with { [parent = self] in
-			parent.addSubview($0)
-			constraints += $0.edgesToSuperview()
-		}
-
 		scrollView = UIScrollView().with { [parent = self] in
 			$0.delegate = privateDelegate
 			$0.showsVerticalScrollIndicator = false
 			$0.showsHorizontalScrollIndicator = false
 			$0.decelerationRate = .fast
+
+			contentView = UIView().with { [parent = $0] in
+				parent.addSubview($0)
+				constraints += $0.size(to: parent)
+			}
 
 			parent.addSubview($0)
 			constraints += $0.edgesToSuperview()
@@ -374,6 +381,11 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		case .rightToLeft, .bottomToTop:
 			scrollView.contentInset = .zero
 		}
+
+		contentOffsetConstraint = orientational(
+			vertical: contentView.topToSuperview(inset: scrollView.contentOffset.y),
+			horizontal: contentView.leftToSuperview(inset: scrollView.contentOffset.x)
+		)
 	}
 
 	private func orientational<Value>(vertical: @autoclosure () -> Value, horizontal: @autoclosure () -> Value) -> Value {

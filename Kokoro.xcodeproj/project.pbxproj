@@ -102,7 +102,7 @@
 		AAD354F4252882AA007C63EF /* FrameObservingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354F3252882AA007C63EF /* FrameObservingView.swift */; };
 		AAD354FA25288577007C63EF /* MinMaxLengthConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354F925288577007C63EF /* MinMaxLengthConstraint.swift */; };
 		AAD354FE252887F0007C63EF /* Animated.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354FD252887F0007C63EF /* Animated.swift */; };
-		AAD3550225288947007C63EF /* ClickThroughCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */; };
+		AAD3550225288947007C63EF /* ClickThroughViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550125288947007C63EF /* ClickThroughViews.swift */; };
 		AAD3550625288985007C63EF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550525288985007C63EF /* Button.swift */; };
 		AAD3550B25288A0F007C63EF /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3550A25288A0F007C63EF /* GradientView.swift */; };
 		AAD3551125288BD4007C63EF /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD3551025288BD4007C63EF /* ProgressBar.swift */; };
@@ -499,7 +499,7 @@
 		AAD354F3252882AA007C63EF /* FrameObservingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameObservingView.swift; sourceTree = "<group>"; };
 		AAD354F925288577007C63EF /* MinMaxLengthConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinMaxLengthConstraint.swift; sourceTree = "<group>"; };
 		AAD354FD252887F0007C63EF /* Animated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animated.swift; sourceTree = "<group>"; };
-		AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickThroughCollectionView.swift; sourceTree = "<group>"; };
+		AAD3550125288947007C63EF /* ClickThroughViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClickThroughViews.swift; sourceTree = "<group>"; };
 		AAD3550525288985007C63EF /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AAD3550A25288A0F007C63EF /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		AAD3551025288BD4007C63EF /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
@@ -1150,7 +1150,7 @@
 			isa = PBXGroup;
 			children = (
 				AAD354F3252882AA007C63EF /* FrameObservingView.swift */,
-				AAD3550125288947007C63EF /* ClickThroughCollectionView.swift */,
+				AAD3550125288947007C63EF /* ClickThroughViews.swift */,
 				AAD3550525288985007C63EF /* Button.swift */,
 				AAEFB1432542DD6A003AA60E /* PinnedOnTopView.swift */,
 				AAEFB14D2542DE74003AA60E /* LazyInitView.swift */,
@@ -2456,7 +2456,7 @@
 				AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */,
 				AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */,
 				AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */,
-				AAD3550225288947007C63EF /* ClickThroughCollectionView.swift in Sources */,
+				AAD3550225288947007C63EF /* ClickThroughViews.swift in Sources */,
 				AA469ECC26C8F6170061B6C5 /* CardDeckView.swift in Sources */,
 				AAD354C125287281007C63EF /* Geometry.swift in Sources */,
 				AAD3550B25288A0F007C63EF /* GradientView.swift in Sources */,

@@ -234,13 +234,19 @@ class CardDeckViewController: UIViewController {
 		return RoundedView().with {
 			$0.rounding = .rectangle(radius: .points(16))
 
-			UIView().with { [parent = $0] in
+			UIButton(type: .system).with { [parent = $0] in
 				$0.backgroundColor = colors[index % colors.count]
+				$0.setTitle("B", for: .normal)
+				$0.addTarget(self, action: #selector(didTapCard), for: .touchUpInside)
 
 				parent.addSubview($0)
 				$0.edgesToSuperview().activate()
 			}
 		}
+	}
+
+	@objc private func didTapCard() {
+		print("didTapCard")
 	}
 
 	private func updateSplitSpacingUI() {
