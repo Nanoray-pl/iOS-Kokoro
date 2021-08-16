@@ -21,14 +21,14 @@ class MenuViewController: UITableViewController {
 
 	private enum Cell {
 		case proportionalOffsetConstraint, aspectRatioEqualConstraint, minMaxLengthConstraint
-		case flexColumnCollectionViewLayout
+		case flexColumnCollectionViewLayout, cardDeckView
 		case progressBar
 	}
 
-	unowned var router: (ProportionalOffsetConstraintRoute & FlexColumnCollectionViewLayoutRoute & ProgressBarsRoute)!
+	unowned var router: (ProportionalOffsetConstraintRoute & FlexColumnCollectionViewLayoutRoute & ProgressBarsRoute & CardDeckViewRoute)!
 	private let sections: [Section] = [
 		.init(header: "Non-basic Constraints", cells: [.proportionalOffsetConstraint, .aspectRatioEqualConstraint, .minMaxLengthConstraint]),
-		.init(header: "Containers", cells: [.flexColumnCollectionViewLayout]),
+		.init(header: "Containers", cells: [.flexColumnCollectionViewLayout, .cardDeckView]),
 		.init(header: "Aesthetic", cells: [.progressBar]),
 	]
 
@@ -74,6 +74,8 @@ class MenuViewController: UITableViewController {
 			cell.textLabel?.text = "MinMaxLengthConstraint"
 		case .flexColumnCollectionViewLayout:
 			cell.textLabel?.text = "FlexColumnCollectionViewLayout"
+		case .cardDeckView:
+			cell.textLabel?.text = "CardDeckView"
 		case .progressBar:
 			cell.textLabel?.text = "ProgressBar"
 		}
@@ -89,6 +91,8 @@ class MenuViewController: UITableViewController {
 			break
 		case .flexColumnCollectionViewLayout:
 			router.showFlexColumnCollectionViewLayout(animated: Animated.motionBased.value)
+		case .cardDeckView:
+			router.showCardDeckView(animated: Animated.motionBased.value)
 		case .progressBar:
 			router.showProgressBars(animated: Animated.motionBased.value)
 		}

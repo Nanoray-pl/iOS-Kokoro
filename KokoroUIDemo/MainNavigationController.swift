@@ -18,7 +18,7 @@ class MainNavigationController: NavigationControllerWrapper {
 	}
 }
 
-extension MainNavigationController: ProportionalOffsetConstraintRoute, ProgressBarsRoute, FlexColumnCollectionViewLayoutRoute {
+extension MainNavigationController: ProportionalOffsetConstraintRoute, ProgressBarsRoute, FlexColumnCollectionViewLayoutRoute, CardDeckViewRoute {
 	func showProportionalOffsetConstraint(animated: Bool) {
 		navigateToExistingOrNewViewController(
 			factory: { _ in .init(controller: ProportionalOffsetConstraintViewController(), options: .init(navigationBar: .visible)) },
@@ -29,6 +29,13 @@ extension MainNavigationController: ProportionalOffsetConstraintRoute, ProgressB
 	func showFlexColumnCollectionViewLayout(animated: Bool) {
 		navigateToExistingOrNewViewController(
 			factory: { _ in .init(controller: FlexColumnCollectionViewLayoutViewController(), options: .init(navigationBar: .visible)) },
+			animated: animated
+		)
+	}
+
+	func showCardDeckView(animated: Bool) {
+		navigateToExistingOrNewViewController(
+			factory: { _ in .init(controller: CardDeckViewController(), options: .init(navigationBar: .visible)) },
 			animated: animated
 		)
 	}
