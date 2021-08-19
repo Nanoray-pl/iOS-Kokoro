@@ -18,6 +18,18 @@ public extension ServiceVariant where Self: RawRepresentable, RawValue == String
 	}
 }
 
+public protocol VoidServiceVariantProtocol {
+	static var instance: Self { get }
+}
+
+public enum VoidServiceVariant<Service>: ServiceVariant, VoidServiceVariantProtocol {
+	case instance
+
+	public var variantName: String {
+		return ""
+	}
+}
+
 public extension Container {
 	@discardableResult
 	func register<Variant: ServiceVariant>(_ variant: Variant, factory: @escaping () -> Variant.Service) -> ServiceEntry<Variant.Service> {
