@@ -21,7 +21,12 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 		}
 	}
 
-	private class EntryView: UIView {
+	public enum Distribution {
+		case fill, fillEqually
+	}
+
+	private class EntryView: UIView, UIViewSubviewObserver {
+		private unowned let owner: SeparatorStackView
 		let contentView: ContentView
 		weak var separatorView: UIView?
 		var customSeparatorLength: SeparatorLength?
@@ -29,7 +34,8 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 
 		private(set) var stackView: UIStackView!
 
-		init(with contentView: ContentView, observation: NSKeyValueObservation) {
+		init(with contentView: ContentView, observation: NSKeyValueObservation, owner: SeparatorStackView) {
+			self.owner = owner
 			self.contentView = contentView
 			self.observation = observation
 			super.init(frame: .zero)
@@ -44,6 +50,7 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 			let constraints = ConstraintSession.current
 
 			stackView = UIStackView().with { [parent = self] in
+				$0.addSubviewObserver(self)
 				$0.addArrangedSubview(contentView)
 
 				parent.addSubview($0)
@@ -51,10 +58,14 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 			}
 		}
 
-		func setupSeparator(owner: SeparatorStackView<ContentView>) {
+		deinit {
+			stackView.removeSubviewObserver(self)
+		}
+
+		func update() {
 			isHidden = contentView.isHidden
 			separatorView?.removeFromSuperview()
-			if owner.entryViews.last(where: { !$0.contentView.isHidden }) != self {
+			if !isHidden && owner.entryViews.last(where: { !$0.contentView.isHidden }) != self {
 				let index = owner.entryViews.firstIndex(of: self)!
 				if owner.entryViews.count <= index + 1 { return }
 
@@ -72,18 +83,28 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 					case .vertical:
 						separatorView.height(of: points).activate()
 					@unknown default:
-						break
+						fatalError("Unknown axis \(stackView.axis)")
 					}
 				case .dynamic:
 					break
 				}
 			}
 		}
+
+		func didAddSubview(_ subview: UIView, to view: UIView) {
+			// do nothing
+		}
+
+		func didRemoveSubview(_ subview: UIView, from view: UIView) {
+			if subview == contentView {
+				owner.removeArrangedSubview(contentView)
+			}
+		}
 	}
 
 	public var separatorBuilder: (_ previousView: ContentView, _ nextView: ContentView) -> UIView = { _, _ in UIView() } {
 		didSet {
-			updateSeparators()
+			queueSeparatorUpdate()
 		}
 	}
 
@@ -95,14 +116,24 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 			guard newValue != stackView.axis else { return }
 			stackView.axis = newValue
 			entryViews.forEach { $0.stackView.axis = newValue }
-			updateSeparators()
+			queueSeparatorUpdate()
+		}
+	}
+
+	@Proxy(\.stackView.alignment)
+	public var alignment: UIStackView.Alignment
+
+	var distribution = Distribution.fill {
+		didSet {
+			guard distribution != oldValue else { return }
+			queueSeparatorUpdate()
 		}
 	}
 
 	public var separatorLength: SeparatorLength = 0 {
 		didSet {
 			guard separatorLength != oldValue else { return }
-			updateSeparators()
+			queueSeparatorUpdate()
 		}
 	}
 
@@ -123,6 +154,15 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 
 	private var stackView: UIStackView!
 
+	private var isSeparatorUpdateQueued = false
+
+	private var distributionConstraints = [NSLayoutConstraint]() {
+		didSet {
+			oldValue.deactivate()
+			distributionConstraints.activate()
+		}
+	}
+
 	public init() {
 		super.init(frame: .zero)
 		buildUI()
@@ -136,6 +176,8 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 		let constraints = ConstraintSession.current
 
 		stackView = UIStackView().with { [parent = self] in
+			$0.isLayoutMarginsRelativeArrangement = true
+			$0.insetsLayoutMarginsFromSafeArea = false
 			parent.addSubview($0)
 			constraints += $0.edgesToSuperview()
 		}
@@ -147,13 +189,13 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 
 	public func insertArrangedSubview(_ view: ContentView, at index: Int) {
 		let observation = view.observe(\.isHidden) { [weak self] _, _ in
-			self?.updateSeparators()
+			self?.queueSeparatorUpdate()
 		}
-		let entryView = EntryView(with: view, observation: observation)
+		let entryView = EntryView(with: view, observation: observation, owner: self)
 		entryView.stackView.axis = axis
 		stackView.addArrangedSubview(entryView)
 		entryViews.insert(entryView, at: index)
-		updateSeparators()
+		queueSeparatorUpdate()
 	}
 
 	public func removeArrangedSubview(_ view: ContentView) {
@@ -161,7 +203,7 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 		let entryView = entryViews[index]
 		entryViews.remove(at: index)
 		stackView.removeArrangedSubview(entryView)
-		updateSeparators()
+		queueSeparatorUpdate()
 	}
 
 	public func setCustomSeparatorLength(_ separatorLength: SeparatorLength?, after view: ContentView) {
@@ -169,12 +211,41 @@ public class SeparatorStackView<ContentView: UIView>: UIView {
 		let entryView = entryViews[index]
 		if entryView.customSeparatorLength != separatorLength {
 			entryView.customSeparatorLength = separatorLength
-			entryView.setupSeparator(owner: self)
+			entryView.update()
 		}
 	}
 
-	private func updateSeparators() {
-		entryViews.forEach { $0.setupSeparator(owner: self) }
+	private func updateDistributionConstraints() {
+		switch distribution {
+		case .fill:
+			distributionConstraints = []
+		case .fillEqually:
+			if entryViews.count > 1 {
+				switch axis {
+				case .horizontal:
+					distributionConstraints = (1 ..< entryViews.count).map { entryViews[$0].contentView.width(to: entryViews[$0 - 1].contentView) }
+				case .vertical:
+					distributionConstraints = (1 ..< entryViews.count).map { entryViews[$0].contentView.height(to: entryViews[$0 - 1].contentView) }
+				@unknown default:
+					fatalError("Unknown axis \(stackView.axis)")
+				}
+			} else {
+				distributionConstraints = []
+			}
+		}
+	}
+
+	private func queueSeparatorUpdate() {
+		if isSeparatorUpdateQueued { return }
+		isSeparatorUpdateQueued = true
+		DispatchQueue.main.async {
+			self.updateSeparatorsNow()
+		}
+	}
+
+	private func updateSeparatorsNow() {
+		isSeparatorUpdateQueued = false
+		entryViews.forEach { $0.update() }
 	}
 }
 #endif

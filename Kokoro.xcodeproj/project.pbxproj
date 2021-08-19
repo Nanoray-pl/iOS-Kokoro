@@ -38,6 +38,7 @@
 		AA469ED226C9A02A0061B6C5 /* KokoroUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAD3548D252869D0007C63EF /* KokoroUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AA469ED326C9A02A0061B6C5 /* KokoroUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAD354B125287210007C63EF /* KokoroUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AA469ED526C9A0B80061B6C5 /* CardDeckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */; };
+		AA469EDB26CEC0950061B6C5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469EDA26CEC0950061B6C5 /* Math.swift */; };
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
 		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
@@ -423,6 +424,7 @@
 		AA42D456256A8154004604D2 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		AA469ECB26C8F6170061B6C5 /* CardDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckView.swift; sourceTree = "<group>"; };
 		AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckViewController.swift; sourceTree = "<group>"; };
+		AA469EDA26CEC0950061B6C5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
 		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
@@ -1071,6 +1073,7 @@
 				AA880B2B261EFA12001AE8C3 /* ProxyPropertyWrapper.swift */,
 				AA974CE526AD5C27005D6ADE /* LoggedError.swift */,
 				AA974CFD26AD6012005D6ADE /* KVOObserver.swift */,
+				AA469EDA26CEC0950061B6C5 /* Math.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -2445,6 +2448,7 @@
 				AA5AECEA2556B10D00516C8D /* MD5.swift in Sources */,
 				AA16EB0A257A78F0001C30E9 /* DispatchQueueScheduler.swift in Sources */,
 				AA16EB24257A7917001C30E9 /* MockScheduler.swift in Sources */,
+				AA469EDB26CEC0950061B6C5 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
