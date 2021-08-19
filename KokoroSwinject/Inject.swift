@@ -47,20 +47,28 @@ public struct AnyInject<EnclosingSelf, Variant: ServiceVariant> {
 	}
 
 	public static subscript(_enclosingInstance observed: EnclosingSelf, wrapped wrappedKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Variant.Service>, storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Self>) -> Variant.Service {
-		var storageValue = observed[keyPath: storageKeyPath]
-		return storageValue.lock.acquireAndRun {
-			if let component = storageValue.component {
-				return component
-			} else {
-				let resolver = observed[keyPath: storageValue.resolverKeyPath]
-				let component: Variant.Service
-				if storageValue.variant is VoidServiceVariantProtocol {
-					component = resolver.resolve(Variant.Service.self)!
+		get {
+			var storageValue = observed[keyPath: storageKeyPath]
+			return storageValue.lock.acquireAndRun {
+				if let component = storageValue.component {
+					return component
 				} else {
-					component = resolver.resolve(storageValue.variant)!
+					let resolver = observed[keyPath: storageValue.resolverKeyPath]
+					let component: Variant.Service
+					if storageValue.variant is VoidServiceVariantProtocol {
+						component = resolver.resolve(Variant.Service.self)!
+					} else {
+						component = resolver.resolve(storageValue.variant)!
+					}
+					storageValue.component = component
+					return component
 				}
-				storageValue.component = component
-				return component
+			}
+		}
+		set {
+			var storageValue = observed[keyPath: storageKeyPath]
+			storageValue.lock.acquireAndRun {
+				storageValue.component = newValue
 			}
 		}
 	}
