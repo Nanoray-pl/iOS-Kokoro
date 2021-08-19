@@ -3,6 +3,7 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
+#if canImport(Foundation)
 import Foundation
 
 public extension Measurement {
@@ -10,3 +11,4 @@ public extension Measurement {
 		return Measurement(value: -value.value, unit: value.unit)
 	}
 }
+#endif
