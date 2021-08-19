@@ -19,7 +19,11 @@ let package = Package(
 		.library(name: "KokoroCacheResourceProvider", targets: ["KokoroCacheResourceProvider"]),
 		.library(name: "KokoroUIResourceProvider", targets: ["KokoroUIResourceProvider"]),
 		.library(name: "KokoroCoreDataFetchable", targets: ["KokoroCoreDataFetchable"]),
+		.library(name: "KokoroSwinject", targets: ["KokoroSwinject"]),
 	],
+	dependencies: [
+        .package(name: "Swinject", url: "https://github.com/Swinject/Swinject", .upToNextMajor(from: "2.8.0"))
+    ],
 	targets: [
 		.target(
 			name: "KokoroUtils",
@@ -111,6 +115,12 @@ let package = Package(
 			name: "KokoroCoreDataFetchable",
 			dependencies: ["KokoroUtils", "KokoroCoreData", "KokoroFetchable"],
 			path: "KokoroCoreDataFetchable",
+			exclude: ["Bootstrap/Info.plist"]
+		),
+		.target(
+			name: "KokoroSwinject",
+			dependencies: ["KokoroUtils", "Swinject"],
+			path: "KokoroSwinject",
 			exclude: ["Bootstrap/Info.plist"]
 		),
 //		.testTarget(

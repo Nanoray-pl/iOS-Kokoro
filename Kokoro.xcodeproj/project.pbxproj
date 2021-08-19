@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -39,6 +39,11 @@
 		AA469ED326C9A02A0061B6C5 /* KokoroUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAD354B125287210007C63EF /* KokoroUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AA469ED526C9A0B80061B6C5 /* CardDeckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */; };
 		AA469EDB26CEC0950061B6C5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469EDA26CEC0950061B6C5 /* Math.swift */; };
+		AA469EE526CEC6890061B6C5 /* KokoroSwinject.h in Headers */ = {isa = PBXBuildFile; fileRef = AA469EE326CEC6890061B6C5 /* KokoroSwinject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA469EF226CEC81F0061B6C5 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = AA469EF126CEC81F0061B6C5 /* Swinject */; };
+		AA469EF426CEC86B0061B6C5 /* ServiceVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469EF326CEC86B0061B6C5 /* ServiceVariant.swift */; };
+		AA469EF626CEC88D0061B6C5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469EF526CEC88D0061B6C5 /* Extensions.swift */; };
+		AA469EF826CEC8EB0061B6C5 /* Inject.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469EF726CEC8EB0061B6C5 /* Inject.swift */; };
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
 		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
@@ -275,6 +280,13 @@
 			remoteGlobalIDString = AAD3548C252869D0007C63EF;
 			remoteInfo = KokoroUtils;
 		};
+		AA469EE926CEC69D0061B6C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AAD35484252869D0007C63EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AAD3548C252869D0007C63EF;
+			remoteInfo = KokoroUtils;
+		};
 		AA5AEBE52555801000516C8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AAD35484252869D0007C63EF /* Project object */;
@@ -425,6 +437,12 @@
 		AA469ECB26C8F6170061B6C5 /* CardDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckView.swift; sourceTree = "<group>"; };
 		AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckViewController.swift; sourceTree = "<group>"; };
 		AA469EDA26CEC0950061B6C5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		AA469EE126CEC6890061B6C5 /* KokoroSwinject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroSwinject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA469EE326CEC6890061B6C5 /* KokoroSwinject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroSwinject.h; sourceTree = "<group>"; };
+		AA469EE426CEC6890061B6C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA469EF326CEC86B0061B6C5 /* ServiceVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceVariant.swift; sourceTree = "<group>"; };
+		AA469EF526CEC88D0061B6C5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		AA469EF726CEC8EB0061B6C5 /* Inject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inject.swift; sourceTree = "<group>"; };
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
 		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
@@ -659,6 +677,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA469EDE26CEC6890061B6C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA469EF226CEC81F0061B6C5 /* Swinject in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA5AEB8925557D7700516C8D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -878,6 +904,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AA469EE226CEC6890061B6C5 /* KokoroSwinject */ = {
+			isa = PBXGroup;
+			children = (
+				AA469EEF26CEC7230061B6C5 /* Bootstrap */,
+				AA469EF526CEC88D0061B6C5 /* Extensions.swift */,
+				AA469EF326CEC86B0061B6C5 /* ServiceVariant.swift */,
+				AA469EF726CEC8EB0061B6C5 /* Inject.swift */,
+			);
+			path = KokoroSwinject;
+			sourceTree = "<group>";
+		};
+		AA469EEF26CEC7230061B6C5 /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				AA469EE326CEC6890061B6C5 /* KokoroSwinject.h */,
+				AA469EE426CEC6890061B6C5 /* Info.plist */,
+			);
+			path = Bootstrap;
+			sourceTree = "<group>";
+		};
 		AA5AEB8D25557D7700516C8D /* KokoroJobs */ = {
 			isa = PBXGroup;
 			children = (
@@ -1020,6 +1066,7 @@
 				AA5AED052556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AA42D3D6256A781D004604D2 /* KokoroUIResourceProvider */,
 				AA26301226BDBD180016BF3B /* KokoroCoreDataFetchable */,
+				AA469EE226CEC6890061B6C5 /* KokoroSwinject */,
 				AAD3548E252869D0007C63EF /* Products */,
 				AA469ECD26C99FF20061B6C5 /* Frameworks */,
 			);
@@ -1045,6 +1092,7 @@
 				AAE9D7ED2617AF7C0040C91F /* KokoroValueStore.framework */,
 				AA974CEB26AD5D01005D6ADE /* KokoroUtilsTests.xctest */,
 				AA26301126BDBD180016BF3B /* KokoroCoreDataFetchable.framework */,
+				AA469EE126CEC6890061B6C5 /* KokoroSwinject.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1496,6 +1544,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA469EDC26CEC6890061B6C5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA469EE526CEC6890061B6C5 /* KokoroSwinject.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA5AEB8725557D7700516C8D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1602,6 +1658,7 @@
 			buildConfigurationList = AA26301826BDBD180016BF3B /* Build configuration list for PBXNativeTarget "KokoroCoreDataFetchable" */;
 			buildPhases = (
 				AA26300C26BDBD180016BF3B /* Headers */,
+				AA469EED26CEC7000061B6C5 /* Linters */,
 				AA26300D26BDBD180016BF3B /* Sources */,
 				AA26300E26BDBD180016BF3B /* Frameworks */,
 				AA26300F26BDBD180016BF3B /* Resources */,
@@ -1622,6 +1679,7 @@
 			buildConfigurationList = AA42D3DC256A781D004604D2 /* Build configuration list for PBXNativeTarget "KokoroUIResourceProvider" */;
 			buildPhases = (
 				AA42D3D0256A781D004604D2 /* Headers */,
+				AA469EEC26CEC6F20061B6C5 /* Linters */,
 				AA42D3D1256A781D004604D2 /* Sources */,
 				AA42D3D2256A781D004604D2 /* Frameworks */,
 				AA42D3D3256A781D004604D2 /* Resources */,
@@ -1635,6 +1693,29 @@
 			name = KokoroUIResourceProvider;
 			productName = KokoroUIResourceProvider;
 			productReference = AA42D3D5256A781D004604D2 /* KokoroUIResourceProvider.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AA469EE026CEC6890061B6C5 /* KokoroSwinject */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA469EE626CEC6890061B6C5 /* Build configuration list for PBXNativeTarget "KokoroSwinject" */;
+			buildPhases = (
+				AA469EDC26CEC6890061B6C5 /* Headers */,
+				AA469EEE26CEC70A0061B6C5 /* Linters */,
+				AA469EDD26CEC6890061B6C5 /* Sources */,
+				AA469EDE26CEC6890061B6C5 /* Frameworks */,
+				AA469EDF26CEC6890061B6C5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA469EEA26CEC69D0061B6C5 /* PBXTargetDependency */,
+			);
+			name = KokoroSwinject;
+			packageProductDependencies = (
+				AA469EF126CEC81F0061B6C5 /* Swinject */,
+			);
+			productName = KokoroSwinject;
+			productReference = AA469EE126CEC6890061B6C5 /* KokoroSwinject.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		AA5AEB8B25557D7700516C8D /* KokoroJobs */ = {
@@ -1682,6 +1763,7 @@
 			buildConfigurationList = AA5AED092556B2B000516C8D /* Build configuration list for PBXNativeTarget "KokoroCacheResourceProvider" */;
 			buildPhases = (
 				AA5AECFF2556B2B000516C8D /* Headers */,
+				AA469EEB26CEC6E40061B6C5 /* Linters */,
 				AA5AED002556B2B000516C8D /* Sources */,
 				AA5AED012556B2B000516C8D /* Frameworks */,
 				AA5AED022556B2B000516C8D /* Resources */,
@@ -1935,6 +2017,10 @@
 						CreatedOnToolsVersion = 12.2;
 						LastSwiftMigration = 1220;
 					};
+					AA469EE026CEC6890061B6C5 = {
+						CreatedOnToolsVersion = 12.5.1;
+						LastSwiftMigration = 1250;
+					};
 					AA5AEB8B25557D7700516C8D = {
 						CreatedOnToolsVersion = 12.1;
 						LastSwiftMigration = 1210;
@@ -2001,6 +2087,7 @@
 			);
 			mainGroup = AAD35483252869D0007C63EF;
 			packageReferences = (
+				AA469EF026CEC81F0061B6C5 /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			productRefGroup = AAD3548E252869D0007C63EF /* Products */;
 			projectDirPath = "";
@@ -2023,6 +2110,7 @@
 				AA5AED032556B2B000516C8D /* KokoroCacheResourceProvider */,
 				AA42D3D4256A781D004604D2 /* KokoroUIResourceProvider */,
 				AA26301026BDBD180016BF3B /* KokoroCoreDataFetchable */,
+				AA469EE026CEC6890061B6C5 /* KokoroSwinject */,
 			);
 		};
 /* End PBXProject section */
@@ -2043,6 +2131,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA42D3D3256A781D004604D2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA469EDF26CEC6890061B6C5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2152,6 +2247,82 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		AA469EEB26CEC6E40061B6C5 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AA469EEC26CEC6F20061B6C5 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AA469EED26CEC7000061B6C5 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AA469EEE26CEC70A0061B6C5 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		AAD354A925286FA6007C63EF /* Linters */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -2371,6 +2542,16 @@
 				AA71690B26BEDD25002039DC /* AwaitTimeMagnitudeAwareAsynchronousImageLoader.swift in Sources */,
 				AA42D423256A8056004604D2 /* SimpleAsynchronousImageLoader.swift in Sources */,
 				AA42D407256A7894004604D2 /* AsynchronousImageLoader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA469EDD26CEC6890061B6C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA469EF426CEC86B0061B6C5 /* ServiceVariant.swift in Sources */,
+				AA469EF626CEC88D0061B6C5 /* Extensions.swift in Sources */,
+				AA469EF826CEC8EB0061B6C5 /* Inject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2694,6 +2875,11 @@
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
 			targetProxy = AA469ED026C99FFC0061B6C5 /* PBXContainerItemProxy */;
 		};
+		AA469EEA26CEC69D0061B6C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
+			targetProxy = AA469EE926CEC69D0061B6C5 /* PBXContainerItemProxy */;
+		};
 		AA5AEBE62555801000516C8D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AAD3548C252869D0007C63EF /* KokoroUtils */;
@@ -2814,8 +3000,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroCoreDataFetchable;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -2877,6 +3061,49 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroUIResourceProvider;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AA469EE726CEC6890061B6C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroSwinject;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA469EE826CEC6890061B6C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.nanoray.KokoroSwinject;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -3582,6 +3809,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		AA469EE626CEC6890061B6C5 /* Build configuration list for PBXNativeTarget "KokoroSwinject" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA469EE726CEC6890061B6C5 /* Debug */,
+				AA469EE826CEC6890061B6C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AA5AEB9125557D7700516C8D /* Build configuration list for PBXNativeTarget "KokoroJobs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3718,6 +3954,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AA469EF026CEC81F0061B6C5 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA469EF126CEC81F0061B6C5 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA469EF026CEC81F0061B6C5 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		AAD357402528C422007C63EF /* TestModel.xcdatamodeld */ = {
