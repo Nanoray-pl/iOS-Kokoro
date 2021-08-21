@@ -117,6 +117,9 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		}
 	}
 
+	@Proxy(\.scrollView.ignoresTaps)
+	public var ignoresTaps: Bool
+
 	private var itemSize: CGSize {
 		return orientational(
 			vertical: .init(width: frame.width - contentInsets.horizontal, height: (frame.width - contentInsets.horizontal) / itemRatio),
@@ -126,7 +129,7 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 
 	public var scrollingLocksOntoItems = true
 
-	private var scrollView: UIScrollView!
+	private var scrollView: KScrollView!
 	private var contentView: UIView!
 
 	private lazy var privateDelegate = PrivateDelegate(parent: self) // swiftlint:disable:this weak_delegate
@@ -161,7 +164,7 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			constraints += $0.edgesToSuperview()
 		}
 
-		scrollView = UIScrollView().with { [parent = self] in
+		scrollView = KScrollView().with { [parent = self] in
 			$0.delegate = privateDelegate
 			$0.showsVerticalScrollIndicator = false
 			$0.showsHorizontalScrollIndicator = false

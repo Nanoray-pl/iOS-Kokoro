@@ -19,7 +19,7 @@
 		AA16EBF1257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */; };
 		AA20B64826D1205100A7EE98 /* LateInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA20B64726D1205100A7EE98 /* LateInit.swift */; };
 		AA262FFD26BD53A60016BF3B /* ScrollableContentBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */; };
-		AA262FFF26BD543F0016BF3B /* FittableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */; };
+		AA262FFF26BD543F0016BF3B /* KScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFE26BD543F0016BF3B /* KScrollView.swift */; };
 		AA26300126BD54910016BF3B /* FittableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA26300026BD54910016BF3B /* FittableTableView.swift */; };
 		AA26301526BDBD180016BF3B /* KokoroCoreDataFetchable.h in Headers */ = {isa = PBXBuildFile; fileRef = AA26301326BDBD180016BF3B /* KokoroCoreDataFetchable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA26301B26BDBD600016BF3B /* CoreDataListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA26301A26BDBD600016BF3B /* CoreDataListDataSource.swift */; };
@@ -418,7 +418,7 @@
 		AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayoutViewController.swift; sourceTree = "<group>"; };
 		AA20B64726D1205100A7EE98 /* LateInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateInit.swift; sourceTree = "<group>"; };
 		AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContentBehavior.swift; sourceTree = "<group>"; };
-		AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableScrollView.swift; sourceTree = "<group>"; };
+		AA262FFE26BD543F0016BF3B /* KScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KScrollView.swift; sourceTree = "<group>"; };
 		AA26300026BD54910016BF3B /* FittableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableTableView.swift; sourceTree = "<group>"; };
 		AA26301126BDBD180016BF3B /* KokoroCoreDataFetchable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroCoreDataFetchable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA26301326BDBD180016BF3B /* KokoroCoreDataFetchable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroCoreDataFetchable.h; sourceTree = "<group>"; };
@@ -837,7 +837,7 @@
 			children = (
 				AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */,
 				AAEFB1392542DBC2003AA60E /* HeaderFooterCollectionView.swift */,
-				AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */,
+				AA262FFE26BD543F0016BF3B /* KScrollView.swift */,
 				AA26300026BD54910016BF3B /* FittableTableView.swift */,
 			);
 			path = Scrollable;
@@ -2678,7 +2678,7 @@
 				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
 				AA5AEC3B255587FF00516C8D /* HapticFeedbackGenerator.swift in Sources */,
 				AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */,
-				AA262FFF26BD543F0016BF3B /* FittableScrollView.swift in Sources */,
+				AA262FFF26BD543F0016BF3B /* KScrollView.swift in Sources */,
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
 				AAEFB16225443BC3003AA60E /* InteractableUrlTextView.swift in Sources */,
 				AAEFB14E2542DE74003AA60E /* LazyInitView.swift in Sources */,
