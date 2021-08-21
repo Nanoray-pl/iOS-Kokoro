@@ -8,8 +8,11 @@ import KokoroUtils
 import Swinject
 
 public extension ObjectWith {
-	typealias Inject<T> = AnyInject<Self, VoidServiceVariant<T>>
-	typealias InjectVariant<Variant: ServiceVariant> = AnyInject<Self, Variant>
+	typealias Inject<Variant: ServiceVariant> = AnyInject<Self, Variant>
+}
+
+public protocol HasResolver {
+	var resolver: Resolver { get }
 }
 
 public enum AnyInjectSynchronization {
@@ -73,7 +76,7 @@ public struct AnyInject<EnclosingSelf, Variant: ServiceVariant> {
 		}
 	}
 
-	public init(_ resolverKeyPath: KeyPath<EnclosingSelf, Resolver>, variant: Variant, synchronization: AnyInjectSynchronization = .shared) {
+	public init(_ resolverKeyPath: KeyPath<EnclosingSelf, Resolver>, _ variant: Variant, synchronization: AnyInjectSynchronization = .shared) {
 		self.resolverKeyPath = resolverKeyPath
 		self.variant = variant
 		switch synchronization {
@@ -88,8 +91,18 @@ public struct AnyInject<EnclosingSelf, Variant: ServiceVariant> {
 		}
 	}
 
-	public init(_ resolverKeyPath: KeyPath<EnclosingSelf, Resolver>, synchronization: AnyInjectSynchronization = .shared) where Variant: VoidServiceVariantProtocol {
-		self.init(resolverKeyPath, variant: Variant.instance, synchronization: synchronization)
+	public init<T>(_ resolverKeyPath: KeyPath<EnclosingSelf, Resolver>, synchronization: AnyInjectSynchronization = .shared) where Variant == VoidServiceVariant<T> {
+		self.init(resolverKeyPath, Variant.instance, synchronization: synchronization)
+	}
+}
+
+public extension AnyInject where EnclosingSelf: HasResolver {
+	init(_ variant: Variant, synchronization: AnyInjectSynchronization = .shared) {
+		self.init(\.resolver, variant, synchronization: synchronization)
+	}
+
+	init<T>(synchronization: AnyInjectSynchronization = .shared) where Variant == VoidServiceVariant<T> {
+		self.init(\.resolver, Variant.instance, synchronization: synchronization)
 	}
 }
 #endif

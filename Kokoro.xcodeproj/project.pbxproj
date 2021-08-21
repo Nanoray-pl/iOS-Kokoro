@@ -17,6 +17,7 @@
 		AA16EBC5257A7FB3001C30E9 /* Fetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */; };
 		AA16EBE1257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */; };
 		AA16EBF1257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */; };
+		AA20B64826D1205100A7EE98 /* LateInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA20B64726D1205100A7EE98 /* LateInit.swift */; };
 		AA262FFD26BD53A60016BF3B /* ScrollableContentBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */; };
 		AA262FFF26BD543F0016BF3B /* FittableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */; };
 		AA26300126BD54910016BF3B /* FittableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA26300026BD54910016BF3B /* FittableTableView.swift */; };
@@ -415,6 +416,7 @@
 		AA16EBC4257A7FB3001C30E9 /* Fetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fetchable.swift; sourceTree = "<group>"; };
 		AA16EBE0257A8B61001C30E9 /* FlexColumnCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayout.swift; sourceTree = "<group>"; };
 		AA16EBF0257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexColumnCollectionViewLayoutViewController.swift; sourceTree = "<group>"; };
+		AA20B64726D1205100A7EE98 /* LateInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LateInit.swift; sourceTree = "<group>"; };
 		AA262FFC26BD53A60016BF3B /* ScrollableContentBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableContentBehavior.swift; sourceTree = "<group>"; };
 		AA262FFE26BD543F0016BF3B /* FittableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableScrollView.swift; sourceTree = "<group>"; };
 		AA26300026BD54910016BF3B /* FittableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittableTableView.swift; sourceTree = "<group>"; };
@@ -1122,6 +1124,7 @@
 				AA974CE526AD5C27005D6ADE /* LoggedError.swift */,
 				AA974CFD26AD6012005D6ADE /* KVOObserver.swift */,
 				AA469EDA26CEC0950061B6C5 /* Math.swift */,
+				AA20B64726D1205100A7EE98 /* LateInit.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -2603,6 +2606,7 @@
 				AA5AEC072555845D00516C8D /* ComparableExtensions.swift in Sources */,
 				AA71690126BED222002039DC /* SinkAndAssignExtensions.swift in Sources */,
 				AA974CFE26AD6012005D6ADE /* KVOObserver.swift in Sources */,
+				AA20B64826D1205100A7EE98 /* LateInit.swift in Sources */,
 				AA16EAFB257A7818001C30E9 /* Scheduler.swift in Sources */,
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
 				AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */,
