@@ -4,9 +4,12 @@
 //
 
 #if canImport(UIKit)
+import KokoroUtils
 import UIKit
 
 open class TabAndNavigationControllerWrapper: UIViewController {
+	public typealias Configurator<T: UIViewController> = (_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void
+
 	public struct NavigateBuilderResult<T: UIViewController> {
 		public let controller: T
 		public let options: Options
@@ -17,43 +20,77 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public struct Item {
-		let controller: UIViewController
-		let title: String
-		let icon: UIImage?
-		let selectedIcon: UIImage?
-		let navigationBarVisibility: Visibility
+	public struct TabBarVisuals {
+		public var title: String
+		public var icon: UIImage?
+		public var selectedIcon: UIImage?
+		public var accessibilityIdentifier: String?
 
-		public init(controller: UIViewController, title: String, icon: UIImage?, selectedIcon: UIImage? = nil, withNavigationBar navigationBarVisibility: Visibility) {
-			self.controller = controller
+		public init(
+			title: String,
+			icon: UIImage?,
+			selectedIcon: UIImage? = nil,
+			accessibilityIdentifier: String? = nil
+		) {
 			self.title = title
 			self.icon = icon
 			self.selectedIcon = selectedIcon
+			self.accessibilityIdentifier = accessibilityIdentifier
+		}
+	}
+
+	public struct Item {
+		public let controller: UIViewController
+		public let tabBarVisuals: TabBarVisuals
+		public let navigationBarVisibility: Visibility
+
+		public init(controller: UIViewController, tabBarVisuals: TabBarVisuals, withNavigationBar navigationBarVisibility: Visibility) {
+			self.controller = controller
+			self.tabBarVisuals = tabBarVisuals
 			self.navigationBarVisibility = navigationBarVisibility
 		}
 	}
 
-	public struct Options: Hashable {
-		public let barOptions: [BarOption]
-		public let swipeBackGestureState: EnablementState
+	public enum PrecedingItemNavigationState {
+		case disabled(attemptClosure: () -> Void = {})
+		case enabled
+	}
 
-		public init(barOptions: [BarOption], swipeBackGesture swipeBackGestureState: EnablementState = .enabled) {
-			self.barOptions = barOptions
+	public struct Options: ValueWith {
+		public var barDifference: SetDifference<Bar>
+		public var precedingItemNavigationState: PrecedingItemNavigationState
+		public var swipeBackGestureState: EnablementState
+
+		public init(
+			barDifference: SetDifference<Bar>,
+			precedingItemNavigationState: PrecedingItemNavigationState = .enabled,
+			swipeBackGesture swipeBackGestureState: EnablementState = .enabled
+		) {
+			self.barDifference = barDifference
+			self.precedingItemNavigationState = precedingItemNavigationState
 			self.swipeBackGestureState = swipeBackGestureState
 		}
 	}
 
-	public enum BarOption: Hashable {
-		case without(_ bar: Bar)
-		case with(_ bar: Bar)
-
-		public enum Bar: Hashable, CaseIterable {
-			case navigation, tab
-		}
+	public enum Bar: Hashable, CaseIterable {
+		case navigation, tab
 	}
 
 	public enum NavigateScope: Hashable {
 		case currentTab, allTabs
+	}
+
+	private struct ControllerOptions {
+		private(set) weak var controller: UIViewController?
+		var options: Options
+
+		init(
+			controller: UIViewController,
+			options: Options
+		) {
+			self.controller = controller
+			self.options = options
+		}
 	}
 
 	private class NavigationState {
@@ -69,13 +106,17 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 
 	private(set) lazy var precedingControllerNavigator: PrecedingControllerNavigator = PrecedingControllerNavigatorImplementation(parent: self)
 	private lazy var wrappedTabBarController = UITabBarController().with { $0.delegate = internalDelegate }
-	private let hiddenTabBarControllers = NSHashTable<UIViewController>(options: .weakMemory)
-	private let hiddenNavigationBarControllers = NSHashTable<UIViewController>(options: .weakMemory)
-	private let disabledSwipeBackGestureControllers = NSHashTable<UIViewController>(options: .weakMemory)
 	private let navigationState = NSMapTable<UINavigationController, NavigationState>(keyOptions: .weakMemory, valueOptions: .strongMemory)
 	private var isCustomModalInPresentationValueSet = false
 	private weak var targetOrCurrentViewController: UIViewController?
 	private lazy var internalDelegate = InternalDelegate(parent: self) // swiftlint:disable:this weak_delegate
+
+	private var controllerOptions = [ControllerOptions]() {
+		didSet {
+			guard controllerOptions.contains(where: { $0.controller == nil }) else { return }
+			controllerOptions = controllerOptions.filter { $0.controller != nil }
+		}
+	}
 
 	open override var childForHomeIndicatorAutoHidden: UIViewController? {
 		return targetOrCurrentViewController ?? super.childForHomeIndicatorAutoHidden
@@ -103,17 +144,11 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public var currentNavigationController: UINavigationController {
-		get {
-			return wrappedTabBarController.selectedViewController as! UINavigationController
-		}
-		set {
-			wrappedTabBarController.selectedViewController = newValue
-		}
-	}
+	@Proxy(\.wrappedTabBarController.selectedViewController, get: { $0 as! UINavigationController }, set: { $0 })
+	public var currentNavigationController: UINavigationController
 
 	public var navigationControllers: [UINavigationController] {
-		return (wrappedTabBarController.viewControllers ?? []).filter(ofType: UINavigationController.self)
+		return (wrappedTabBarController.viewControllers ?? []).compactMap { $0 as? UINavigationController }
 	}
 
 	public var topViewController: UIViewController? {
@@ -164,15 +199,27 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 			animated: false
 		)
 
-		hiddenNavigationBarControllers.removeAllObjects()
+		controllerOptions.removeAll()
 
 		let tabItems = tabBar.items!
 		for index in 0 ..< items.count {
 			let item = items[index]
-			if item.navigationBarVisibility == .hidden {
-				hiddenNavigationBarControllers.add(item.controller)
-			}
-			setupTabItem(tabItems[index], for: item)
+			controllerOptions.append(.init(
+				controller: item.controller,
+				options: .init(
+					barDifference: .init().with {
+						switch item.navigationBarVisibility {
+						case .visible:
+							$0.insert(.navigation)
+						case .hidden:
+							$0.remove(.navigation)
+						}
+						$0.insert(.tab)
+					},
+					swipeBackGesture: .disabled
+				)
+			))
+			setupTabItem(tabItems[index], with: item.tabBarVisuals)
 		}
 	}
 
@@ -186,13 +233,14 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	private func setupTabItem(_ tabItem: UITabBarItem, for item: Item) {
-		tabItem.title = item.title
-		tabItem.image = item.icon
-		tabItem.selectedImage = item.selectedIcon
+	private func setupTabItem(_ tabItem: UITabBarItem, with visuals: TabBarVisuals) {
+		tabItem.title = visuals.title
+		tabItem.image = visuals.icon
+		tabItem.selectedImage = visuals.selectedIcon
+		tabItem.accessibilityIdentifier = visuals.accessibilityIdentifier
 	}
 
-	open override func loadView() {
+	public override func loadView() {
 		super.loadView()
 
 		addChild(wrappedTabBarController)
@@ -213,7 +261,12 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public func navigateToRootViewController<T: UIViewController>(type: T.Type = T.self, configurator: (_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void = { _, _, completion in completion?() }, animated: Bool, completion: (() -> Void)? = nil) {
+	public func setTabBarVisuals(_ visuals: TabBarVisuals, for navigationController: UINavigationController) {
+		guard let index = navigationControllers.firstIndex(of: navigationController) else { fatalError("Navigation controller \(navigationController) is not managed by this TabAndNavigationControllerWrapper.") }
+		setupTabItem(tabBar.items![index], with: visuals)
+	}
+
+	public func navigateToRootViewController<T: UIViewController>(type: T.Type = T.self, configurator: Configurator<T> = { _, _, completion in completion?() }, animated: Bool, completion: (() -> Void)? = nil) {
 		for navigationController in navigationControllers(for: .allTabs) {
 			guard let rootController = navigationController.viewControllers.first as? T else { continue }
 			if navigationController.viewControllers.count == 1 {
@@ -227,11 +280,11 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: (_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: Configurator<T> = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: (() -> Void)? = nil) {
 		navigateToExistingOrNewViewController(where: { $0 == controller }, configurator: configurator, factory: factory, animated: animated, completion: completion)
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: (_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: Configurator<T> = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: (() -> Void)? = nil) {
 		if let existingViewController = topViewController as? T, predicate(existingViewController) {
 			configurator(existingViewController, animated, completion)
 			return
@@ -256,37 +309,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	public func pushViewController(_ viewController: UIViewController, options: Options, animated: Bool, completion: (() -> Void)? = nil) {
-		let barShouldHideMap = BarOption.Bar.allCases.reduce([BarOption.Bar: Bool]()) { result, bar in
-			var result = result
-			switch bar {
-			case .navigation:
-				result[bar] = hiddenNavigationBarControllers.contains(topViewController)
-			case .tab:
-				result[bar] = hiddenTabBarControllers.contains(topViewController)
-			}
-
-			options.barOptions.forEach {
-				switch $0 {
-				case .without(bar):
-					result[bar] = true
-				case .with(bar):
-					result[bar] = false
-				case .without, .with:
-					break
-				}
-			}
-			return result
-		}
-
-		if barShouldHideMap[.navigation]! {
-			hiddenNavigationBarControllers.add(viewController)
-		}
-		if barShouldHideMap[.tab]! {
-			hiddenTabBarControllers.add(viewController)
-		}
-		if !options.swipeBackGestureState.isEnabled {
-			disabledSwipeBackGestureControllers.add(viewController)
-		}
+		controllerOptions.append(.init(controller: viewController, options: options))
 		currentNavigationController.pushViewController(viewController, animated: animated, completion: completion)
 	}
 
@@ -305,6 +328,21 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		return currentNavigationController.popToRootViewController(animated: animated, completion: completion)
 	}
 
+	private func controllerOptions(for viewController: UIViewController) -> ControllerOptions {
+		guard let entry = controllerOptions.first(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
+		return entry
+	}
+
+	public func options(for viewController: UIViewController) -> Options {
+		return controllerOptions(for: viewController).options
+	}
+
+	public func setOptions(to optionsOverride: Options, for viewController: UIViewController, animated: Bool) {
+		guard let index = controllerOptions.firstIndex(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
+		controllerOptions[index].options = optionsOverride
+		updateOptionsForAllNavigationControllers(animated: animated)
+	}
+
 	private func setTabBarHidden(_ isHidden: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		guard isTabBarHidden != isHidden else { return }
 		tabBarAnimator = nil
@@ -319,18 +357,15 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 			currentNavigationController.view.setNeedsLayout()
 		}
 
-		tabBarAnimator = Animated(booleanLiteral: animated).run(
-			animations: {
-				self.tabBar.frame = endFrame
-			},
-			completion: { [weak currentNavigationController] in
-				if !isHidden, let currentNavigationController = currentNavigationController {
-					currentNavigationController.additionalSafeAreaInsets = newInsets
-					currentNavigationController.view.setNeedsLayout()
-				}
-				completion?()
+		tabBarAnimator = Animated(booleanLiteral: animated).run(animations: {
+			self.tabBar.frame = endFrame
+		}, completion: { [weak currentNavigationController] in
+			if !isHidden, let currentNavigationController = currentNavigationController {
+				currentNavigationController.additionalSafeAreaInsets = newInsets
+				currentNavigationController.view.setNeedsLayout()
 			}
-		)
+			completion?()
+		})
 	}
 
 	private func navigationState(for navigationController: UINavigationController) -> NavigationState {
@@ -343,15 +378,43 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	open func didSelectViewController(_ controller: UIViewController) {
+	func didSelectViewController(_ controller: UIViewController) {
 		targetOrCurrentViewController = topViewController
-		updateDelegatedChildViewControllers()
+		setNeedsDelegatedChildViewControllerUpdates()
 	}
 
-	private func updateDelegatedChildViewControllers() {
+	private func setupBarVisibility(for navigationState: NavigationState, setupNavigationBar: Bool = true, animated: Bool) {
+		let controller = navigationState.targetController ?? navigationState.currentController!
+
+		var visibleBars = Set(Bar.allCases)
+		var allControllers = navigationState.navigationController.viewControllers
+		if let targetController = navigationState.targetController, !allControllers.contains(targetController) {
+			allControllers.append(targetController)
+		}
+		for stackController in allControllers {
+			visibleBars.apply(options(for: stackController).barDifference)
+			if stackController == navigationState.targetController { break }
+		}
+
+		if setupNavigationBar {
+			navigationState.navigationController.setNavigationBarHidden(!visibleBars.contains(.navigation), animated: animated)
+		}
+		setTabBarHidden(!visibleBars.contains(.tab), animated: animated)
+		if navigationState.navigationController.interactivePopGestureRecognizer?.state == .possible {
+			navigationState.navigationController.interactivePopGestureRecognizer?.isEnabled = options(for: controller).swipeBackGestureState == .enabled
+		}
+	}
+
+	private func setNeedsDelegatedChildViewControllerUpdates() {
 		setNeedsStatusBarAppearanceUpdate()
 		setNeedsUpdateOfHomeIndicatorAutoHidden()
 		setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
+	}
+
+	private func updateOptionsForAllNavigationControllers(animated: Bool) {
+		navigationControllers.forEach {
+			setupBarVisibility(for: navigationState(for: $0), animated: animated)
+		}
 	}
 
 	private class PrecedingControllerNavigatorImplementation: PrecedingControllerNavigator {
@@ -368,51 +431,25 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 
 		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
-			guard let controller = parent.navigationControllers.flatMap(\.viewControllers).first(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
-			parent.popToViewController(controller, animated: animated, completion: completion)
-		}
-	}
+			guard let navigationController = parent.navigationControllers.first(where: { $0.viewControllers.contains { $0.navigationItem == navigationItem } }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+			guard let targetControllerIndex = navigationController.viewControllers.firstIndex(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
 
-	private func setupBarVisibility(for navigationState: NavigationState, setupNavigationBar: Bool = true, animated: Bool) {
-		let controller = navigationState.targetController ?? navigationState.currentController!
-		let isNavigationBarHidden = hiddenNavigationBarControllers.contains(controller)
-		let isTabBarHidden = hiddenTabBarControllers.contains(controller)
-		let isSwipeBackGestureDisabled = (navigationState.navigationController.viewControllers.first == navigationState.currentController || disabledSwipeBackGestureControllers.contains(controller))
-
-		if setupNavigationBar {
-			navigationState.navigationController.setNavigationBarHidden(isNavigationBarHidden, animated: animated)
-		}
-		setTabBarHidden(isTabBarHidden, animated: animated)
-		navigationState.navigationController.interactivePopGestureRecognizer?.isEnabled = !isSwipeBackGestureDisabled
-	}
-
-	private func willShow(_ controller: UIViewController, animated: Bool, in navigationController: UINavigationController) {
-		let navigationState = self.navigationState(for: navigationController)
-		navigationState.targetController = controller
-		setupBarVisibility(for: navigationState, animated: animated)
-
-		targetOrCurrentViewController = controller
-		updateDelegatedChildViewControllers()
-
-		navigationController.topViewController?.transitionCoordinator?.notifyWhenInteractionChanges { [weak self] context in
-			if context.isCancelled {
-				self?.targetOrCurrentViewController = navigationState.currentController
-				self?.updateDelegatedChildViewControllers()
-
-				navigationState.targetController = nil
-				self?.setupBarVisibility(for: navigationState, setupNavigationBar: false, animated: Animated.motionBased.value)
+			var currentIndex = navigationController.viewControllers.count - 1
+			while currentIndex > targetControllerIndex {
+				let controller = navigationController.viewControllers[currentIndex]
+				switch parent.options(for: controller).precedingItemNavigationState {
+				case let .disabled(attemptClosure):
+					attemptClosure()
+					return
+				case .enabled:
+					break
+				}
+				currentIndex -= 1
 			}
+
+			let targetController = navigationController.viewControllers[targetControllerIndex]
+			parent.popToViewController(targetController, animated: animated, completion: completion)
 		}
-	}
-
-	private func didShow(_ controller: UIViewController, animated: Bool, in navigationController: UINavigationController) {
-		let navigationState = self.navigationState(for: navigationController)
-		navigationState.currentController = controller
-		navigationState.targetController = nil
-		setupBarVisibility(for: navigationState, animated: false)
-
-		targetOrCurrentViewController = controller
-		updateDelegatedChildViewControllers()
 	}
 
 	private class InternalDelegate: NSObject, UITabBarControllerDelegate, UINavigationControllerDelegate {
@@ -430,11 +467,32 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 
 		func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-			parent.willShow(viewController, animated: animated, in: navigationController)
+			let navigationState = parent.navigationState(for: navigationController)
+			navigationState.targetController = viewController
+			parent.setupBarVisibility(for: navigationState, animated: animated)
+
+			parent.targetOrCurrentViewController = viewController
+			parent.setNeedsDelegatedChildViewControllerUpdates()
+
+			navigationController.topViewController?.transitionCoordinator?.notifyWhenInteractionChanges { [weak parent] context in
+				if context.isCancelled {
+					parent?.targetOrCurrentViewController = navigationState.currentController
+					parent?.setNeedsDelegatedChildViewControllerUpdates()
+
+					navigationState.targetController = nil
+					parent?.setupBarVisibility(for: navigationState, setupNavigationBar: false, animated: Animated.motionBased.value)
+				}
+			}
 		}
 
 		func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-			parent.didShow(viewController, animated: animated, in: navigationController)
+			let navigationState = parent.navigationState(for: navigationController)
+			navigationState.currentController = viewController
+			navigationState.targetController = nil
+			parent.setupBarVisibility(for: navigationState, animated: false)
+
+			parent.targetOrCurrentViewController = viewController
+			parent.setNeedsDelegatedChildViewControllerUpdates()
 		}
 	}
 }

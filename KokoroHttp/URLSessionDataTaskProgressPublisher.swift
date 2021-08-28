@@ -31,7 +31,7 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	private let session: URLSession
 	private let request: URLRequest
 	private let subject = CurrentValueSubject<Output, Failure>(.sendProgress(.indeterminate()))
-	private let lock = ObjcLock()
+	private let lock: Lock = FoundationLock()
 	private var subscriptionCount = 0
 	private var dataTask: URLSessionDataTask?
 	private lazy var kvoObserver = KVOObserver { [weak self] in self?.updateProgress() }
@@ -39,6 +39,12 @@ public class UrlSessionDataTaskProgressPublisher: Publisher {
 	public init(session: URLSession, request: URLRequest) {
 		self.session = session
 		self.request = request
+	}
+
+	deinit {
+		lock.acquireAndRun {
+			kvoObserver.stopObservingAll()
+		}
 	}
 
 	public func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {

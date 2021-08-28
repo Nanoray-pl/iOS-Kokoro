@@ -4,9 +4,12 @@
 //
 
 #if canImport(UIKit)
+import KokoroUtils
 import UIKit
 
 open class NavigationControllerWrapper: UIViewController {
+	public typealias Configurator<T: UIViewController> = (_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void
+
 	public struct NavigateBuilderResult<T: UIViewController> {
 		public let controller: T
 		public let options: Options
@@ -17,23 +20,52 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public struct Options: Hashable {
-		public let navigationBarVisibility: Visibility
-		public let swipeBackGestureState: EnablementState
+	public struct Options: ValueWith {
+		public var navigationBarVisibility: Visibility
+		public var precedingItemNavigationState: PrecedingItemNavigationState
+		public var swipeBackGestureState: EnablementState
 
-		public init(navigationBar navigationBarVisibility: Visibility, swipeBackGesture swipeBackGestureState: EnablementState = .enabled) {
+		public init(
+			navigationBar navigationBarVisibility: Visibility,
+			precedingItemNavigationState: PrecedingItemNavigationState = .enabled,
+			swipeBackGesture swipeBackGestureState: EnablementState = .enabled
+		) {
 			self.navigationBarVisibility = navigationBarVisibility
+			self.precedingItemNavigationState = precedingItemNavigationState
 			self.swipeBackGestureState = swipeBackGestureState
+		}
+	}
+
+	public enum PrecedingItemNavigationState {
+		case disabled(attemptClosure: () -> Void = {})
+		case enabled
+	}
+
+	private struct ControllerOptions: ValueWith {
+		private(set) weak var controller: UIViewController?
+		var options: Options
+
+		init(
+			controller: UIViewController,
+			options: Options
+		) {
+			self.controller = controller
+			self.options = options
 		}
 	}
 
 	private(set) lazy var precedingControllerNavigator: PrecedingControllerNavigator = PrecedingControllerNavigatorImplementation(parent: self)
 	private let wrappedNavigationController: UINavigationController
-	private let hiddenNavigationBarControllers = NSHashTable<UIViewController>(options: .weakMemory)
-	private let disabledSwipeBackGestureControllers = NSHashTable<UIViewController>(options: .weakMemory)
 	private var isCustomModalInPresentationValueSet = false
 	private weak var targetOrCurrentViewController: UIViewController?
 	private lazy var internalDelegate = InternalDelegate(parent: self) // swiftlint:disable:this weak_delegate
+
+	private var controllerOptions = [ControllerOptions]() {
+		didSet {
+			guard controllerOptions.contains(where: { $0.controller == nil }) else { return }
+			controllerOptions = controllerOptions.filter { $0.controller != nil }
+		}
+	}
 
 	open override var childForHomeIndicatorAutoHidden: UIViewController? {
 		return targetOrCurrentViewController ?? super.childForHomeIndicatorAutoHidden
@@ -75,15 +107,20 @@ open class NavigationControllerWrapper: UIViewController {
 
 	public init(rootViewController: UIViewController, navigationControllerFactory: (_ rootViewController: UIViewController) -> UINavigationController = { UINavigationController(rootViewController: $0) }, withNavigationBar navigationBarVisibility: Visibility) {
 		wrappedNavigationController = navigationControllerFactory(rootViewController)
-		if navigationBarVisibility == .hidden {
-			hiddenNavigationBarControllers.add(rootViewController)
-		}
+		controllerOptions.append(.init(
+			controller: rootViewController,
+			options: .init(
+				navigationBar: navigationBarVisibility,
+				precedingItemNavigationState: .disabled(),
+				swipeBackGesture: .disabled
+			)
+		))
 		super.init(nibName: nil, bundle: nil)
 		wrappedNavigationController.delegate = internalDelegate
 		wrappedNavigationController.interactivePopGestureRecognizer?.delegate = nil // allows the swipe-from-left-edge back gesture to work
 	}
 
-	open override func loadView() {
+	public override func loadView() {
 		super.loadView()
 
 		addChild(wrappedNavigationController)
@@ -96,7 +133,7 @@ open class NavigationControllerWrapper: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	public func navigateToRootViewController<T: UIViewController>(configurator: ((_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void)? = nil, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToRootViewController<T: UIViewController>(configurator: Configurator<T>? = nil, animated: Bool, completion: (() -> Void)? = nil) {
 		guard let rootController = viewControllers.first as? T else { return }
 		if viewControllers.count == 1 {
 			if let configurator = configurator {
@@ -110,11 +147,11 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: ((_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void)? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: Configurator<T>? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: (() -> Void)? = nil) {
 		navigateToExistingOrNewViewController(where: { $0 == controller }, configurator: configurator, factory: factory, animated: animated, completion: completion)
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (_ controller: T) -> Bool = { _ in true }, configurator: ((_ controller: T, _ animated: Bool, _ completion: (() -> Void)?) -> Void)? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: Configurator<T>? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: (() -> Void)? = nil) {
 		if let existingViewController = topViewController as? T, predicate(existingViewController) {
 			if let configurator = configurator {
 				configurator(existingViewController, animated, completion)
@@ -135,12 +172,7 @@ open class NavigationControllerWrapper: UIViewController {
 	}
 
 	public func pushViewController(_ viewController: UIViewController, options: Options, animated: Bool, completion: (() -> Void)? = nil) {
-		if options.navigationBarVisibility == .hidden {
-			hiddenNavigationBarControllers.add(viewController)
-		}
-		if !options.swipeBackGestureState.isEnabled {
-			disabledSwipeBackGestureControllers.add(viewController)
-		}
+		controllerOptions.append(.init(controller: viewController, options: options))
 		wrappedNavigationController.pushViewController(viewController, animated: animated, completion: completion)
 	}
 
@@ -159,10 +191,38 @@ open class NavigationControllerWrapper: UIViewController {
 		return wrappedNavigationController.popToRootViewController(animated: animated, completion: completion)
 	}
 
-	private func updateDelegatedChildViewControllers() {
+	private func controllerOptions(for viewController: UIViewController) -> ControllerOptions {
+		guard let entry = controllerOptions.first(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
+		return entry
+	}
+
+	public func options(for viewController: UIViewController) -> Options {
+		return controllerOptions(for: viewController).options
+	}
+
+	public func setOptions(to optionsOverride: Options, for viewController: UIViewController, animated: Bool) {
+		guard let index = controllerOptions.firstIndex(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
+		controllerOptions[index].options = optionsOverride
+		updateOptions(animated: animated)
+	}
+
+	private func setNeedsDelegatedChildViewControllerUpdates() {
 		setNeedsStatusBarAppearanceUpdate()
 		setNeedsUpdateOfHomeIndicatorAutoHidden()
 		setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
+	}
+
+	private func updateOptions(animated: Bool) {
+		guard let topViewController = topViewController else { return }
+		updateOptions(for: topViewController, animated: animated)
+	}
+
+	private func updateOptions(for viewController: UIViewController, animated: Bool) {
+		let options = options(for: viewController)
+		wrappedNavigationController.setNavigationBarHidden(options.navigationBarVisibility == .hidden, animated: animated)
+		if wrappedNavigationController.interactivePopGestureRecognizer?.state == .possible {
+			wrappedNavigationController.interactivePopGestureRecognizer?.isEnabled = options.swipeBackGestureState.isEnabled
+		}
 	}
 
 	private class PrecedingControllerNavigatorImplementation: PrecedingControllerNavigator {
@@ -178,29 +238,24 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 
 		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
-			guard let controller = parent.wrappedNavigationController.viewControllers.first(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
-			parent.popToViewController(controller, animated: animated, completion: completion)
+			guard let targetControllerIndex = parent.wrappedNavigationController.viewControllers.firstIndex(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+
+			var currentIndex = parent.wrappedNavigationController.viewControllers.count - 1
+			while currentIndex > targetControllerIndex {
+				let controller = parent.wrappedNavigationController.viewControllers[currentIndex]
+				switch parent.options(for: controller).precedingItemNavigationState {
+				case let .disabled(attemptClosure):
+					attemptClosure()
+					return
+				case .enabled:
+					break
+				}
+				currentIndex -= 1
+			}
+
+			let targetController = parent.wrappedNavigationController.viewControllers[targetControllerIndex]
+			parent.popToViewController(targetController, animated: animated, completion: completion)
 		}
-	}
-
-	private func willShow(_ controller: UIViewController, animated: Bool, in navigationController: UINavigationController) {
-		let shouldHide = hiddenNavigationBarControllers.contains(controller)
-		navigationController.setNavigationBarHidden(shouldHide, animated: animated)
-
-		let shouldDisableSwipeBackGesture = disabledSwipeBackGestureControllers.contains(controller)
-		navigationController.interactivePopGestureRecognizer?.isEnabled = !shouldDisableSwipeBackGesture
-
-		targetOrCurrentViewController = controller
-		updateDelegatedChildViewControllers()
-	}
-
-	private func didShow(_ controller: UIViewController, animated: Bool, in navigationController: UINavigationController) {
-		if navigationController.viewControllers.first == controller {
-			navigationController.interactivePopGestureRecognizer?.isEnabled = false
-		}
-
-		targetOrCurrentViewController = controller
-		updateDelegatedChildViewControllers()
 	}
 
 	private class InternalDelegate: NSObject, UINavigationControllerDelegate {
@@ -211,11 +266,24 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 
 		func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-			parent.willShow(viewController, animated: animated, in: navigationController)
+			parent.updateOptions(for: viewController, animated: animated)
+
+			parent.targetOrCurrentViewController = viewController
+			parent.setNeedsDelegatedChildViewControllerUpdates()
 		}
 
 		func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-			parent.didShow(viewController, animated: animated, in: navigationController)
+			let shouldEnableSwipeBackGesture: Bool
+			if navigationController.viewControllers.first == viewController {
+				shouldEnableSwipeBackGesture = false
+				navigationController.interactivePopGestureRecognizer?.isEnabled = false
+			} else {
+				shouldEnableSwipeBackGesture = parent.options(for: viewController).swipeBackGestureState.isEnabled
+			}
+			parent.wrappedNavigationController.interactivePopGestureRecognizer?.isEnabled = shouldEnableSwipeBackGesture
+
+			parent.targetOrCurrentViewController = viewController
+			parent.setNeedsDelegatedChildViewControllerUpdates()
 		}
 	}
 }

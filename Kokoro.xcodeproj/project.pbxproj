@@ -33,6 +33,10 @@
 		AA42D423256A8056004604D2 /* SimpleAsynchronousImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D422256A8056004604D2 /* SimpleAsynchronousImageLoader.swift */; };
 		AA42D449256A80EA004604D2 /* SkeletonAsynchronousImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D448256A80EA004604D2 /* SkeletonAsynchronousImageLoader.swift */; };
 		AA42D457256A8154004604D2 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42D456256A8154004604D2 /* SkeletonView.swift */; };
+		AA43DF4326DABDED00C0B2AC /* SetDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43DF4226DABDED00C0B2AC /* SetDifference.swift */; };
+		AA43DF4626DAC0EC00C0B2AC /* OSLogLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43DF4526DAC0EC00C0B2AC /* OSLogLogger.swift */; };
+		AA43DF4826DAC12D00C0B2AC /* CodeIdentifierLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43DF4726DAC12D00C0B2AC /* CodeIdentifierLogger.swift */; };
+		AA43DF4A26DAC13D00C0B2AC /* CompoundLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA43DF4926DAC13D00C0B2AC /* CompoundLogger.swift */; };
 		AA469ECC26C8F6170061B6C5 /* CardDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469ECB26C8F6170061B6C5 /* CardDeckView.swift */; };
 		AA469ECE26C99FF20061B6C5 /* KokoroUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD354B125287210007C63EF /* KokoroUI.framework */; };
 		AA469ECF26C99FF80061B6C5 /* KokoroUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAD3548D252869D0007C63EF /* KokoroUtils.framework */; };
@@ -436,6 +440,10 @@
 		AA42D422256A8056004604D2 /* SimpleAsynchronousImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAsynchronousImageLoader.swift; sourceTree = "<group>"; };
 		AA42D448256A80EA004604D2 /* SkeletonAsynchronousImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonAsynchronousImageLoader.swift; sourceTree = "<group>"; };
 		AA42D456256A8154004604D2 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
+		AA43DF4226DABDED00C0B2AC /* SetDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetDifference.swift; sourceTree = "<group>"; };
+		AA43DF4526DAC0EC00C0B2AC /* OSLogLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogLogger.swift; sourceTree = "<group>"; };
+		AA43DF4726DAC12D00C0B2AC /* CodeIdentifierLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeIdentifierLogger.swift; sourceTree = "<group>"; };
+		AA43DF4926DAC13D00C0B2AC /* CompoundLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundLogger.swift; sourceTree = "<group>"; };
 		AA469ECB26C8F6170061B6C5 /* CardDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckView.swift; sourceTree = "<group>"; };
 		AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckViewController.swift; sourceTree = "<group>"; };
 		AA469EDA26CEC0950061B6C5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -899,6 +907,17 @@
 			path = Bootstrap;
 			sourceTree = "<group>";
 		};
+		AA43DF4426DAC0D200C0B2AC /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				AAD355CC2528B4A4007C63EF /* Logger.swift */,
+				AA43DF4526DAC0EC00C0B2AC /* OSLogLogger.swift */,
+				AA43DF4726DAC12D00C0B2AC /* CodeIdentifierLogger.swift */,
+				AA43DF4926DAC13D00C0B2AC /* CompoundLogger.swift */,
+			);
+			path = Logger;
+			sourceTree = "<group>";
+		};
 		AA469ECD26C99FF20061B6C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1106,10 +1125,10 @@
 				AA16EB08257A7849001C30E9 /* Scheduler */,
 				AAE9D6712615FB3A0040C91F /* Either */,
 				AA7168FB26BECF55002039DC /* Combine */,
+				AA43DF4426DAC0D200C0B2AC /* Logger */,
 				AAD354A025286B1C007C63EF /* With.swift */,
 				AAD355C72528B3D7007C63EF /* Identifier.swift */,
 				AAD3580E2529C6F2007C63EF /* Identifiable.swift */,
-				AAD355CC2528B4A4007C63EF /* Logger.swift */,
 				AA5AEC1A255584D800516C8D /* Cancellable.swift */,
 				AA5AECC72556B03600516C8D /* SortedArray.swift */,
 				AA5AECE92556B10D00516C8D /* MD5.swift */,
@@ -1125,6 +1144,7 @@
 				AA974CFD26AD6012005D6ADE /* KVOObserver.swift */,
 				AA469EDA26CEC0950061B6C5 /* Math.swift */,
 				AA20B64726D1205100A7EE98 /* LateInit.swift */,
+				AA43DF4226DABDED00C0B2AC /* SetDifference.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -2608,6 +2628,7 @@
 				AA974CFE26AD6012005D6ADE /* KVOObserver.swift in Sources */,
 				AA20B64826D1205100A7EE98 /* LateInit.swift in Sources */,
 				AA16EAFB257A7818001C30E9 /* Scheduler.swift in Sources */,
+				AA43DF4326DABDED00C0B2AC /* SetDifference.swift in Sources */,
 				AAD354A125286B1C007C63EF /* With.swift in Sources */,
 				AA5AEC1B255584D800516C8D /* Cancellable.swift in Sources */,
 				AA42D415256A7BBC004604D2 /* PrivateSourceLocation.swift in Sources */,
@@ -2615,8 +2636,10 @@
 				AAF080E325E942A800D5065C /* ObserverSet.swift in Sources */,
 				AA7168FD26BECF98002039DC /* SyncCombine.swift in Sources */,
 				AA5AECC82556B03600516C8D /* SortedArray.swift in Sources */,
+				AA43DF4826DAC12D00C0B2AC /* CodeIdentifierLogger.swift in Sources */,
 				AA974CE626AD5C27005D6ADE /* LoggedError.swift in Sources */,
 				AA71690326BED26E002039DC /* CombineOnEvent.swift in Sources */,
+				AA43DF4A26DAC13D00C0B2AC /* CompoundLogger.swift in Sources */,
 				AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */,
 				AA880B2C261EFA12001AE8C3 /* ProxyPropertyWrapper.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
@@ -2624,6 +2647,7 @@
 				AA3E320E2597CCCC00981F90 /* RunLoopScheduler.swift in Sources */,
 				AAE9D68F2615FBB40040C91F /* Either4.swift in Sources */,
 				AA16EAE1257A74DA001C30E9 /* Lock.swift in Sources */,
+				AA43DF4626DAC0EC00C0B2AC /* OSLogLogger.swift in Sources */,
 				AAD3580F2529C6F2007C63EF /* Identifiable.swift in Sources */,
 				AA71690526BED2AB002039DC /* OtherCombineExtensions.swift in Sources */,
 				AAD354A725286E31007C63EF /* CollectionExtensions.swift in Sources */,

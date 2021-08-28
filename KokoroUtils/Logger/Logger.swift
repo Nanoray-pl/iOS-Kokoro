@@ -93,66 +93,6 @@ public extension Logger {
 	}
 }
 
-#if canImport(os)
-import os.log
-
-public class OSLogLoggerFactory: LoggerFactory {
-	private let includesCodeIdentifier: Bool
-
-	public init(includesCodeIdentifier: Bool = true) {
-		self.includesCodeIdentifier = includesCodeIdentifier
-	}
-
-	public func createLogger(name: String, level: LogLevel) -> Logger {
-		return OSLogLogger(logger: OSLog(subsystem: name, category: name), name: name, includesCodeIdentifier: includesCodeIdentifier, initialLevel: level)
-	}
-
-	private class OSLogLogger: Logger {
-		private let logger: OSLog
-		private let name: String
-		private let includesCodeIdentifier: Bool
-
-		var level: LogLevel
-
-		init(logger: OSLog, name: String, includesCodeIdentifier: Bool, initialLevel: LogLevel) {
-			self.name = name
-			self.logger = logger
-			self.includesCodeIdentifier = includesCodeIdentifier
-			level = initialLevel
-		}
-
-		private func identifier(file: String, function: String, line: Int) -> String {
-			return "\(file.split(separator: "/").last!):\(function):\(line)"
-		}
-
-		func log(_ level: LogLevel, _ message: @autoclosure () -> String, file: String, function: String, line: Int) {
-			guard level >= self.level else { return }
-
-			let builtMessage = message()
-			let builtMessageWithPrefix = builtMessage.isEmpty ? "" : "\(includesCodeIdentifier ? ": " : "")\(builtMessage)"
-			let finalMessage = "\(includesCodeIdentifier ? identifier(file: file, function: function, line: line) : "")\(builtMessageWithPrefix)"
-
-			os_log("%@[%@] %@", type: Self.osLogType(for: level), level.symbol ?? "", name, finalMessage)
-		}
-
-		private static func osLogType(for level: LogLevel) -> OSLogType {
-			switch level {
-			case .verbose:
-				return .debug
-			case .debug:
-				return .debug
-			case .info:
-				return .info
-			case .warning:
-				return .info
-			case .error:
-				return .error
-			}
-		}
-	}
-}
-#endif
-
 #if canImport(Combine)
 import Combine
 
