@@ -353,7 +353,22 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 				constraints += entryView.bottomToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.bottom)
 			}
 
-			entryView.entryConstraints = constraints
+			let previousConstraints = entryView.entryConstraints.sorted(by: \.firstAttribute.rawValue, .ascending, then: \.secondAttribute.rawValue, .ascending)
+			let newConstraints = constraints.sorted(by: \.firstAttribute.rawValue, .ascending, then: \.secondAttribute.rawValue, .ascending)
+			var shouldUpdateConstraints = previousConstraints.count != newConstraints.count
+			if !shouldUpdateConstraints {
+				for constraintIndex in newConstraints.indices {
+					let previousConstraint = previousConstraints[constraintIndex]
+					let newConstraint = newConstraints[constraintIndex]
+					if previousConstraint.firstAttribute != newConstraint.firstAttribute || previousConstraint.secondAttribute != newConstraint.secondAttribute || previousConstraint.multiplier != newConstraint.multiplier || previousConstraint.constant != newConstraint.constant {
+						shouldUpdateConstraints = true
+						break
+					}
+				}
+			}
+			if shouldUpdateConstraints {
+				entryView.entryConstraints = constraints
+			}
 		}
 
 		let scrollableContentLength = CGFloat(visibleEntryViews.count) * itemScrollLength
