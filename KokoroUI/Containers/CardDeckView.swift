@@ -255,7 +255,6 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			horizontal: frame.width - contentInsets.right
 		)
 
-		let directionMultiplier: CGFloat
 		let firstGroupStart: CGFloat
 		var firstGroupEnd: CGFloat
 		var secondGroupStart: CGFloat
@@ -270,32 +269,30 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 
 		switch orientation {
 		case .leftToRight, .topToBottom:
-			directionMultiplier = 1
 			firstGroupStart = minL
 		case .rightToLeft, .bottomToTop:
-			directionMultiplier = -1
 			firstGroupStart = maxL
 		}
-		firstGroupEnd = firstGroupStart + (workingLength - itemLength - splitSpacing) * directionMultiplier
+		firstGroupEnd = firstGroupStart + workingLength - itemLength - splitSpacing
 		let baseSpacing = (firstGroupLength - itemLength) / CGFloat(visibleEntryViews.count - 2)
 		firstGroupEnd += baseSpacing
 
-		secondGroupEnd = firstGroupStart + workingLength * directionMultiplier
+		secondGroupEnd = firstGroupStart + workingLength
 		secondGroupStart = secondGroupEnd - firstGroupLength
 
 		if let maxGroupedSpacing = maxGroupedSpacing {
 			let currentSpacing = (abs(firstGroupLength) - itemLength) / CGFloat(visibleEntryViews.count - 1)
 			if maxGroupedSpacing < currentSpacing {
 				let newGroupLength = maxGroupedSpacing * CGFloat(visibleEntryViews.count - 1) + itemLength
-				firstGroupEnd = firstGroupStart + newGroupLength * directionMultiplier
-				secondGroupStart = secondGroupEnd - newGroupLength * directionMultiplier
+				firstGroupEnd = firstGroupStart + newGroupLength
+				secondGroupStart = secondGroupEnd - newGroupLength
 			}
 		}
 
 		switch splitCardGroupPosition {
 		case .near:
 			let currentSpacing = (abs(firstGroupLength) - itemLength) / CGFloat(visibleEntryViews.count - 1)
-			secondGroupEnd = firstGroupEnd + (splitSpacing + itemLength - currentSpacing) * directionMultiplier
+			secondGroupEnd = firstGroupEnd + (splitSpacing + itemLength - currentSpacing)
 			secondGroupStart = secondGroupEnd - firstGroupLength
 		case .far:
 			break
@@ -316,9 +313,9 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		let firstPositionMultiplier = mappedScrollPosition < 0 ? 1 / (abs(mappedScrollPosition) + 1) : 1
 		let secondPositionMultiplier = mappedScrollPosition > CGFloat(visibleEntryViews.count) ? 1 / (abs(mappedScrollPosition - CGFloat(visibleEntryViews.count)) + 1) : 1
 
-		let newFirstGroupLength = ((abs(firstGroupLength) - itemLength) * firstPositionMultiplier + itemLength) * directionMultiplier
+		let newFirstGroupLength = (abs(firstGroupLength) - itemLength) * firstPositionMultiplier + itemLength
 		firstGroupEnd = firstGroupStart + newFirstGroupLength
-		let newSecondGroupLength = ((abs(secondGroupLength) - itemLength) * secondPositionMultiplier + itemLength) * directionMultiplier
+		let newSecondGroupLength = (abs(secondGroupLength) - itemLength) * secondPositionMultiplier + itemLength
 		secondGroupStart = secondGroupEnd - newSecondGroupLength
 
 		visibleEntryViews.enumerated().forEach { index, entryView in
@@ -336,33 +333,24 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 
 			let position: CGFloat
 			if visibleEntryViews.count == 1 {
-				switch orientation {
-				case .leftToRight, .topToBottom:
-					position = firstGroupStart
-				case .rightToLeft, .bottomToTop:
-					position = firstGroupStart - itemLength
-				}
+				position = firstGroupStart
 			} else {
 				let itemIndexFraction = visibleEntryViews.count == 1 ? 0 : CGFloat(index) / CGFloat(visibleEntryViews.count - 1)
-				var firstPosition = firstGroupStart + (abs(firstGroupLength) - itemLength) * itemIndexFraction * directionMultiplier
-				var secondPosition = secondGroupStart + (abs(secondGroupLength) - itemLength) * itemIndexFraction * directionMultiplier
-				switch orientation {
-				case .rightToLeft, .bottomToTop:
-					firstPosition -= itemLength
-					secondPosition -= itemLength
-				case .leftToRight, .topToBottom:
-					break
-				}
-
+				let firstPosition = firstGroupStart + (abs(firstGroupLength) - itemLength) * itemIndexFraction
+				let secondPosition = secondGroupStart + (abs(secondGroupLength) - itemLength) * itemIndexFraction
 				let fraction = (mappedScrollPosition - CGFloat(visibleEntryViews.count - 1) + CGFloat(index)).clamped(to: 0 ... 1)
 				position = firstPosition + (secondPosition - firstPosition) * fraction
 			}
 
 			switch orientation {
-			case .leftToRight, .rightToLeft:
-				constraints += entryView.leftToSuperview(inset: position.isNaN ? 0 : position)
-			case .topToBottom, .bottomToTop:
-				constraints += entryView.topToSuperview(inset: position.isNaN ? 0 : position)
+			case .leftToRight:
+				constraints += entryView.leftToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.left)
+			case .rightToLeft:
+				constraints += entryView.rightToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.right)
+			case .topToBottom:
+				constraints += entryView.topToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.top)
+			case .bottomToTop:
+				constraints += entryView.bottomToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.bottom)
 			}
 
 			entryView.entryConstraints = constraints

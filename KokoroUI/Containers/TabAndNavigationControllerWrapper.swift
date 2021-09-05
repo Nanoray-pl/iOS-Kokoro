@@ -184,11 +184,6 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public init(items: [Item]) {
-		super.init(nibName: nil, bundle: nil)
-		setupItems(items)
-	}
-
 	public final func setupItems(_ items: [Item]) {
 		wrappedTabBarController.setViewControllers(
 			items.map {
@@ -266,27 +261,27 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		setupTabItem(tabBar.items![index], with: visuals)
 	}
 
-	public func navigateToRootViewController<T: UIViewController>(type: T.Type = T.self, configurator: Configurator<T> = { _, _, completion in completion?() }, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToRootViewController<T: UIViewController>(type: T.Type = T.self, configurator: Configurator<T> = { _, _, completion in completion?() }, animated: Bool, completion: ((T) -> Void)? = nil) {
 		for navigationController in navigationControllers(for: .allTabs) {
 			guard let rootController = navigationController.viewControllers.first as? T else { continue }
 			if navigationController.viewControllers.count == 1 {
-				configurator(rootController, animated, completion)
+				configurator(rootController, animated) { completion?(rootController) }
 				break
 			} else {
 				configurator(rootController, false, nil)
-				navigationController.popToViewController(rootController, animated: animated, completion: completion)
+				navigationController.popToViewController(rootController, animated: animated) { completion?(rootController) }
 				break
 			}
 		}
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: Configurator<T> = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: Configurator<T> = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: ((T) -> Void)? = nil) {
 		navigateToExistingOrNewViewController(where: { $0 == controller }, configurator: configurator, factory: factory, animated: animated, completion: completion)
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: Configurator<T> = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: Configurator<T> = { _, _, completion in completion?() }, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, inScope navigateScope: NavigateScope = .currentTab, animated: Bool, completion: ((T) -> Void)? = nil) {
 		if let existingViewController = topViewController as? T, predicate(existingViewController) {
-			configurator(existingViewController, animated, completion)
+			configurator(existingViewController, animated) { completion?(existingViewController) }
 			return
 		}
 
@@ -294,18 +289,18 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 			if let existingViewController = navigationController.viewControllers.compactMap({ $0 as? T }).last(where: predicate) {
 				configurator(existingViewController, false, nil)
 				if navigationController == currentNavigationController {
-					navigationController.popToViewController(existingViewController, animated: animated, completion: completion)
+					navigationController.popToViewController(existingViewController, animated: animated) { completion?(existingViewController) }
 				} else {
 					navigationController.popToViewController(existingViewController, animated: false)
 					currentNavigationController = navigationController
-					completion?()
+					completion?(existingViewController)
 				}
 				return
 			}
 		}
 
 		let result = factory(precedingControllerNavigator)
-		pushViewController(result.controller, options: result.options, animated: animated, completion: completion)
+		pushViewController(result.controller, options: result.options, animated: animated) { completion?(result.controller) }
 	}
 
 	public func pushViewController(_ viewController: UIViewController, options: Options, animated: Bool, completion: (() -> Void)? = nil) {
@@ -378,7 +373,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	func didSelectViewController(_ controller: UIViewController) {
+	open func didSelectViewController(_ controller: UIViewController) {
 		targetOrCurrentViewController = topViewController
 		setNeedsDelegatedChildViewControllerUpdates()
 	}

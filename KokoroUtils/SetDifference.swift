@@ -8,7 +8,7 @@ public struct SetDifference<T: Hashable>: ValueWith, ExpressibleByArrayLiteral {
 		case with(_ element: T)
 		case without(_ element: T)
 
-		var element: T {
+		public var element: T {
 			switch self {
 			case let .with(element), let .without(element):
 				return element

@@ -147,28 +147,28 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: Configurator<T>? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(_ controller: T, configurator: Configurator<T>? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: ((T) -> Void)? = nil) {
 		navigateToExistingOrNewViewController(where: { $0 == controller }, configurator: configurator, factory: factory, animated: animated, completion: completion)
 	}
 
-	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: Configurator<T>? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: (() -> Void)? = nil) {
+	public func navigateToExistingOrNewViewController<T: UIViewController>(where predicate: (T) -> Bool = { _ in true }, configurator: Configurator<T>? = nil, factory: (_ precedingControllerNavigator: PrecedingControllerNavigator) -> NavigateBuilderResult<T>, animated: Bool, completion: ((T) -> Void)? = nil) {
 		if let existingViewController = topViewController as? T, predicate(existingViewController) {
 			if let configurator = configurator {
-				configurator(existingViewController, animated, completion)
+				configurator(existingViewController, animated) { completion?(existingViewController) }
 			} else {
-				completion?()
+				completion?(existingViewController)
 			}
 			return
 		}
 
 		if let existingViewController = viewControllers.compactMap({ $0 as? T }).last(where: predicate) {
 			configurator?(existingViewController, false, nil)
-			popToViewController(existingViewController, animated: animated, completion: completion)
+			popToViewController(existingViewController, animated: animated) { completion?(existingViewController) }
 			return
 		}
 
 		let result = factory(precedingControllerNavigator)
-		pushViewController(result.controller, options: result.options, animated: animated, completion: completion)
+		pushViewController(result.controller, options: result.options, animated: animated) { completion?(result.controller) }
 	}
 
 	public func pushViewController(_ viewController: UIViewController, options: Options, animated: Bool, completion: (() -> Void)? = nil) {
