@@ -3,9 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-public protocol EmptyInitializableCollection: Collection {
-	init()
-}
+public protocol EmptyInitializableCollection: NoParameterInitializable, Collection {}
 
 public extension Collection {
 	var nonEmpty: Self? {

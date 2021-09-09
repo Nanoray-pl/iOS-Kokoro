@@ -11,6 +11,10 @@ public protocol ObjectWith: AnyObject, AnyWith {
 	typealias Locked<T, LockType: Lock> = AnyLocked<Self, T, LockType>
 }
 
+public protocol NoParameterInitializable {
+	init()
+}
+
 private enum CastError: Error {
 	case error
 }

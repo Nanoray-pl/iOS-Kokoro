@@ -15,6 +15,32 @@ public extension Lock {
 	}
 }
 
+public enum FakeLock: Lock {
+	case shared
+
+	public func acquireAndRun<R>(_ closure: () throws -> R) rethrows -> R {
+		return try closure()
+	}
+}
+
+public enum Synchronization {
+	case none, shared, automatic
+	case via(_ lock: Lock)
+
+	public func lock(sharedLock: Lock) -> Lock {
+		switch self {
+		case .none:
+			return FakeLock.shared
+		case .shared:
+			return sharedLock
+		case .automatic:
+			return FoundationLock()
+		case let .via(lock):
+			return lock
+		}
+	}
+}
+
 #if canImport(ObjectiveC)
 import ObjectiveC
 
