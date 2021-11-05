@@ -123,7 +123,7 @@ public extension Router {
 	}
 }
 
-public protocol Route: Router {}
+public protocol Route: AnyObject {}
 
 #if canImport(UIKit)
 import UIKit
