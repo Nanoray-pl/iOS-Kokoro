@@ -59,16 +59,16 @@ public extension FirstRouterAware {
 		return current
 	}
 
-	func optionalRouter<RouteType>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType? {
+	func optionalRouter<RouteType: Route>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType? {
 		return firstRouter?.optionalRouter(direction, for: routeType)
 	}
 
-	func router<RouteType>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType {
+	func router<RouteType: Route>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType {
 		guard let firstRouter = firstRouter else { fatalError("\(self) does not have a `Router` in its chain.") }
 		return firstRouter.router(direction, for: routeType)
 	}
 
-	func route<RouteType>(_ direction: RoutingDirection, via routeType: RouteType.Type, routing: (RouteType) -> Void) {
+	func route<RouteType: Route>(_ direction: RoutingDirection, via routeType: RouteType.Type, routing: (RouteType) -> Void) {
 		guard let firstRouter = firstRouter else { fatalError("\(self) does not have a `Router` in its chain.") }
 		firstRouter.route(direction, via: routeType, routing: routing)
 	}
@@ -84,11 +84,11 @@ public extension Router {
 		return self
 	}
 
-	private func firstUpstreamRouter<RouteType>(for routeType: RouteType.Type) -> RouteType? {
+	private func firstUpstreamRouter<RouteType: Route>(for routeType: RouteType.Type) -> RouteType? {
 		return (self as? RouteType) ?? parentRouter?.firstUpstreamRouter(for: routeType)
 	}
 
-	private func lastDownstreamRouter<RouteType>(for routeType: RouteType.Type) -> RouteType? {
+	private func lastDownstreamRouter<RouteType: Route>(for routeType: RouteType.Type) -> RouteType? {
 		for childRouter in childRouters.reversed() {
 			if let childRouter = childRouter.lastDownstreamRouter(for: routeType) {
 				return childRouter
@@ -100,7 +100,7 @@ public extension Router {
 		return nil
 	}
 
-	func optionalRouter<RouteType>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType? {
+	func optionalRouter<RouteType: Route>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType? {
 		let optionalRouter: RouteType?
 		switch direction {
 		case .upstream:
@@ -113,12 +113,12 @@ public extension Router {
 		return optionalRouter
 	}
 
-	func router<RouteType>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType {
+	func router<RouteType: Route>(_ direction: RoutingDirection, for routeType: RouteType.Type) -> RouteType {
 		guard let router = optionalRouter(direction, for: routeType) else { fatalError("No known router handling \(routeType).") }
 		return router
 	}
 
-	func route<RouteType>(_ direction: RoutingDirection, via routeType: RouteType.Type, routing: (RouteType) -> Void) {
+	func route<RouteType: Route>(_ direction: RoutingDirection, via routeType: RouteType.Type, routing: (RouteType) -> Void) {
 		routing(router(direction, for: routeType))
 	}
 }
