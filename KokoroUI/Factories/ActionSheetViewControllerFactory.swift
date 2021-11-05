@@ -34,6 +34,8 @@ public protocol ActionSheetViewControllerFactory {
 }
 
 public class DefaultActionSheetViewControllerFactory: ActionSheetViewControllerFactory {
+	public init() {}
+
 	public func createActionSheet(source: ActionSheetSource, title: String?, message: String?, actions: [ActionSheetAction]) -> UIViewController {
 		let controller = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
 		actions.forEach { action in
