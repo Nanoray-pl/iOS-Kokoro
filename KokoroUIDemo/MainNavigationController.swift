@@ -6,11 +6,12 @@
 import KokoroUI
 import UIKit
 
-class MainNavigationController: NavigationControllerWrapper {
+class MainNavigationController: NavigationControllerWrapper, UINavigationControllerRouter {
+	let parentRouter: Router? = nil
+
 	init() {
 		let root = MenuViewController()
 		super.init(rootViewController: root, withNavigationBar: .visible)
-		root.router = self
 	}
 
 	required init?(coder: NSCoder) {

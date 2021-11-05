@@ -6,7 +6,7 @@
 import KokoroUI
 import UIKit
 
-protocol CardDeckViewRoute: AnyObject {
+protocol CardDeckViewRoute: Route {
 	func showCardDeckView(animated: Bool)
 }
 

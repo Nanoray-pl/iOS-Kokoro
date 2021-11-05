@@ -6,7 +6,7 @@
 import KokoroUI
 import UIKit
 
-class MenuViewController: UITableViewController {
+class MenuViewController: UITableViewController, RouterAwareUIViewController {
 	private struct Section {
 		let header: String?
 		let footer: String?
@@ -25,7 +25,6 @@ class MenuViewController: UITableViewController {
 		case progressBar
 	}
 
-	unowned var router: (ProportionalOffsetConstraintRoute & FlexColumnCollectionViewLayoutRoute & ProgressBarsRoute & CardDeckViewRoute)!
 	private let sections: [Section] = [
 		.init(header: "Non-basic Constraints", cells: [.proportionalOffsetConstraint, .aspectRatioEqualConstraint, .minMaxLengthConstraint]),
 		.init(header: "Containers", cells: [.flexColumnCollectionViewLayout, .cardDeckView]),
@@ -86,15 +85,15 @@ class MenuViewController: UITableViewController {
 		tableView.deselectRow(at: indexPath, animated: Animated.motionBased.value)
 		switch sections[indexPath.section].cells[indexPath.row] {
 		case .proportionalOffsetConstraint:
-			router.showProportionalOffsetConstraint(animated: Animated.motionBased.value)
+			router(for: ProportionalOffsetConstraintRoute.self).showProportionalOffsetConstraint(animated: Animated.motionBased.value)
 		case .aspectRatioEqualConstraint, .minMaxLengthConstraint:
 			break
 		case .flexColumnCollectionViewLayout:
-			router.showFlexColumnCollectionViewLayout(animated: Animated.motionBased.value)
+			router(for: FlexColumnCollectionViewLayoutRoute.self).showFlexColumnCollectionViewLayout(animated: Animated.motionBased.value)
 		case .cardDeckView:
-			router.showCardDeckView(animated: Animated.motionBased.value)
+			router(for: CardDeckViewRoute.self).showCardDeckView(animated: Animated.motionBased.value)
 		case .progressBar:
-			router.showProgressBars(animated: Animated.motionBased.value)
+			router(for: ProgressBarsRoute.self).showProgressBars(animated: Animated.motionBased.value)
 		}
 	}
 }
