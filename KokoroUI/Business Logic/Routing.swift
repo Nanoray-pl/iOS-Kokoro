@@ -167,4 +167,18 @@ public extension RouterAwareUIViewController where Self: UIViewController {
 		}
 	}
 }
+
+public protocol UINavigationControllerRouter: Router {}
+
+public extension UINavigationControllerRouter where Self: UINavigationController {
+	var childRouters: [Router] {
+		return [viewControllers.last].compactMap { $0 as? Router }
+	}
+}
+
+public extension UINavigationControllerRouter where Self: NavigationControllerWrapper {
+	var childRouters: [Router] {
+		return [viewControllers.last].compactMap { $0 as? Router }
+	}
+}
 #endif
