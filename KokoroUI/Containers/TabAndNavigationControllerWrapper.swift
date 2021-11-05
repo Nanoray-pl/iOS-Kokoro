@@ -394,7 +394,9 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		if setupNavigationBar {
 			navigationState.navigationController.setNavigationBarHidden(!visibleBars.contains(.navigation), animated: animated)
 		}
-		setTabBarHidden(!visibleBars.contains(.tab), animated: animated)
+		if currentNavigationController == navigationState.navigationController {
+			setTabBarHidden(!visibleBars.contains(.tab), animated: animated)
+		}
 		if navigationState.navigationController.interactivePopGestureRecognizer?.state == .possible {
 			navigationState.navigationController.interactivePopGestureRecognizer?.isEnabled = options(for: controller).swipeBackGestureState == .enabled
 		}

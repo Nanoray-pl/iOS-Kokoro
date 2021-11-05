@@ -67,6 +67,12 @@
 		AA5AED082556B2B000516C8D /* KokoroCacheResourceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AED062556B2B000516C8D /* KokoroCacheResourceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AED192556B2D200516C8D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AED182556B2D200516C8D /* Extensions.swift */; };
 		AA5AEDA32556B36E00516C8D /* CacheResourceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */; };
+		AA5D163627354C3E001C2DF8 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D163527354C3E001C2DF8 /* Analytics.swift */; };
+		AA5D163927355447001C2DF8 /* UserDefaultsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D163827355447001C2DF8 /* UserDefaultsExtensions.swift */; };
+		AA5D163B27355664001C2DF8 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D163A27355664001C2DF8 /* ViewControllerPresenter.swift */; };
+		AA5D163D273556D2001C2DF8 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D163C273556D2001C2DF8 /* BundleExtensions.swift */; };
+		AA5D163F2735580B001C2DF8 /* AlertViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D163E2735580B001C2DF8 /* AlertViewControllerFactory.swift */; };
+		AA5D1642273558CF001C2DF8 /* ActionSheetViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D1641273558CF001C2DF8 /* ActionSheetViewControllerFactory.swift */; };
 		AA61278426EAA2B30093570B /* EnumeratedListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA61278326EAA2B30093570B /* EnumeratedListDataSource.swift */; };
 		AA61278626EAA2E00093570B /* EnumeratedListDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA61278526EAA2E00093570B /* EnumeratedListDataSourceTests.swift */; };
 		AA61279526EAA33A0093570B /* KokoroDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA61278C26EAA33A0093570B /* KokoroDI.framework */; };
@@ -501,6 +507,12 @@
 		AA5AED072556B2B000516C8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA5AED182556B2D200516C8D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AA5AEDA22556B36E00516C8D /* CacheResourceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheResourceProvider.swift; sourceTree = "<group>"; };
+		AA5D163527354C3E001C2DF8 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		AA5D163827355447001C2DF8 /* UserDefaultsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtensions.swift; sourceTree = "<group>"; };
+		AA5D163A27355664001C2DF8 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
+		AA5D163C273556D2001C2DF8 /* BundleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
+		AA5D163E2735580B001C2DF8 /* AlertViewControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewControllerFactory.swift; sourceTree = "<group>"; };
+		AA5D1641273558CF001C2DF8 /* ActionSheetViewControllerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetViewControllerFactory.swift; sourceTree = "<group>"; };
 		AA61278326EAA2B30093570B /* EnumeratedListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumeratedListDataSource.swift; sourceTree = "<group>"; };
 		AA61278526EAA2E00093570B /* EnumeratedListDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumeratedListDataSourceTests.swift; sourceTree = "<group>"; };
 		AA61278C26EAA33A0093570B /* KokoroDI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroDI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1007,6 +1019,8 @@
 				AAD355492528A03F007C63EF /* ForceTouchGestureRecognizer.swift */,
 				AA5AEC3A255587FF00516C8D /* HapticFeedbackGenerator.swift */,
 				AA9F229125D8663C001C6A46 /* Routing.swift */,
+				AA5D163527354C3E001C2DF8 /* Analytics.swift */,
+				AA5D163A27355664001C2DF8 /* ViewControllerPresenter.swift */,
 			);
 			path = "Business Logic";
 			sourceTree = "<group>";
@@ -1048,6 +1062,15 @@
 				AA5AED072556B2B000516C8D /* Info.plist */,
 			);
 			path = Bootstrap;
+			sourceTree = "<group>";
+		};
+		AA5D1640273558B0001C2DF8 /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				AA5D163E2735580B001C2DF8 /* AlertViewControllerFactory.swift */,
+				AA5D1641273558CF001C2DF8 /* ActionSheetViewControllerFactory.swift */,
+			);
+			path = Factories;
 			sourceTree = "<group>";
 		};
 		AA61278D26EAA33A0093570B /* KokoroDI */ = {
@@ -1247,6 +1270,8 @@
 				AA469EDA26CEC0950061B6C5 /* Math.swift */,
 				AA20B64726D1205100A7EE98 /* LateInit.swift */,
 				AA43DF4226DABDED00C0B2AC /* SetDifference.swift */,
+				AA5D163827355447001C2DF8 /* UserDefaultsExtensions.swift */,
+				AA5D163C273556D2001C2DF8 /* BundleExtensions.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -1269,6 +1294,7 @@
 				AAD3551C25288CE4007C63EF /* Containers */,
 				AAD354F22528829C007C63EF /* Functional Views */,
 				AAD3550925288A03007C63EF /* Aesthetic Views */,
+				AA5D1640273558B0001C2DF8 /* Factories */,
 				AA5AEC39255587F000516C8D /* Business Logic */,
 				AAD354E3252879BB007C63EF /* Utils */,
 				AA974CFF26AD6104005D6ADE /* Debug */,
@@ -1888,6 +1914,7 @@
 			buildConfigurationList = AA61279D26EAA33A0093570B /* Build configuration list for PBXNativeTarget "KokoroDI" */;
 			buildPhases = (
 				AA61278726EAA33A0093570B /* Headers */,
+				AA5D163727354E58001C2DF8 /* Linters */,
 				AA61278826EAA33A0093570B /* Sources */,
 				AA61278926EAA33A0093570B /* Frameworks */,
 				AA61278A26EAA33A0093570B /* Resources */,
@@ -2456,6 +2483,25 @@
 			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		AA5D163727354E58001C2DF8 /* Linters */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Linters;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n\tswiftlint --config \"$SRCROOT/.swiftlint.yml\" --path \"$SRCROOT/$TARGET_NAME\" --force-exclude\nelse\n\techo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n\tswiftformat --config \"$SRCROOT/.swiftformat\" --lint --lenient \"$SRCROOT/$TARGET_NAME\"\nelse\n\techo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		AAD354A925286FA6007C63EF /* Linters */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -2758,6 +2804,7 @@
 			files = (
 				AA5AEC072555845D00516C8D /* ComparableExtensions.swift in Sources */,
 				AA71690126BED222002039DC /* SinkAndAssignExtensions.swift in Sources */,
+				AA5D163927355447001C2DF8 /* UserDefaultsExtensions.swift in Sources */,
 				AA974CFE26AD6012005D6ADE /* KVOObserver.swift in Sources */,
 				AA20B64826D1205100A7EE98 /* LateInit.swift in Sources */,
 				AA16EAFB257A7818001C30E9 /* Scheduler.swift in Sources */,
@@ -2774,6 +2821,7 @@
 				AA71690326BED26E002039DC /* CombineOnEvent.swift in Sources */,
 				AA43DF4A26DAC13D00C0B2AC /* CompoundLogger.swift in Sources */,
 				AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */,
+				AA5D163D273556D2001C2DF8 /* BundleExtensions.swift in Sources */,
 				AA880B2C261EFA12001AE8C3 /* ProxyPropertyWrapper.swift in Sources */,
 				AAD355C82528B3D7007C63EF /* Identifier.swift in Sources */,
 				AAE9D6342615C9360040C91F /* Either.swift in Sources */,
@@ -2802,6 +2850,7 @@
 				AAD3552625288F0A007C63EF /* PrecedingControllerNavigator.swift in Sources */,
 				AAD3552C25289175007C63EF /* TabAndNavigationControllerWrapper.swift in Sources */,
 				AAD355C32528B2B3007C63EF /* HierarchyObserving.swift in Sources */,
+				AA5D163B27355664001C2DF8 /* ViewControllerPresenter.swift in Sources */,
 				AAD3550225288947007C63EF /* ClickThroughViews.swift in Sources */,
 				AA469ECC26C8F6170061B6C5 /* CardDeckView.swift in Sources */,
 				AAD354C125287281007C63EF /* Geometry.swift in Sources */,
@@ -2831,9 +2880,12 @@
 				AAEFAFA72539A582003AA60E /* BasicSuperviewConstraintBuilders.swift in Sources */,
 				AA5AEC5825558B8F00516C8D /* SystemUILocalizable.swift in Sources */,
 				AA262FFD26BD53A60016BF3B /* ScrollableContentBehavior.swift in Sources */,
+				AA5D1642273558CF001C2DF8 /* ActionSheetViewControllerFactory.swift in Sources */,
 				AAD3552225288E3F007C63EF /* NavigationControllerWrapper.swift in Sources */,
 				AAD354C5252872C8007C63EF /* Insets.swift in Sources */,
+				AA5D163F2735580B001C2DF8 /* AlertViewControllerFactory.swift in Sources */,
 				AA5AEC3B255587FF00516C8D /* HapticFeedbackGenerator.swift in Sources */,
+				AA5D163627354C3E001C2DF8 /* Analytics.swift in Sources */,
 				AAEFB1442542DD6A003AA60E /* PinnedOnTopView.swift in Sources */,
 				AA262FFF26BD543F0016BF3B /* KScrollView.swift in Sources */,
 				AAD354E5252879C7007C63EF /* StateEnums.swift in Sources */,
