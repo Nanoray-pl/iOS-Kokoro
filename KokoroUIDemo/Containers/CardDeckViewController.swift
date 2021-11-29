@@ -170,6 +170,7 @@ class CardDeckViewController: UIViewController {
 			$0.setContentCompressionResistancePriority(.required, for: .vertical)
 
 			cardDeckView = CardDeckView().with { [parent = $0] in
+				$0.addObserver(self)
 				$0.backgroundColor = .tertiarySystemBackground
 				$0.contentInsets = .init(insets: 20)
 				$0.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -288,5 +289,15 @@ class CardDeckViewController: UIViewController {
 
 	private func updateItemCountUI() {
 		itemCountLabel.text = "Items: \(items.count)"
+	}
+}
+
+extension CardDeckViewController: CardDeckViewObserver {
+	func didScroll(to position: CGFloat, in view: CardDeckView<UIView>) {
+		print("didScroll(to: \(position), in: \(view))")
+	}
+
+	func didEndDragging(targetPosition: CGFloat, in view: CardDeckView<UIView>) {
+		print("didEndDragging(targetPosition: \(targetPosition), in: \(view))")
 	}
 }

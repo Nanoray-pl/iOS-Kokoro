@@ -7,6 +7,18 @@
 import KokoroUtils
 import UIKit
 
+public protocol CardDeckViewObserver: AnyObject {
+	associatedtype ContentView: UIView
+
+	func didScroll(to position: CGFloat, in view: CardDeckView<ContentView>)
+	func didEndDragging(targetPosition: CGFloat, in view: CardDeckView<ContentView>)
+}
+
+public extension CardDeckViewObserver {
+	func didScroll(to position: CGFloat, in view: CardDeckView<ContentView>) {}
+	func didEndDragging(targetPosition: CGFloat, in view: CardDeckView<ContentView>) {}
+}
+
 public class CardDeckView<ContentView: UIView>: LazyInitView {
 	public enum Orientation {
 		/// First subview on the left of the view, last subview near the right of the view.
@@ -66,6 +78,71 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			parent?.entryViews.removeFirst { $0 === self }
 			parent?.isDirty = true
 			DispatchQueue.main.async { [weak parent] in parent?.updateLayoutIfNeeded() }
+		}
+	}
+
+	private class WeakObserver: CardDeckViewObserver {
+		let identifier: ObjectIdentifier
+		private(set) weak var weakReference: AnyObject?
+		private let didScrollClosure: (CGFloat, CardDeckView<ContentView>) -> Void
+		private let didEndDraggingClosure: (CGFloat, CardDeckView<ContentView>) -> Void
+
+		init<Wrapped>(wrapping wrapped: Wrapped) where Wrapped: CardDeckViewObserver, Wrapped.ContentView == ContentView {
+			identifier = ObjectIdentifier(wrapped)
+			weakReference = wrapped
+			didScrollClosure = { [weak wrapped] in wrapped?.didScroll(to: $0, in: $1) }
+			didEndDraggingClosure = { [weak wrapped] in wrapped?.didEndDragging(targetPosition: $0, in: $1) }
+		}
+
+		func didScroll(to position: CGFloat, in view: CardDeckView<ContentView>) {
+			didScrollClosure(position, view)
+		}
+
+		func didEndDragging(targetPosition: CGFloat, in view: CardDeckView<ContentView>) {
+			didEndDraggingClosure(targetPosition, view)
+		}
+	}
+
+	private struct CalculatedStaticLayout {
+		let itemSize: CGSize
+		let itemLength: CGFloat
+		let collectionViewLength: CGFloat
+		let workingLength: CGFloat
+		let firstGroupStart: CGFloat
+		let firstGroupEnd: CGFloat
+		let secondGroupStart: CGFloat
+		let secondGroupEnd: CGFloat
+
+		var firstGroupLength: CGFloat {
+			return firstGroupEnd - firstGroupStart
+		}
+
+		var secondGroupLength: CGFloat {
+			return secondGroupEnd - secondGroupStart
+		}
+	}
+
+	private struct CalculatedScrollLayout {
+		let staticLayout: CalculatedStaticLayout
+		let itemScrollLength: CGFloat
+		let mappedScrollPosition: CGFloat
+		let firstGroupEnd: CGFloat
+		let secondGroupStart: CGFloat
+
+		var firstGroupStart: CGFloat {
+			return staticLayout.firstGroupStart
+		}
+
+		var secondGroupEnd: CGFloat {
+			return staticLayout.secondGroupEnd
+		}
+
+		var firstGroupLength: CGFloat {
+			return firstGroupEnd - firstGroupStart
+		}
+
+		var secondGroupLength: CGFloat {
+			return secondGroupEnd - secondGroupStart
 		}
 	}
 
@@ -135,8 +212,9 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 	private lazy var privateDelegate = PrivateDelegate(parent: self) // swiftlint:disable:this weak_delegate
 	private var isDirty = true
 	private var entryViews = [EntryView]()
-	private var scrollIndex = 0
-	private var lastItemScrollLength: CGFloat = 0
+	private(set) var scrollPosition: CGFloat = 0
+	private var calculatedStaticLayout: CalculatedStaticLayout?
+	private var calculatedScrollLayout: CalculatedScrollLayout?
 
 	private var contentOffsetConstraint: NSLayoutConstraint? {
 		didSet {
@@ -144,6 +222,11 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			contentOffsetConstraint?.activate()
 		}
 	}
+
+	private let observers = BoxedObserverSet<WeakObserver, ObjectIdentifier>(
+		isValid: { $0.weakReference != nil },
+		identity: \.identifier
+	)
 
 	public init() {
 		super.init(frame: .zero)
@@ -187,11 +270,19 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		updateLayoutIfNeeded()
 	}
 
-	public func scrollToItem(at index: Int, animated: Bool) {
-		scrollIndex = index
+	public func addObserver<T>(_ observer: T) where T: CardDeckViewObserver, T.ContentView == ContentView {
+		observers.insert(.init(wrapping: observer))
+	}
+
+	public func removeObserver<T>(_ observer: T) where T: CardDeckViewObserver, T.ContentView == ContentView {
+		observers.remove(.init(wrapping: observer))
+	}
+
+	public func scrollToPosition(_ position: CGFloat, animated: Bool) {
+		scrollPosition = position
 		scrollView.setContentOffset(.init(
-			x: orientational(vertical: 0, horizontal: CGFloat(index) * itemSize.width),
-			y: orientational(vertical: CGFloat(index) * itemSize.height, horizontal: 0)
+			x: orientational(vertical: scrollView.contentOffset.x, horizontal: scrollContentOffset(for: position)),
+			y: orientational(vertical: scrollContentOffset(for: position), horizontal: scrollView.contentOffset.y)
 		), animated: animated)
 	}
 
@@ -230,6 +321,28 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		}
 	}
 
+	private func scrollContentOffset(for position: CGFloat) -> CGFloat {
+		let directionMultiplier: CGFloat
+		switch orientation {
+		case .leftToRight, .topToBottom:
+			directionMultiplier = -1
+		case .rightToLeft, .bottomToTop:
+			directionMultiplier = 1
+		}
+		return calculatedScrollLayout!.itemScrollLength * position * directionMultiplier
+	}
+
+	private func scrollPositionForContentOffset(_ contentOffset: CGFloat) -> CGFloat {
+		let directionMultiplier: CGFloat
+		switch orientation {
+		case .leftToRight, .topToBottom:
+			directionMultiplier = -1
+		case .rightToLeft, .bottomToTop:
+			directionMultiplier = 1
+		}
+		return contentOffset / calculatedScrollLayout!.itemScrollLength * directionMultiplier
+	}
+
 	private func updateLayoutIfNeeded() {
 		guard isDirty else { return }
 		updateLayout()
@@ -239,16 +352,100 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 		isDirty = false
 
 		cleanUpEntryViews(andUpdateLayout: false)
-		updateLayoutConstraints()
+		recalculateLayout()
 	}
 
-	private func updateLayoutConstraints() {
+	private func recalculateLayout() {
+		calculatedStaticLayout = calculateStaticLayout()
+		recalculateScrollLayout()
+		scrollToPosition(scrollPosition, animated: false)
+	}
+
+	private func recalculateScrollLayout() {
 		let visibleEntryViews = entryViews.filter { $0.contentView?.isHidden == false }
-		if visibleEntryViews.isEmpty { return }
+		let scrollLayout = calculateScrollLayout()
+		calculatedScrollLayout = scrollLayout
+
+		visibleEntryViews.enumerated().forEach { index, entryView in
+			var constraints: [NSLayoutConstraint] = orientational(
+				vertical: [
+					entryView.leftToSuperview(inset: contentInsets.left),
+					entryView.rightToSuperview(inset: contentInsets.right),
+				],
+				horizontal: [
+					entryView.topToSuperview(inset: contentInsets.top),
+					entryView.bottomToSuperview(inset: contentInsets.bottom),
+				]
+			)
+			constraints += entryView.ratio(size: .init(width: max(itemSize.width, 1), height: max(itemSize.height, 1)))
+
+			let position: CGFloat
+			if visibleEntryViews.count == 1 {
+				position = scrollLayout.firstGroupStart
+			} else {
+				let itemIndexFraction = visibleEntryViews.count == 1 ? 0 : CGFloat(index) / CGFloat(visibleEntryViews.count - 1)
+				let firstPosition = scrollLayout.firstGroupStart + (abs(scrollLayout.firstGroupLength) - scrollLayout.staticLayout.itemLength) * itemIndexFraction
+				let secondPosition = scrollLayout.secondGroupStart + (abs(scrollLayout.secondGroupLength) - scrollLayout.staticLayout.itemLength) * itemIndexFraction
+				let fraction = (scrollLayout.mappedScrollPosition - CGFloat(visibleEntryViews.count - 1) + CGFloat(index)).clamped(to: 0 ... 1)
+				position = firstPosition + (secondPosition - firstPosition) * fraction
+			}
+
+			switch orientation {
+			case .leftToRight:
+				constraints += entryView.leftToSuperview(inset: position.isNaN ? 0 : position - scrollLayout.firstGroupStart + contentInsets.left)
+			case .rightToLeft:
+				constraints += entryView.rightToSuperview(inset: position.isNaN ? 0 : position - scrollLayout.firstGroupStart + contentInsets.right)
+			case .topToBottom:
+				constraints += entryView.topToSuperview(inset: position.isNaN ? 0 : position - scrollLayout.firstGroupStart + contentInsets.top)
+			case .bottomToTop:
+				constraints += entryView.bottomToSuperview(inset: position.isNaN ? 0 : position - scrollLayout.firstGroupStart + contentInsets.bottom)
+			}
+
+			let previousConstraints = entryView.entryConstraints.sorted(by: \.firstAttribute.rawValue, .ascending, then: \.secondAttribute.rawValue, .ascending)
+			let newConstraints = constraints.sorted(by: \.firstAttribute.rawValue, .ascending, then: \.secondAttribute.rawValue, .ascending)
+			var shouldUpdateConstraints = previousConstraints.count != newConstraints.count
+			if !shouldUpdateConstraints {
+				for constraintIndex in newConstraints.indices {
+					let previousConstraint = previousConstraints[constraintIndex]
+					let newConstraint = newConstraints[constraintIndex]
+					if previousConstraint.firstAttribute != newConstraint.firstAttribute || previousConstraint.secondAttribute != newConstraint.secondAttribute || previousConstraint.multiplier != newConstraint.multiplier || previousConstraint.constant != newConstraint.constant {
+						shouldUpdateConstraints = true
+						break
+					}
+				}
+			}
+			if shouldUpdateConstraints {
+				entryView.entryConstraints = constraints
+			}
+		}
+
+		let scrollableContentLength = CGFloat(visibleEntryViews.count) * scrollLayout.itemScrollLength
+		scrollView.contentSize = .init(
+			width: orientational(vertical: frame.width, horizontal: frame.width + scrollableContentLength),
+			height: orientational(vertical: frame.height + scrollableContentLength, horizontal: frame.height)
+		)
+		switch orientation {
+		case .leftToRight:
+			scrollView.contentInset = .init(top: 0, left: scrollableContentLength, bottom: 0, right: -scrollableContentLength)
+		case .topToBottom:
+			scrollView.contentInset = .init(top: scrollableContentLength, left: 0, bottom: -scrollableContentLength, right: 0)
+		case .rightToLeft, .bottomToTop:
+			scrollView.contentInset = .zero
+		}
+
+		contentOffsetConstraint = orientational(
+			vertical: contentView.topToSuperview(inset: scrollView.contentOffset.y),
+			horizontal: contentView.leftToSuperview(inset: scrollView.contentOffset.x)
+		)
+	}
+
+	private func calculateStaticLayout() -> CalculatedStaticLayout {
+		let visibleEntryViews = entryViews.filter { $0.contentView?.isHidden == false }
 		let itemSize = self.itemSize
 		let itemLength = orientational(itemSize, vertical: \.height, horizontal: \.width)
 		let collectionViewLength = orientational(frame, vertical: \.height, horizontal: \.width)
 		let workingLength = collectionViewLength - orientational(contentInsets, vertical: \.vertical, horizontal: \.horizontal)
+
 		let minL = orientational(contentInsets, vertical: \.top, horizontal: \.left)
 		let maxL = orientational(
 			vertical: frame.height - contentInsets.bottom,
@@ -298,6 +495,21 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			break
 		}
 
+		return .init(
+			itemSize: itemSize,
+			itemLength: itemLength,
+			collectionViewLength: collectionViewLength,
+			workingLength: workingLength,
+			firstGroupStart: firstGroupStart,
+			firstGroupEnd: firstGroupEnd,
+			secondGroupStart: secondGroupStart,
+			secondGroupEnd: secondGroupEnd
+		)
+	}
+
+	private func calculateScrollLayout() -> CalculatedScrollLayout {
+		let staticLayout = calculatedStaticLayout!
+		let visibleEntryViews = entryViews.filter { $0.contentView?.isHidden == false }
 		let baseScrollPosition = orientational(scrollView.contentOffset, vertical: \.y, horizontal: \.x)
 		let mirroredIfNeededScrollPosition: CGFloat
 		switch orientation {
@@ -307,87 +519,34 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 			mirroredIfNeededScrollPosition = baseScrollPosition
 		}
 
+		let firstGroupStart = staticLayout.firstGroupStart
+		var firstGroupEnd = staticLayout.firstGroupEnd
+		var secondGroupStart = staticLayout.secondGroupStart
+		let secondGroupEnd = staticLayout.secondGroupEnd
+
+		var firstGroupLength: CGFloat {
+			return firstGroupEnd - firstGroupStart
+		}
+		var secondGroupLength: CGFloat {
+			return secondGroupEnd - secondGroupStart
+		}
+
 		let itemScrollLength = abs(secondGroupStart - firstGroupStart)
-		lastItemScrollLength = itemScrollLength
 		let mappedScrollPosition = mirroredIfNeededScrollPosition / itemScrollLength
 		let firstPositionMultiplier = mappedScrollPosition < 0 ? 1 / (abs(mappedScrollPosition) + 1) : 1
 		let secondPositionMultiplier = mappedScrollPosition > CGFloat(visibleEntryViews.count) ? 1 / (abs(mappedScrollPosition - CGFloat(visibleEntryViews.count)) + 1) : 1
 
-		let newFirstGroupLength = (abs(firstGroupLength) - itemLength) * firstPositionMultiplier + itemLength
+		let newFirstGroupLength = (abs(firstGroupLength) - staticLayout.itemLength) * firstPositionMultiplier + staticLayout.itemLength
 		firstGroupEnd = firstGroupStart + newFirstGroupLength
-		let newSecondGroupLength = (abs(secondGroupLength) - itemLength) * secondPositionMultiplier + itemLength
+		let newSecondGroupLength = (abs(secondGroupLength) - staticLayout.itemLength) * secondPositionMultiplier + staticLayout.itemLength
 		secondGroupStart = secondGroupEnd - newSecondGroupLength
 
-		visibleEntryViews.enumerated().forEach { index, entryView in
-			var constraints: [NSLayoutConstraint] = orientational(
-				vertical: [
-					entryView.leftToSuperview(inset: contentInsets.left),
-					entryView.rightToSuperview(inset: contentInsets.right),
-				],
-				horizontal: [
-					entryView.topToSuperview(inset: contentInsets.top),
-					entryView.bottomToSuperview(inset: contentInsets.bottom),
-				]
-			)
-			constraints += entryView.ratio(size: .init(width: max(itemSize.width, 1), height: max(itemSize.height, 1)))
-
-			let position: CGFloat
-			if visibleEntryViews.count == 1 {
-				position = firstGroupStart
-			} else {
-				let itemIndexFraction = visibleEntryViews.count == 1 ? 0 : CGFloat(index) / CGFloat(visibleEntryViews.count - 1)
-				let firstPosition = firstGroupStart + (abs(firstGroupLength) - itemLength) * itemIndexFraction
-				let secondPosition = secondGroupStart + (abs(secondGroupLength) - itemLength) * itemIndexFraction
-				let fraction = (mappedScrollPosition - CGFloat(visibleEntryViews.count - 1) + CGFloat(index)).clamped(to: 0 ... 1)
-				position = firstPosition + (secondPosition - firstPosition) * fraction
-			}
-
-			switch orientation {
-			case .leftToRight:
-				constraints += entryView.leftToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.left)
-			case .rightToLeft:
-				constraints += entryView.rightToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.right)
-			case .topToBottom:
-				constraints += entryView.topToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.top)
-			case .bottomToTop:
-				constraints += entryView.bottomToSuperview(inset: position.isNaN ? 0 : position - firstGroupStart + contentInsets.bottom)
-			}
-
-			let previousConstraints = entryView.entryConstraints.sorted(by: \.firstAttribute.rawValue, .ascending, then: \.secondAttribute.rawValue, .ascending)
-			let newConstraints = constraints.sorted(by: \.firstAttribute.rawValue, .ascending, then: \.secondAttribute.rawValue, .ascending)
-			var shouldUpdateConstraints = previousConstraints.count != newConstraints.count
-			if !shouldUpdateConstraints {
-				for constraintIndex in newConstraints.indices {
-					let previousConstraint = previousConstraints[constraintIndex]
-					let newConstraint = newConstraints[constraintIndex]
-					if previousConstraint.firstAttribute != newConstraint.firstAttribute || previousConstraint.secondAttribute != newConstraint.secondAttribute || previousConstraint.multiplier != newConstraint.multiplier || previousConstraint.constant != newConstraint.constant {
-						shouldUpdateConstraints = true
-						break
-					}
-				}
-			}
-			if shouldUpdateConstraints {
-				entryView.entryConstraints = constraints
-			}
-		}
-
-		let scrollableContentLength = CGFloat(visibleEntryViews.count) * itemScrollLength
-		scrollView.contentSize = .init(
-			width: orientational(vertical: frame.width, horizontal: frame.width + scrollableContentLength),
-			height: orientational(vertical: frame.height + scrollableContentLength, horizontal: frame.height)
-		)
-		switch orientation {
-		case .leftToRight:
-			scrollView.contentInset = .init(top: 0, left: scrollableContentLength, bottom: 0, right: -scrollableContentLength)
-		case .topToBottom:
-			scrollView.contentInset = .init(top: scrollableContentLength, left: 0, bottom: -scrollableContentLength, right: 0)
-		case .rightToLeft, .bottomToTop:
-			scrollView.contentInset = .zero
-		}
-
-		contentOffsetConstraint = orientational(
-			vertical: contentView.topToSuperview(inset: scrollView.contentOffset.y),
-			horizontal: contentView.leftToSuperview(inset: scrollView.contentOffset.x)
+		return .init(
+			staticLayout: staticLayout,
+			itemScrollLength: itemScrollLength,
+			mappedScrollPosition: mappedScrollPosition,
+			firstGroupEnd: firstGroupEnd,
+			secondGroupStart: secondGroupStart
 		)
 	}
 
@@ -418,16 +577,34 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 
 		func didChangeFrame(from oldFrame: CGRect, to newFrame: CGRect, in view: FrameObservingView) {
 			guard let parent = parent else { return }
-			parent.scrollToItem(at: parent.scrollIndex, animated: false)
-			parent.updateLayoutConstraints()
+			if oldFrame.size == newFrame.size { return }
+			parent.recalculateLayout()
+			parent.scrollToPosition(parent.scrollPosition, animated: false)
 		}
 
 		func scrollViewDidScroll(_ scrollView: UIScrollView) {
-			parent?.updateLayoutConstraints()
+			guard let parent = parent else { return }
+			parent.recalculateScrollLayout()
+			let contentOffset = parent.orientational(scrollView.contentOffset, vertical: \.y, horizontal: \.x)
+			let position = parent.scrollPositionForContentOffset(contentOffset)
+			parent.observers.forEach { $0.didScroll(to: position, in: parent) }
 		}
 
 		func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-			guard let parent = parent, parent.scrollingLocksOntoItems else { return }
+			guard let parent = parent else { return }
+			if !parent.scrollingLocksOntoItems {
+				let scrollPosition: CGFloat
+				switch parent.orientation {
+				case .leftToRight, .rightToLeft:
+					scrollPosition = parent.scrollPositionForContentOffset(targetContentOffset.pointee.x)
+				case .topToBottom, .bottomToTop:
+					scrollPosition = parent.scrollPositionForContentOffset(targetContentOffset.pointee.y)
+				}
+				parent.scrollPosition = scrollPosition
+				parent.observers.forEach { $0.didEndDragging(targetPosition: scrollPosition, in: parent) }
+				return
+			}
+
 			let contentLength = parent.orientational(scrollView.contentSize, vertical: \.height, horizontal: \.width)
 			var targetPosition = parent.orientational(targetContentOffset.pointee, vertical: \.y, horizontal: \.x)
 			switch parent.orientation {
@@ -439,13 +616,18 @@ public class CardDeckView<ContentView: UIView>: LazyInitView {
 				if targetPosition >= contentLength { return }
 			}
 
-			targetPosition = round(targetPosition / parent.lastItemScrollLength) * parent.lastItemScrollLength
+			let itemScrollLength = parent.calculatedScrollLayout!.itemScrollLength
+			targetPosition = round(targetPosition / itemScrollLength) * itemScrollLength
 			switch parent.orientation {
 			case .leftToRight, .rightToLeft:
 				targetContentOffset.pointee.x = targetPosition
 			case .topToBottom, .bottomToTop:
 				targetContentOffset.pointee.y = targetPosition
 			}
+
+			let scrollPosition = parent.scrollPositionForContentOffset(targetPosition)
+			parent.scrollPosition = scrollPosition
+			parent.observers.forEach { $0.didEndDragging(targetPosition: scrollPosition, in: parent) }
 		}
 	}
 }
@@ -477,7 +659,7 @@ struct CardDeckViewPreviews: PreviewProvider {
 						parent.addArrangedSubview($0)
 					}
 				}
-				$0.scrollToItem(at: 3, animated: false)
+				$0.scrollToPosition(3, animated: false)
 			}
 		}
 	}

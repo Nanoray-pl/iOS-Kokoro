@@ -88,8 +88,8 @@ public extension BoxingObserverSet where AdditionalObserverParameters == Void {
 
 /// A collection storing strong references to objects which are already wrapping weak references.
 public final class BoxedObserverSet<BoxedObserver, ID: Equatable> {
-	private var isValidClosure: (BoxedObserver) -> Bool
-	private var identityClosure: (BoxedObserver) -> ID
+	private let isValidClosure: (BoxedObserver) -> Bool
+	private let identityClosure: (BoxedObserver) -> ID
 
 	public var observers: [BoxedObserver] {
 		cleanUp()

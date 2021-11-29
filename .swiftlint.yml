@@ -33,22 +33,6 @@ excluded:
   - Resources/R.generated.swift
   - Sourcery/Generated
 custom_rules:
-  avoid_print:
-    included: ".*.swift"
-    excluded:
-      - ".*Test.?\\.swift"
-    regex: 'print\('
-    name: "print"
-    message: "Avoid using print method directly. Use logger"
-    severity: warning
-  avoid_nslog:
-    included: ".*.swift"
-    excluded:
-      - ".*Test.?\\.swift"
-    regex: 'NSLog\('
-    name: "NSLog"
-    message: "Avoid using NSLog method directly. Use logger"
-    severity: warning
   descriptive_failure_logs:
     included: ".*.swift"
     excluded: ".*Test.?\\.swift"
