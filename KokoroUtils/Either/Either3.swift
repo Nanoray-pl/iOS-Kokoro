@@ -24,6 +24,12 @@ public enum Either3<A, B, C> {
 extension Either3: Equatable where A: Equatable, B: Equatable, C: Equatable {}
 extension Either3: Hashable where A: Hashable, B: Hashable, C: Hashable {}
 
+extension Either3: CaseIterable where A: CaseIterable, B: CaseIterable, C: CaseIterable {
+	public static var allCases: [Either3<A, B, C>] {
+		return A.allCases.map { .first($0) } + B.allCases.map { .second($0) } + C.allCases.map { .third($0) }
+	}
+}
+
 extension Either3: Decodable where A: Decodable, B: Decodable, C: Decodable {
 	public init(from decoder: Decoder) throws {
 		do {

@@ -21,6 +21,12 @@ public enum Either<A, B> {
 extension Either: Equatable where A: Equatable, B: Equatable {}
 extension Either: Hashable where A: Hashable, B: Hashable {}
 
+extension Either: CaseIterable where A: CaseIterable, B: CaseIterable {
+	public static var allCases: [Either<A, B>] {
+		return A.allCases.map { .first($0) } + B.allCases.map { .second($0) }
+	}
+}
+
 extension Either: Decodable where A: Decodable, B: Decodable {
 	public init(from decoder: Decoder) throws {
 		do {
