@@ -55,4 +55,8 @@ public extension Router {
 		}
 		return router
 	}
+
+	subscript<RouteType>(_ routeType: RouteType.Type) -> RouteType {
+		return router(for: routeType)
+	}
 }

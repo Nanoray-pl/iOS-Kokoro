@@ -120,6 +120,8 @@
 		AA974D0126AD6115005D6ADE /* ConstraintBreakingDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA974D0026AD6115005D6ADE /* ConstraintBreakingDebug.swift */; };
 		AA9F220625D85F2D001C6A46 /* MockingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */; };
 		AA9F229225D8663C001C6A46 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9F229125D8663C001C6A46 /* Routing.swift */; };
+		AAA0BC362756BE13003F6017 /* MainRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0BC352756BE13003F6017 /* MainRoute.swift */; };
+		AAA0BC392757E11E003F6017 /* MainWindowRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0BC382757E11E003F6017 /* MainWindowRouter.swift */; };
 		AAD35492252869D0007C63EF /* KokoroUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD35490252869D0007C63EF /* KokoroUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AAD354A125286B1C007C63EF /* With.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A025286B1C007C63EF /* With.swift */; };
 		AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD354A325286B88007C63EF /* OptionalExtensions.swift */; };
@@ -217,7 +219,6 @@
 		AAD57D132533B1AC007358D1 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D122533B1AC007358D1 /* MenuViewController.swift */; };
 		AAD57D372533B363007358D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAD57D362533B363007358D1 /* LaunchScreen.storyboard */; };
 		AAD57D412533B46F007358D1 /* ProgressBarsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */; };
-		AAD57D532533B689007358D1 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD57D522533B689007358D1 /* MainNavigationController.swift */; };
 		AAE9D6342615C9360040C91F /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D6332615C9360040C91F /* Either.swift */; };
 		AAE9D6502615C9C00040C91F /* LoggingHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D64F2615C9C00040C91F /* LoggingHttpClient.swift */; };
 		AAE9D6732615FB4D0040C91F /* Either3.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9D6722615FB4D0040C91F /* Either3.swift */; };
@@ -564,6 +565,8 @@
 		AA974D0026AD6115005D6ADE /* ConstraintBreakingDebug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintBreakingDebug.swift; sourceTree = "<group>"; };
 		AA9F220525D85F2D001C6A46 /* MockingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockingHttpClient.swift; sourceTree = "<group>"; };
 		AA9F229125D8663C001C6A46 /* Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
+		AAA0BC352756BE13003F6017 /* MainRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRoute.swift; sourceTree = "<group>"; };
+		AAA0BC382757E11E003F6017 /* MainWindowRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowRouter.swift; sourceTree = "<group>"; };
 		AAD3548D252869D0007C63EF /* KokoroUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAD35490252869D0007C63EF /* KokoroUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroUtils.h; sourceTree = "<group>"; };
 		AAD35491252869D0007C63EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -678,7 +681,6 @@
 		AAD57D122533B1AC007358D1 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		AAD57D362533B363007358D1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AAD57D402533B46F007358D1 /* ProgressBarsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarsViewController.swift; sourceTree = "<group>"; };
-		AAD57D522533B689007358D1 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		AAE9D6332615C9360040C91F /* Either.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		AAE9D64F2615C9C00040C91F /* LoggingHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingHttpClient.swift; sourceTree = "<group>"; };
 		AAE9D6722615FB4D0040C91F /* Either3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Either3.swift; sourceTree = "<group>"; };
@@ -1189,6 +1191,14 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		AAA0BC372757E0FE003F6017 /* Routers */ = {
+			isa = PBXGroup;
+			children = (
+				AAA0BC382757E11E003F6017 /* MainWindowRouter.swift */,
+			);
+			path = Routers;
+			sourceTree = "<group>";
+		};
 		AAD35483252869D0007C63EF = {
 			isa = PBXGroup;
 			children = (
@@ -1590,7 +1600,8 @@
 				AA42D3122566B054004604D2 /* Non-basic Constraints */,
 				AA16EBEF257AF0A5001C30E9 /* Containers */,
 				AA42D3112566B04B004604D2 /* Aesthetic */,
-				AAD57D522533B689007358D1 /* MainNavigationController.swift */,
+				AAA0BC372757E0FE003F6017 /* Routers */,
+				AAA0BC352756BE13003F6017 /* MainRoute.swift */,
 				AAD57D122533B1AC007358D1 /* MenuViewController.swift */,
 			);
 			path = KokoroUIDemo;
@@ -3008,9 +3019,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAD57D412533B46F007358D1 /* ProgressBarsViewController.swift in Sources */,
+				AAA0BC362756BE13003F6017 /* MainRoute.swift in Sources */,
+				AAA0BC392757E11E003F6017 /* MainWindowRouter.swift in Sources */,
 				AA42D3142566B071004604D2 /* ProportionalOffsetConstraintViewController.swift in Sources */,
 				AAD57D132533B1AC007358D1 /* MenuViewController.swift in Sources */,
-				AAD57D532533B689007358D1 /* MainNavigationController.swift in Sources */,
 				AA469ED526C9A0B80061B6C5 /* CardDeckViewController.swift in Sources */,
 				AA16EBF1257AF0CD001C30E9 /* FlexColumnCollectionViewLayoutViewController.swift in Sources */,
 				AAD57CC72533B0C8007358D1 /* AppDelegate.swift in Sources */,

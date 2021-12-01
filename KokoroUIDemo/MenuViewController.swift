@@ -6,7 +6,7 @@
 import KokoroUI
 import UIKit
 
-class MenuViewController: UITableViewController, RouterAwareUIViewController {
+class MenuViewController: UITableViewController {
 	private struct Section {
 		let header: String?
 		let footer: String?
@@ -25,13 +25,16 @@ class MenuViewController: UITableViewController, RouterAwareUIViewController {
 		case progressBar
 	}
 
+	private unowned let router: Router
+
 	private let sections: [Section] = [
 		.init(header: "Non-basic Constraints", cells: [.proportionalOffsetConstraint, .aspectRatioEqualConstraint, .minMaxLengthConstraint]),
 		.init(header: "Containers", cells: [.flexColumnCollectionViewLayout, .cardDeckView]),
 		.init(header: "Aesthetic", cells: [.progressBar]),
 	]
 
-	init() {
+	init(router: Router) {
+		self.router = router
 		super.init(style: .grouped)
 		navigationItem.title = "KokoroUI Demo"
 	}
@@ -85,15 +88,15 @@ class MenuViewController: UITableViewController, RouterAwareUIViewController {
 		tableView.deselectRow(at: indexPath, animated: Animated.motionBased.value)
 		switch sections[indexPath.section].cells[indexPath.row] {
 		case .proportionalOffsetConstraint:
-			router(for: ProportionalOffsetConstraintRoute.self).showProportionalOffsetConstraint(animated: Animated.motionBased.value)
+			router[ProportionalOffsetConstraintRoute.self].showProportionalOffsetConstraint(animated: Animated.motionBased.value)
 		case .aspectRatioEqualConstraint, .minMaxLengthConstraint:
 			break
 		case .flexColumnCollectionViewLayout:
-			router(for: FlexColumnCollectionViewLayoutRoute.self).showFlexColumnCollectionViewLayout(animated: Animated.motionBased.value)
+			router[FlexColumnCollectionViewLayoutRoute.self].showFlexColumnCollectionViewLayout(animated: Animated.motionBased.value)
 		case .cardDeckView:
-			router(for: CardDeckViewRoute.self).showCardDeckView(animated: Animated.motionBased.value)
+			router[CardDeckViewRoute.self].showCardDeckView(animated: Animated.motionBased.value)
 		case .progressBar:
-			router(for: ProgressBarsRoute.self).showProgressBars(animated: Animated.motionBased.value)
+			router[ProgressBarsRoute.self].showProgressBars(animated: Animated.motionBased.value)
 		}
 	}
 }
