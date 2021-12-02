@@ -103,9 +103,9 @@ extension NSManagedObjectID: CVarArgConvertible {
 public struct FetchRequest<ResultType: NSManagedObject & ManagedObject> {
 	public struct SortDescriptor {
 		public let keyPathString: String
-		public let order: SortOrder
+		public let order: KokoroUtils.SortOrder
 
-		public init<T>(keyPath: KeyPath<ResultType, T>, order: SortOrder) {
+		public init<T>(keyPath: KeyPath<ResultType, T>, order: KokoroUtils.SortOrder) {
 			keyPathString = NSExpression(forKeyPath: keyPath).keyPath
 			self.order = order
 		}
