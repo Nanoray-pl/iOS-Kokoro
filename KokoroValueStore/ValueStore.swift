@@ -3,17 +3,36 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
-public protocol ValueStore: AnyObject {
+public protocol ReadOnlyValueStore: AnyObject {
 	associatedtype Element
 
+	var value: Element { get }
+}
+
+public protocol ValueStore: ReadOnlyValueStore {
 	var value: Element { get set }
 }
 
-public protocol ThrowingValueStore: AnyObject {
+public protocol ThrowingReadOnlyValueStore: AnyObject {
 	associatedtype Element
 
 	func value() throws -> Element
+}
+
+public protocol ThrowingValueStore: ThrowingReadOnlyValueStore {
 	func setValue(_ value: Element) throws
+}
+
+public class AnyReadOnlyValueStore<Element>: ReadOnlyValueStore {
+	private let getter: () -> Element
+
+	public var value: Element {
+		return getter()
+	}
+
+	public init<T>(wrapping wrapped: T) where T: ReadOnlyValueStore, T.Element == Element {
+		getter = { wrapped.value }
+	}
 }
 
 public class AnyValueStore<Element>: ValueStore {
@@ -35,6 +54,18 @@ public class AnyValueStore<Element>: ValueStore {
 	}
 }
 
+public class AnyThrowingReadOnlyValueStore<Element>: ThrowingReadOnlyValueStore {
+	private let getter: () throws -> Element
+
+	public init<T>(wrapping wrapped: T) where T: ThrowingReadOnlyValueStore, T.Element == Element {
+		getter = { try wrapped.value() }
+	}
+
+	public func value() throws -> Element {
+		return try getter()
+	}
+}
+
 public class AnyThrowingValueStore<Element>: ThrowingValueStore {
 	private let getter: () throws -> Element
 	private let setter: (Element) throws -> Void
@@ -50,6 +81,20 @@ public class AnyThrowingValueStore<Element>: ThrowingValueStore {
 
 	public func setValue(_ value: Element) throws {
 		try setter(value)
+	}
+}
+
+public class NonThrowingToThrowingReadOnlyValueStore<Store>: ThrowingReadOnlyValueStore where Store: ReadOnlyValueStore {
+	public typealias Element = Store.Element
+
+	private let getter: () -> Element
+
+	public init(wrapping wrapped: Store) {
+		getter = { wrapped.value }
+	}
+
+	public func value() throws -> Element {
+		return getter()
 	}
 }
 
@@ -73,6 +118,16 @@ public class NonThrowingToThrowingValueStore<Store>: ThrowingValueStore where St
 	}
 }
 
+public extension ReadOnlyValueStore {
+	func eraseToAnyReadOnlyValueStore() -> AnyReadOnlyValueStore<Element> {
+		return (self as? AnyReadOnlyValueStore<Element>) ?? .init(wrapping: self)
+	}
+
+	func throwing() -> NonThrowingToThrowingReadOnlyValueStore<Self> {
+		return (self as? NonThrowingToThrowingReadOnlyValueStore<Self>) ?? .init(wrapping: self)
+	}
+}
+
 public extension ValueStore {
 	func eraseToAnyValueStore() -> AnyValueStore<Element> {
 		return (self as? AnyValueStore<Element>) ?? .init(wrapping: self)
@@ -80,6 +135,12 @@ public extension ValueStore {
 
 	func throwing() -> NonThrowingToThrowingValueStore<Self> {
 		return (self as? NonThrowingToThrowingValueStore<Self>) ?? .init(wrapping: self)
+	}
+}
+
+public extension ThrowingReadOnlyValueStore {
+	func eraseToAnyThrowingReadOnlyValueStore() -> AnyThrowingReadOnlyValueStore<Element> {
+		return (self as? AnyThrowingReadOnlyValueStore<Element>) ?? .init(wrapping: self)
 	}
 }
 
