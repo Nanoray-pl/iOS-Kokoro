@@ -3,14 +3,33 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
-public protocol ReadOnlyValueStore: AnyObject {
+import KokoroUtils
+
+public protocol ReadOnlyValueStore: AnyObject, HasReadOnlyProjectedValue where ProjectedValue == Element {
 	associatedtype Element
 
 	var value: Element { get }
 }
 
-public protocol ValueStore: ReadOnlyValueStore {
+public extension ReadOnlyValueStore {
+	var projectedValue: Element {
+		return value
+	}
+}
+
+public protocol ValueStore: ReadOnlyValueStore, HasProjectedValue {
 	var value: Element { get set }
+}
+
+public extension ValueStore {
+	var projectedValue: Element {
+		get {
+			return value
+		}
+		set {
+			value = newValue
+		}
+	}
 }
 
 public protocol ThrowingReadOnlyValueStore: AnyObject {
