@@ -9,7 +9,7 @@ import KokoroUtils
 private let sharedLock: Lock = FoundationLock()
 
 public extension ObjectWith {
-	typealias ReadOnlyProjectedValueInject<Component: HasProjectedValue, Variant: Hashable> = AnyReadOnlyProjectedValueInject<Self, Component, Variant>
+	typealias ReadOnlyProjectedValueInject<Component: HasReadOnlyProjectedValue, Variant: Hashable> = AnyReadOnlyProjectedValueInject<Self, Component, Variant>
 }
 
 @propertyWrapper
