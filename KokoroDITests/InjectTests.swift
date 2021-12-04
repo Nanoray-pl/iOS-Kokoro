@@ -10,6 +10,12 @@ import XCTest
 class InjectTests: XCTestCase {
 	private class Component {}
 
+	private class ComponentWithProjectedValue: HasProjectedValue {
+		var projectedValue = 0
+
+		init() {}
+	}
+
 	private enum TestComponentVariant: ComponentVariant {
 		typealias Component = InjectTests.Component
 
@@ -39,6 +45,15 @@ class InjectTests: XCTestCase {
 		let resolver: Resolver
 		@Inject(TestComponentVariant.first) private(set) var component1: Component
 		@Inject(TestComponentVariant.second) private(set) var component2: Component
+
+		init(resolver: Resolver) {
+			self.resolver = resolver
+		}
+	}
+
+	private class ProjectedValueDependant: ObjectWith, HasResolver {
+		let resolver: Resolver
+		@ProjectedValueInject() var component: ComponentWithProjectedValue
 
 		init(resolver: Resolver) {
 			self.resolver = resolver
@@ -77,5 +92,22 @@ class InjectTests: XCTestCase {
 		let firstComponent = dependant.component1
 		let secondComponent = dependant.component2
 		XCTAssertNotIdentical(firstComponent, secondComponent)
+	}
+
+	func testProjectedValue() {
+		let container = Container(defaultComponentStorageFactory: storageFactory)
+		container.register(ComponentWithProjectedValue.self) { ComponentWithProjectedValue() }
+
+		let dependant = ProjectedValueDependant(resolver: container)
+		XCTAssertEqual(dependant.component.projectedValue, 0)
+		XCTAssertEqual(dependant.$component, 0)
+
+		dependant.component.projectedValue = 1
+		XCTAssertEqual(dependant.component.projectedValue, 1)
+		XCTAssertEqual(dependant.$component, 1)
+
+		dependant.$component = 2
+		XCTAssertEqual(dependant.component.projectedValue, 2)
+		XCTAssertEqual(dependant.$component, 2)
 	}
 }

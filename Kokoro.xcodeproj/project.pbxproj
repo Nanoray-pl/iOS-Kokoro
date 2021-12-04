@@ -44,6 +44,9 @@
 		AA469ED326C9A02A0061B6C5 /* KokoroUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAD354B125287210007C63EF /* KokoroUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AA469ED526C9A0B80061B6C5 /* CardDeckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */; };
 		AA469EDB26CEC0950061B6C5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA469EDA26CEC0950061B6C5 /* Math.swift */; };
+		AA475532275BFD5B001FE9AC /* HasProjectedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA475531275BFD5B001FE9AC /* HasProjectedValue.swift */; };
+		AA475537275C0774001FE9AC /* ProjectedValueInject.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA475536275C0774001FE9AC /* ProjectedValueInject.swift */; };
+		AA475539275C090E001FE9AC /* ReadOnlyProjectedValueInject.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA475538275C090E001FE9AC /* ReadOnlyProjectedValueInject.swift */; };
 		AA5AEB7E2555797C00516C8D /* SwitchableListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */; };
 		AA5AEB9025557D7700516C8D /* KokoroJobs.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5AEB8E25557D7700516C8D /* KokoroJobs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA5AEBB125557E1B00516C8D /* JobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AEBB025557E1B00516C8D /* JobManager.swift */; };
@@ -479,6 +482,9 @@
 		AA469ECB26C8F6170061B6C5 /* CardDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckView.swift; sourceTree = "<group>"; };
 		AA469ED426C9A0B80061B6C5 /* CardDeckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckViewController.swift; sourceTree = "<group>"; };
 		AA469EDA26CEC0950061B6C5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		AA475531275BFD5B001FE9AC /* HasProjectedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasProjectedValue.swift; sourceTree = "<group>"; };
+		AA475536275C0774001FE9AC /* ProjectedValueInject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectedValueInject.swift; sourceTree = "<group>"; };
+		AA475538275C090E001FE9AC /* ReadOnlyProjectedValueInject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadOnlyProjectedValueInject.swift; sourceTree = "<group>"; };
 		AA5AEB7D2555797C00516C8D /* SwitchableListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableListDataSource.swift; sourceTree = "<group>"; };
 		AA5AEB8C25557D7700516C8D /* KokoroJobs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KokoroJobs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5AEB8E25557D7700516C8D /* KokoroJobs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KokoroJobs.h; sourceTree = "<group>"; };
@@ -991,6 +997,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AA475535275C0749001FE9AC /* Inject */ = {
+			isa = PBXGroup;
+			children = (
+				AA6127B626EAA4E40093570B /* Inject.swift */,
+				AA475536275C0774001FE9AC /* ProjectedValueInject.swift */,
+				AA475538275C090E001FE9AC /* ReadOnlyProjectedValueInject.swift */,
+			);
+			path = Inject;
+			sourceTree = "<group>";
+		};
 		AA5AEB8D25557D7700516C8D /* KokoroJobs */ = {
 			isa = PBXGroup;
 			children = (
@@ -1080,11 +1096,11 @@
 			children = (
 				AA6127A326EAA39A0093570B /* Bootstrap */,
 				AA6127A526EAA40A0093570B /* Storage */,
+				AA475535275C0749001FE9AC /* Inject */,
 				AA6127AC26EAA4630093570B /* Resolver.swift */,
 				AA6127B026EAA4860093570B /* ComponentKey.swift */,
 				AA6127B226EAA49B0093570B /* Container.swift */,
 				AA6127B426EAA4B50093570B /* AutoInitializingContainer.swift */,
-				AA6127B626EAA4E40093570B /* Inject.swift */,
 				AA6127B826EAA5010093570B /* ComponentVariant.swift */,
 				AA6127BA26EAA51D0093570B /* ResolverInitializable.swift */,
 			);
@@ -1282,6 +1298,7 @@
 				AA43DF4226DABDED00C0B2AC /* SetDifference.swift */,
 				AA5D163827355447001C2DF8 /* UserDefaultsExtensions.swift */,
 				AA5D163C273556D2001C2DF8 /* BundleExtensions.swift */,
+				AA475531275BFD5B001FE9AC /* HasProjectedValue.swift */,
 			);
 			path = KokoroUtils;
 			sourceTree = "<group>";
@@ -2779,6 +2796,8 @@
 				AA6127BE26EAA5860093570B /* TransientComponentStorage.swift in Sources */,
 				AA6127C226EAA5B30093570B /* WeakComponentStorage.swift in Sources */,
 				AA6127BB26EAA51D0093570B /* ResolverInitializable.swift in Sources */,
+				AA475537275C0774001FE9AC /* ProjectedValueInject.swift in Sources */,
+				AA475539275C090E001FE9AC /* ReadOnlyProjectedValueInject.swift in Sources */,
 				AA6127AB26EAA44E0093570B /* UntypedComponentStorage.swift in Sources */,
 				AA6127A726EAA4220093570B /* ComponentStorage.swift in Sources */,
 				AA6127C026EAA5980093570B /* LazyComponentStorage.swift in Sources */,
@@ -2846,6 +2865,7 @@
 				AAD354A425286B88007C63EF /* OptionalExtensions.swift in Sources */,
 				AAE9D88E2617E5B10040C91F /* CodableExtensions.swift in Sources */,
 				AA7168FF26BED140002039DC /* CancelBag.swift in Sources */,
+				AA475532275BFD5B001FE9AC /* HasProjectedValue.swift in Sources */,
 				AA5AECEA2556B10D00516C8D /* MD5.swift in Sources */,
 				AA16EB0A257A78F0001C30E9 /* DispatchQueueScheduler.swift in Sources */,
 				AA16EB24257A7917001C30E9 /* MockScheduler.swift in Sources */,

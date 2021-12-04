@@ -72,4 +72,28 @@ public extension AnyInject where EnclosingSelf: HasResolver {
 		self.init(\.resolver, resolve: resolveMode, key: .init(for: Variant.Component.self, variant: variant), synchronization: synchronization)
 	}
 }
+
+public extension AnyProjectedValueInject {
+	init(_ resolverKeyPath: KeyPath<EnclosingSelf, Resolver>, resolve resolveMode: AnyInjectResolveMode = .once, _ variant: Variant, synchronization: Synchronization = .shared) where Variant: ComponentVariant, Variant.Component == Component {
+		self.init(resolverKeyPath, resolve: resolveMode, key: .init(for: Variant.Component.self, variant: variant), synchronization: synchronization)
+	}
+}
+
+public extension AnyProjectedValueInject where EnclosingSelf: HasResolver {
+	init(resolve resolveMode: AnyInjectResolveMode = .once, _ variant: Variant, synchronization: Synchronization = .shared) where Variant: ComponentVariant, Variant.Component == Component {
+		self.init(\.resolver, resolve: resolveMode, key: .init(for: Variant.Component.self, variant: variant), synchronization: synchronization)
+	}
+}
+
+public extension AnyReadOnlyProjectedValueInject {
+	init(_ resolverKeyPath: KeyPath<EnclosingSelf, Resolver>, resolve resolveMode: AnyInjectResolveMode = .once, _ variant: Variant, synchronization: Synchronization = .shared) where Variant: ComponentVariant, Variant.Component == Component {
+		self.init(resolverKeyPath, resolve: resolveMode, key: .init(for: Variant.Component.self, variant: variant), synchronization: synchronization)
+	}
+}
+
+public extension AnyReadOnlyProjectedValueInject where EnclosingSelf: HasResolver {
+	init(resolve resolveMode: AnyInjectResolveMode = .once, _ variant: Variant, synchronization: Synchronization = .shared) where Variant: ComponentVariant, Variant.Component == Component {
+		self.init(\.resolver, resolve: resolveMode, key: .init(for: Variant.Component.self, variant: variant), synchronization: synchronization)
+	}
+}
 #endif
