@@ -6,32 +6,32 @@
 import XCTest
 @testable import KokoroDI
 
+private protocol ObjectComponentProtocol: AnyObject {}
+
 class ContainerTests: XCTestCase {
-	private class Component {}
+	private class Component: ObjectComponentProtocol {}
 
 	private class ResolverComponent: ResolverInitializable {
 		required init(resolver: Resolver) {}
 	}
 
-	private class TestStorageFactory: ComponentStorageFactory {
+	private class CallbackComponentStorageFactory: ComponentStorageFactory {
 		private let wrapped: ComponentStorageFactory
-		private let valueClosure: () -> Void
-		private let objectClosure: () -> Void
+		private let callback: () -> Void
 
-		init(wrapping wrapped: ComponentStorageFactory, valueClosure: @escaping () -> Void, objectClosure: @escaping () -> Void) {
+		init(wrapping wrapped: ComponentStorageFactory, callback: @escaping () -> Void) {
 			self.wrapped = wrapped
-			self.valueClosure = valueClosure
-			self.objectClosure = objectClosure
+			self.callback = callback
 		}
 
 		func createComponentStorage<Component>(resolver: Resolver, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component> {
-			valueClosure()
+			callback()
 			return wrapped.createComponentStorage(resolver: resolver, factory: factory)
 		}
 
-		func createObjectComponentStorage<Component: AnyObject>(resolver: Resolver, factory: @escaping (Resolver) -> Component) -> AnyObjectComponentStorage<Component> {
-			objectClosure()
-			return wrapped.createObjectComponentStorage(resolver: resolver, factory: factory)
+		func createComponentStorage<Component>(resolver: Resolver, with component: Component, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component> {
+			callback()
+			return wrapped.createComponentStorage(resolver: resolver, with: component, factory: factory)
 		}
 	}
 
@@ -101,26 +101,46 @@ class ContainerTests: XCTestCase {
 	}
 
 	func testValueAndObjectDifferentiation() {
+		var weakCounter = 0
 		var valueCounter = 0
-		var objectCounter = 0
 
 		let container = Container(
-			defaultComponentStorageFactory: TestStorageFactory(
-				wrapping: storageFactory,
-				valueClosure: { valueCounter += 1 },
-				objectClosure: { objectCounter += 1 }
+			defaultComponentStorageFactory: CallbackComponentStorageFactory(
+				wrapping: WeakComponentStorageFactory(
+					valueStorageFactory: CallbackComponentStorageFactory(
+						wrapping: storageFactory,
+						callback: { valueCounter += 1 }
+					)
+				),
+				callback: { weakCounter += 1 }
 			)
 		)
 
+		XCTAssertEqual(weakCounter, 0)
 		XCTAssertEqual(valueCounter, 0)
-		XCTAssertEqual(objectCounter, 0)
 
 		container.register(Int.self) { 0 }
-		XCTAssertEqual(valueCounter, 1)
-		XCTAssertEqual(objectCounter, 0)
+		XCTAssertEqual(weakCounter, 1)
+		XCTAssertEqual(valueCounter, 0)
 
 		container.register(Component.self) { Component() }
+		XCTAssertEqual(weakCounter, 2)
+		XCTAssertEqual(valueCounter, 0)
+
+		container.register(ObjectComponentProtocol.self) { Component() }
+		XCTAssertEqual(weakCounter, 3)
+		XCTAssertEqual(valueCounter, 0)
+
+		_ = container.resolve(Int.self)
+		XCTAssertEqual(weakCounter, 3)
 		XCTAssertEqual(valueCounter, 1)
-		XCTAssertEqual(objectCounter, 1)
+
+		_ = container.resolve(Component.self)
+		XCTAssertEqual(weakCounter, 3)
+		XCTAssertEqual(valueCounter, 1)
+
+		_ = container.resolve(ObjectComponentProtocol.self)
+		XCTAssertEqual(weakCounter, 3)
+		XCTAssertEqual(valueCounter, 1)
 	}
 }

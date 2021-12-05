@@ -24,4 +24,10 @@ public enum TransientComponentStorageFactory: ComponentStorageFactory {
 		return TransientComponentStorage(resolver: resolver, factory: factory)
 			.eraseToAnyComponentStorage()
 	}
+
+	public func createComponentStorage<Component>(resolver: Resolver, with component: Component, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component> {
+		// ignoring the component, the storage is transient anyway so it would be ignored
+		return TransientComponentStorage(resolver: resolver, factory: factory)
+			.eraseToAnyComponentStorage()
+	}
 }

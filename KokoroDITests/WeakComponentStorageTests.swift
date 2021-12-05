@@ -24,9 +24,9 @@ class WeakComponentStorageTests: XCTestCase {
 	}
 
 	func test() {
-		let storageFactory = WeakComponentStorageFactory()
+		let storageFactory = WeakComponentStorageFactory(valueStorageFactory: LazyComponentStorageFactory.shared)
 		let resolver = BlankResolver()
-		let storage = storageFactory.createObjectComponentStorage(resolver: resolver) { _ in Component() }
+		let storage = storageFactory.createComponentStorage(resolver: resolver) { _ in Component() }
 
 		var instance: Component! = storage.component
 		let firstValue = instance.value

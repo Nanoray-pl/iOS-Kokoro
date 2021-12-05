@@ -81,7 +81,6 @@
 		AA61279526EAA33A0093570B /* KokoroDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA61278C26EAA33A0093570B /* KokoroDI.framework */; };
 		AA61279C26EAA33A0093570B /* KokoroDI.h in Headers */ = {isa = PBXBuildFile; fileRef = AA61278E26EAA33A0093570B /* KokoroDI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AA6127A726EAA4220093570B /* ComponentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6127A626EAA4220093570B /* ComponentStorage.swift */; };
-		AA6127A926EAA43D0093570B /* ObjectComponentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6127A826EAA43D0093570B /* ObjectComponentStorage.swift */; };
 		AA6127AB26EAA44E0093570B /* UntypedComponentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6127AA26EAA44E0093570B /* UntypedComponentStorage.swift */; };
 		AA6127AD26EAA4630093570B /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6127AC26EAA4630093570B /* Resolver.swift */; };
 		AA6127B126EAA4860093570B /* ComponentKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6127B026EAA4860093570B /* ComponentKey.swift */; };
@@ -528,7 +527,6 @@
 		AA61279426EAA33A0093570B /* KokoroDITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KokoroDITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA61279B26EAA33A0093570B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA6127A626EAA4220093570B /* ComponentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentStorage.swift; sourceTree = "<group>"; };
-		AA6127A826EAA43D0093570B /* ObjectComponentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectComponentStorage.swift; sourceTree = "<group>"; };
 		AA6127AA26EAA44E0093570B /* UntypedComponentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UntypedComponentStorage.swift; sourceTree = "<group>"; };
 		AA6127AC26EAA4630093570B /* Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resolver.swift; sourceTree = "<group>"; };
 		AA6127B026EAA4860093570B /* ComponentKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentKey.swift; sourceTree = "<group>"; };
@@ -1143,7 +1141,6 @@
 			children = (
 				AA6127BC26EAA57A0093570B /* Implementations */,
 				AA6127A626EAA4220093570B /* ComponentStorage.swift */,
-				AA6127A826EAA43D0093570B /* ObjectComponentStorage.swift */,
 				AA6127AA26EAA44E0093570B /* UntypedComponentStorage.swift */,
 			);
 			path = Storage;
@@ -2791,7 +2788,6 @@
 				AA6127B126EAA4860093570B /* ComponentKey.swift in Sources */,
 				AA6127B326EAA49B0093570B /* Container.swift in Sources */,
 				AA6127B526EAA4B50093570B /* AutoInitializingContainer.swift in Sources */,
-				AA6127A926EAA43D0093570B /* ObjectComponentStorage.swift in Sources */,
 				AA6127B726EAA4E40093570B /* Inject.swift in Sources */,
 				AA6127BE26EAA5860093570B /* TransientComponentStorage.swift in Sources */,
 				AA6127C226EAA5B30093570B /* WeakComponentStorage.swift in Sources */,

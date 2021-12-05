@@ -25,19 +25,9 @@ public extension ComponentStorage {
 	func eraseToAnyComponentStorage() -> AnyComponentStorage<Component> {
 		return (self as? AnyComponentStorage<Component>) ?? .init(wrapping: self)
 	}
-
-	func eraseToAnyObjectComponentStorage() -> AnyObjectComponentStorage<Component> where Component: AnyObject {
-		return (self as? AnyObjectComponentStorage<Component>) ?? .init(wrapping: self)
-	}
 }
 
-public protocol ComponentStorageFactory: ObjectComponentStorageFactory {
+public protocol ComponentStorageFactory {
 	func createComponentStorage<Component>(resolver: Resolver, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component>
-}
-
-public extension ComponentStorageFactory {
-	func createObjectComponentStorage<Component: AnyObject>(resolver: Resolver, factory: @escaping (Resolver) -> Component) -> AnyObjectComponentStorage<Component> {
-		return createComponentStorage(resolver: resolver, factory: factory)
-			.eraseToAnyObjectComponentStorage()
-	}
+	func createComponentStorage<Component>(resolver: Resolver, with component: Component, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component>
 }

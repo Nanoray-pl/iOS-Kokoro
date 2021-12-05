@@ -11,35 +11,21 @@ public class AutoInitializingContainer {
 	private let parent: Resolver?
 	private let lock: Lock
 	public var componentStorageFactory: ComponentStorageFactory
-	public var objectComponentStorageFactory: ObjectComponentStorageFactory
 
 	private var components = [AnyComponentKey: UntypedComponentStorage]()
 
 	public init(
 		parent: Resolver? = nil,
 		synchronization: Synchronization = .automatic,
-		componentStorageFactory: ComponentStorageFactory,
-		objectComponentStorageFactory: ObjectComponentStorageFactory
+		componentStorageFactory: ComponentStorageFactory
 	) {
 		self.parent = parent
 		self.componentStorageFactory = componentStorageFactory
-		self.objectComponentStorageFactory = objectComponentStorageFactory
 		lock = synchronization.lock(sharedLock: sharedLock)
 	}
 }
 
 extension AutoInitializingContainer: Resolver {
-	public convenience init(
-		parent: Container? = nil,
-		componentStorageFactory: ComponentStorageFactory
-	) {
-		self.init(
-			parent: parent,
-			componentStorageFactory: componentStorageFactory,
-			objectComponentStorageFactory: componentStorageFactory
-		)
-	}
-
 	public func resolveIfPresent<Component, Variant: Hashable>(for key: ComponentKey<Component, Variant>) -> Component? {
 		return lock.acquireAndRun {
 			if let component = components[.init(from: key)]?.component as? Component {
@@ -47,23 +33,13 @@ extension AutoInitializingContainer: Resolver {
 			}
 
 			if let type = Component.self as? ResolverInitializable.Type {
-				let untypedComponentStorage: UntypedComponentStorage
-				if type is AnyClass {
-					untypedComponentStorage = .init(wrapping: objectComponentStorageFactory.createObjectComponentStorage(resolver: self) { type.init(resolver: $0) as AnyObject })
-				} else {
-					untypedComponentStorage = .init(wrapping: componentStorageFactory.createComponentStorage(resolver: self) { type.init(resolver: $0) })
-				}
+				let untypedComponentStorage = UntypedComponentStorage(wrapping: componentStorageFactory.createComponentStorage(resolver: self) { type.init(resolver: $0) })
 				components[.init(from: key)] = untypedComponentStorage
 				return untypedComponentStorage.component as? Component
 			}
 
 			if let type = Component.self as? NoParameterInitializable.Type {
-				let untypedComponentStorage: UntypedComponentStorage
-				if type is AnyClass {
-					untypedComponentStorage = .init(wrapping: objectComponentStorageFactory.createObjectComponentStorage(resolver: self) { _ in type.init() as AnyObject })
-				} else {
-					untypedComponentStorage = .init(wrapping: componentStorageFactory.createComponentStorage(resolver: self) { _ in type.init() })
-				}
+				let untypedComponentStorage = UntypedComponentStorage(wrapping: componentStorageFactory.createComponentStorage(resolver: self) { _ in type.init() })
 				components[.init(from: key)] = untypedComponentStorage
 				return untypedComponentStorage.component as? Component
 			}

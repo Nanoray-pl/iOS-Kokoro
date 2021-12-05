@@ -24,16 +24,8 @@ public extension Container {
 		register(Variant.Component.self, variant: variant, storageFactory: storageFactory, factory: factory)
 	}
 
-	func register<Variant>(_ variant: Variant, storageFactory: ObjectComponentStorageFactory, factory: @escaping (Resolver) -> Variant.Component) where Variant: ComponentVariant, Variant.Component: AnyObject {
-		register(Variant.Component.self, variant: variant, storageFactory: storageFactory, factory: factory)
-	}
-
 	func register<Variant: ComponentVariant>(_ variant: Variant, factory: @escaping (Resolver) -> Variant.Component) {
 		register(Variant.Component.self, variant: variant, storageFactory: defaultComponentStorageFactory, factory: factory)
-	}
-
-	func register<Variant>(_ variant: Variant, factory: @escaping (Resolver) -> Variant.Component) where Variant: ComponentVariant, Variant.Component: AnyObject {
-		register(Variant.Component.self, variant: variant, storageFactory: defaultObjectComponentStorageFactory, factory: factory)
 	}
 
 	func unregister<Variant: ComponentVariant>(_ variant: Variant) {
@@ -47,15 +39,7 @@ public extension Container {
 		register(variant, storageFactory: storageFactory) { _ in factory() }
 	}
 
-	func register<Variant>(_ variant: Variant, storageFactory: ObjectComponentStorageFactory, factory: @escaping () -> Variant.Component) where Variant: ComponentVariant, Variant.Component: AnyObject {
-		register(variant, storageFactory: storageFactory) { _ in factory() }
-	}
-
 	func register<Variant: ComponentVariant>(_ variant: Variant, factory: @escaping () -> Variant.Component) {
-		register(variant) { _ in factory() }
-	}
-
-	func register<Variant>(_ variant: Variant, factory: @escaping () -> Variant.Component) where Variant: ComponentVariant, Variant.Component: AnyObject {
 		register(variant) { _ in factory() }
 	}
 }

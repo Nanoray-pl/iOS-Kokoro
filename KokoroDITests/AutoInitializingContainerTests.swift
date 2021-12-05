@@ -18,25 +18,23 @@ class AutoInitializingContainerTests: XCTestCase {
 		required init(resolver: Resolver) {}
 	}
 
-	private class TestStorageFactory: ComponentStorageFactory {
+	private class CallbackComponentStorageFactory: ComponentStorageFactory {
 		private let wrapped: ComponentStorageFactory
-		private let valueClosure: () -> Void
-		private let objectClosure: () -> Void
+		private let callback: () -> Void
 
-		init(wrapping wrapped: ComponentStorageFactory, valueClosure: @escaping () -> Void, objectClosure: @escaping () -> Void) {
+		init(wrapping wrapped: ComponentStorageFactory, callback: @escaping () -> Void) {
 			self.wrapped = wrapped
-			self.valueClosure = valueClosure
-			self.objectClosure = objectClosure
+			self.callback = callback
 		}
 
 		func createComponentStorage<Component>(resolver: Resolver, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component> {
-			valueClosure()
+			callback()
 			return wrapped.createComponentStorage(resolver: resolver, factory: factory)
 		}
 
-		func createObjectComponentStorage<Component: AnyObject>(resolver: Resolver, factory: @escaping (Resolver) -> Component) -> AnyObjectComponentStorage<Component> {
-			objectClosure()
-			return wrapped.createObjectComponentStorage(resolver: resolver, factory: factory)
+		func createComponentStorage<Component>(resolver: Resolver, with component: Component, factory: @escaping (Resolver) -> Component) -> AnyComponentStorage<Component> {
+			callback()
+			return wrapped.createComponentStorage(resolver: resolver, with: component, factory: factory)
 		}
 	}
 
@@ -75,30 +73,34 @@ class AutoInitializingContainerTests: XCTestCase {
 	}
 
 	func testValueAndObjectDifferentiation() {
+		var weakCounter = 0
 		var valueCounter = 0
-		var objectCounter = 0
 
 		let container = AutoInitializingContainer(
-			componentStorageFactory: TestStorageFactory(
-				wrapping: storageFactory,
-				valueClosure: { valueCounter += 1 },
-				objectClosure: { objectCounter += 1 }
+			componentStorageFactory: CallbackComponentStorageFactory(
+				wrapping: WeakComponentStorageFactory(
+					valueStorageFactory: CallbackComponentStorageFactory(
+						wrapping: storageFactory,
+						callback: { valueCounter += 1 }
+					)
+				),
+				callback: { weakCounter += 1 }
 			)
 		)
 
+		XCTAssertEqual(weakCounter, 0)
 		XCTAssertEqual(valueCounter, 0)
-		XCTAssertEqual(objectCounter, 0)
 
 		XCTAssertNotNil(container.resolveIfPresent(String.self))
+		XCTAssertEqual(weakCounter, 1)
 		XCTAssertEqual(valueCounter, 1)
-		XCTAssertEqual(objectCounter, 0)
 
 		XCTAssertNotNil(container.resolveIfPresent(NoParameterComponent.self))
+		XCTAssertEqual(weakCounter, 2)
 		XCTAssertEqual(valueCounter, 1)
-		XCTAssertEqual(objectCounter, 1)
 
 		XCTAssertNotNil(container.resolveIfPresent(ResolverComponent.self))
+		XCTAssertEqual(weakCounter, 3)
 		XCTAssertEqual(valueCounter, 1)
-		XCTAssertEqual(objectCounter, 2)
 	}
 }
