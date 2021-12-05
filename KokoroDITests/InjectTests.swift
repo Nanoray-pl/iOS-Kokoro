@@ -16,6 +16,12 @@ class InjectTests: XCTestCase {
 		init() {}
 	}
 
+	private class ComponentWithReadOnlyProjectedValue: HasReadOnlyProjectedValue {
+		var projectedValue = 0
+
+		init() {}
+	}
+
 	private enum TestComponentVariant: ComponentVariant {
 		typealias Component = InjectTests.Component
 
@@ -54,6 +60,15 @@ class InjectTests: XCTestCase {
 	private class ProjectedValueDependant: ObjectWith, HasResolver {
 		let resolver: Resolver
 		@ProjectedValueInject() var component: ComponentWithProjectedValue
+
+		init(resolver: Resolver) {
+			self.resolver = resolver
+		}
+	}
+
+	private class ReadOnlyProjectedValueDependant: ObjectWith, HasResolver {
+		let resolver: Resolver
+		@ReadOnlyProjectedValueInject() var component: ComponentWithReadOnlyProjectedValue
 
 		init(resolver: Resolver) {
 			self.resolver = resolver
@@ -109,5 +124,18 @@ class InjectTests: XCTestCase {
 		dependant.$component = 2
 		XCTAssertEqual(dependant.component.projectedValue, 2)
 		XCTAssertEqual(dependant.$component, 2)
+	}
+
+	func testReadOnlyProjectedValue() {
+		let container = Container(defaultComponentStorageFactory: storageFactory)
+		container.register(ComponentWithReadOnlyProjectedValue.self) { ComponentWithReadOnlyProjectedValue() }
+
+		let dependant = ReadOnlyProjectedValueDependant(resolver: container)
+		XCTAssertEqual(dependant.component.projectedValue, 0)
+		XCTAssertEqual(dependant.$component, 0)
+
+		dependant.component.projectedValue = 1
+		XCTAssertEqual(dependant.component.projectedValue, 1)
+		XCTAssertEqual(dependant.$component, 1)
 	}
 }

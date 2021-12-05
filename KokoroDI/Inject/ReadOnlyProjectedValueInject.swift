@@ -28,8 +28,7 @@ public struct AnyReadOnlyProjectedValueInject<EnclosingSelf, Component: HasReadO
 
 	@available(*, unavailable, message: "@(Any)Inject can only be applied to classes")
 	public var projectedValue: Component.ProjectedValue {
-		get { fatalError("@(Any)Inject can only be applied to classes") }
-		set { fatalError("@(Any)Inject can only be applied to classes") } // swiftlint:disable:this unused_setter_value
+		fatalError("@(Any)Inject can only be applied to classes")
 	}
 
 	public static subscript(_enclosingInstance observed: EnclosingSelf, wrapped wrappedKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Component>, storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Self>) -> Component {
@@ -59,7 +58,7 @@ public struct AnyReadOnlyProjectedValueInject<EnclosingSelf, Component: HasReadO
 		}
 	}
 
-	public static subscript(_enclosingInstance observed: EnclosingSelf, projected wrappedKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Component.ProjectedValue>, storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Self>) -> Component.ProjectedValue {
+	public static subscript(_enclosingInstance observed: EnclosingSelf, projected wrappedKeyPath: KeyPath<EnclosingSelf, Component.ProjectedValue>, storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, Self>) -> Component.ProjectedValue {
 		var storageValue = observed[keyPath: storageKeyPath]
 		return storageValue.lock.acquireAndRun {
 			if let component = storageValue.component {
