@@ -25,11 +25,15 @@ extension Optional: OptionalConvertible {
 	}
 
 	public func unwrap() throws -> Wrapped {
+		try unwrap { throw OptionalUnwrapError.error }
+	}
+
+	public func unwrap(else elseClosure: () throws -> Never) rethrows -> Wrapped {
 		switch self {
 		case let .some(value):
 			return value
 		case .none:
-			throw OptionalUnwrapError.error
+			try elseClosure()
 		}
 	}
 }

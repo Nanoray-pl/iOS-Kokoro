@@ -192,8 +192,7 @@ open class NavigationControllerWrapper: UIViewController {
 	}
 
 	private func controllerOptions(for viewController: UIViewController) -> ControllerOptions {
-		guard let entry = controllerOptions.first(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
-		return entry
+		return controllerOptions.first { $0.controller == viewController }.unwrap { fatalError("View controller \(viewController) is not on the stack.") }
 	}
 
 	public func options(for viewController: UIViewController) -> Options {
@@ -201,7 +200,7 @@ open class NavigationControllerWrapper: UIViewController {
 	}
 
 	public func setOptions(to optionsOverride: Options, for viewController: UIViewController, animated: Bool) {
-		guard let index = controllerOptions.firstIndex(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
+		let index = controllerOptions.firstIndex { $0.controller == viewController }.unwrap { fatalError("View controller \(viewController) is not on the stack.") }
 		controllerOptions[index].options = optionsOverride
 		updateOptions(animated: animated)
 	}
@@ -238,7 +237,7 @@ open class NavigationControllerWrapper: UIViewController {
 		}
 
 		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
-			guard let targetControllerIndex = parent.wrappedNavigationController.viewControllers.firstIndex(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+			let targetControllerIndex = parent.wrappedNavigationController.viewControllers.firstIndex { $0.navigationItem == navigationItem }.unwrap { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
 
 			var currentIndex = parent.wrappedNavigationController.viewControllers.count - 1
 			while currentIndex > targetControllerIndex {

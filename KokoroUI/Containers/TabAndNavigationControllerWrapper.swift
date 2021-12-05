@@ -257,7 +257,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	public func setTabBarVisuals(_ visuals: TabBarVisuals, for navigationController: UINavigationController) {
-		guard let index = navigationControllers.firstIndex(of: navigationController) else { fatalError("Navigation controller \(navigationController) is not managed by this TabAndNavigationControllerWrapper.") }
+		let index = navigationControllers.firstIndex(of: navigationController).unwrap { fatalError("Navigation controller \(navigationController) is not managed by this TabAndNavigationControllerWrapper.") }
 		setupTabItem(tabBar.items![index], with: visuals)
 	}
 
@@ -324,8 +324,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	private func controllerOptions(for viewController: UIViewController) -> ControllerOptions {
-		guard let entry = controllerOptions.first(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
-		return entry
+		return controllerOptions.first { $0.controller == viewController }.unwrap { fatalError("View controller \(viewController) is not on the stack.") }
 	}
 
 	public func options(for viewController: UIViewController) -> Options {
@@ -333,7 +332,7 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 	}
 
 	public func setOptions(to optionsOverride: Options, for viewController: UIViewController, animated: Bool) {
-		guard let index = controllerOptions.firstIndex(where: { $0.controller == viewController }) else { fatalError("View controller \(viewController) is not on the stack.") }
+		let index = controllerOptions.firstIndex { $0.controller == viewController }.unwrap { fatalError("View controller \(viewController) is not on the stack.") }
 		controllerOptions[index].options = optionsOverride
 		updateOptionsForAllNavigationControllers(animated: animated)
 	}
@@ -428,8 +427,8 @@ open class TabAndNavigationControllerWrapper: UIViewController {
 		}
 
 		func navigateBackToViewController(owning navigationItem: UINavigationItem, animated: Bool, completion: (() -> Void)?) {
-			guard let navigationController = parent.navigationControllers.first(where: { $0.viewControllers.contains { $0.navigationItem == navigationItem } }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
-			guard let targetControllerIndex = navigationController.viewControllers.firstIndex(where: { $0.navigationItem == navigationItem }) else { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+			let navigationController = parent.navigationControllers.first { $0.viewControllers.contains { $0.navigationItem == navigationItem } }.unwrap { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
+			let targetControllerIndex = navigationController.viewControllers.firstIndex { $0.navigationItem == navigationItem }.unwrap { fatalError("View controller owning navigation item \(navigationItem) is not on the stack") }
 
 			var currentIndex = navigationController.viewControllers.count - 1
 			while currentIndex > targetControllerIndex {

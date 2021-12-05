@@ -7,6 +7,7 @@
 import Combine
 import CoreData
 import Foundation
+import KokoroUtils
 
 public protocol CoreDataContextProvider {
 	/// The context that can be used on a main thread.
@@ -107,19 +108,11 @@ public class DefaultCoreDataManager<ModelVersion: CoreDataModelVersion>: CoreDat
 	public private(set) var state = State.awaiting
 
 	public var mainContext: MainThreadCoreDataContext {
-		if let stack = stack {
-			return stack.instance.mainContext
-		} else {
-			fatalError("CoreDataStack not initialized yet")
-		}
+		return stack.unwrap { fatalError("CoreDataStack not initialized yet") }.instance.mainContext
 	}
 
 	public var backgroundContext: CoreDataContext {
-		if let stack = stack {
-			return stack.instance.backgroundContext
-		} else {
-			fatalError("CoreDataStack not initialized yet")
-		}
+		return stack.unwrap { fatalError("CoreDataStack not initialized yet") }.instance.backgroundContext
 	}
 
 	private lazy var storeDescription: NSPersistentStoreDescription = {

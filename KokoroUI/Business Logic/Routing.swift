@@ -3,6 +3,8 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
+import KokoroUtils
+
 public protocol Router: AnyObject {
 	var parentRouter: Router? { get }
 	var childRouters: [Router] { get }
@@ -49,11 +51,7 @@ public extension Router {
 	}
 
 	func router<RouteType>(for routeType: RouteType.Type) -> RouteType {
-		guard let router = optionalRouter(for: routeType) else {
-			// we treat this as a programming error, hence the fatalError
-			fatalError("No known router handling \(routeType).")
-		}
-		return router
+		return optionalRouter(for: routeType).unwrap { fatalError("No known router handling \(routeType).") }
 	}
 
 	subscript<RouteType>(_ routeType: RouteType.Type) -> RouteType {

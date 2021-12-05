@@ -81,9 +81,7 @@ public class ProportionalOffsetConstraint: NonBasicConstraint, ObjectWith {
 		guard horizontalPoint != nil || verticalPoint != nil else { return }
 
 		guard let constrainable = constrainable, let anchor = anchor else { return }
-		guard let common = constrainable.constrainableView.findCommonView(with: anchor.constrainableView) else {
-			fatalError("No common superview between views \(constrainable.constrainableView) and \(anchor.constrainableView).")
-		}
+		let common = constrainable.constrainableView.findCommonView(with: anchor.constrainableView).unwrap { fatalError("No common superview between views \(constrainable.constrainableView) and \(anchor.constrainableView).") }
 		var constraints = ConstraintSet()
 		defer { constraints.activate() }
 

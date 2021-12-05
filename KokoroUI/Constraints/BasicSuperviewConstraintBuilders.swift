@@ -13,8 +13,7 @@ public extension UIView {
 	}
 
 	private func unsafeSuperview() -> UIView {
-		guard let superview = self.superview else { fatalError("Cannot set constraints dependent on superview - superview not set") }
-		return superview
+		return superview.unwrap { fatalError("Cannot set constraints dependent on superview - superview not set") }
 	}
 
 	// MARK: Single Edges
