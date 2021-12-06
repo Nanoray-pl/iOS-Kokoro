@@ -10,6 +10,7 @@ private protocol ObjectComponentProtocol: AnyObject {}
 
 class ContainerTests: XCTestCase {
 	private class Component: ObjectComponentProtocol {}
+	private class ComponentSubclass: Component {}
 
 	private class ResolverComponent: ResolverInitializable {
 		required init(resolver: Resolver) {}
@@ -142,5 +143,29 @@ class ContainerTests: XCTestCase {
 		_ = container.resolve(ObjectComponentProtocol.self)
 		XCTAssertEqual(weakCounter, 3)
 		XCTAssertEqual(valueCounter, 1)
+	}
+
+	func testForwarding() {
+		do {
+			let container = Container(defaultComponentStorageFactory: storageFactory)
+
+			container.register(ComponentSubclass.self) { ComponentSubclass() }
+			XCTAssertNotNil(container.resolveIfPresent(ComponentSubclass.self))
+			XCTAssertNil(container.resolveIfPresent(Component.self))
+
+			container.forward(Component.self, to: ComponentSubclass.self)
+			XCTAssertNotNil(container.resolveIfPresent(ComponentSubclass.self))
+			XCTAssertNotNil(container.resolveIfPresent(Component.self))
+		}
+
+		do {
+			let container = Container(defaultComponentStorageFactory: storageFactory)
+
+			container
+				.register(ComponentSubclass.self) { ComponentSubclass() }
+				.forwarding(Component.self)
+			XCTAssertNotNil(container.resolveIfPresent(ComponentSubclass.self))
+			XCTAssertNotNil(container.resolveIfPresent(Component.self))
+		}
 	}
 }

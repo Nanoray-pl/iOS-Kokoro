@@ -20,12 +20,14 @@ public extension Resolver {
 }
 
 public extension Container {
-	func register<Variant: ComponentVariant>(_ variant: Variant, storageFactory: ComponentStorageFactory, factory: @escaping (Resolver) -> Variant.Component) {
-		register(Variant.Component.self, variant: variant, storageFactory: storageFactory, factory: factory)
+	@discardableResult
+	func register<Variant: ComponentVariant>(_ variant: Variant, storageFactory: ComponentStorageFactory, factory: @escaping (Resolver) -> Variant.Component) -> ContainerRegisterResult {
+		return register(Variant.Component.self, variant: variant, storageFactory: storageFactory, factory: factory)
 	}
 
-	func register<Variant: ComponentVariant>(_ variant: Variant, factory: @escaping (Resolver) -> Variant.Component) {
-		register(Variant.Component.self, variant: variant, storageFactory: defaultComponentStorageFactory, factory: factory)
+	@discardableResult
+	func register<Variant: ComponentVariant>(_ variant: Variant, factory: @escaping (Resolver) -> Variant.Component) -> ContainerRegisterResult {
+		return register(Variant.Component.self, variant: variant, storageFactory: defaultComponentStorageFactory, factory: factory)
 	}
 
 	func unregister<Variant: ComponentVariant>(_ variant: Variant) {
@@ -35,12 +37,14 @@ public extension Container {
 
 // registering without `resolver` parameter
 public extension Container {
-	func register<Variant: ComponentVariant>(_ variant: Variant, storageFactory: ComponentStorageFactory, factory: @escaping () -> Variant.Component) {
-		register(variant, storageFactory: storageFactory) { _ in factory() }
+	@discardableResult
+	func register<Variant: ComponentVariant>(_ variant: Variant, storageFactory: ComponentStorageFactory, factory: @escaping () -> Variant.Component) -> ContainerRegisterResult {
+		return register(variant, storageFactory: storageFactory) { _ in factory() }
 	}
 
-	func register<Variant: ComponentVariant>(_ variant: Variant, factory: @escaping () -> Variant.Component) {
-		register(variant) { _ in factory() }
+	@discardableResult
+	func register<Variant: ComponentVariant>(_ variant: Variant, factory: @escaping () -> Variant.Component) -> ContainerRegisterResult {
+		return register(variant) { _ in factory() }
 	}
 }
 

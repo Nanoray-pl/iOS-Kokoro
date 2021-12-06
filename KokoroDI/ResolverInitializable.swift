@@ -11,54 +11,66 @@ public protocol ResolverInitializable {
 
 // NoParameterInitializable
 public extension Container {
-	func register<Component: NoParameterInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory) {
-		register(for: key, storageFactory: storageFactory) { Component() }
+	@discardableResult
+	func register<Component: NoParameterInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
+		return register(for: key, storageFactory: storageFactory) { Component() }
 	}
 
-	func register<Component: NoParameterInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>) {
-		register(for: key, storageFactory: defaultComponentStorageFactory)
+	@discardableResult
+	func register<Component: NoParameterInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>) -> ContainerRegisterResult {
+		return register(for: key, storageFactory: defaultComponentStorageFactory)
 	}
 
-	func register<Component: NoParameterInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant, storageFactory: ComponentStorageFactory) {
-		register(for: .init(for: type, variant: variant), storageFactory: storageFactory)
+	@discardableResult
+	func register<Component: NoParameterInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
+		return register(for: .init(for: type, variant: variant), storageFactory: storageFactory)
 	}
 
-	func register<Component: NoParameterInitializable>(_ type: Component.Type, storageFactory: ComponentStorageFactory) {
-		register(for: .init(for: type, variant: VoidComponentKeyVariant.shared), storageFactory: storageFactory)
+	@discardableResult
+	func register<Component: NoParameterInitializable>(_ type: Component.Type, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
+		return register(for: .init(for: type, variant: VoidComponentKeyVariant.shared), storageFactory: storageFactory)
 	}
 
-	func register<Component: NoParameterInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant) {
-		register(type, variant: variant, storageFactory: defaultComponentStorageFactory)
+	@discardableResult
+	func register<Component: NoParameterInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant) -> ContainerRegisterResult {
+		return register(type, variant: variant, storageFactory: defaultComponentStorageFactory)
 	}
 
-	func register<Component: NoParameterInitializable>(_ type: Component.Type) {
-		register(type, storageFactory: defaultComponentStorageFactory)
+	@discardableResult
+	func register<Component: NoParameterInitializable>(_ type: Component.Type) -> ContainerRegisterResult {
+		return register(type, storageFactory: defaultComponentStorageFactory)
 	}
 }
 
 // ResolverInitializable
 public extension Container {
-	func register<Component: ResolverInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory) {
-		register(for: key, storageFactory: storageFactory) { Component(resolver: $0) }
+	@discardableResult
+	func register<Component: ResolverInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
+		return register(for: key, storageFactory: storageFactory) { Component(resolver: $0) }
 	}
 
-	func register<Component: ResolverInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>) {
-		register(for: key, storageFactory: defaultComponentStorageFactory)
+	@discardableResult
+	func register<Component: ResolverInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>) -> ContainerRegisterResult {
+		return register(for: key, storageFactory: defaultComponentStorageFactory)
 	}
 
-	func register<Component: ResolverInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant, storageFactory: ComponentStorageFactory) {
-		register(for: .init(for: type, variant: variant), storageFactory: storageFactory)
+	@discardableResult
+	func register<Component: ResolverInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
+		return register(for: .init(for: type, variant: variant), storageFactory: storageFactory)
 	}
 
-	func register<Component: ResolverInitializable>(_ type: Component.Type, storageFactory: ComponentStorageFactory) {
-		register(for: .init(for: type, variant: VoidComponentKeyVariant.shared), storageFactory: storageFactory)
+	@discardableResult
+	func register<Component: ResolverInitializable>(_ type: Component.Type, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
+		return register(for: .init(for: type, variant: VoidComponentKeyVariant.shared), storageFactory: storageFactory)
 	}
 
-	func register<Component: ResolverInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant) {
-		register(type, variant: variant, storageFactory: defaultComponentStorageFactory)
+	@discardableResult
+	func register<Component: ResolverInitializable, Variant: Hashable>(_ type: Component.Type, variant: Variant) -> ContainerRegisterResult {
+		return register(type, variant: variant, storageFactory: defaultComponentStorageFactory)
 	}
 
-	func register<Component: ResolverInitializable>(_ type: Component.Type) {
-		register(type, storageFactory: defaultComponentStorageFactory)
+	@discardableResult
+	func register<Component: ResolverInitializable>(_ type: Component.Type) -> ContainerRegisterResult {
+		return register(type, storageFactory: defaultComponentStorageFactory)
 	}
 }

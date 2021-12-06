@@ -14,9 +14,9 @@ public extension Resolver {
 	func resolve<Component, Variant: Hashable>(for key: ComponentKey<Component, Variant>) -> Component {
 		return resolveIfPresent(for: key).unwrap {
 			if Variant.self == VoidComponentKeyVariant.self {
-				fatalError("Tried to resolve an unregistered component of type \(Component.self)")
+				fatalError("Tried to resolve an unregistered component of type \(Component.self).")
 			} else {
-				fatalError("Tried to resolve an unregistered component variant \(key.variant) of type \(Component.self)")
+				fatalError("Tried to resolve an unregistered component variant \(key.variant) of type \(Component.self).")
 			}
 		}
 	}
