@@ -3,10 +3,9 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
-#if canImport(Foundation)
 import KokoroUtils
 
-private let sharedLock: Lock = FoundationLock()
+private let sharedLock: Lock = DefaultLock()
 
 public extension ObjectWith {
 	typealias ReadOnlyProjectedValueInject<Component: HasReadOnlyProjectedValue, Variant: Hashable> = AnyReadOnlyProjectedValueInject<Self, Component, Variant>
@@ -104,4 +103,3 @@ public extension AnyReadOnlyProjectedValueInject where EnclosingSelf: HasResolve
 		self.init(\.resolver, resolve: resolveMode, key: .init(for: Component.self, variant: .shared), synchronization: synchronization)
 	}
 }
-#endif

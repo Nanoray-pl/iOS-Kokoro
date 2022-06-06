@@ -5,6 +5,7 @@
 
 #if canImport(Foundation)
 import Foundation
+import KokoroUtils
 
 public class MockScheduler: Scheduler {
 	private struct Entry {

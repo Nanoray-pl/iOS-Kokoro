@@ -5,9 +5,9 @@
 
 #if canImport(Combine) && canImport(UIKit)
 import Combine
+import KokoroResourceProvider
 import KokoroUI
 import KokoroUtils
-import KokoroResourceProvider
 import UIKit
 
 public protocol AsynchronousImageLoaderTarget: AnyObject {

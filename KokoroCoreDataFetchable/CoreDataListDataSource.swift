@@ -29,18 +29,18 @@ public class CoreDataListDataSource<CoreDataType: NSManagedObject & ManagedObjec
 		identity: \.identifier
 	)
 
-	private let lock = FoundationLock()
+	private let lock = DefaultLock()
 	private var pages = [Page]()
 	@Locked(via: \.lock) public private(set) var elements = [Element]()
 	private var fetchingPageIndex: Int?
 	private var fetchingId: UUID?
-	@Locked(via: \.lock) public private(set) var expectedTotalCount: Int? = nil
+	@Locked(via: \.lock) public private(set) var expectedTotalCount: Int?
 
 	public var count: Int {
 		return lock.acquireAndRun { elements.count }
 	}
 
-	@Locked(via: \.lock) public private(set) var error: Error? = nil
+	@Locked(via: \.lock) public private(set) var error: Error?
 
 	public var isEmpty: Bool {
 		return lock.acquireAndRun { elements.isEmpty }

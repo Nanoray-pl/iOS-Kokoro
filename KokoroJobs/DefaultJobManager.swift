@@ -6,6 +6,7 @@
 #if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
+import KokoroAsync
 import KokoroUtils
 
 private struct FakeCodableWrapper: Codable {
@@ -93,10 +94,10 @@ private class UntypedJob: Job {
 
 public class DefaultJobManager: JobManager, ObjectWith {
 	private let entryStorage: JobEntryStorage
-	private let scheduler: KokoroUtils.Scheduler
+	private let scheduler: KokoroAsync.Scheduler
 	private let logger: Logger
 
-	private let lock = ObjcLock()
+	private let lock: Lock = DefaultLock()
 	private var handlers = [JobHandlerIdentifier: UntypedJobHandler]()
 	private var jobs = [UntypedJob]()
 	private var jobHandlers = [JobIdentifier: UntypedJobHandler]()
@@ -104,7 +105,7 @@ public class DefaultJobManager: JobManager, ObjectWith {
 	private var persistedScheduleParameters = [JobIdentifier: JobManagerPersistedScheduleParameters]()
 	private var workItem: DispatchWorkItem?
 
-	public init(entryStorage: JobEntryStorage, scheduler: KokoroUtils.Scheduler = DispatchQueue.global(qos: .background), logger: Logger, dispatchQueue: DispatchQueue = .global(qos: .background)) {
+	public init(entryStorage: JobEntryStorage, scheduler: KokoroAsync.Scheduler = DispatchQueue.global(qos: .background), logger: Logger, dispatchQueue: DispatchQueue = .global(qos: .background)) {
 		self.entryStorage = entryStorage
 		self.logger = logger
 		self.scheduler = scheduler

@@ -29,7 +29,7 @@ public class AwaitTimeMagnitudeAwareAsynchronousImageLoader: AsynchronousImageLo
 		self.fallbackLoader = fallbackLoader
 	}
 
-	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T : ResourceProvider, T.Resource == UIImage? {
+	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage? {
 		entries.removeFirst { $0.target === target }?.loader?.loadImage(from: nil as T?, into: target, errorHandler: errorHandler, successCallback: successCallback)
 
 		guard let provider = provider else { return }

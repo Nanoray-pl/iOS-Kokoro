@@ -21,7 +21,7 @@ public class SimpleAsynchronousImageLoader: AsynchronousImageLoader {
 		}
 	}
 
-	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T : ResourceProvider, T.Resource == UIImage? {
+	public func loadImage<T>(from provider: T?, into target: AsynchronousImageLoaderTarget, errorHandler: @escaping (Error) -> AnyPublisher<UIImage?, Never>, successCallback: ((UIImage?) -> Void)?) where T: ResourceProvider, T.Resource == UIImage? {
 		entries.first { $0.target === target }?.cancellable.cancel()
 		guard let provider = provider else {
 			target.image = nil

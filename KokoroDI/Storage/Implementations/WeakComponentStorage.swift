@@ -3,10 +3,9 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
-#if canImport(Foundation)
 import KokoroUtils
 
-private let sharedLock: Lock = FoundationLock()
+private let sharedLock: Lock = DefaultLock()
 
 private enum WeakComponentStorageLock: Lock {
 	case none
@@ -107,4 +106,3 @@ public struct WeakComponentStorageFactory: ComponentStorageFactory {
 			.eraseToAnyComponentStorage()
 	}
 }
-#endif

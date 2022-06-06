@@ -3,7 +3,7 @@
 //  Copyright © 2020 Nanoray. All rights reserved.
 //
 
-private enum OptionalUnwrapError: Error {
+public enum OptionalUnwrapError: Error {
 	case error
 }
 

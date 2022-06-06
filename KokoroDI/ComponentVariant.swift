@@ -35,7 +35,8 @@ public extension Container {
 	}
 }
 
-// registering without `resolver` parameter
+// MARK: - registering without `resolver` parameter
+
 public extension Container {
 	@discardableResult
 	func register<Variant: ComponentVariant>(_ variant: Variant, storageFactory: ComponentStorageFactory, factory: @escaping () -> Variant.Component) -> ContainerRegisterResult {
@@ -47,6 +48,8 @@ public extension Container {
 		return register(variant) { _ in factory() }
 	}
 }
+
+// MARK: - `Inject` property wrapper support
 
 #if canImport(Foundation)
 public extension AnyInject {

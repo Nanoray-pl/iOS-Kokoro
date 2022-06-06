@@ -34,7 +34,7 @@ public enum Synchronization {
 		case .shared:
 			return sharedLock
 		case .automatic:
-			return FoundationLock()
+			return DefaultLock()
 		case let .via(lock):
 			return lock
 		}
@@ -73,6 +73,28 @@ public class FoundationLock: Lock {
 }
 #endif
 
+public class PThreadLock: Lock {
+	private var mutex = pthread_mutex_t()
+
+	public init() {
+		pthread_mutex_init(&mutex, nil)
+	}
+
+	public func acquireAndRun<R>(_ closure: () throws -> R) rethrows -> R {
+		pthread_mutex_lock(&mutex)
+		defer { pthread_mutex_unlock(&mutex) }
+		return try closure()
+	}
+}
+
+#if canImport(Foundation)
+public typealias DefaultLock = FoundationLock
+#elseif canImport(ObjectiveC)
+public typealias DefaultLock = ObjcLock
+#else
+public typealias DefaultLock = PThreadLock
+#endif
+
 @propertyWrapper
 public struct AnyLocked<EnclosingSelf, Value, LockType: Lock> {
 	private let lockKeyPath: KeyPath<EnclosingSelf, LockType>
@@ -95,6 +117,11 @@ public struct AnyLocked<EnclosingSelf, Value, LockType: Lock> {
 			let lock = observed[keyPath: storageValue.lockKeyPath]
 			lock.acquireAndRun { storageValue.value = newValue }
 		}
+	}
+
+	public init(via lockKeyPath: KeyPath<EnclosingSelf, LockType>) where Value: OptionalConvertible {
+		self.value = Value(from: nil)
+		self.lockKeyPath = lockKeyPath
 	}
 
 	public init(wrappedValue value: Value, via lockKeyPath: KeyPath<EnclosingSelf, LockType>) {

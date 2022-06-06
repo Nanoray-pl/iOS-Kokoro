@@ -5,6 +5,7 @@
 
 #if canImport(Combine)
 import Combine
+import KokoroUtils
 
 public extension Publisher {
 	func onError(_ closure: @escaping (Failure) -> Void) -> Publishers.MapError<Self, Failure> {
@@ -19,7 +20,7 @@ public extension Publisher {
 	}
 
 	func onStart(_ closure: @escaping () -> Void) -> Publishers.HandleEvents<Self> {
-		let lock = FoundationLock()
+		let lock: Lock = DefaultLock()
 		var didCallClosure = false
 		return handleEvents(receiveSubscription: { _ in
 			lock.acquireAndRun {

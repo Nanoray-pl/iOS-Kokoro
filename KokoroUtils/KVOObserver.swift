@@ -18,7 +18,7 @@ public class KVOObserver: NSObject {
 	}
 
 	private let callback: () -> Void
-	private let lock = FoundationLock()
+	private let lock: Lock = DefaultLock()
 	private var observations = [Entry]()
 
 	public init(callback: @escaping () -> Void) {

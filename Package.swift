@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -20,6 +20,7 @@ let package = Package(
 		.library(name: "KokoroUIResourceProvider", targets: ["KokoroUIResourceProvider"]),
 		.library(name: "KokoroCoreDataFetchable", targets: ["KokoroCoreDataFetchable"]),
 		.library(name: "KokoroDI", targets: ["KokoroDI"]),
+		.library(name: "KokoroAsync", targets: ["KokoroAsync"]),
 	],
 	targets: [
 		.target(
@@ -56,7 +57,7 @@ let package = Package(
 		),
 		.target(
 			name: "KokoroHttp",
-			dependencies: ["KokoroUtils"],
+			dependencies: ["KokoroUtils", "KokoroAsync"],
 			path: "KokoroHttp",
 			exclude: ["Bootstrap/Info.plist"]
 		),
@@ -68,19 +69,19 @@ let package = Package(
 		),
 		.target(
 			name: "KokoroResourceProvider",
-			dependencies: ["KokoroUtils"],
+			dependencies: ["KokoroUtils", "KokoroAsync"],
 			path: "KokoroResourceProvider",
 			exclude: ["Bootstrap/Info.plist"]
 		),
 		.target(
 			name: "KokoroJobs",
-			dependencies: ["KokoroUtils"],
+			dependencies: ["KokoroUtils", "KokoroAsync"],
 			path: "KokoroJobs",
 			exclude: ["Bootstrap/Info.plist"]
 		),
 		.target(
 			name: "KokoroCache",
-			dependencies: ["KokoroUtils"],
+			dependencies: ["KokoroUtils", "KokoroAsync"],
 			path: "KokoroCache",
 			exclude: ["Bootstrap/Info.plist"]
 		),
@@ -124,6 +125,12 @@ let package = Package(
 			name: "KokoroDITests",
 			dependencies: ["KokoroDI"],
 			path: "KokoroDITests",
+			exclude: ["Bootstrap/Info.plist"]
+		),
+		.target(
+			name: "KokoroAsync",
+			dependencies: ["KokoroUtils"],
+			path: "KokoroAsync",
 			exclude: ["Bootstrap/Info.plist"]
 		),
 //		.testTarget(

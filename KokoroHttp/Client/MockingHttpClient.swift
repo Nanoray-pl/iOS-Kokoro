@@ -18,10 +18,10 @@ public class MockingHttpClient: HttpClient {
 		self.mocks = mocks
 	}
 
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
+	public func requestProgressPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		if let result = mocks.compactMapFirst({ $0(request) }) { return result.map { .output($0) }.publisher.eraseToAnyPublisher() }
 		guard let wrapped = wrapped else { fatalError("Unhandled HTTP request") }
-		return wrapped.request(request)
+		return wrapped.requestProgressPublisher(request)
 	}
 }
 

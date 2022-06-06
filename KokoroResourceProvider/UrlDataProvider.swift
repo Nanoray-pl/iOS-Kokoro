@@ -6,6 +6,7 @@
 #if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
+import KokoroAsync
 
 public class UrlDataProviderFactory: ResourceProviderFactory {
 	private let session: URLSession

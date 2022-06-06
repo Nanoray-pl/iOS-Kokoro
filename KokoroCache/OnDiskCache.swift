@@ -5,6 +5,7 @@
 
 #if canImport(Foundation) && canImport(CryptoKit) && canImport(ObjectiveC)
 import Foundation
+import KokoroAsync
 import KokoroUtils
 import ObjectiveC
 
@@ -125,7 +126,7 @@ public class OnDiskCache<Key, Serializer>: Cache where Key: OnDiskCacheable, Ser
 	private let fileManager: FileManager
 	private let serializer: Serializer
 	private let scheduler: Scheduler
-	private let lock = ObjcLock()
+	private let lock: Lock = DefaultLock()
 
 	private lazy var cacheEntriesFileUrl = cacheDirectoryUrl.appendingPathComponent("/cache.json")
 

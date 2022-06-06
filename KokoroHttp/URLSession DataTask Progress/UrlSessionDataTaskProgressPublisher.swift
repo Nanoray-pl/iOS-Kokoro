@@ -15,23 +15,13 @@ public extension URLSession {
 }
 
 public class UrlSessionDataTaskProgressPublisher: Publisher {
-	public enum Output: Hashable {
-		case sendProgress(_ progress: Progress)
-		case receiveProgress(_ progress: Progress)
-		case output(data: Data, response: URLResponse)
-
-		public enum Progress: Hashable {
-			case indeterminate(processedByteCount: Int = 0)
-			case determinate(processedByteCount: Int, expectedByteCount: Int)
-		}
-	}
-
+	public typealias Output = UrlSessionDataTaskProgress
 	public typealias Failure = URLError
 
 	private let session: URLSession
 	private let request: URLRequest
 	private let subject = CurrentValueSubject<Output, Failure>(.sendProgress(.indeterminate()))
-	private let lock: Lock = FoundationLock()
+	private let lock: Lock = DefaultLock()
 	private var subscriptionCount = 0
 	private var dataTask: URLSessionDataTask?
 	private lazy var kvoObserver = KVOObserver { [weak self] in self?.updateProgress() }

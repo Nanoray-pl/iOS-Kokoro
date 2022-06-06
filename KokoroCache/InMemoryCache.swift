@@ -5,6 +5,7 @@
 
 #if canImport(Foundation)
 import Foundation
+import KokoroAsync
 import KokoroUtils
 import ObjectiveC
 
@@ -61,7 +62,7 @@ public class InMemoryCache<Key: Hashable, Value>: Cache {
 
 	private let scheduler: Scheduler
 	private let sizeFunction: (Value) -> Int
-	private let lock = ObjcLock()
+	private let lock: Lock = DefaultLock()
 
 	private var entries = [Key: Entry]()
 	private var entriesSortedByInvalidationDate = SortedArray<Entry>(comparator: {

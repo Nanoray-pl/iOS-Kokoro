@@ -18,13 +18,13 @@ public class SchedulingHttpClient<Scheduler: Combine.Scheduler>: HttpClient {
 		self.delay = delay
 	}
 
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
+	public func requestProgressPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		if let delay = delay {
-			return wrapped.request(request)
+			return wrapped.requestProgressPublisher(request)
 				.delay(for: delay, scheduler: scheduler)
 				.eraseToAnyPublisher()
 		} else {
-			return wrapped.request(request)
+			return wrapped.requestProgressPublisher(request)
 				.receive(on: scheduler)
 				.eraseToAnyPublisher()
 		}

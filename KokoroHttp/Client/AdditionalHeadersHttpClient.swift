@@ -25,8 +25,8 @@ public class AdditionalHeadersHttpClient: HttpClient {
 		}
 	}
 
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
-		return wrapped.request(modifiedRequest(request))
+	public func requestProgressPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
+		return wrapped.requestProgressPublisher(modifiedRequest(request))
 	}
 }
 

@@ -10,7 +10,7 @@ public extension Bundle {
 	var isProduction: Bool {
 		#if targetEnvironment(simulator) || DEBUG
 		return false
-		#elseif DEBUG
+		#else
 		if let appStoreReceiptURL = appStoreReceiptURL {
 			return appStoreReceiptURL.lastPathComponent != "sandboxReceipt"
 		} else {

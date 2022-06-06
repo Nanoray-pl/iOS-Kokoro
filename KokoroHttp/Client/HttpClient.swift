@@ -6,6 +6,8 @@
 #if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
+import KokoroAsync
+import KokoroUtils
 
 public typealias HttpClientProgress = UrlSessionDataTaskProgressPublisher.Output.Progress
 
@@ -28,7 +30,7 @@ public enum HttpClientOutput<Output> {
 	}
 }
 
-public struct HttpClientResponse {
+public struct HttpClientResponse: ValueWith {
 	public let statusCode: Int
 	public let headers: [String: String]
 	public let data: Data
@@ -41,7 +43,37 @@ public struct HttpClientResponse {
 }
 
 public protocol HttpClient {
-	func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error>
+	func requestPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientResponse, Error>
+	func requestProgressPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error>
+
+	#if swift(>=5.6)
+	func request(_ request: URLRequest) async throws -> HttpClientResponse
+	func requestProgress(_ request: URLRequest) -> AnyAsyncSequence<HttpClientOutput<HttpClientResponse>>
+	#endif
+}
+
+public extension HttpClient {
+	func requestPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientResponse, Error> {
+		return self.requestProgressPublisher(request).unwrap()
+	}
+
+	#if swift(>=5.6)
+	func request(_ request: URLRequest) async throws -> HttpClientResponse {
+		for try await output in requestProgress(request) {
+			switch output {
+			case .sendProgress, .receiveProgress:
+				break
+			case let .output(output):
+				return output
+			}
+		}
+		fatalError("Sequence did not return an .output value.")
+	}
+
+	func requestProgress(_ request: URLRequest) -> AnyAsyncSequence<HttpClientOutput<HttpClientResponse>> {
+		return requestProgressPublisher(request).asyncStream().eraseToAnyAsyncSequence()
+	}
+	#endif
 }
 
 public struct HttpClientUnallowedStatusCodeError: Hashable, Error {
@@ -49,6 +81,20 @@ public struct HttpClientUnallowedStatusCodeError: Hashable, Error {
 
 	public init(statusCode: Int) {
 		self.statusCode = statusCode
+	}
+}
+
+public extension AsyncSequence {
+	func unwrap<OutputType>() async throws -> OutputType where Element == HttpClientOutput<OutputType> {
+		for try await element in self {
+			switch element {
+			case .sendProgress, .receiveProgress:
+				break
+			case let .output(output):
+				return output
+			}
+		}
+		fatalError("Sequence did not return an .output value.")
 	}
 }
 

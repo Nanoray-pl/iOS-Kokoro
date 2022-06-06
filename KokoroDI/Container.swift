@@ -78,7 +78,8 @@ public extension Container {
 	}
 }
 
-// registering without `resolver` parameter
+// MARK: - registering without `resolver` parameter
+
 public extension Container {
 	@discardableResult
 	func register<Component, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory, factory: @escaping () -> Component) -> ContainerRegisterResult {
@@ -111,7 +112,8 @@ public extension Container {
 	}
 }
 
-// forwarding
+// MARK: - forwarding
+
 public extension Container {
 	func forward<OriginalComponent, OriginalVariant: Hashable, Component, Variant: Hashable>(_ type: Component.Type, variant: Variant, to serviceType: OriginalComponent.Type, variant serviceVariant: OriginalVariant) {
 		forward(key: .init(for: type, variant: variant), to: .init(for: serviceType, variant: serviceVariant))
@@ -146,17 +148,6 @@ public extension Container {
 	}
 }
 
-// unregistering
-public extension Container {
-	func unregister<Component, Variant: Hashable>(_ type: Component.Type, variant: Variant) {
-		unregister(for: .init(for: type, variant: variant))
-	}
-
-	func unregister<Component>(_ type: Component.Type) {
-		unregister(for: .init(for: type, variant: VoidComponentKeyVariant.shared))
-	}
-}
-
 public protocol ContainerRegisterResult {
 	@discardableResult
 	func forwarding<ForwardComponent, ForwardVariant: Hashable>(_ key: ComponentKey<ForwardComponent, ForwardVariant>) -> ContainerRegisterResult
@@ -187,5 +178,17 @@ public extension ContainerRegisterResult {
 	@discardableResult
 	func forwarding<ForwardComponent>(_ type: ForwardComponent.Type) -> ContainerRegisterResult {
 		return forwarding(.init(for: type, variant: VoidComponentKeyVariant.shared))
+	}
+}
+
+// MARK: - unregistering
+
+public extension Container {
+	func unregister<Component, Variant: Hashable>(_ type: Component.Type, variant: Variant) {
+		unregister(for: .init(for: type, variant: variant))
+	}
+
+	func unregister<Component>(_ type: Component.Type) {
+		unregister(for: .init(for: type, variant: VoidComponentKeyVariant.shared))
 	}
 }

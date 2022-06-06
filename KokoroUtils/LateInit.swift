@@ -22,7 +22,7 @@ private enum LateInitSynchronizationLock: Lock {
 	}
 }
 
-private let sharedLock: Lock = FoundationLock()
+private let sharedLock: Lock = DefaultLock()
 
 @propertyWrapper
 public struct LateInit<T> {
@@ -79,7 +79,7 @@ public struct LateInit<T> {
 		case .shared:
 			lock = .via(sharedLock)
 		case .automatic:
-			lock = .via(FoundationLock())
+			lock = .via(DefaultLock())
 		case let .via(lock):
 			self.lock = .via(lock)
 		}

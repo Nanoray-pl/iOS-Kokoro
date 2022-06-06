@@ -3,13 +3,13 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
-#if canImport(Combine) && canImport(Foundation)
+#if canImport(Combine)
 import Combine
-import Foundation
+import KokoroUtils
 
 public class CancelBag {
 	private var cancellableSet = Set<AnyCancellable>()
-	private let lock = FoundationLock()
+	private let lock: Lock = DefaultLock()
 
 	public init() {}
 

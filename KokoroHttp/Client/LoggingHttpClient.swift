@@ -3,8 +3,10 @@
 //  Copyright © 2021 Nanoray. All rights reserved.
 //
 
+#if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
+import KokoroAsync
 import KokoroUtils
 
 public class LoggingHttpClient: HttpClient {
@@ -142,10 +144,10 @@ public class LoggingHttpClient: HttpClient {
 		self.configuration = configuration
 	}
 
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
+	public func requestProgressPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		let requestId = RequestId()
 		var finished = false
-		return wrapped.request(request)
+		return wrapped.requestProgressPublisher(request)
 			.onStart { [configuration] in configuration.request?(requestId, request) }
 			.onOutput { [configuration] in
 				configuration.output?(requestId, request, $0)
@@ -185,3 +187,4 @@ public extension HttpClient {
 		return LoggingHttpClient(wrapping: self, configuration: configuration)
 	}
 }
+#endif

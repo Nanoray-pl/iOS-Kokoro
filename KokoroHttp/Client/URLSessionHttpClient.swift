@@ -6,6 +6,7 @@
 #if canImport(Combine) && canImport(Foundation)
 import Combine
 import Foundation
+import KokoroUtils
 
 public class URLSessionHttpClient: HttpClient {
 	private let session: URLSession
@@ -14,7 +15,7 @@ public class URLSessionHttpClient: HttpClient {
 		self.session = session
 	}
 
-	public func request(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
+	public func requestProgressPublisher(_ request: URLRequest) -> AnyPublisher<HttpClientOutput<HttpClientResponse>, Error> {
 		return session.dataTaskProgressPublisher(for: request)
 			.tryMap {
 				switch $0 {

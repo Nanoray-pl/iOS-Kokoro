@@ -5,7 +5,7 @@
 
 import KokoroUtils
 
-private let sharedLock: Lock = FoundationLock()
+private let sharedLock: Lock = DefaultLock()
 
 public class AutoInitializingContainer {
 	private let parent: Resolver?

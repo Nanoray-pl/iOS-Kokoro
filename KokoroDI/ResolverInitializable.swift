@@ -9,7 +9,8 @@ public protocol ResolverInitializable {
 	init(resolver: Resolver)
 }
 
-// NoParameterInitializable
+// MARK: - NoParameterInitializable
+
 public extension Container {
 	@discardableResult
 	func register<Component: NoParameterInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
@@ -42,7 +43,8 @@ public extension Container {
 	}
 }
 
-// ResolverInitializable
+// MARK: - ResolverInitializable
+
 public extension Container {
 	@discardableResult
 	func register<Component: ResolverInitializable, Variant: Hashable>(for key: ComponentKey<Component, Variant>, storageFactory: ComponentStorageFactory) -> ContainerRegisterResult {
